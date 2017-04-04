@@ -21,10 +21,8 @@ import me.boomboompower.all.togglechat.ToggleChat;
 import me.boomboompower.all.togglechat.utils.Writer;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -33,8 +31,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 //        - 94
 //        - 70

@@ -1,0 +1,13 @@
+# IntelliJ project files
+.idea/
+out/
+gen
+
+# Gradle
+.gradle/
+gradle
+
+# Other directories
+build/
+jars/
+run/

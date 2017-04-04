@@ -19,6 +19,7 @@ package me.boomboompower.all.togglechat.gui;
 
 import me.boomboompower.all.togglechat.ToggleChat;
 import me.boomboompower.all.togglechat.utils.Writer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiChat;

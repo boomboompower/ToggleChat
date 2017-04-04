@@ -19,8 +19,8 @@ package me.boomboompower.all.togglechat;
 
 import me.boomboompower.all.togglechat.command.ToggleCommand;
 import me.boomboompower.all.togglechat.command.WhitelistCommand;
-
 import me.boomboompower.all.togglechat.utils.FileUtils;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommand;
 import net.minecraft.util.EnumChatFormatting;
