@@ -48,12 +48,12 @@ public class WhitelistGui extends GuiScreen {
     @Override
     public void initGui() {
         text = new CustomGuiTextBox(0, this.fontRendererObj, this.width / 2 - 75, this.height / 2 - 58, 150, 20);
-        this.buttonList.add(new CustomGuiButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add"));
-        this.buttonList.add(new CustomGuiButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove"));
-        this.buttonList.add(new CustomGuiButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear"));
-        this.buttonList.add(new CustomGuiButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List"));
+        this.buttonList.add(new GuiButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add"));
+        this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove"));
+        this.buttonList.add(new GuiButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear"));
+        this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List"));
 
-        this.buttonList.add(new CustomGuiButton(5, 5, this.height - 25, 50, 20, "Back"));
+        this.buttonList.add(new GuiButton(5, 5, this.height - 25, 50, 20, "Back"));
 
         text.setMaxStringLength(16);
         text.setFocused(true);
