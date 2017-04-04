@@ -13,7 +13,7 @@ buildscript {
 
 apply plugin: "net.minecraftforge.gradle.forge"
 
-version = "1.2.0-SNAPSHOT"
+version = "1.1.6-SNAPSHOT"
 group = "me.boomboompower.all.togglechat"
 archivesBaseName = "ToggleChat"
 

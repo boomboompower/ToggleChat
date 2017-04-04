@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
 public class ToggleChat {
 
     public static final String MODID = "publictogglechat";
-    public static final String VERSION = "1.2.0";
+    public static final String VERSION = "1.1.6";
 
     public static String USER_DIR;
 
