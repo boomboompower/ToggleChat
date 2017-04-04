@@ -32,8 +32,6 @@ import java.awt.*;
 
 public class ToggleGui {
 
-    private static final String WHITELIST_CMD = "/whitelist ";
-
     //        - 94
     //        - 70
     //        - 46

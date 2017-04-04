@@ -185,22 +185,8 @@ public class WhitelistGui extends GuiScreen {
 
     private void displayWhitelist(String[] args) {
         if (ToggleChat.whitelist.size() > 0) {
-            int page = 1;
-            int pages = (int) Math.ceil(ToggleChat.whitelist.size() / 7D);
-
-            if (args.length > 1) {
-                try {
-                    page = Integer.parseInt(args[1]);
-                } catch (NumberFormatException var21) {
-                    page = -1;
-                }
-            }
-
-            if (page >= 1 && page <= pages) {
-                sendChatMessage(EnumChatFormatting.WHITE + "Whitelist " + EnumChatFormatting.GRAY + "[Page " + page + " of " + pages + "]" + EnumChatFormatting.WHITE + ":");
-                ToggleChat.whitelist.stream().skip((long) (page - 1) * 7).limit(7L).forEach(word -> sendChatMessage(EnumChatFormatting.GOLD + "\u25CF " + word));
-            } else {
-                sendChatMessage(EnumChatFormatting.RED + "Unknown page number!");
+            for (String word : ToggleChat.whitelist) {
+                sendChatMessage(EnumChatFormatting.GOLD + "\u25CF " + word);
             }
         } else {
             sendChatMessage(EnumChatFormatting.RED + "There is nothing on your whitelist!");

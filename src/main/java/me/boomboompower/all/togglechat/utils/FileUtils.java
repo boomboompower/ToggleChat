@@ -80,7 +80,7 @@ public class FileUtils {
                try {
                    whitelist = f.lines().collect(Collectors.toList());
                    for (String s : whitelist) {
-                       ToggleChat.whitelist.add(s);
+                       attemptLoad(s);
                    }
                } catch (Throwable var30) {
                    var30.printStackTrace();
@@ -95,7 +95,13 @@ public class FileUtils {
        }
    }
 
-    private static boolean exists(String path) {
+   private static void attemptLoad(String word) {
+       if (word.toCharArray().length >= 16 && !word.contains(" ")) { // We don't want to load something that is over 16 characters, or has spaces in it!
+           ToggleChat.whitelist.add(word);
+       }
+   }
+
+   private static boolean exists(String path) {
         return Files.exists(Paths.get(path));
     }
 }
