@@ -133,7 +133,7 @@ public class WhitelistGui extends GuiScreen {
                 Minecraft.getMinecraft().displayGuiScreen(null);
                 break;
             case 4:
-                displayWhitelist(new String[] {"0"});
+                displayWhitelist();
                 Minecraft.getMinecraft().displayGuiScreen(null);
                 break;
             case 5:
@@ -183,8 +183,9 @@ public class WhitelistGui extends GuiScreen {
         }
     }
 
-    private void displayWhitelist(String[] args) {
+    private void displayWhitelist() {
         if (ToggleChat.whitelist.size() > 0) {
+            sendChatMessage("Displaying " + goldify(String.valueOf(ToggleChat.whitelist.size())) + (ToggleChat.whitelist.size() == 1 ? " entry" : " entries") + " from the whitelist!");
             for (String word : ToggleChat.whitelist) {
                 sendChatMessage(EnumChatFormatting.GOLD + "\u25CF " + word);
             }

@@ -95,19 +95,19 @@ public class ToggleGui {
                     break;
                 case 2:
                     ToggleChat.instance().toggleLeaveChat();
-                    this.buttonList.get(3).displayString = "Leave: " + (ToggleChat.showLeave ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                    this.buttonList.get(2).displayString = "Leave: " + (ToggleChat.showLeave ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
                     break;
                 case 3:
                     ToggleChat.instance().toggleGuildChat();
-                    this.buttonList.get(4).displayString = "Guild: " + (ToggleChat.showGuild ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                    this.buttonList.get(3).displayString = "Guild: " + (ToggleChat.showGuild ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
                     break;
                 case 4:
                     ToggleChat.instance().togglePartyChat();
-                    this.buttonList.get(5).displayString = "Party: " + (ToggleChat.showParty ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                    this.buttonList.get(4).displayString = "Party: " + (ToggleChat.showParty ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
                     break;
                 case 5:
                     ToggleChat.instance().toggleShoutChat();
-                    this.buttonList.get(6).displayString = "Shout: " + (ToggleChat.showShout ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                    this.buttonList.get(5).displayString = "Shout: " + (ToggleChat.showShout ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
                     break;
                 case 6:
                     new WhitelistGui().display();

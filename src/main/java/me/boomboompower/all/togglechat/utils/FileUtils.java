@@ -96,7 +96,7 @@ public class FileUtils {
    }
 
    private static void attemptLoad(String word) {
-       if (word.toCharArray().length >= 16 && !word.contains(" ")) { // We don't want to load something that is over 16 characters, or has spaces in it!
+       if (word.toCharArray().length <= 16 && !word.contains(" ")) { // We don't want to load something that is over 16 characters, or has spaces in it!
            ToggleChat.whitelist.add(word);
        }
    }
