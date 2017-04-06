@@ -17,9 +17,8 @@
 
 package me.boomboompower.all.togglechat.command;
 
-import me.boomboompower.all.togglechat.ToggleChat;
 import me.boomboompower.all.togglechat.gui.WhitelistGui;
-import me.boomboompower.all.togglechat.utils.Writer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -27,7 +26,6 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
@@ -51,7 +49,7 @@ public class WhitelistCommand implements ICommand {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return EnumChatFormatting.RED + "Usage: /whitelist <player, list, clear>";
+        return EnumChatFormatting.RED + "Usage: /whitelist <player>";
     }
 
     @Override
@@ -61,22 +59,11 @@ public class WhitelistCommand implements ICommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-        boolean write = false;
-        new WhitelistGui().display();
-//        if (args.length == 0) {
-//            sendChatMessage(getCommandUsage(sender));
-//        } else {
-//            if (args[0].equalsIgnoreCase("list")) {
-//                displayWhitelist(args);
-//            } else if (args[0].equalsIgnoreCase("clear")) {
-//                write = true;
-//                whitelist();
-//            } else {
-//                write = true;
-//                whitelist(args[0]);
-//            }
-//        }
-//        if (write) Writer.execute(true);
+        if (args.length == 0) {
+            new WhitelistGui().display();
+        } else {
+            new WhitelistGui(args[0]).display();
+        }
     }
 
     @Override
@@ -104,52 +91,6 @@ public class WhitelistCommand implements ICommand {
         for (Entity o : Minecraft.getMinecraft().theWorld.playerEntities) {
             names.add(o.getName());
         }
-        names.add("list");
-        names.add("clear");
         return names;
-    }
-
-    private void whitelist() {
-        ToggleChat.whitelist.clear();
-        sendChatMessage("Cleared your whitelist!");
-    }
-
-    private void whitelist(String userName) {
-        userName = userName != null ? userName : "boomboompower";
-        if (whitelistContains(userName)) {
-            sendChatMessage("Removed " + EnumChatFormatting.GOLD + userName + EnumChatFormatting.GRAY + " from the whitelist!");
-            removeFromWhitelist(userName);
-        } else {
-            sendChatMessage("Added " + EnumChatFormatting.GOLD + userName + EnumChatFormatting.GRAY + " to the whitelist!");
-            ToggleChat.whitelist.add(userName);
-        }
-    }
-
-
-
-    private void sendChatMessage(String message) {
-        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
-    }
-
-    private boolean whitelistContains(String message) {
-        boolean contains = false;
-
-        for (String s : ToggleChat.whitelist) {
-            if (s.equalsIgnoreCase(message)) {
-                contains = true;
-                break;
-            }
-        }
-
-        return contains;
-    }
-
-    private void removeFromWhitelist(String message) {
-        for (String s : ToggleChat.whitelist) {
-            if (s.equalsIgnoreCase(message)) {
-                ToggleChat.whitelist.remove(message);
-                break;
-            }
-        }
     }
 }

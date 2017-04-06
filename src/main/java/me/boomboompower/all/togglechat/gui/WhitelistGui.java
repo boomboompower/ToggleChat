@@ -44,6 +44,15 @@ import java.io.IOException;
 public class WhitelistGui extends GuiScreen {
 
     private CustomGuiTextBox text;
+    private String input = "";
+
+    public WhitelistGui() {
+        this("");
+    }
+
+    public WhitelistGui(String input) {
+        this.input = input;
+    }
 
     @Override
     public void initGui() {
@@ -55,6 +64,7 @@ public class WhitelistGui extends GuiScreen {
 
         this.buttonList.add(new GuiButton(5, 5, this.height - 25, 50, 20, "Back"));
 
+        text.setText(input);
         text.setMaxStringLength(16);
         text.setFocused(true);
     }
