@@ -38,6 +38,7 @@ repositories {
 }
 
 dependencies {
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
 }
 
 processResources {

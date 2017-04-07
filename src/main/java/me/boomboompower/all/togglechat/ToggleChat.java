@@ -21,6 +21,7 @@ import me.boomboompower.all.togglechat.command.ToggleCommand;
 import me.boomboompower.all.togglechat.command.WhitelistCommand;
 import me.boomboompower.all.togglechat.utils.FileUtils;
 
+import me.boomboompower.all.togglechat.versions.Hooker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommand;
 import net.minecraft.util.EnumChatFormatting;
@@ -30,6 +31,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import scala.Int;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,6 +67,10 @@ public class ToggleChat {
     public static boolean showSpec = true;
     public static boolean showColored = true;
 
+    public static Boolean showStatupMessage = true;
+    public static Integer statupMessageRevision = 1;
+    public static Integer updatedStartupRevision = 1;
+
     public ToggleChat() {
         instance = this;
     }
@@ -79,6 +85,8 @@ public class ToggleChat {
         data.url = "https://hypixel.net/threads/997547";
 
         data.credits = "2Pi for the initial idea behind the mod!";
+
+        Hooker.update();
     }
 
     @Mod.EventHandler

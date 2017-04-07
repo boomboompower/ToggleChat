@@ -119,7 +119,7 @@ public class ToggleGui {
         }
 
         public void onGuiClosed() {
-            Writer.execute(false);
+            Writer.execute(false, false);
         }
 
         public boolean doesGuiPauseGame() {
@@ -206,7 +206,7 @@ public class ToggleGui {
         }
 
         public void onGuiClosed() {
-            Writer.execute(false);
+            Writer.execute(false, false);
         }
 
         public boolean doesGuiPauseGame() {

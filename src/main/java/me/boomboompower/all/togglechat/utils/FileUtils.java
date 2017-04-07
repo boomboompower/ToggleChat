@@ -74,6 +74,24 @@ public class FileUtils {
                }
            }
 
+           if (exists(ToggleChat.USER_DIR + "startup.nn")) {
+               f = new BufferedReader(new FileReader(ToggleChat.USER_DIR + "startup.nn"));
+
+               try {
+                   options = f.lines().collect(Collectors.toList());
+                   if (options.size() >= 3) {
+
+                       // The following cannot be moved (since v1.1.7)
+                       ToggleChat.showStatupMessage = Boolean.parseBoolean((String) options.get(0));
+                       ToggleChat.statupMessageRevision = Integer.parseInt((String) options.get(2));
+                   } else {
+                       executeWriter = true;
+                   }
+               } catch (Throwable var31) {
+                   throw var31;
+               }
+           }
+
            if (exists(ToggleChat.USER_DIR + "whitelist.nn")) {
                f = new BufferedReader(new FileReader(ToggleChat.USER_DIR + "whitelist.nn"));
 
@@ -88,7 +106,7 @@ public class FileUtils {
            }
 
            if (executeWriter) {
-               Writer.execute(false);
+               Writer.execute(false,false);
            }
        } catch (IOException var32) {
            throw var32;

@@ -17,7 +17,14 @@
 
 package me.boomboompower.all.togglechat;
 
+import me.boomboompower.all.togglechat.utils.GlobalUtils;
+import me.boomboompower.all.togglechat.versions.Hooker;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -27,18 +34,19 @@ public class ToggleEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
-    public void onGuildChat(ClientChatReceivedEvent event) {
+    public void onChatReceive(ClientChatReceivedEvent event) {
         String message = event.message.getUnformattedText();
+        String formattedMessage = event.message.getFormattedText();
         boolean cancelled = false;
-        if (message == null) return;
+        if (message == null || formattedMessage == null) return;
         if (!containsWhitelisted(message)) {
             if (message.startsWith("Guild > ") && !ToggleChat.showGuild) {
                 cancelled = true;
             } if (message.startsWith("Party > ") && !ToggleChat.showParty) {
                 cancelled = true;
-            } if (ToggleChat.containsIgnoreCase(message," joined.") && !ToggleChat.showJoin) {
+            } if (message.endsWith(" joined.") && !ToggleChat.showJoin) {
                 cancelled = true;
-            } if (isLeave(message) && !ToggleChat.showLeave) {
+            } if (isLeave(formattedMessage) && !ToggleChat.showLeave) {
                 cancelled = true;
             } if (message.startsWith("[SPECTATOR] ") && !ToggleChat.showSpec) {
                 cancelled = true;
@@ -61,6 +69,18 @@ public class ToggleEvents {
         event.setCanceled(cancelled);
     }
 
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public void onWorldLoad(RenderWorldLastEvent event) {
+        if (ToggleChat.showStatupMessage) {
+            sendChatMessage(GlobalUtils.translateAlternateColorCodes('&', "A message about: \'&b" + Hooker.getInstance().message.getTopic() + "&7\'"));
+            Hooker.getInstance().message.getMessages().forEach(message -> sendChatMessage(GlobalUtils.translateAlternateColorCodes('&', message)));
+        }
+    }
+
+    public void sendChatMessage(String message) {
+        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
+    }
+
     private boolean containsWhitelisted(String message) {
         boolean contains = false;
         for (String s : ToggleChat.whitelist) {
@@ -74,7 +94,7 @@ public class ToggleEvents {
     }
 
     private boolean isLeave(String message) {
-        return message.equalsIgnoreCase("-----------------------------------------------------") || ToggleChat.containsIgnoreCase(message," left.");
+        return message.equalsIgnoreCase(GlobalUtils.translateAlternateColorCodes('&', "&b-----------------------------------------------------")) || (message.startsWith(GlobalUtils.translateAlternateColorCodes('&', "&e")) && message.endsWith(" left."));
     }
 
     private boolean isPartyInv(String message) {
