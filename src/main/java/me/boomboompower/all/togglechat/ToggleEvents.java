@@ -18,6 +18,7 @@
 package me.boomboompower.all.togglechat;
 
 import me.boomboompower.all.togglechat.utils.GlobalUtils;
+import me.boomboompower.all.togglechat.utils.Writer;
 import me.boomboompower.all.togglechat.versions.Hooker;
 
 import net.minecraft.client.Minecraft;
@@ -36,9 +37,8 @@ public class ToggleEvents {
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onChatReceive(ClientChatReceivedEvent event) {
         String message = event.message.getUnformattedText();
-        String formattedMessage = event.message.getFormattedText();
         boolean cancelled = false;
-        if (message == null || formattedMessage == null) return;
+        if (message == null) return;
         if (!containsWhitelisted(message)) {
             if (message.startsWith("Guild > ") && !ToggleChat.showGuild) {
                 cancelled = true;
@@ -46,7 +46,7 @@ public class ToggleEvents {
                 cancelled = true;
             } if (message.endsWith(" joined.") && !ToggleChat.showJoin) {
                 cancelled = true;
-            } if (isLeave(formattedMessage) && !ToggleChat.showLeave) {
+            } if (isLeave(message) && !ToggleChat.showLeave) {
                 cancelled = true;
             } if (message.startsWith("[SPECTATOR] ") && !ToggleChat.showSpec) {
                 cancelled = true;
@@ -74,6 +74,9 @@ public class ToggleEvents {
         if (ToggleChat.showStatupMessage) {
             sendChatMessage(GlobalUtils.translateAlternateColorCodes('&', "A message about: \'&b" + Hooker.getInstance().message.getTopic() + "&7\'"));
             Hooker.getInstance().message.getMessages().forEach(message -> sendChatMessage(GlobalUtils.translateAlternateColorCodes('&', message)));
+
+            ToggleChat.showStatupMessage = false;
+            Writer.execute(true, false);
         }
     }
 
@@ -94,7 +97,7 @@ public class ToggleEvents {
     }
 
     private boolean isLeave(String message) {
-        return message.equalsIgnoreCase(GlobalUtils.translateAlternateColorCodes('&', "&b-----------------------------------------------------")) || (message.startsWith(GlobalUtils.translateAlternateColorCodes('&', "&e")) && message.endsWith(" left."));
+        return message.equalsIgnoreCase("-----------------------------------------------------") || message.endsWith(" left.");
     }
 
     private boolean isPartyInv(String message) {

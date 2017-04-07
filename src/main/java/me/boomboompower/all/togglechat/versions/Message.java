@@ -39,6 +39,8 @@ public class Message {
         this.about = message;
         this.revision = revision;
 
+        doMagic();
+
         instance = this;
     }
 
