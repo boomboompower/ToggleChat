@@ -79,11 +79,10 @@ public class FileUtils {
 
                try {
                    options = f.lines().collect(Collectors.toList());
-                   if (options.size() >= 2) {
+                   if (options.size() >= 1) {
 
                        // The following cannot be moved (since v1.1.7)
-                       ToggleChat.showStatupMessage = Boolean.parseBoolean((String) options.get(0));
-                       ToggleChat.statupMessageRevision = Integer.parseInt((String) options.get(1));
+                       ToggleChat.statupMessageRevision = Integer.parseInt((String) options.get(0));
                    } else {
                        executeWriter = true;
                    }

@@ -20,8 +20,8 @@ package me.boomboompower.all.togglechat;
 import me.boomboompower.all.togglechat.command.ToggleCommand;
 import me.boomboompower.all.togglechat.command.WhitelistCommand;
 import me.boomboompower.all.togglechat.utils.FileUtils;
-
 import me.boomboompower.all.togglechat.versions.Hooker;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommand;
 import net.minecraft.util.EnumChatFormatting;
@@ -31,7 +31,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import scala.Int;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ import java.util.regex.Pattern;
 public class ToggleChat {
 
     public static final String MODID = "publictogglechat";
-    public static final String VERSION = "1.1.8";
+    public static final String VERSION = "1.1.9";
 
     public static String USER_DIR;
 
@@ -67,7 +66,8 @@ public class ToggleChat {
     public static boolean showSpec = true;
     public static boolean showColored = true;
 
-    public static Boolean showStatupMessage = true;
+    // v1.1.8
+    public static Boolean showStatupMessage = false;
     public static Integer statupMessageRevision = 1;
     public static Integer updatedStartupRevision = 1;
 
@@ -85,6 +85,8 @@ public class ToggleChat {
         data.url = "https://hypixel.net/threads/997547";
 
         data.credits = "2Pi for the initial idea behind the mod!";
+
+        Hooker.update();
     }
 
     @Mod.EventHandler
@@ -96,7 +98,6 @@ public class ToggleChat {
 
         try {
             FileUtils.getVars();
-            Hooker.update();
         } catch (Throwable var21) {
             var21.printStackTrace();
         }

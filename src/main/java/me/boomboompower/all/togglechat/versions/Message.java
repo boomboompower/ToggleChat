@@ -18,6 +18,7 @@
 package me.boomboompower.all.togglechat.versions;
 
 import me.boomboompower.all.togglechat.ToggleChat;
+
 import scala.actors.threadpool.Arrays;
 
 import java.util.List;

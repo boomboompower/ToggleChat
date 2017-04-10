@@ -70,7 +70,6 @@ public class Writer implements Runnable {
                 FileWriter e = new FileWriter(ToggleChat.USER_DIR + "startup.nn");
 
                 // The following cannot be moved (since v1.1.7)
-                this.write(e, ToggleChat.showStatupMessage + ls);
                 this.write(e, ToggleChat.updatedStartupRevision + ls);
 
                 e.close();

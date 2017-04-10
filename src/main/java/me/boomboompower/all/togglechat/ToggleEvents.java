@@ -18,7 +18,6 @@
 package me.boomboompower.all.togglechat;
 
 import me.boomboompower.all.togglechat.utils.GlobalUtils;
-import me.boomboompower.all.togglechat.utils.Writer;
 import me.boomboompower.all.togglechat.versions.Hooker;
 
 import net.minecraft.client.Minecraft;
@@ -76,7 +75,6 @@ public class ToggleEvents {
             Hooker.getInstance().message.getMessages().forEach(message -> sendChatMessage(GlobalUtils.translateAlternateColorCodes('&', message)));
 
             ToggleChat.showStatupMessage = false;
-            Writer.execute(true, false);
         }
     }
 
@@ -85,11 +83,13 @@ public class ToggleEvents {
     }
 
     private boolean containsWhitelisted(String message) {
-        boolean contains = false;
-        for (String s : ToggleChat.whitelist) {
-            if (ToggleChat.containsIgnoreCase(message, s)) contains = true;
-        }
-        return contains;
+        final boolean[] contains = {false};
+        ToggleChat.whitelist.forEach(s -> {
+            if (ToggleChat.containsIgnoreCase(message, s)) {
+                contains[0] = true;
+            }
+        });
+        return contains[0];
     }
 
     private boolean isFriendReq(String message) {
