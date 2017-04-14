@@ -27,13 +27,11 @@ public class Writer implements Runnable {
     private static String ls = System.lineSeparator();
 
     private static boolean useWhitelist;
-    private static boolean useStartup;
 
     public Writer() {
     }
 
-    public static void execute(boolean startup, boolean whitelist) {
-        useStartup = startup;
+    public static void execute(boolean whitelist) {
         useWhitelist = whitelist;
         (new Thread(new Writer())).start();
     }
@@ -64,18 +62,6 @@ public class Writer implements Runnable {
             e.close();
         } catch (Throwable var56) {
             var56.printStackTrace();
-        }
-        if (useStartup) {
-            try {
-                FileWriter e = new FileWriter(ToggleChat.USER_DIR + "startup.nn");
-
-                // The following cannot be moved (since v1.1.7)
-                this.write(e, ToggleChat.updatedStartupRevision + ls);
-
-                e.close();
-            } catch (Throwable var56) {
-                var56.printStackTrace();
-            }
         }
         if (useWhitelist) {
             try {

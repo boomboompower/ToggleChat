@@ -154,7 +154,7 @@ public class WhitelistGui extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-        Writer.execute(false, true);
+        Writer.execute(true);
     }
 
     @Override

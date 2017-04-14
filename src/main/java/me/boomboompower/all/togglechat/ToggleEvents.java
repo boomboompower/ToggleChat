@@ -17,14 +17,10 @@
 
 package me.boomboompower.all.togglechat;
 
-import me.boomboompower.all.togglechat.utils.GlobalUtils;
-import me.boomboompower.all.togglechat.versions.Hooker;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -66,16 +62,6 @@ public class ToggleEvents {
             }
         }
         event.setCanceled(cancelled);
-    }
-
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public void onWorldLoad(RenderWorldLastEvent event) {
-        if (ToggleChat.showStatupMessage) {
-            sendChatMessage(GlobalUtils.translateAlternateColorCodes('&', "A message about: \'&b" + Hooker.getInstance().message.getTopic() + "&7\'"));
-            Hooker.getInstance().message.getMessages().forEach(message -> sendChatMessage(GlobalUtils.translateAlternateColorCodes('&', message)));
-
-            ToggleChat.showStatupMessage = false;
-        }
     }
 
     public void sendChatMessage(String message) {
