@@ -14,7 +14,6 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package me.boomboompower.all.togglechat;
 
 import me.boomboompower.all.togglechat.command.ToggleCommand;
@@ -39,7 +38,7 @@ import java.util.regex.Pattern;
 public class ToggleChat {
 
     public static final String MODID = "publictogglechat";
-    public static final String VERSION = "1.2.0";
+    public static final String VERSION = "1.2.1";
 
     public static String USER_DIR;
 

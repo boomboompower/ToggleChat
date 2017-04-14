@@ -14,7 +14,6 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package me.boomboompower.all.togglechat.gui;
 
 import me.boomboompower.all.togglechat.ToggleChat;
@@ -113,8 +112,8 @@ public class WhitelistGui extends GuiScreen {
                 break;
             case 1:
                 if (text.getText().isEmpty()) {
-                sendChatMessage("No name given!");
-            } else if (!whitelistContains(text.getText())) {
+                    sendChatMessage("No name given!");
+                } else if (!whitelistContains(text.getText())) {
                     ToggleChat.whitelist.add(text.getText());
                     sendChatMessage("Added " + goldify(text.getText()) + " to the whitelist!");
                 } else {
@@ -174,7 +173,7 @@ public class WhitelistGui extends GuiScreen {
     private boolean whitelistContains(String message) {
         boolean contains = false;
 
-        for (String s : ToggleChat.whitelist) {
+        for (String s: ToggleChat.whitelist) {
             if (s.equalsIgnoreCase(message)) {
                 contains = true;
                 break;
@@ -185,7 +184,7 @@ public class WhitelistGui extends GuiScreen {
     }
 
     private void removeFromWhitelist(String username) {
-        for (String s : ToggleChat.whitelist) {
+        for (String s: ToggleChat.whitelist) {
             if (s.equalsIgnoreCase(username)) {
                 ToggleChat.whitelist.remove(s);
                 break;
@@ -196,7 +195,7 @@ public class WhitelistGui extends GuiScreen {
     private void displayWhitelist() {
         if (ToggleChat.whitelist.size() > 0) {
             sendChatMessage("Displaying " + goldify(String.valueOf(ToggleChat.whitelist.size())) + (ToggleChat.whitelist.size() == 1 ? " entry" : " entries") + " from the whitelist!");
-            for (String word : ToggleChat.whitelist) {
+            for (String word: ToggleChat.whitelist) {
                 sendChatMessage(EnumChatFormatting.GOLD + "\u25CF " + word);
             }
         } else {

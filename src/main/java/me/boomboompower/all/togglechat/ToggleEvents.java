@@ -14,7 +14,6 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package me.boomboompower.all.togglechat;
 
 import net.minecraft.client.Minecraft;
@@ -26,8 +25,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ToggleEvents {
 
-    public ToggleEvents() {
-    }
+    private String lastMessage = "";
+
+    public ToggleEvents() {}
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onChatReceive(ClientChatReceivedEvent event) {
@@ -37,29 +37,41 @@ public class ToggleEvents {
         if (!containsWhitelisted(message)) {
             if (message.startsWith("Guild > ") && !ToggleChat.showGuild) {
                 cancelled = true;
-            } if (message.startsWith("Party > ") && !ToggleChat.showParty) {
-                cancelled = true;
-            } if (message.endsWith(" joined.") && !ToggleChat.showJoin) {
-                cancelled = true;
-            } if (isLeave(message) && !ToggleChat.showLeave) {
-                cancelled = true;
-            } if (message.startsWith("[SPECTATOR] ") && !ToggleChat.showSpec) {
-                cancelled = true;
-            } if (message.startsWith("[SHOUT] ") && !ToggleChat.showShout) {
-                cancelled = true;
-            } if (message.startsWith("[TEAM] ") && !ToggleChat.showTeam) {
-                cancelled = true;
-            } if ((message.startsWith("To ") || message.startsWith("From ")) && !ToggleChat.showMessage) {
-                cancelled = true;
-            } if (isUHC(message) && !ToggleChat.showUHC) {
-                cancelled = true;
-            } if (isPartyInv(message) && !ToggleChat.showPartyInv) {
-                cancelled = true;
-            } if (isFriendReq(message) && !ToggleChat.showFriendReqs) {
-                cancelled = true;
-            } if (isColoredChat(message) && !ToggleChat.showColored) {
+            }
+            if (message.startsWith("Party > ") && !ToggleChat.showParty) {
                 cancelled = true;
             }
+            if (message.endsWith(" joined.") && !ToggleChat.showJoin) {
+                cancelled = true;
+            }
+            if (isLeave(message) && !ToggleChat.showLeave) {
+                cancelled = true;
+            }
+            if (message.startsWith("[SPECTATOR] ") && !ToggleChat.showSpec) {
+                cancelled = true;
+            }
+            if (message.startsWith("[SHOUT] ") && !ToggleChat.showShout) {
+                cancelled = true;
+            }
+            if (message.startsWith("[TEAM] ") && !ToggleChat.showTeam) {
+                cancelled = true;
+            }
+            if ((message.startsWith("To ") || message.startsWith("From ")) && !ToggleChat.showMessage) {
+                cancelled = true;
+            }
+            if (isUHC(message) && !ToggleChat.showUHC) {
+                cancelled = true;
+            }
+            if (isPartyInv(message) && !ToggleChat.showPartyInv) {
+                cancelled = true;
+            }
+            if (isFriendReq(message) && !ToggleChat.showFriendReqs) {
+                cancelled = true;
+            }
+            if (isColoredChat(message) && !ToggleChat.showColored) {
+                cancelled = true;
+            }
+            lastMessage = message;
         }
         event.setCanceled(cancelled);
     }
@@ -71,15 +83,14 @@ public class ToggleEvents {
     private boolean containsWhitelisted(String message) {
         final boolean[] contains = {false};
         ToggleChat.whitelist.forEach(s -> {
-            if (ToggleChat.containsIgnoreCase(message, s)) {
-                contains[0] = true;
-            }
-        });
+        if (ToggleChat.containsIgnoreCase(message, s)) {
+            contains[0] = true;
+        }});
         return contains[0];
     }
 
     private boolean isFriendReq(String message) {
-        return ToggleChat.containsIgnoreCase(message,"Friend request from ") || (message.contains("Click one") && message.contains("[ACCEPT]") && message.contains("[DENY]"));
+        return ToggleChat.containsIgnoreCase(message, "Friend request from ") || (!containsWhitelisted(lastMessage) && (message.contains("Click one") && message.contains("[ACCEPT]") && message.contains("[DENY]")));
     }
 
     private boolean isLeave(String message) {
@@ -87,7 +98,7 @@ public class ToggleEvents {
     }
 
     private boolean isPartyInv(String message) {
-        return ToggleChat.containsIgnoreCase(message,"has invited you to join their party.") || ToggleChat.containsIgnoreCase(message,"60 seconds to accept");
+        return ToggleChat.containsIgnoreCase(message, "has invited you to join their party.") || (!containsWhitelisted(lastMessage) && ToggleChat.containsIgnoreCase(message, "60 seconds to accept"));
     }
 
     private boolean isColoredChat(String message) {
