@@ -25,8 +25,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ToggleEvents {
 
-    private String lastMessage = "";
-
     public ToggleEvents() {}
 
     @SubscribeEvent(priority = EventPriority.LOW)
