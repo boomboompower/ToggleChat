@@ -71,7 +71,6 @@ public class ToggleEvents {
             if (isColoredChat(message) && !ToggleChat.showColored) {
                 cancelled = true;
             }
-            lastMessage = message;
         }
         event.setCanceled(cancelled);
     }
@@ -90,7 +89,7 @@ public class ToggleEvents {
     }
 
     private boolean isFriendReq(String message) {
-        return ToggleChat.containsIgnoreCase(message, "Friend request from ") || (!containsWhitelisted(lastMessage) && (message.contains("Click one") && message.contains("[ACCEPT]") && message.contains("[DENY]")));
+        return ToggleChat.containsIgnoreCase(message, "Friend request from ") || (message.contains("Click one") && message.contains("[ACCEPT]") && message.contains("[DENY]"));
     }
 
     private boolean isLeave(String message) {
@@ -98,7 +97,7 @@ public class ToggleEvents {
     }
 
     private boolean isPartyInv(String message) {
-        return ToggleChat.containsIgnoreCase(message, "has invited you to join their party.") || (!containsWhitelisted(lastMessage) && ToggleChat.containsIgnoreCase(message, "60 seconds to accept"));
+        return ToggleChat.containsIgnoreCase(message, "has invited you to join ") || ToggleChat.containsIgnoreCase(message, "60 seconds to accept") || (EnumChatFormatting.getTextWithoutFormattingCodes(message).contains("The party invite from ") && message.endsWith(" has expired."));
     }
 
     private boolean isColoredChat(String message) {
