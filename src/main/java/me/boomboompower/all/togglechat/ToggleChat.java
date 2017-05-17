@@ -46,24 +46,6 @@ public class ToggleChat {
 
     public static ArrayList<String> whitelist = new ArrayList<String>();
 
-    // v1.0.2
-    public static boolean showTeam = true;
-    public static boolean showJoin = true;
-    public static boolean showLeave = true;
-    public static boolean showGuild = true;
-    public static boolean showParty = true;
-    public static boolean showShout = true;
-    public static boolean showMessage = true;
-
-    // v1.0.4
-    public static boolean showUHC = true;
-    public static boolean showPartyInv = true;
-    public static boolean showFriendReqs = true;
-
-    // v1.1.0
-    public static boolean showSpec = true;
-    public static boolean showColored = true;
-
     public ToggleChat() {
         instance = this;
     }
@@ -78,6 +60,8 @@ public class ToggleChat {
         data.url = "https://hypixel.net/threads/997547";
 
         data.credits = "2Pi for the initial idea behind the mod!";
+
+        new Options();
     }
 
     @Mod.EventHandler
@@ -94,53 +78,6 @@ public class ToggleChat {
         }
     }
 
-    public boolean toggleUHCChat() {
-        return (showUHC = !showUHC);
-    }
-
-    public boolean toggleColored() {
-        return (showColored = !showColored);
-    }
-
-    public boolean toggleSpecChat() {
-        return (showSpec = !showSpec);
-    }
-
-    public boolean toggleMessages() {
-        return (showMessage = !showMessage);
-    }
-
-    public boolean togglePartyInv() {
-        return (showPartyInv = !showPartyInv);
-    }
-
-    public boolean toggleTeamChat() {
-        return (showTeam = !showTeam);
-    }
-
-    public boolean toggleJoinChat() {
-        return (showJoin = !showJoin);
-    }
-
-    public boolean toggleLeaveChat() {
-        return (showLeave = !showLeave);
-    }
-
-    public boolean toggleGuildChat() {
-        return (showGuild = !showGuild);
-    }
-
-    public boolean togglePartyChat() {
-        return (showParty = !showParty);
-    }
-
-    public boolean toggleShoutChat() {
-        return (showShout = !showShout);
-    }
-
-    public boolean toggleFriendReqs() {
-        return (showFriendReqs = !showFriendReqs);
-    }
 
     public static ToggleChat instance() {
         return instance;

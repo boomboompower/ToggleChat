@@ -59,9 +59,9 @@ public class WhitelistCommand implements ICommand {
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         if (args.length == 0) {
-            new WhitelistGui().display();
+            new WhitelistGui.WhitelistMain().display();
         } else {
-            new WhitelistGui(args[0]).display();
+            new WhitelistGui.WhitelistMain(args[0]).display();
         }
     }
 

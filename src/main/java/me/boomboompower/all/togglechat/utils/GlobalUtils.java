@@ -23,6 +23,10 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class GlobalUtils {
 
+    public static void log(Object message) {
+        System.out.println(message);
+    }
+
     public static void sendChatMessage(String message) {
         Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
     }

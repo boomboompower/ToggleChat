@@ -17,11 +17,13 @@
 
 package me.boomboompower.all.togglechat.utils;
 
+import me.boomboompower.all.togglechat.Options;
 import me.boomboompower.all.togglechat.ToggleChat;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,25 +49,31 @@ public class FileUtils {
 
                try {
                    options = f.lines().collect(Collectors.toList());
-                   if (options.size() >= 11) {
+                   if (options.size() >= 13) {
+                       List<String> entries = new ArrayList<String>();
+                       for (int i = 0; i <= 13; i++) {
+                           entries.add((String) options.get(i));
+                       }
+                       Options.getInstance().setup(Options.ConfigType.MAIN_OPTIONS, entries);
+                   } else {
+                       executeWriter = true;
+                   }
+               } catch (Throwable var31) {
+                   throw var31;
+               }
+           }
 
-                       // The following cannot be moved (since v1.0.2)
-                       ToggleChat.showTeam = Boolean.parseBoolean((String) options.get(0));
-                       ToggleChat.showJoin = Boolean.parseBoolean((String) options.get(1));
-                       ToggleChat.showLeave = Boolean.parseBoolean((String) options.get(2));
-                       ToggleChat.showGuild = Boolean.parseBoolean((String) options.get(3));
-                       ToggleChat.showParty = Boolean.parseBoolean((String) options.get(4));
-                       ToggleChat.showShout = Boolean.parseBoolean((String) options.get(5));
-                       ToggleChat.showMessage = Boolean.parseBoolean((String) options.get(6));
+           if (exists(ToggleChat.USER_DIR + "whitelist_options.nn")) {
+               f = new BufferedReader(new FileReader(ToggleChat.USER_DIR + "whitelist_options.nn"));
 
-                       // The following cannot be moved (since v1.0.4)
-                       ToggleChat.showUHC = Boolean.parseBoolean((String) options.get(7));
-                       ToggleChat.showPartyInv = Boolean.parseBoolean((String) options.get(8));
-                       ToggleChat.showFriendReqs = Boolean.parseBoolean((String) options.get(9));
-
-                       // The following cannot be moved (since v1.1.0)
-                       ToggleChat.showSpec = Boolean.parseBoolean((String) options.get(10));
-                       ToggleChat.showColored = Boolean.parseBoolean((String) options.get(11));
+               try {
+                   options = f.lines().collect(Collectors.toList());
+                   if (options.size() >= 13) {
+                       List<String> entries = new ArrayList<String>();
+                       for (int i = 0; i <= 13; i++) {
+                           entries.add((String) options.get(i));
+                       }
+                       Options.getInstance().setup(Options.ConfigType.WHITELIST_OPTIONS, entries);
                    } else {
                        executeWriter = true;
                    }
@@ -96,7 +104,7 @@ public class FileUtils {
    }
 
    private static void attemptLoad(String word) {
-       if (word.toCharArray().length <= 16 && !word.contains(" ")) { // We don't want to load something that is over 16 characters, or has spaces in it!
+       if (word != null && word.toCharArray().length <= 16 && !word.contains(" ")) { // We don't want to load something that is over 16 characters, or has spaces in it!
            ToggleChat.whitelist.add(word);
        }
    }
