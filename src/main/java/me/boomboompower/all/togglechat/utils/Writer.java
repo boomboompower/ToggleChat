@@ -76,33 +76,33 @@ public class Writer implements Runnable {
         } catch (Throwable var56) {
             var56.printStackTrace();
         }
-        if (useWhitelistSettings) {
-            try {
-                FileWriter e = new FileWriter(ToggleChat.USER_DIR + "whitelist_options.nn");
-
-                // The following cannot be moved (since v1.0.2)
-                this.write(e, Options.ignoreTeam + ls);
-                this.write(e, Options.ignoreJoin + ls);
-                this.write(e, Options.ignoreLeave + ls);
-                this.write(e, Options.ignoreGuild + ls);
-                this.write(e, Options.ignoreParty + ls);
-                this.write(e, Options.ignoreShout + ls);
-                this.write(e, Options.ignoreMessage + ls);
-
-                this.write(e, Options.ignoreUHC + ls);
-                this.write(e, Options.ignorePartyInv + ls);
-                this.write(e, Options.ignoreFriendReqs + ls);
-
-                this.write(e, Options.ignoreSpec + ls);
-                this.write(e, Options.ignoreColored + ls);
-
-                this.write(e, Options.ignoreSpec + ls);
-                this.write(e, Options.ignoreColored + ls);
-                e.close();
-            } catch (Throwable var56) {
-                var56.printStackTrace();
-            }
-        }
+//        if (useWhitelistSettings) {
+//            try {
+//                FileWriter e = new FileWriter(ToggleChat.USER_DIR + "whitelist_options.nn");
+//
+//                // The following cannot be moved (since v1.0.2)
+//                this.write(e, Options.ignoreTeam + ls);
+//                this.write(e, Options.ignoreJoin + ls);
+//                this.write(e, Options.ignoreLeave + ls);
+//                this.write(e, Options.ignoreGuild + ls);
+//                this.write(e, Options.ignoreParty + ls);
+//                this.write(e, Options.ignoreShout + ls);
+//                this.write(e, Options.ignoreMessage + ls);
+//
+//                this.write(e, Options.ignoreUHC + ls);
+//                this.write(e, Options.ignorePartyInv + ls);
+//                this.write(e, Options.ignoreFriendReqs + ls);
+//
+//                this.write(e, Options.ignoreSpec + ls);
+//                this.write(e, Options.ignoreColored + ls);
+//
+//                this.write(e, Options.ignoreSpec + ls);
+//                this.write(e, Options.ignoreColored + ls);
+//                e.close();
+//            } catch (Throwable var56) {
+//                var56.printStackTrace();
+//            }
+//        }
         if (useWhitelist) {
             try {
                 FileWriter e = new FileWriter(ToggleChat.USER_DIR + "whitelist.nn");

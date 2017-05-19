@@ -63,24 +63,24 @@ public class FileUtils {
                }
            }
 
-           if (exists(ToggleChat.USER_DIR + "whitelist_options.nn")) {
-               f = new BufferedReader(new FileReader(ToggleChat.USER_DIR + "whitelist_options.nn"));
-
-               try {
-                   options = f.lines().collect(Collectors.toList());
-                   if (options.size() >= 13) {
-                       List<String> entries = new ArrayList<String>();
-                       for (int i = 0; i <= 13; i++) {
-                           entries.add((String) options.get(i));
-                       }
-                       Options.getInstance().setup(Options.ConfigType.WHITELIST_OPTIONS, entries);
-                   } else {
-                       executeWriter = true;
-                   }
-               } catch (Throwable var31) {
-                   throw var31;
-               }
-           }
+//           if (exists(ToggleChat.USER_DIR + "whitelist_options.nn")) {
+//               f = new BufferedReader(new FileReader(ToggleChat.USER_DIR + "whitelist_options.nn"));
+//
+//               try {
+//                   options = f.lines().collect(Collectors.toList());
+//                   if (options.size() >= 13) {
+//                       List<String> entries = new ArrayList<String>();
+//                       for (int i = 0; i <= 13; i++) {
+//                           entries.add((String) options.get(i));
+//                       }
+//                       Options.getInstance().setup(Options.ConfigType.WHITELIST_OPTIONS, entries);
+//                   } else {
+//                       executeWriter = true;
+//                   }
+//               } catch (Throwable var31) {
+//                   throw var31;
+//               }
+//           }
 
            if (exists(ToggleChat.USER_DIR + "whitelist.nn")) {
                f = new BufferedReader(new FileReader(ToggleChat.USER_DIR + "whitelist.nn"));

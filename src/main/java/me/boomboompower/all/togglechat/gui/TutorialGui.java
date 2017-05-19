@@ -31,6 +31,9 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import java.awt.*;
 import java.io.IOException;
 
+/*
+ * The most hard-coded messaging system you'll ever see!
+ */
 public class TutorialGui {
 
     public static class MainToggleTutorial extends GuiScreen {
@@ -68,7 +71,7 @@ public class TutorialGui {
 
             writePage();
 
-            buttonList.get(1).enabled = pageNumber < 9;
+            buttonList.get(1).enabled = pageNumber < 7;
 
             super.drawScreen(x, y, ticks);
         }
@@ -254,13 +257,13 @@ public class TutorialGui {
                             "",
                             "Ignoring spectator chat with this amazing",
                             "tool, created specifically to ignore spectators!",
-                            "&8#BringBackSpecChat"
+                            "&8&o#BringBackSpecChat"
                     );
 
                     writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Colored team");
                     writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that start with",
-                            "\"&e[YELLOW]&r\", \"&5[PURPLE]&r\", \"&c[RED]&r\" etc",
+                            "\"&e[YELLOW]&r\", \"&d[PURPLE]&r\", \"&c[RED]&r\" etc",
                             "",
                             "Useful for when you\'re playing paintball.",
                             "A lot of people were confused about this,",
@@ -280,11 +283,11 @@ public class TutorialGui {
                     writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Separators");
                     writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for messages that are just",
-                            "\"&9-------------------------\"",
+                            "\"&9-------------------------&r\"",
                             "",
                             "This was intially built into the \"Leave\"",
                             "toggle, but we decided to separate it... Get it...",
-                            "&9Im so sorry........"
+                            "&8Im so sorry........"
                     );
                     break;
                 default:
@@ -373,10 +376,70 @@ public class TutorialGui {
         private void setupInfo() {
             drawCentered(new CenterStringBuilder("Whitelist Tutorial", this.width / 2, this.height / 2 - 115));
             drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 105));
+
+            drawHorizontalLine(width / 2 - 80, width / 2 + 80, this.height / 2 - 95, Color.WHITE.getRGB());
         }
 
         private void writePage() {
             switch (pageNumber) {
+                case 0:
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lWhat is it?");
+                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                            "The whitelist feature is designed so that",
+                            "you can have a certain chat toggled, and still see",
+                            "a message in a toggled chat if the sentance contains",
+                            "a word from the whitelist. Weather it be an important",
+                            "friends name, or some trigger word to be used in an emergency",
+                            "the whitelist feature will always be there to assist you."
+                    );
+
+                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.GOLD, "&lHow do I use it?");
+                    writeInformation(this.width / 2, this.height / 2 + 25, 10, EnumChatFormatting.WHITE,
+                            "If you wish to add a certain word to the whitelist",
+                            "simply open the main whitelist gui on the previous screen",
+                            "and type in whatever you wish to input to the whitelist.",
+                            "",
+                            "The only limitation to the whitelist is that spaces cannot",
+                            "be used. This is an intended feature as it goes against the",
+                            "idea of the whitelist being a simple word-based system."
+                    );
+                    break;
+                case 1:
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lHow does the whitelist work?");
+                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                            "All the words in the whitelist are stored in a list",
+                            "and whenever a chat message if received, the message is tested",
+                            "to see if if contains anything from the whitelist. If it does,",
+                            "all of toggle settings are ignored instantly and the message goes",
+                            "through. In a technical aspect all the words are stored in an ArrayList",
+                            "that is looped through in a containsIgnoreCase fashion."
+                    );
+
+                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.GOLD, "&lWhy does the clearing page have a confirmation box?");
+                    writeInformation(this.width / 2, this.height / 2 + 25, 10, EnumChatFormatting.WHITE,
+                            "Previously, there was none which made it easy for users to",
+                            "missclick and have all the words stored in their whitelist be",
+                            "deleated instantly. The confirmation is just a last-second check",
+                            "to make sure you are actually willing to clear the whitelist."
+                    );
+                    break;
+                case 2:
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lAre there chats the whitelist doesn\'t work with?");
+                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                            "There are a few chat toggles that are known to have issues",
+                            "with the whitelist, this is especially true in multi-line chats",
+                            "such as friend requests or party invites. Currently there are only",
+                            "ideas for a \"smart-mode\" feature. That will check multiple lines.",
+                            "If you find a bug, don\'t forget to report it!"
+                    );
+
+                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.GOLD, "&lWhere can I find the whitelist source code?");
+                    writeInformation(this.width / 2, this.height / 2 + 25, 10, EnumChatFormatting.WHITE,
+                            "All code for the mod is available at:",
+                            "&9https://github.com/boomboompower/ToggleChat",
+                            "Feel free to contribute if you wish, all help is appreciated!"
+                    );
+                    break;
                 default:
                     writeInformation(this.width / 2, this.height / 2 - 50, 30,
                             "TODO",

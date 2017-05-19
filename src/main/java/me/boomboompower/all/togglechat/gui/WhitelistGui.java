@@ -16,7 +16,6 @@
  */
 package me.boomboompower.all.togglechat.gui;
 
-import me.boomboompower.all.togglechat.Options;
 import me.boomboompower.all.togglechat.ToggleChat;
 import me.boomboompower.all.togglechat.utils.Writer;
 
@@ -64,7 +63,7 @@ public class WhitelistGui {
             this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove"));
             this.buttonList.add(new GuiButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear"));
             this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List"));
-            this.buttonList.add(new GuiButton(5, this.width / 2 - 75, this.height / 2 + 74, 150, 20, "Settings"));
+//            this.buttonList.add(new GuiButton(5, this.width / 2 - 75, this.height / 2 + 74, 150, 20, "Settings"));
 
             this.buttonList.add(new GuiButton(9, this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
             this.buttonList.add(new GuiButton(10, 5, this.height - 25, 75, 20, "Back"));
@@ -153,9 +152,9 @@ public class WhitelistGui {
                     displayWhitelist();
                     Minecraft.getMinecraft().displayGuiScreen(null);
                     break;
-                case 5:
-                    new WhitelistSettings(this, 0).display();
-                    break;
+//                case 5:
+//                    new WhitelistSettings(this, 0).display();
+//                    break;
                 case 9:
                     new TutorialGui.WhitelistTutorial(this, 0).display();
                     break;
@@ -220,179 +219,179 @@ public class WhitelistGui {
         }
     }
 
-    public static class WhitelistSettings extends GuiScreen {
-
-        private GuiScreen previousScreen;
-        private int pageNumber;
-
-        public WhitelistSettings(GuiScreen previous, int pageNumber) {
-            this.previousScreen = previous;
-            this.pageNumber = pageNumber;
-        }
-
-        @Override
-        public void initGui() {
-            createButtons();
-        }
-
-        private void createButtons() {
-            this.buttonList.clear();
-            if (pageNumber == 0) {
-                this.buttonList.add(new GuiButton(0, this.width / 2 - 75, this.height / 2 - 70, 150, 20, "Team: " + (Options.ignoreTeam ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(1, this.width / 2 - 75, this.height / 2 - 46, 150, 20, "Join: " + (Options.ignoreJoin ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Leave: " + (Options.ignoreLeave ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(3, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Guild: " + (Options.ignoreGuild ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Party: " + (Options.ignoreParty ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(5, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Shout: " + (Options.ignoreShout ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(6, this.width / 2 - 75, this.height / 2 + 74, 150, 20, "Message: " + (Options.ignoreTeam ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-            } else {
-                this.buttonList.add(new GuiButton(0, this.width / 2 - 75, this.height / 2 - 70, 150, 20, "UHC: " + (Options.ignoreJoin ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(1, this.width / 2 - 75, this.height / 2 - 46, 150, 20, "Party invites: " + (Options.ignoreLeave ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Friend requests: " + (Options.ignoreGuild ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(3, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Spectator: " + (Options.ignoreParty ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Colored team: " + (Options.ignoreShout ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(5, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Housing: " + (Options.ignoreHousing ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(6, this.width / 2 - 75, this.height / 2 + 74, 150, 20, "Separators: " + (Options.ignoreSeparators ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-            }
-
-            this.buttonList.add(new GuiButton(7, 5, this.height - 25, 75, 20, "Whitelist"));
-            this.buttonList.add(new GuiButton(8, this.width - 135, this.height - 25, 65, 20, "Back"));
-            this.buttonList.add(new GuiButton(9, this.width - 70, this.height - 25, 65, 20, "Next"));
-        }
-
-        public void display() {
-            FMLCommonHandler.instance().bus().register(this);
-        }
-
-        @SubscribeEvent
-        public void onClientTick(TickEvent.ClientTickEvent event) {
-            FMLCommonHandler.instance().bus().unregister(this);
-            Minecraft.getMinecraft().displayGuiScreen(this);
-        }
-
-        @Override
-        public void drawScreen(int x, int y, float ticks) {
-            drawDefaultBackground();
-            drawCenteredString(this.fontRendererObj, "Whitelist Settings", this.width / 2, this.height / 2 - 100, Color.WHITE.getRGB());
-            drawCenteredString(this.fontRendererObj, "This feature is experimental and may be removed at any time!", this.width / 2, this.height / 2 - 90, Color.WHITE.getRGB());
-
-            buttonList.get(8).enabled = pageNumber == 1; // Back
-            buttonList.get(9).enabled = pageNumber == 0; // Next
-
-            super.drawScreen(x, y, ticks);
-        }
-
-        @Override
-        protected void keyTyped(char c, int key) throws IOException {
-            if (key == 1) {
-                mc.displayGuiScreen(previousScreen);
-            }
-        }
-
-        @Override
-        public void updateScreen() {
-            super.updateScreen();
-        }
-
-        @Override
-        protected void actionPerformed(GuiButton button) {
-            if (pageNumber == 0) {
-                switch (button.id) {
-                    case 0:
-                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_TEAM);
-                        button.displayString = "Team: " + (Options.ignoreTeam ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-                        break;
-                    case 1:
-                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_JOIN);
-                        button.displayString = "Join: " + (Options.ignoreJoin ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-                        break;
-                    case 2:
-                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_LEAVE);
-                        button.displayString = "Leave: " + (Options.ignoreLeave ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-                        break;
-                    case 3:
-                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_GUILD);
-                        button.displayString = "Guild: " + (Options.ignoreGuild ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-                        break;
-                    case 4:
-                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_PARTY);
-                        button.displayString = "Party: " + (Options.ignoreParty ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-                        break;
-                    case 5:
-                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_SHOUT);
-                        button.displayString = "Shout: " + (Options.ignoreShout ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-                        break;
-                    case 6:
-                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_MESSAGE);
-                        button.displayString = "Message: " + (Options.ignoreMessage ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-                        break;
-                }
-            } else {
-                switch (button.id) {
-                    case 0:
-                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_UHC);
-                        button.displayString = "UHC: " + (Options.ignoreUHC ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-                        break;
-                    case 1:
-                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_PARTYINV);
-                        button.displayString = "Party invites: " + (Options.ignorePartyInv ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-                        break;
-                    case 2:
-                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_FRIENDREQ);
-                        button.displayString = "Friend requests: " + (Options.ignoreFriendReqs ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-                        break;
-                    case 3:
-                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_SPECTATOR);
-                        button.displayString = "Spectator: " + (Options.ignoreSpec ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-                        break;
-                    case 4:
-                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_COLORED_TEAM);
-                        button.displayString = "Colored team: " + (Options.ignoreColored ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-                        break;
-                    case 5:
-                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_HOUSING);
-                        button.displayString = "Housing: " + (Options.ignoreHousing ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-                        break;
-                    case 6:
-                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_SEPARATOR);
-                        button.displayString = "Separators: " + (Options.ignoreSeparators ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
-                        break;
-                }
-            }
-            switch (button.id) {
-                case 7:
-                    new WhitelistMain().display();
-                    break;
-                case 8:
-                    if (pageNumber > 0) {
-                        new ToggleGui.ToggleChatMainGui(pageNumber--);
-                        createButtons();
-                    } else {
-                        new WhitelistMain().display();
-                    }
-                    break;
-                case 9:
-                    new ToggleGui.ToggleChatMainGui(pageNumber++);
-                    createButtons();
-                    break;
-            }
-        }
-
-        @Override
-        public void onGuiClosed() {
-            Writer.execute(false, true);
-        }
-
-        @Override
-        public boolean doesGuiPauseGame() {
-            return false;
-        }
-
-        @Override
-        public void sendChatMessage(String message) {
-            Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
-        }
-    }
+//    public static class WhitelistSettings extends GuiScreen {
+//
+//        private GuiScreen previousScreen;
+//        private int pageNumber;
+//
+//        public WhitelistSettings(GuiScreen previous, int pageNumber) {
+//            this.previousScreen = previous;
+//            this.pageNumber = pageNumber;
+//        }
+//
+//        @Override
+//        public void initGui() {
+//            createButtons();
+//        }
+//
+//        private void createButtons() {
+//            this.buttonList.clear();
+//            if (pageNumber == 0) {
+//                this.buttonList.add(new GuiButton(0, this.width / 2 - 75, this.height / 2 - 70, 150, 20, "Team: " + (Options.ignoreTeam ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+//                this.buttonList.add(new GuiButton(1, this.width / 2 - 75, this.height / 2 - 46, 150, 20, "Join: " + (Options.ignoreJoin ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+//                this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Leave: " + (Options.ignoreLeave ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+//                this.buttonList.add(new GuiButton(3, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Guild: " + (Options.ignoreGuild ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+//                this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Party: " + (Options.ignoreParty ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+//                this.buttonList.add(new GuiButton(5, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Shout: " + (Options.ignoreShout ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+//                this.buttonList.add(new GuiButton(6, this.width / 2 - 75, this.height / 2 + 74, 150, 20, "Message: " + (Options.ignoreTeam ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+//            } else {
+//                this.buttonList.add(new GuiButton(0, this.width / 2 - 75, this.height / 2 - 70, 150, 20, "UHC: " + (Options.ignoreJoin ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+//                this.buttonList.add(new GuiButton(1, this.width / 2 - 75, this.height / 2 - 46, 150, 20, "Party invites: " + (Options.ignoreLeave ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+//                this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Friend requests: " + (Options.ignoreGuild ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+//                this.buttonList.add(new GuiButton(3, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Spectator: " + (Options.ignoreParty ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+//                this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Colored team: " + (Options.ignoreShout ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+//                this.buttonList.add(new GuiButton(5, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Housing: " + (Options.ignoreHousing ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+//                this.buttonList.add(new GuiButton(6, this.width / 2 - 75, this.height / 2 + 74, 150, 20, "Separators: " + (Options.ignoreSeparators ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+//            }
+//
+//            this.buttonList.add(new GuiButton(7, 5, this.height - 25, 75, 20, "Whitelist"));
+//            this.buttonList.add(new GuiButton(8, this.width - 135, this.height - 25, 65, 20, "Back"));
+//            this.buttonList.add(new GuiButton(9, this.width - 70, this.height - 25, 65, 20, "Next"));
+//        }
+//
+//        public void display() {
+//            FMLCommonHandler.instance().bus().register(this);
+//        }
+//
+//        @SubscribeEvent
+//        public void onClientTick(TickEvent.ClientTickEvent event) {
+//            FMLCommonHandler.instance().bus().unregister(this);
+//            Minecraft.getMinecraft().displayGuiScreen(this);
+//        }
+//
+//        @Override
+//        public void drawScreen(int x, int y, float ticks) {
+//            drawDefaultBackground();
+//            drawCenteredString(this.fontRendererObj, "Whitelist Settings", this.width / 2, this.height / 2 - 100, Color.WHITE.getRGB());
+//            drawCenteredString(this.fontRendererObj, "This feature is experimental and may be removed at any time!", this.width / 2, this.height / 2 - 90, Color.WHITE.getRGB());
+//
+//            buttonList.get(8).enabled = pageNumber == 1; // Back
+//            buttonList.get(9).enabled = pageNumber == 0; // Next
+//
+//            super.drawScreen(x, y, ticks);
+//        }
+//
+//        @Override
+//        protected void keyTyped(char c, int key) throws IOException {
+//            if (key == 1) {
+//                mc.displayGuiScreen(previousScreen);
+//            }
+//        }
+//
+//        @Override
+//        public void updateScreen() {
+//            super.updateScreen();
+//        }
+//
+//        @Override
+//        protected void actionPerformed(GuiButton button) {
+//            if (pageNumber == 0) {
+//                switch (button.id) {
+//                    case 0:
+//                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_TEAM);
+//                        button.displayString = "Team: " + (Options.ignoreTeam ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+//                        break;
+//                    case 1:
+//                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_JOIN);
+//                        button.displayString = "Join: " + (Options.ignoreJoin ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+//                        break;
+//                    case 2:
+//                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_LEAVE);
+//                        button.displayString = "Leave: " + (Options.ignoreLeave ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+//                        break;
+//                    case 3:
+//                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_GUILD);
+//                        button.displayString = "Guild: " + (Options.ignoreGuild ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+//                        break;
+//                    case 4:
+//                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_PARTY);
+//                        button.displayString = "Party: " + (Options.ignoreParty ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+//                        break;
+//                    case 5:
+//                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_SHOUT);
+//                        button.displayString = "Shout: " + (Options.ignoreShout ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+//                        break;
+//                    case 6:
+//                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_MESSAGE);
+//                        button.displayString = "Message: " + (Options.ignoreMessage ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+//                        break;
+//                }
+//            } else {
+//                switch (button.id) {
+//                    case 0:
+//                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_UHC);
+//                        button.displayString = "UHC: " + (Options.ignoreUHC ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+//                        break;
+//                    case 1:
+//                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_PARTYINV);
+//                        button.displayString = "Party invites: " + (Options.ignorePartyInv ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+//                        break;
+//                    case 2:
+//                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_FRIENDREQ);
+//                        button.displayString = "Friend requests: " + (Options.ignoreFriendReqs ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+//                        break;
+//                    case 3:
+//                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_SPECTATOR);
+//                        button.displayString = "Spectator: " + (Options.ignoreSpec ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+//                        break;
+//                    case 4:
+//                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_COLORED_TEAM);
+//                        button.displayString = "Colored team: " + (Options.ignoreColored ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+//                        break;
+//                    case 5:
+//                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_HOUSING);
+//                        button.displayString = "Housing: " + (Options.ignoreHousing ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+//                        break;
+//                    case 6:
+//                        Options.getInstance().toggle(Options.ToggleType.WHITELIST_SEPARATOR);
+//                        button.displayString = "Separators: " + (Options.ignoreSeparators ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+//                        break;
+//                }
+//            }
+//            switch (button.id) {
+//                case 7:
+//                    new WhitelistMain().display();
+//                    break;
+//                case 8:
+//                    if (pageNumber > 0) {
+//                        new ToggleGui.ToggleChatMainGui(pageNumber--);
+//                        createButtons();
+//                    } else {
+//                        new WhitelistMain().display();
+//                    }
+//                    break;
+//                case 9:
+//                    new ToggleGui.ToggleChatMainGui(pageNumber++);
+//                    createButtons();
+//                    break;
+//            }
+//        }
+//
+//        @Override
+//        public void onGuiClosed() {
+//            Writer.execute(false, true);
+//        }
+//
+//        @Override
+//        public boolean doesGuiPauseGame() {
+//            return false;
+//        }
+//
+//        @Override
+//        public void sendChatMessage(String message) {
+//            Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
+//        }
+//    }
 
     public static class WhitelistClearConfirmation extends GuiScreen {
 

@@ -20,7 +20,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -152,6 +151,7 @@ public class ToggleEvents {
 
     public enum ChatType {
         UHC(),
+        NONE(),
         TEAM(),
         JOIN(),
         LEAVE(),

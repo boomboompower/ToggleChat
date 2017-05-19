@@ -39,20 +39,20 @@ public class Options {
     public static boolean showFriendReqs = true;
     public static boolean showSeparators = true;
 
-    public static boolean ignoreUHC = false;
-    public static boolean ignoreSpec = false;
-    public static boolean ignoreTeam = false;
-    public static boolean ignoreJoin = false;
-    public static boolean ignoreLeave = false;
-    public static boolean ignoreGuild = false;
-    public static boolean ignoreParty = false;
-    public static boolean ignoreShout = false;
-    public static boolean ignoreHousing = false;
-    public static boolean ignoreColored = false;
-    public static boolean ignoreMessage = false;
-    public static boolean ignorePartyInv = false;
-    public static boolean ignoreFriendReqs = false;
-    public static boolean ignoreSeparators = false;
+//    public static boolean ignoreUHC = false;
+//    public static boolean ignoreSpec = false;
+//    public static boolean ignoreTeam = false;
+//    public static boolean ignoreJoin = false;
+//    public static boolean ignoreLeave = false;
+//    public static boolean ignoreGuild = false;
+//    public static boolean ignoreParty = false;
+//    public static boolean ignoreShout = false;
+//    public static boolean ignoreHousing = false;
+//    public static boolean ignoreColored = false;
+//    public static boolean ignoreMessage = false;
+//    public static boolean ignorePartyInv = false;
+//    public static boolean ignoreFriendReqs = false;
+//    public static boolean ignoreSeparators = false;
 
     private static Options instance;
 
@@ -94,32 +94,32 @@ public class Options {
                     GlobalUtils.log("The error and its details are shown above.");
                 }
                 break;
-            case WHITELIST_OPTIONS:
-                try {
-                    Options.ignoreUHC = Boolean.parseBoolean(lines.get(0));
-                    Options.ignoreSpec = Boolean.parseBoolean(lines.get(1));
-                    Options.ignoreTeam = Boolean.parseBoolean(lines.get(2));
-                    Options.ignoreJoin = Boolean.parseBoolean(lines.get(3));
-                    Options.ignoreLeave = Boolean.parseBoolean(lines.get(4));
-                    Options.ignoreGuild = Boolean.parseBoolean(lines.get(5));
-                    Options.ignoreParty = Boolean.parseBoolean(lines.get(6));
-                    Options.ignoreShout = Boolean.parseBoolean(lines.get(7));
-                    Options.ignoreHousing = Boolean.parseBoolean(lines.get(8));
-                    Options.ignoreColored = Boolean.parseBoolean(lines.get(9));
-                    Options.ignoreMessage = Boolean.parseBoolean(lines.get(10));
-                    Options.ignorePartyInv = Boolean.parseBoolean(lines.get(11));
-                    Options.ignoreFriendReqs = Boolean.parseBoolean(lines.get(12));
-                    Options.ignoreSeparators = Boolean.parseBoolean(lines.get(13));
-                }
-                catch (Exception ex) {
-                    GlobalUtils.log("Failed to setup whitelist ignoring values. Rewriting!");
-                    Writer.execute(false, true);
-                    GlobalUtils.log("------------------- ERROR -------------------");
-                    ex.printStackTrace();
-                    GlobalUtils.log("------------------- ERROR -------------------");
-                    GlobalUtils.log("The error and its details are shown above.");
-                }
-                break;
+//            case WHITELIST_OPTIONS:
+//                try {
+//                    Options.ignoreUHC = Boolean.parseBoolean(lines.get(0));
+//                    Options.ignoreSpec = Boolean.parseBoolean(lines.get(1));
+//                    Options.ignoreTeam = Boolean.parseBoolean(lines.get(2));
+//                    Options.ignoreJoin = Boolean.parseBoolean(lines.get(3));
+//                    Options.ignoreLeave = Boolean.parseBoolean(lines.get(4));
+//                    Options.ignoreGuild = Boolean.parseBoolean(lines.get(5));
+//                    Options.ignoreParty = Boolean.parseBoolean(lines.get(6));
+//                    Options.ignoreShout = Boolean.parseBoolean(lines.get(7));
+//                    Options.ignoreHousing = Boolean.parseBoolean(lines.get(8));
+//                    Options.ignoreColored = Boolean.parseBoolean(lines.get(9));
+//                    Options.ignoreMessage = Boolean.parseBoolean(lines.get(10));
+//                    Options.ignorePartyInv = Boolean.parseBoolean(lines.get(11));
+//                    Options.ignoreFriendReqs = Boolean.parseBoolean(lines.get(12));
+//                    Options.ignoreSeparators = Boolean.parseBoolean(lines.get(13));
+//                }
+//                catch (Exception ex) {
+//                    GlobalUtils.log("Failed to setup whitelist ignoring values. Rewriting!");
+//                    Writer.execute(false, true);
+//                    GlobalUtils.log("------------------- ERROR -------------------");
+//                    ex.printStackTrace();
+//                    GlobalUtils.log("------------------- ERROR -------------------");
+//                    GlobalUtils.log("The error and its details are shown above.");
+//                }
+//                break;
         }
     }
 
@@ -153,35 +153,35 @@ public class Options {
             case CHAT_COLORED_TEAM:
                 return (showColored = !showColored);
 
-            // Whitelist chat ignore list.
-            case WHITELIST_UHC:
-                return (ignoreUHC = !ignoreUHC);
-            case WHITELIST_TEAM:
-                return (ignoreTeam = !ignoreTeam);
-            case WHITELIST_JOIN:
-                return (ignoreJoin = !ignoreJoin);
-            case WHITELIST_LEAVE:
-                return (ignoreLeave = !ignoreLeave);
-            case WHITELIST_GUILD:
-                return (ignoreGuild = !ignoreGuild);
-            case WHITELIST_PARTY:
-                return (ignoreParty = !ignoreParty);
-            case WHITELIST_SHOUT:
-                return (ignoreShout = !ignoreShout);
-            case WHITELIST_MESSAGE:
-                return (ignoreMessage = !ignoreMessage);
-            case WHITELIST_HOUSING:
-                return (ignoreHousing = !ignoreHousing);
-            case WHITELIST_PARTYINV:
-                return (ignorePartyInv = !ignorePartyInv);
-            case WHITELIST_FRIENDREQ:
-                return (ignoreFriendReqs = !ignoreFriendReqs);
-            case WHITELIST_SPECTATOR:
-                return (ignoreSpec = !ignoreSpec);
-            case WHITELIST_SEPARATOR:
-                return (ignoreSeparators = !ignoreSeparators);
-            case WHITELIST_COLORED_TEAM:
-                return (ignoreColored = !ignoreColored);
+//            // Whitelist chat ignore list.
+//            case WHITELIST_UHC:
+//                return (ignoreUHC = !ignoreUHC);
+//            case WHITELIST_TEAM:
+//                return (ignoreTeam = !ignoreTeam);
+//            case WHITELIST_JOIN:
+//                return (ignoreJoin = !ignoreJoin);
+//            case WHITELIST_LEAVE:
+//                return (ignoreLeave = !ignoreLeave);
+//            case WHITELIST_GUILD:
+//                return (ignoreGuild = !ignoreGuild);
+//            case WHITELIST_PARTY:
+//                return (ignoreParty = !ignoreParty);
+//            case WHITELIST_SHOUT:
+//                return (ignoreShout = !ignoreShout);
+//            case WHITELIST_MESSAGE:
+//                return (ignoreMessage = !ignoreMessage);
+//            case WHITELIST_HOUSING:
+//                return (ignoreHousing = !ignoreHousing);
+//            case WHITELIST_PARTYINV:
+//                return (ignorePartyInv = !ignorePartyInv);
+//            case WHITELIST_FRIENDREQ:
+//                return (ignoreFriendReqs = !ignoreFriendReqs);
+//            case WHITELIST_SPECTATOR:
+//                return (ignoreSpec = !ignoreSpec);
+//            case WHITELIST_SEPARATOR:
+//                return (ignoreSeparators = !ignoreSeparators);
+//            case WHITELIST_COLORED_TEAM:
+//                return (ignoreColored = !ignoreColored);
 
             // Should never happen
             default:
@@ -212,20 +212,21 @@ public class Options {
         CHAT_SEPARATOR(),
         CHAT_COLORED_TEAM(),
 
-        WHITELIST_UHC(),
-        WHITELIST_TEAM(),
-        WHITELIST_JOIN(),
-        WHITELIST_LEAVE(),
-        WHITELIST_GUILD(),
-        WHITELIST_PARTY(),
-        WHITELIST_SHOUT(),
-        WHITELIST_MESSAGE(),
-        WHITELIST_HOUSING(),
-        WHITELIST_PARTYINV(),
-        WHITELIST_FRIENDREQ(),
-        WHITELIST_SPECTATOR(),
-        WHITELIST_SEPARATOR(),
-        WHITELIST_COLORED_TEAM();
+//        WHITELIST_UHC(),
+//        WHITELIST_TEAM(),
+//        WHITELIST_JOIN(),
+//        WHITELIST_LEAVE(),
+//        WHITELIST_GUILD(),
+//        WHITELIST_PARTY(),
+//        WHITELIST_SHOUT(),
+//        WHITELIST_MESSAGE(),
+//        WHITELIST_HOUSING(),
+//        WHITELIST_PARTYINV(),
+//        WHITELIST_FRIENDREQ(),
+//        WHITELIST_SPECTATOR(),
+//        WHITELIST_SEPARATOR(),
+//        WHITELIST_COLORED_TEAM()
+        ;
 
         ToggleType() {}
     }
