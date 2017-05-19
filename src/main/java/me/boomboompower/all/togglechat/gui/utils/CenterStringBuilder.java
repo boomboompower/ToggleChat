@@ -15,8 +15,9 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.all.togglechat.utils;
+package me.boomboompower.all.togglechat.gui.utils;
 
+import me.boomboompower.all.togglechat.utils.GlobalUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.EnumChatFormatting;

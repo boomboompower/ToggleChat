@@ -17,10 +17,10 @@
 
 package me.boomboompower.all.togglechat.gui;
 
-import me.boomboompower.all.togglechat.utils.CenterStringBuilder;
+import me.boomboompower.all.togglechat.gui.utils.CenterStringBuilder;
+import me.boomboompower.all.togglechat.gui.utils.GuiTextWriter;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
@@ -34,10 +34,12 @@ public class TutorialGui {
 
     public static class MainToggleTutorial extends GuiScreen {
 
+        private GuiTextWriter guiTextWriter;
         private GuiScreen previousScreen;
         private int pageNumber;
 
         public MainToggleTutorial(GuiScreen previous, int pageNumber) {
+            this.guiTextWriter = new GuiTextWriter(this);
             this.previousScreen = previous;
             this.pageNumber = pageNumber;
         }
@@ -102,15 +104,15 @@ public class TutorialGui {
         }
 
         private void setupInfo() {
-            drawCentered(new CenterStringBuilder("ToggleChat Tutorial", this.width / 2, this.height / 2 - 105));
-            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 95));
-            drawCentered(new CenterStringBuilder("Any questions? Ask &aboomboompower&r on the forums!", this.width / 2, this.height / 2 + 80));
+            guiTextWriter.drawCenteredMessage(new CenterStringBuilder("ToggleChat Tutorial", this.width / 2, this.height / 2 - 105));
+            guiTextWriter.drawCenteredMessage(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 95));
+            guiTextWriter.drawCenteredMessage(new CenterStringBuilder("Any questions? Ask &aboomboompower&r on the forums!", this.width / 2, this.height / 2 + 80));
         }
 
         private void writePage() {
             switch (pageNumber) {
                 case 0:
-                    writeInformation(this.width / 2, this.height / 2 - 90, 10,
+                    guiTextWriter.drawCenteredMessage(this.width / 2, this.height / 2 - 90, 10,
                             "You may notice, there are MANY different chats that",
                             "can be toggled with this mod.",
                             "",
@@ -120,7 +122,7 @@ public class TutorialGui {
                             "The toggleable chats are listed below."
                     );
 
-                    writeInformation(this.width / 2 - 50, this.height / 2 - 10, 12, EnumChatFormatting.GOLD,
+                    guiTextWriter.drawCenteredMessage(this.width / 2 - 50, this.height / 2 - 10, 12, EnumChatFormatting.GOLD,
                             "Team",
                             "Join",
                             "Leave",
@@ -130,7 +132,7 @@ public class TutorialGui {
                             "Message"
                     );
 
-                    writeInformation(this.width / 2 + 50, this.height / 2 - 10, 12, EnumChatFormatting.GOLD,
+                    guiTextWriter.drawCenteredMessage(this.width / 2 + 50, this.height / 2 - 10, 12, EnumChatFormatting.GOLD,
                             "UHC",
                             "Party invites",
                             "Friend requests",
@@ -141,8 +143,8 @@ public class TutorialGui {
                     );
                     break;
                 case 1:
-                    writeInformation(this.width / 2 - 120, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Team");
-                    writeInformation(this.width / 2 - 120, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                    guiTextWriter.drawCenteredMessage(this.width / 2 - 120, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Team");
+                    guiTextWriter.drawCenteredMessage(this.width / 2 - 120, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&9[TEAM]&r\"",
                             "",
@@ -150,8 +152,8 @@ public class TutorialGui {
                             "The message will be &cblocked&r!"
                     );
 
-                    writeInformation(this.width / 2 - 120, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Join");
-                    writeInformation(this.width / 2 - 120, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                    guiTextWriter.drawCenteredMessage(this.width / 2 - 120, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Join");
+                    guiTextWriter.drawCenteredMessage(this.width / 2 - 120, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "end with \"&ejoined.&r\"",
                             "",
@@ -159,8 +161,8 @@ public class TutorialGui {
                             "The message will be &cblocked&r!"
                     );
 
-                    writeInformation(this.width / 2 + 120, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Leave");
-                    writeInformation(this.width / 2 + 120, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                    guiTextWriter.drawCenteredMessage(this.width / 2 + 120, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Leave");
+                    guiTextWriter.drawCenteredMessage(this.width / 2 + 120, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "end with \"&eleft.&r\"",
                             "",
@@ -168,8 +170,8 @@ public class TutorialGui {
                             "The message will be &cblocked&r!"
                     );
 
-                    writeInformation(this.width / 2 + 120, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Guild");
-                    writeInformation(this.width / 2 + 120, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                    guiTextWriter.drawCenteredMessage(this.width / 2 + 120, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Guild");
+                    guiTextWriter.drawCenteredMessage(this.width / 2 + 120, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&2Guild >&r\" or \"&aG >&r\"",
                             "",
@@ -178,7 +180,7 @@ public class TutorialGui {
                     );
                     break;
                 default:
-                    writeInformation(this.width / 2, this.height / 2 - 50, 10,
+                    guiTextWriter.drawCenteredMessage(this.width / 2, this.height / 2 - 50, 10,
                             "Sorry, &cno&r information is currently available!",
                             "Please try again later!",
                             "",
@@ -193,10 +195,12 @@ public class TutorialGui {
 
     public static class WhitelistTutorial extends GuiScreen {
 
+        private GuiTextWriter guiTextWriter;
         private GuiScreen previousScreen;
         private int pageNumber;
 
         public WhitelistTutorial(GuiScreen previous, int pageNumber) {
+            this.guiTextWriter = new GuiTextWriter(this);
             this.previousScreen = previous;
             this.pageNumber = pageNumber;
         }
@@ -261,38 +265,19 @@ public class TutorialGui {
         }
 
         private void setupInfo() {
-            drawCentered(new CenterStringBuilder("Whitelist Tutorial", this.width / 2, this.height / 2 - 105));
-            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 95));
+            guiTextWriter.drawCenteredMessage(new CenterStringBuilder("Whitelist Tutorial", this.width / 2, this.height / 2 - 105));
+            guiTextWriter.drawCenteredMessage(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 95));
         }
 
         private void writePage() {
             switch (pageNumber) {
                 default:
-                    writeInformation(this.width / 2, this.height / 2 - 50, 30,
+                    guiTextWriter.drawCenteredMessage(this.width / 2, this.height / 2 - 50, 30,
                             "TODO",
                             "Shall be completed soon\u2122!"
                     );
                     break;
             }
-        }
-    }
-
-    public static void drawCenteredString(FontRenderer fontRenderer, String text, int x, int y, int color) {
-        fontRenderer.drawStringWithShadow(text, (float) (x - fontRenderer.getStringWidth(text) / 2), (float) y, color);
-    }
-
-    public static void drawCentered(CenterStringBuilder builder) {
-        drawCenteredString(builder.getFontRender(), builder.translateCodes().getMessage(), builder.getX(), builder.getY(), builder.getColor().getRGB());
-    }
-
-    public static void writeInformation(int startingX, int startingY, int separation, String... lines) {
-        writeInformation(startingX, startingY, separation, EnumChatFormatting.WHITE, lines);
-    }
-
-    public static void writeInformation(int startingX, int startingY, int separation, EnumChatFormatting color, String... lines) {
-        for (String s : lines) {
-            drawCentered(new CenterStringBuilder(color + s, startingX, startingY));
-            startingY += separation;
         }
     }
 }
