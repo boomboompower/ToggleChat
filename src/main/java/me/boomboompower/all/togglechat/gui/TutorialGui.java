@@ -146,7 +146,7 @@ public class TutorialGui {
                     );
                     break;
                 case 1:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Team");
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lTeam");
                     writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&9[TEAM]&r\"",
@@ -156,7 +156,7 @@ public class TutorialGui {
                             "that you believe is not appropriate"
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Join");
+                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lJoin");
                     writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "end with \"&ejoined.&r\"",
@@ -167,7 +167,7 @@ public class TutorialGui {
                     );
                     break;
                 case 2:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Leave");
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lLeave");
                     writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "end with \"&eleft.&r\"",
@@ -177,7 +177,7 @@ public class TutorialGui {
                             "with a lot of players. (&aTechnoguild&r)"
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Guild");
+                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lGuild");
                     writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&2Guild >&r\" or \"&aG >&r\"",
@@ -188,7 +188,7 @@ public class TutorialGui {
                     );
                     break;
                 case 3:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Party");
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lParty");
                     writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&9Party >&r\"",
@@ -198,7 +198,7 @@ public class TutorialGui {
                             "Toggle it with a click of a button!"
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Shout");
+                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lShout");
                     writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&6[SHOUT]&r\"",
@@ -209,7 +209,7 @@ public class TutorialGui {
                     );
                     break;
                 case 4:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Messages");
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lMessages");
                     writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&dTo&r\" or \"&dFrom&r\"",
@@ -219,7 +219,7 @@ public class TutorialGui {
                             "Simply slap that &6Messages&r button and move on!"
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "UHC");
+                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lUHC");
                     writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&6[00\u272B]&r\"",
@@ -230,7 +230,7 @@ public class TutorialGui {
                     );
                     break;
                 case 5:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Party invites");
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lParty invites");
                     writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "*may* be a party invite/expiry message",
@@ -240,7 +240,7 @@ public class TutorialGui {
                             "party invites, you can use this instead!"
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Friend requests");
+                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lFriend requests");
                     writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that start with",
                             "\"&eFriend request from&r\" and a few others",
@@ -250,17 +250,17 @@ public class TutorialGui {
                     );
                     break;
                 case 6:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Spectator");
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lSpectator");
                     writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
-                            "begin with \"&7[SPECTATOR]\"",
+                            "begin with \"&7[SPECTATOR]&r\"",
                             "",
                             "Ignoring spectator chat with this amazing",
                             "tool, created specifically to ignore spectators!",
                             "&8&o#BringBackSpecChat"
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Colored team");
+                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lColored team");
                     writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that start with",
                             "\"&e[YELLOW]&r\", \"&d[PURPLE]&r\", \"&c[RED]&r\" etc",
@@ -271,16 +271,16 @@ public class TutorialGui {
                     );
                     break;
                 case 7:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Housing");
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lHousing");
                     writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
-                            "begin with \"&e[CO-OWNER]\", \"&e[OWNER]\" or \"&6[RES]\"",
+                            "begin with \"&e[CO-OWNER]&r\", \"&e[OWNER]&r\" or \"&6[RES]&r\"",
                             "",
                             "Good for when you are in a housing plot",
                             "with many residents/co-owners."
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Separators");
+                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lSeparators");
                     writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for messages that are just",
                             "\"&9-------------------------&r\"",
@@ -339,7 +339,7 @@ public class TutorialGui {
 
             writePage();
 
-            buttonList.get(1).enabled = pageNumber < 9;
+            buttonList.get(1).enabled = pageNumber < 2;
 
             super.drawScreen(x, y, ticks);
         }
