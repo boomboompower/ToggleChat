@@ -177,7 +177,33 @@ public class TutorialGui {
                     writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Guild");
                     writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
-                            "start with \"&2Guild >&r\" or \"&aG >&r\""
+                            "start with \"&2Guild >&r\" or \"&aG >&r\"",
+                            "",
+                            "One of the most commonly used features.",
+                            "Simply allows you to toggle recieving",
+                            "guild messages. Good for large guilds!"
+                    );
+                    break;
+                case 3:
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Party");
+                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                            "Checks for chat messages that ",
+                            "start with \"&9Party >&r\"",
+                            "",
+                            "Ever been in a &9100&r player party?",
+                            "Yeah, those can get pretty hectic",
+                            "and extremely spammy. Toggle it with",
+                            "a click of a button!"
+                    );
+
+                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Shout");
+                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                            "Checks for chat messages that ",
+                            "start with \"&6[SHOUT]&r\"",
+                            "",
+                            "VERY usful for ignoring shouts by",
+                            "random users before the game starts.",
+                            "(Generally they aren't positive)"
                     );
                     break;
                 default:
