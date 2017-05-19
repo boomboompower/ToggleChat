@@ -102,15 +102,14 @@ public class TutorialGui {
         }
 
         private void setupInfo() {
-            drawCentered(new CenterStringBuilder("ToggleChat Tutorial", this.width / 2, this.height / 2 - 120));
-            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 110));
+            drawCentered(new CenterStringBuilder("ToggleChat Tutorial", this.width / 2, this.height / 2 - 105));
+            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 95));
             drawCentered(new CenterStringBuilder("Any questions? Ask &aboomboompower&r on the forums!", this.width / 2, this.height / 2 + 80));
         }
 
         private void writePage() {
             switch (pageNumber) {
                 case 0:
-                    // Write tutorial
                     writeInformation(this.width / 2, this.height / 2 - 90, 10,
                             "You may notice, there are MANY different chats that",
                             "can be toggled with this mod.",
@@ -121,7 +120,7 @@ public class TutorialGui {
                             "The toggleable chats are listed below."
                     );
 
-                    writeInformation(this.width / 2 - 50, this.height / 2 - 10, 12, true,
+                    writeInformation(this.width / 2 - 50, this.height / 2 - 10, 12, EnumChatFormatting.GOLD,
                             "Team",
                             "Join",
                             "Leave",
@@ -131,7 +130,7 @@ public class TutorialGui {
                             "Message"
                     );
 
-                    writeInformation(this.width / 2 + 50, this.height / 2 - 10, 12, true,
+                    writeInformation(this.width / 2 + 50, this.height / 2 - 10, 12, EnumChatFormatting.GOLD,
                             "UHC",
                             "Party invites",
                             "Friend requests",
@@ -141,16 +140,53 @@ public class TutorialGui {
                             "Separators"
                     );
                     break;
-                    default:
-                        writeInformation(this.width / 2, this.height / 2 - 50, 10,
-                                "Sorry, &cno&r information is currently available!",
-                                "Please try again later!",
-                                "",
-                                "",
-                                "Sincerely",
-                                "&aboomboompower&r"
-                        );
-                        break;
+                case 1:
+                    writeInformation(this.width / 2 - 120, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Team");
+                    writeInformation(this.width / 2 - 120, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                            "Checks for chat messages that ",
+                            "start with \"&9[TEAM]&r\"",
+                            "",
+                            "If the &aTeam&r button is &cdisabled&r",
+                            "The message will be &cblocked&r!"
+                    );
+
+                    writeInformation(this.width / 2 - 120, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Join");
+                    writeInformation(this.width / 2 - 120, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                            "Checks for chat messages that ",
+                            "end with \"&ejoined.&r\"",
+                            "",
+                            "If the &aJoin&r button is &cdisabled&r",
+                            "The message will be &cblocked&r!"
+                    );
+
+                    writeInformation(this.width / 2 + 120, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Leave");
+                    writeInformation(this.width / 2 + 120, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                            "Checks for chat messages that ",
+                            "end with \"&eleft.&r\"",
+                            "",
+                            "If the &aLeave&r button is &cdisabled&r",
+                            "The message will be &cblocked&r!"
+                    );
+
+                    writeInformation(this.width / 2 + 120, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Guild");
+                    writeInformation(this.width / 2 + 120, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                            "Checks for chat messages that ",
+                            "start with \"&2Guild >&r\" or \"&aG >&r\"",
+                            "",
+                            "If the &aGuild&r button is &cdisabled&r",
+                            "The message will be &cblocked&r!"
+                    );
+                    break;
+                default:
+                    writeInformation(this.width / 2, this.height / 2 - 50, 10,
+                            "Sorry, &cno&r information is currently available!",
+                            "Please try again later!",
+                            "",
+                            "",
+                            "Sincerely",
+                            "&aboomboompower&r"
+                    );
+                    break;
             }
         }
     }
@@ -225,14 +261,14 @@ public class TutorialGui {
         }
 
         private void setupInfo() {
-            drawCentered(new CenterStringBuilder("Whitelist Tutorial", this.width / 2, this.height / 2 - 120));
-            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 110));
+            drawCentered(new CenterStringBuilder("Whitelist Tutorial", this.width / 2, this.height / 2 - 105));
+            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 95));
         }
 
         private void writePage() {
             switch (pageNumber) {
                 default:
-                    writeInformation(this.width / 2, this.height / 2, 30,
+                    writeInformation(this.width / 2, this.height / 2 - 50, 30,
                             "TODO",
                             "Shall be completed soon\u2122!"
                     );
@@ -250,12 +286,12 @@ public class TutorialGui {
     }
 
     public static void writeInformation(int startingX, int startingY, int separation, String... lines) {
-        writeInformation(startingX, startingY, separation, false, lines);
+        writeInformation(startingX, startingY, separation, EnumChatFormatting.WHITE, lines);
     }
 
-    public static void writeInformation(int startingX, int startingY, int separation, boolean chats, String... lines) {
+    public static void writeInformation(int startingX, int startingY, int separation, EnumChatFormatting color, String... lines) {
         for (String s : lines) {
-            drawCentered(new CenterStringBuilder((chats ? EnumChatFormatting.GOLD : "") + s, startingX, startingY));
+            drawCentered(new CenterStringBuilder(color + s, startingX, startingY));
             startingY += separation;
         }
     }
