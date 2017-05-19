@@ -141,6 +141,16 @@ public class TutorialGui {
                             "Separators"
                     );
                     break;
+                    default:
+                        writeInformation(this.width / 2, this.height / 2 - 50, 10,
+                                "Sorry, &cno&r information is currently available!",
+                                "Please try again later!",
+                                "",
+                                "",
+                                "Sincerely",
+                                "&aboomboompower&r"
+                        );
+                        break;
             }
         }
     }
@@ -221,8 +231,7 @@ public class TutorialGui {
 
         private void writePage() {
             switch (pageNumber) {
-                case 0:
-                    // Write tutorial
+                default:
                     writeInformation(this.width / 2, this.height / 2, 30,
                             "TODO",
                             "Shall be completed soon\u2122!"
