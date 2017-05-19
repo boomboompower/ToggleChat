@@ -18,7 +18,6 @@ package me.boomboompower.all.togglechat.gui;
 
 import me.boomboompower.all.togglechat.Options;
 import me.boomboompower.all.togglechat.ToggleChat;
-import me.boomboompower.all.togglechat.command.TutorialGui;
 import me.boomboompower.all.togglechat.utils.Writer;
 
 import net.minecraft.client.Minecraft;
@@ -66,7 +65,7 @@ public class WhitelistGui {
             this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List"));
             this.buttonList.add(new GuiButton(5, this.width / 2 - 75, this.height / 2 + 74, 150, 20, "Settings"));
 
-            this.buttonList.add(new GuiButton(9, this.width / 2 - 75, this.height - 25, 150, 20, "Tutorial"));
+            this.buttonList.add(new GuiButton(9, this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
             this.buttonList.add(new GuiButton(10, 5, this.height - 25, 75, 20, "Back"));
 
             text.setText(input);

@@ -17,7 +17,6 @@
 package me.boomboompower.all.togglechat.gui;
 
 import me.boomboompower.all.togglechat.Options;
-import me.boomboompower.all.togglechat.command.TutorialGui;
 import me.boomboompower.all.togglechat.utils.Writer;
 
 import net.minecraft.client.Minecraft;
@@ -74,7 +73,7 @@ public class ToggleGui {
             }
 
             // Register tutorial buttons
-            this.buttonList.add(new GuiButton(7, this.width / 2 - 65, this.height - 25, 140, 20, "Tutorial"));
+            this.buttonList.add(new GuiButton(7, this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
 
             // Register other buttons
             this.buttonList.add(new GuiButton(8, 5, this.height - 25, 75, 20, "Whitelist"));
