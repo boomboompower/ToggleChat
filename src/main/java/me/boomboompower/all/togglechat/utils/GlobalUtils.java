@@ -21,6 +21,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class GlobalUtils {
 
     public static void log(Object message) {

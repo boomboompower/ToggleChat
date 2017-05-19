@@ -47,7 +47,7 @@ public class Options {
     public static boolean ignoreGuild = false;
     public static boolean ignoreParty = false;
     public static boolean ignoreShout = false;
-    public static boolean ignoreHousing = true;
+    public static boolean ignoreHousing = false;
     public static boolean ignoreColored = false;
     public static boolean ignoreMessage = false;
     public static boolean ignorePartyInv = false;
