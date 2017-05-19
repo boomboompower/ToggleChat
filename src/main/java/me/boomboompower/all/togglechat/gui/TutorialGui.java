@@ -28,6 +28,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class TutorialGui {
@@ -102,25 +103,21 @@ public class TutorialGui {
         }
 
         private void setupInfo() {
-            drawCentered(new CenterStringBuilder("ToggleChat Tutorial", this.width / 2, this.height / 2 - 110));
-            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 100));
+            drawCentered(new CenterStringBuilder("ToggleChat Tutorial", this.width / 2, this.height / 2 - 115));
+            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 105));
             drawCentered(new CenterStringBuilder("Any questions? Ask &aboomboompower&r on the forums!", this.width / 2, this.height / 2 + 80));
 
-            if (pageNumber > 0) {
-                writeInformation(this.width / 2, this.height / 2 + 70, 10,
-                        "Any button labeled &cdisabled&r will have its message &cblocked&r!");
-            }
+            drawHorizontalLine(width / 2 - 80, width / 2 + 80, this.height / 2 - 95, Color.WHITE.getRGB());
         }
 
         private void writePage() {
             switch (pageNumber) {
                 case 0:
-                    writeInformation(this.width / 2, this.height / 2 - 90, 10,
+                    writeInformation(this.width / 2, this.height / 2 - 80, 10,
                             "You may notice, there are MANY different chats that",
                             "can be toggled with this mod.",
                             "",
                             "This is a guide informing you of what each toggle actually does",
-                            "",
                             "",
                             "The toggleable chats are listed below."
                     );
@@ -267,8 +264,8 @@ public class TutorialGui {
         }
 
         private void setupInfo() {
-            drawCentered(new CenterStringBuilder("Whitelist Tutorial", this.width / 2, this.height / 2 - 110));
-            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 100));
+            drawCentered(new CenterStringBuilder("Whitelist Tutorial", this.width / 2, this.height / 2 - 115));
+            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 105));
         }
 
         private void writePage() {
