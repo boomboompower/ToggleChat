@@ -67,7 +67,7 @@ public class WhitelistGui {
             this.buttonList.add(new GuiButton(5, this.width / 2 - 75, this.height / 2 + 74, 150, 20, "Settings"));
 
             this.buttonList.add(new GuiButton(9, this.width / 2 - 75, this.height - 25, 150, 20, "Tutorial"));
-            this.buttonList.add(new GuiButton(10, 5, this.height - 25, 50, 20, "Back"));
+            this.buttonList.add(new GuiButton(10, 5, this.height - 25, 75, 20, "Back"));
 
             text.setText(input);
             text.setMaxStringLength(16);
@@ -158,7 +158,7 @@ public class WhitelistGui {
                     new TutorialGui.WhitelistTutorial(this, 0).display();
                     break;
                 case 10:
-                    new ToggleGui.Settings_1().display();
+                    new ToggleGui.ToggleChatMainGui(0).display();
                     break;
             }
         }

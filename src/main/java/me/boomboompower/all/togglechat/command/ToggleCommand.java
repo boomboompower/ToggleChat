@@ -54,7 +54,7 @@ public class ToggleCommand implements ICommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-        new ToggleGui.Settings_1().display();
+        new ToggleGui.ToggleChatMainGui(0).display();
     }
 
     @Override

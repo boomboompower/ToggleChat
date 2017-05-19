@@ -67,7 +67,7 @@ public class TutorialGui {
 
             writePage();
 
-            buttonList.get(1).enabled = pageNumber < 10;
+            buttonList.get(1).enabled = pageNumber < 9;
 
             super.drawScreen(x, y, ticks);
         }
@@ -103,7 +103,7 @@ public class TutorialGui {
 
         private void setupInfo() {
             drawCentered(new CenterStringBuilder("ToggleChat Tutorial", this.width / 2, this.height / 2 - 120));
-            drawCentered(new CenterStringBuilder(String.format("Page %s", pageNumber), this.width / 2, this.height / 2 - 110));
+            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 110));
             drawCentered(new CenterStringBuilder("Any questions? Ask &aboomboompower&r on the forums!", this.width / 2, this.height / 2 + 80));
         }
 
