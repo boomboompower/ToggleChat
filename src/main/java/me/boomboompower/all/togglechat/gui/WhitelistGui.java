@@ -18,6 +18,7 @@ package me.boomboompower.all.togglechat.gui;
 
 import me.boomboompower.all.togglechat.Options;
 import me.boomboompower.all.togglechat.ToggleChat;
+import me.boomboompower.all.togglechat.command.TutorialGui;
 import me.boomboompower.all.togglechat.utils.Writer;
 
 import net.minecraft.client.Minecraft;
@@ -63,9 +64,10 @@ public class WhitelistGui {
             this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove"));
             this.buttonList.add(new GuiButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear"));
             this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List"));
+            this.buttonList.add(new GuiButton(5, this.width / 2 - 75, this.height / 2 + 74, 150, 20, "Settings"));
 
-            this.buttonList.add(new GuiButton(5, 5, this.height - 25, 50, 20, "Back"));
-            this.buttonList.add(new GuiButton(6, this.width / 2 - 75, this.height - 25, 150, 20, "Settings"));
+            this.buttonList.add(new GuiButton(9, this.width / 2 - 75, this.height - 25, 150, 20, "Tutorial"));
+            this.buttonList.add(new GuiButton(10, 5, this.height - 25, 50, 20, "Back"));
 
             text.setText(input);
             text.setMaxStringLength(16);
@@ -150,13 +152,18 @@ public class WhitelistGui {
                     Minecraft.getMinecraft().displayGuiScreen(null);
                     break;
                 case 5:
-                    new ToggleGui.Settings_1().display();
-                    break;
-                case 6:
                     new WhitelistSettings().display();
+                    break;
+                case 9:
+                    new TutorialGui.WhitelistTutorial(this, 0).display();
+                    break;
+                case 10:
+                    new ToggleGui.Settings_1().display();
                     break;
             }
         }
+
+
 
         @Override
         public void onGuiClosed() {

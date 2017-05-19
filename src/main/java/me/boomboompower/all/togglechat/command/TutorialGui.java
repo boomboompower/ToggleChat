@@ -20,6 +20,7 @@ package me.boomboompower.all.togglechat.command;
 import me.boomboompower.all.togglechat.utils.CenterStringBuilder;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
@@ -100,10 +101,6 @@ public class TutorialGui {
             return false;
         }
 
-        public void drawCentered(CenterStringBuilder builder) {
-            drawCenteredString(builder.getFontRender(), builder.translateCodes().getMessage(), builder.getX(), builder.getY(), builder.getColor().getRGB());
-        }
-
         private void setupInfo() {
             drawCentered(new CenterStringBuilder("ToggleChat Tutorial", this.width / 2, this.height / 2 - 120));
             drawCentered(new CenterStringBuilder(String.format("Page %s", pageNumber), this.width / 2, this.height / 2 - 110));
@@ -146,16 +143,111 @@ public class TutorialGui {
                     break;
             }
         }
+    }
 
-        private void writeInformation(int startingX, int startingY, int separation, String... lines) {
-            writeInformation(startingX, startingY, separation, false, lines);
+    public static class WhitelistTutorial extends GuiScreen {
+
+        private GuiScreen previousScreen;
+        private int pageNumber;
+
+        public WhitelistTutorial(GuiScreen previous, int pageNumber) {
+            this.previousScreen = previous;
+            this.pageNumber = pageNumber;
         }
 
-        private void writeInformation(int startingX, int startingY, int separation, boolean chats, String... lines) {
-            for (String s : lines) {
-                drawCentered(new CenterStringBuilder((chats ? EnumChatFormatting.GOLD : "") + s, startingX, startingY));
-                startingY += separation;
+        @Override
+        public void initGui() {
+            this.buttonList.add(new GuiButton(0, this.width / 2 - 200, this.height - 25, 150, 20, "Previous"));
+            this.buttonList.add(new GuiButton(1, this.width / 2 + 50, this.height - 25, 150, 20, "Next"));
+        }
+
+        public void display() {
+            FMLCommonHandler.instance().bus().register(this);
+        }
+
+        @SubscribeEvent
+        public void onClientTick(TickEvent.ClientTickEvent event) {
+            FMLCommonHandler.instance().bus().unregister(this);
+            Minecraft.getMinecraft().displayGuiScreen(this);
+        }
+
+        @Override
+        public void drawScreen(int x, int y, float ticks) {
+            drawDefaultBackground();
+
+            // Setup header and footer
+            setupInfo();
+
+            writePage();
+
+            buttonList.get(1).enabled = pageNumber < 10;
+
+            super.drawScreen(x, y, ticks);
+        }
+
+        @Override
+        protected void keyTyped(char c, int key) throws IOException {
+            if (key == 1) {
+                mc.displayGuiScreen(previousScreen);
             }
+        }
+
+
+        @Override
+        protected void actionPerformed(GuiButton button) {
+            switch (button.id) {
+                case 0:
+                    if (pageNumber > 0) {
+                        new MainToggleTutorial(this, pageNumber--);
+                    } else {
+                        mc.displayGuiScreen(previousScreen);
+                    }
+                    break;
+                case 1:
+                    new MainToggleTutorial(this, pageNumber++);
+                    break;
+            }
+        }
+
+        @Override
+        public boolean doesGuiPauseGame() {
+            return false;
+        }
+
+        private void setupInfo() {
+            drawCentered(new CenterStringBuilder("Whitelist Tutorial", this.width / 2, this.height / 2 - 120));
+            drawCentered(new CenterStringBuilder(String.format("Page %s", pageNumber), this.width / 2, this.height / 2 - 110));
+        }
+
+        private void writePage() {
+            switch (pageNumber) {
+                case 0:
+                    // Write tutorial
+                    writeInformation(this.width / 2, this.height / 2, 30,
+                            "TODO",
+                            "Shall be completed soon\u2122!"
+                    );
+                    break;
+            }
+        }
+    }
+
+    public static void drawCenteredString(FontRenderer fontRenderer, String text, int x, int y, int color) {
+        fontRenderer.drawStringWithShadow(text, (float) (x - fontRenderer.getStringWidth(text) / 2), (float) y, color);
+    }
+
+    public static void drawCentered(CenterStringBuilder builder) {
+        drawCenteredString(builder.getFontRender(), builder.translateCodes().getMessage(), builder.getX(), builder.getY(), builder.getColor().getRGB());
+    }
+
+    public static void writeInformation(int startingX, int startingY, int separation, String... lines) {
+        writeInformation(startingX, startingY, separation, false, lines);
+    }
+
+    public static void writeInformation(int startingX, int startingY, int separation, boolean chats, String... lines) {
+        for (String s : lines) {
+            drawCentered(new CenterStringBuilder((chats ? EnumChatFormatting.GOLD : "") + s, startingX, startingY));
+            startingY += separation;
         }
     }
 }
