@@ -102,10 +102,14 @@ public class TutorialGui {
         }
 
         private void setupInfo() {
-            drawCentered(new CenterStringBuilder("ToggleChat Tutorial", this.width / 2, this.height / 2 - 120));
-            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 110));
+            drawCentered(new CenterStringBuilder("ToggleChat Tutorial", this.width / 2, this.height / 2 - 110));
+            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 100));
             drawCentered(new CenterStringBuilder("Any questions? Ask &aboomboompower&r on the forums!", this.width / 2, this.height / 2 + 80));
 
+            if (pageNumber > 0) {
+                writeInformation(this.width / 2, this.height / 2 + 70, 10,
+                        "Any button labeled &cdisabled&r will have its message &cblocked&r!");
+            }
         }
 
         private void writePage() {
@@ -121,7 +125,7 @@ public class TutorialGui {
                             "The toggleable chats are listed below."
                     );
 
-                    writeInformation(this.width / 2 - 50, this.height / 2 - 10, 12, EnumChatFormatting.GOLD,
+                    writeInformation(this.width / 2 - 60, this.height / 2 - 10, 12, EnumChatFormatting.GOLD,
                             "Team",
                             "Join",
                             "Leave",
@@ -131,7 +135,7 @@ public class TutorialGui {
                             "Message"
                     );
 
-                    writeInformation(this.width / 2 + 50, this.height / 2 - 10, 12, EnumChatFormatting.GOLD,
+                    writeInformation(this.width / 2 + 40, this.height / 2 - 10, 12, EnumChatFormatting.GOLD,
                             "UHC",
                             "Party invites",
                             "Friend requests",
@@ -142,40 +146,41 @@ public class TutorialGui {
                     );
                     break;
                 case 1:
-                    writeInformation(this.width / 2 - 120, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Team");
-                    writeInformation(this.width / 2 - 120, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Team");
+                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&9[TEAM]&r\"",
                             "",
-                            "If the &aTeam&r button is &cdisabled&r",
-                            "The message will be &cblocked&r!"
+                            "Especially good for if your teammate is",
+                            "spamming the chat or saying something else",
+                            "that you believe is not appropriate"
                     );
 
-                    writeInformation(this.width / 2 - 120, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Join");
-                    writeInformation(this.width / 2 - 120, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Join");
+                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "end with \"&ejoined.&r\"",
                             "",
-                            "If the &aJoin&r button is &cdisabled&r",
-                            "The message will be &cblocked&r!"
+                            "Useful for people who have a lot of",
+                            "friends and constantly recieve messages",
+                            "that someone has joined the game."
                     );
-
-                    writeInformation(this.width / 2 + 120, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Leave");
-                    writeInformation(this.width / 2 + 120, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                    break;
+                case 2:
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Leave");
+                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "end with \"&eleft.&r\"",
                             "",
-                            "If the &aLeave&r button is &cdisabled&r",
-                            "The message will be &cblocked&r!"
+                            "Also useful for players with large",
+                            "amounts of friends, or for guilds",
+                            "with a lot of players. (&aTechnoguild&r)"
                     );
 
-                    writeInformation(this.width / 2 + 120, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Guild");
-                    writeInformation(this.width / 2 + 120, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Guild");
+                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
-                            "start with \"&2Guild >&r\" or \"&aG >&r\"",
-                            "",
-                            "If the &aGuild&r button is &cdisabled&r",
-                            "The message will be &cblocked&r!"
+                            "start with \"&2Guild >&r\" or \"&aG >&r\""
                     );
                     break;
                 default:
@@ -262,8 +267,8 @@ public class TutorialGui {
         }
 
         private void setupInfo() {
-            drawCentered(new CenterStringBuilder("Whitelist Tutorial", this.width / 2, this.height / 2 - 120));
-            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 110));
+            drawCentered(new CenterStringBuilder("Whitelist Tutorial", this.width / 2, this.height / 2 - 110));
+            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 100));
         }
 
         private void writePage() {

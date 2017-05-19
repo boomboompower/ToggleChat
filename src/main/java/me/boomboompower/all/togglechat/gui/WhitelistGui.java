@@ -255,8 +255,9 @@ public class WhitelistGui {
                 this.buttonList.add(new GuiButton(6, this.width / 2 - 75, this.height / 2 + 74, 150, 20, "Separators: " + (Options.ignoreSeparators ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
             }
 
-            this.buttonList.add(new GuiButton(7, this.width - 135, this.height - 25, 65, 20, "Back"));
-            this.buttonList.add(new GuiButton(8, this.width - 70, this.height - 25, 65, 20, "Next"));
+            this.buttonList.add(new GuiButton(7, 5, this.height - 25, 75, 20, "Whitelist"));
+            this.buttonList.add(new GuiButton(8, this.width - 135, this.height - 25, 65, 20, "Back"));
+            this.buttonList.add(new GuiButton(9, this.width - 70, this.height - 25, 65, 20, "Next"));
         }
 
         public void display() {
@@ -272,11 +273,11 @@ public class WhitelistGui {
         @Override
         public void drawScreen(int x, int y, float ticks) {
             drawDefaultBackground();
-            drawCenteredString(this.fontRendererObj, "Whitelist Settings", this.width / 2, this.height / 2 - 82, Color.WHITE.getRGB());
-            drawCenteredString(this.fontRendererObj, "This feature is experimental and may be removed at any time!", this.width / 2, this.height / 2 + 95, Color.WHITE.getRGB());
+            drawCenteredString(this.fontRendererObj, "Whitelist Settings", this.width / 2, this.height / 2 - 100, Color.WHITE.getRGB());
+            drawCenteredString(this.fontRendererObj, "This feature is experimental and may be removed at any time!", this.width / 2, this.height / 2 - 90, Color.WHITE.getRGB());
 
-            buttonList.get(7).enabled = pageNumber == 1; // Back
-            buttonList.get(8).enabled = pageNumber == 0; // Next
+            buttonList.get(8).enabled = pageNumber == 1; // Back
+            buttonList.get(9).enabled = pageNumber == 0; // Next
 
             super.drawScreen(x, y, ticks);
         }
@@ -360,6 +361,9 @@ public class WhitelistGui {
             }
             switch (button.id) {
                 case 7:
+                    new WhitelistMain().display();
+                    break;
+                case 8:
                     if (pageNumber > 0) {
                         new ToggleGui.ToggleChatMainGui(pageNumber--);
                         createButtons();
@@ -367,7 +371,7 @@ public class WhitelistGui {
                         new WhitelistMain().display();
                     }
                     break;
-                case 8:
+                case 9:
                     new ToggleGui.ToggleChatMainGui(pageNumber++);
                     createButtons();
                     break;
