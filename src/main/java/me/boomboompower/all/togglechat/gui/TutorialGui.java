@@ -17,7 +17,7 @@
 
 package me.boomboompower.all.togglechat.gui;
 
-import me.boomboompower.all.togglechat.utils.CenterStringBuilder;
+import me.boomboompower.all.togglechat.gui.utils.CenterStringBuilder;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -105,6 +105,7 @@ public class TutorialGui {
             drawCentered(new CenterStringBuilder("ToggleChat Tutorial", this.width / 2, this.height / 2 - 120));
             drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 110));
             drawCentered(new CenterStringBuilder("Any questions? Ask &aboomboompower&r on the forums!", this.width / 2, this.height / 2 + 80));
+
         }
 
         private void writePage() {
@@ -192,7 +193,7 @@ public class TutorialGui {
     }
 
     public static class WhitelistTutorial extends GuiScreen {
-
+        
         private GuiScreen previousScreen;
         private int pageNumber;
 
@@ -244,13 +245,13 @@ public class TutorialGui {
             switch (button.id) {
                 case 0:
                     if (pageNumber > 0) {
-                        new MainToggleTutorial(this, pageNumber--);
+                        new TutorialGui.MainToggleTutorial(this, pageNumber--);
                     } else {
                         mc.displayGuiScreen(previousScreen);
                     }
                     break;
                 case 1:
-                    new MainToggleTutorial(this, pageNumber++);
+                    new TutorialGui.MainToggleTutorial(this, pageNumber++);
                     break;
             }
         }
