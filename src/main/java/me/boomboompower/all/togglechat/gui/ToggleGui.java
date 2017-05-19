@@ -146,7 +146,7 @@ public class ToggleGui {
             } else {
                 switch (button.id) {
                     case 0:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_MESSAGE);
+                        Options.getInstance().toggle(Options.ToggleType.CHAT_UHC);
                         button.displayString = "UHC: " + (Options.showUHC ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
                         break;
                     case 1:
@@ -154,7 +154,7 @@ public class ToggleGui {
                         button.displayString = "Friend requests: " + (Options.showFriendReqs ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
                         break;
                     case 2:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_PARTY);
+                        Options.getInstance().toggle(Options.ToggleType.CHAT_PARTYINV);
                         button.displayString = "Party invites: " + (Options.showPartyInv ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
                         break;
                     case 3:

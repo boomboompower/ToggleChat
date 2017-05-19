@@ -191,9 +191,8 @@ public class TutorialGui {
                             "start with \"&9Party >&r\"",
                             "",
                             "Ever been in a &9100&r player party?",
-                            "Yeah, those can get pretty hectic",
-                            "and extremely spammy. Toggle it with",
-                            "a click of a button!"
+                            "They can get pretty hectic and extremely spammy",
+                            "Toggle it with a click of a button!"
                     );
 
                     writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Shout");
@@ -201,9 +200,91 @@ public class TutorialGui {
                             "Checks for chat messages that ",
                             "start with \"&6[SHOUT]&r\"",
                             "",
-                            "VERY usful for ignoring shouts by",
+                            "VERY useful for ignoring shouts by",
                             "random users before the game starts.",
                             "(Generally they aren't positive)"
+                    );
+                    break;
+                case 4:
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Messages");
+                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                            "Checks for chat messages that ",
+                            "start with \"&dTo&r\" or \"&dFrom&r\"",
+                            "",
+                            "Good for people who are very popular and",
+                            "have people messaging them every second.",
+                            "Simply slap that &6Messages&r button and move on!"
+                    );
+
+                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "UHC");
+                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                            "Checks for chat messages that ",
+                            "start with \"&6[00\u272B]&r\"",
+                            "(00 can be any number.)",
+                            "",
+                            "For those who do not wish to see their",
+                            "opponents chat in UHC. Very strategical!"
+                    );
+                    break;
+                case 5:
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Party invites");
+                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                            "Checks for chat messages that ",
+                            "*may* be a party invite/expiry message",
+                            "",
+                            "Some people get waaaaay too many party invites",
+                            "Due to the fact there is no quick way of toggling",
+                            "party invites, you can use this instead!"
+                    );
+
+                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Friend requests");
+                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                            "Checks for chat messages that start with",
+                            "\"&eFriend request from&r\" and a few others",
+                            "",
+                            "I mean it\'s better to use &9/friend toggle&r",
+                            "but whatever, thanks for using the mod!"
+                    );
+                    break;
+                case 6:
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Spectator");
+                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                            "Checks for chat messages that ",
+                            "begin with \"&7[SPECTATOR]\"",
+                            "",
+                            "Ignoring spectator chat with this amazing",
+                            "tool, created specifically to ignore spectators!",
+                            "&8#BringBackSpecChat"
+                    );
+
+                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Colored team");
+                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                            "Checks for chat messages that start with",
+                            "\"&e[YELLOW]&r\", \"&5[PURPLE]&r\", \"&c[RED]&r\" etc",
+                            "",
+                            "Useful for when you\'re playing paintball.",
+                            "A lot of people were confused about this,",
+                            "the explaination of it can be found her..."
+                    );
+                    break;
+                case 7:
+                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "Housing");
+                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                            "Checks for chat messages that ",
+                            "begin with \"&e[CO-OWNER]\", \"&e[OWNER]\" or \"&6[RES]\"",
+                            "",
+                            "Good for when you are in a housing plot",
+                            "with many residents/co-owners."
+                    );
+
+                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "Separators");
+                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                            "Checks for messages that are just",
+                            "\"&9-------------------------\"",
+                            "",
+                            "This was intially built into the \"Leave\"",
+                            "toggle, but we decided to separate it... Get it...",
+                            "&9Im so sorry........"
                     );
                     break;
                 default:
