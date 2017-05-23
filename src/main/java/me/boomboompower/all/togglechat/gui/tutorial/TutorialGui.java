@@ -15,12 +15,12 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.all.togglechat.gui;
+package me.boomboompower.all.togglechat.gui.tutorial;
 
 import me.boomboompower.all.togglechat.gui.utils.CenterStringBuilder;
+import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
@@ -106,9 +106,9 @@ public class TutorialGui {
         }
 
         private void setupInfo() {
-            drawCentered(new CenterStringBuilder("ToggleChat Tutorial", this.width / 2, this.height / 2 - 115));
-            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 105));
-            drawCentered(new CenterStringBuilder("Any questions? Ask &aboomboompower&r on the forums!", this.width / 2, this.height / 2 + 80));
+            GuiUtils.drawCentered(new CenterStringBuilder("ToggleChat Tutorial", this.width / 2, this.height / 2 - 115));
+            GuiUtils.drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 105));
+            GuiUtils.drawCentered(new CenterStringBuilder("Any questions? Ask &aboomboompower&r on the forums!", this.width / 2, this.height / 2 + 80));
 
             drawHorizontalLine(width / 2 - 80, width / 2 + 80, this.height / 2 - 95, Color.WHITE.getRGB());
         }
@@ -116,7 +116,7 @@ public class TutorialGui {
         private void writePage() {
             switch (pageNumber) {
                 case 0:
-                    writeInformation(this.width / 2, this.height / 2 - 80, 10,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 80, 10,
                             "You may notice, there are MANY different chats that",
                             "can be toggled with this mod.",
                             "",
@@ -125,7 +125,7 @@ public class TutorialGui {
                             "The toggleable chats are listed below."
                     );
 
-                    writeInformation(this.width / 2 - 60, this.height / 2 - 10, 12, EnumChatFormatting.GOLD,
+                    GuiUtils.writeInformation(this.width / 2 - 60, this.height / 2 - 10, 12, EnumChatFormatting.GOLD,
                             "Team",
                             "Join",
                             "Leave",
@@ -135,7 +135,7 @@ public class TutorialGui {
                             "Message"
                     );
 
-                    writeInformation(this.width / 2 + 40, this.height / 2 - 10, 12, EnumChatFormatting.GOLD,
+                    GuiUtils.writeInformation(this.width / 2 + 40, this.height / 2 - 10, 12, EnumChatFormatting.GOLD,
                             "UHC",
                             "Party invites",
                             "Friend requests",
@@ -146,8 +146,8 @@ public class TutorialGui {
                     );
                     break;
                 case 1:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lTeam");
-                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lTeam");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&9[TEAM]&r\"",
                             "",
@@ -156,8 +156,8 @@ public class TutorialGui {
                             "that you believe is not appropriate"
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lJoin");
-                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lJoin");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "end with \"&ejoined.&r\"",
                             "",
@@ -167,8 +167,8 @@ public class TutorialGui {
                     );
                     break;
                 case 2:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lLeave");
-                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lLeave");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "end with \"&eleft.&r\"",
                             "",
@@ -177,8 +177,8 @@ public class TutorialGui {
                             "with a lot of players. (&aTechnoguild&r)"
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lGuild");
-                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lGuild");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&2Guild >&r\" or \"&aG >&r\"",
                             "",
@@ -188,8 +188,8 @@ public class TutorialGui {
                     );
                     break;
                 case 3:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lParty");
-                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lParty");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&9Party >&r\"",
                             "",
@@ -198,8 +198,8 @@ public class TutorialGui {
                             "Toggle it with a click of a button!"
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lShout");
-                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lShout");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&6[SHOUT]&r\"",
                             "",
@@ -209,8 +209,8 @@ public class TutorialGui {
                     );
                     break;
                 case 4:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lMessages");
-                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lMessages");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&dTo&r\" or \"&dFrom&r\"",
                             "",
@@ -219,8 +219,8 @@ public class TutorialGui {
                             "Simply slap that &6Messages&r button and move on!"
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lUHC");
-                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lUHC");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "start with \"&6[00\u272B]&r\"",
                             "(00 can be any number.)",
@@ -230,8 +230,8 @@ public class TutorialGui {
                     );
                     break;
                 case 5:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lParty invites");
-                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lParty invites");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "*may* be a party invite/expiry message",
                             "",
@@ -240,8 +240,8 @@ public class TutorialGui {
                             "party invites, you can use this instead!"
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lFriend requests");
-                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lFriend requests");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that start with",
                             "\"&eFriend request from&r\" and a few others",
                             "",
@@ -250,8 +250,8 @@ public class TutorialGui {
                     );
                     break;
                 case 6:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lSpectator");
-                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lSpectator");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "begin with \"&7[SPECTATOR]&r\"",
                             "",
@@ -260,8 +260,8 @@ public class TutorialGui {
                             "&8&o#BringBackSpecChat"
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lColored team");
-                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lColored team");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that start with",
                             "\"&e[YELLOW]&r\", \"&d[PURPLE]&r\", \"&c[RED]&r\" etc",
                             "",
@@ -271,8 +271,8 @@ public class TutorialGui {
                     );
                     break;
                 case 7:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lHousing");
-                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lHousing");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "Checks for chat messages that ",
                             "begin with \"&e[CO-OWNER]&r\", \"&e[OWNER]&r\" or \"&6[RES]&r\"",
                             "",
@@ -280,8 +280,8 @@ public class TutorialGui {
                             "with many residents/co-owners."
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lSeparators");
-                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 5, 10, EnumChatFormatting.GOLD, "&lSeparators");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.WHITE,
                             "Checks for messages that are just",
                             "\"&9-------------------------&r\"",
                             "",
@@ -291,7 +291,7 @@ public class TutorialGui {
                     );
                     break;
                 default:
-                    writeInformation(this.width / 2, this.height / 2 - 50, 10,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 50, 10,
                             "Sorry, &cno&r information is currently available!",
                             "Please try again later!",
                             "",
@@ -374,8 +374,8 @@ public class TutorialGui {
         }
 
         private void setupInfo() {
-            drawCentered(new CenterStringBuilder("Whitelist Tutorial", this.width / 2, this.height / 2 - 115));
-            drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 105));
+            GuiUtils.drawCentered(new CenterStringBuilder("Whitelist Tutorial", this.width / 2, this.height / 2 - 115));
+            GuiUtils.drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 105));
 
             drawHorizontalLine(width / 2 - 80, width / 2 + 80, this.height / 2 - 95, Color.WHITE.getRGB());
         }
@@ -383,8 +383,8 @@ public class TutorialGui {
         private void writePage() {
             switch (pageNumber) {
                 case 0:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lWhat is it?");
-                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lWhat is it?");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "The whitelist feature is designed so that",
                             "you can have a certain chat toggled, and still see",
                             "a message in a toggled chat if the sentance contains",
@@ -393,8 +393,8 @@ public class TutorialGui {
                             "the whitelist feature will always be there to assist you."
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.GOLD, "&lHow do I use it?");
-                    writeInformation(this.width / 2, this.height / 2 + 25, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.GOLD, "&lHow do I use it?");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 + 25, 10, EnumChatFormatting.WHITE,
                             "If you wish to add a certain word to the whitelist",
                             "simply open the main whitelist gui on the previous screen",
                             "and type in whatever you wish to input to the whitelist.",
@@ -405,8 +405,8 @@ public class TutorialGui {
                     );
                     break;
                 case 1:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lHow does the whitelist work?");
-                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lHow does the whitelist work?");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "All the words in the whitelist are stored in a list",
                             "and whenever a chat message if received, the message is tested",
                             "to see if if contains anything from the whitelist. If it does,",
@@ -415,8 +415,8 @@ public class TutorialGui {
                             "that is looped through in a containsIgnoreCase fashion."
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.GOLD, "&lWhy does the clearing page have a confirmation box?");
-                    writeInformation(this.width / 2, this.height / 2 + 25, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.GOLD, "&lWhy does the clearing page have a confirmation box?");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 + 25, 10, EnumChatFormatting.WHITE,
                             "Previously, there was none which made it easy for users to",
                             "missclick and have all the words stored in their whitelist be",
                             "deleated instantly. The confirmation is just a last-second check",
@@ -424,8 +424,8 @@ public class TutorialGui {
                     );
                     break;
                 case 2:
-                    writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lAre there chats the whitelist doesn\'t work with?");
-                    writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 85, 10, EnumChatFormatting.GOLD, "&lAre there chats the whitelist doesn\'t work with?");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 70, 10, EnumChatFormatting.WHITE,
                             "There are a few chat toggles that are known to have issues",
                             "with the whitelist, this is especially true in multi-line chats",
                             "such as friend requests or party invites. Currently there are only",
@@ -433,39 +433,20 @@ public class TutorialGui {
                             "If you find a bug, don\'t forget to report it!"
                     );
 
-                    writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.GOLD, "&lWhere can I find the whitelist source code?");
-                    writeInformation(this.width / 2, this.height / 2 + 25, 10, EnumChatFormatting.WHITE,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 + 10, 10, EnumChatFormatting.GOLD, "&lWhere can I find the whitelist source code?");
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 + 25, 10, EnumChatFormatting.WHITE,
                             "All code for the mod is available at:",
                             "&9https://github.com/boomboompower/ToggleChat",
                             "Feel free to contribute if you wish, all help is appreciated!"
                     );
                     break;
                 default:
-                    writeInformation(this.width / 2, this.height / 2 - 50, 30,
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 50, 30,
                             "TODO",
                             "Shall be completed soon\u2122!"
                     );
                     break;
             }
-        }
-    }
-
-    public static void drawCenteredString(FontRenderer fontRenderer, String text, int x, int y, int color) {
-        fontRenderer.drawStringWithShadow(text, (float) (x - fontRenderer.getStringWidth(text) / 2), (float) y, color);
-    }
-
-    public static void drawCentered(CenterStringBuilder builder) {
-        drawCenteredString(builder.getFontRender(), builder.translateCodes().getMessage(), builder.getX(), builder.getY(), builder.getColor().getRGB());
-    }
-
-    public static void writeInformation(int startingX, int startingY, int separation, String... lines) {
-        writeInformation(startingX, startingY, separation, EnumChatFormatting.WHITE, lines);
-    }
-
-    public static void writeInformation(int startingX, int startingY, int separation, EnumChatFormatting color, String... lines) {
-        for (String s : lines) {
-            drawCentered(new CenterStringBuilder(color + s, startingX, startingY));
-            startingY += separation;
         }
     }
 }

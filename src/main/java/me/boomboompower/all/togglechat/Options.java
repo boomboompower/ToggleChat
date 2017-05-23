@@ -58,6 +58,8 @@ public class Options {
 
     public Options() {
         instance = this;
+
+        doTutorialCheck();
     }
 
     public static Options getInstance() {
@@ -186,6 +188,14 @@ public class Options {
             // Should never happen
             default:
                 return true;
+        }
+    }
+
+    private void doTutorialCheck() {
+        try {
+            Class.forName("me.boomboompower.all.togglechat.gui.tutorial.TutorialGui");
+        } catch (Exception ex) {
+            ToggleChat.tutorialEnabled = false;
         }
     }
 

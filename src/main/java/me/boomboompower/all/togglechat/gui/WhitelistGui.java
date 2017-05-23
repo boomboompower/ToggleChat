@@ -17,6 +17,7 @@
 package me.boomboompower.all.togglechat.gui;
 
 import me.boomboompower.all.togglechat.ToggleChat;
+import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
 import me.boomboompower.all.togglechat.utils.Writer;
 
 import net.minecraft.client.Minecraft;
@@ -65,7 +66,7 @@ public class WhitelistGui {
             this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List"));
 //            this.buttonList.add(new GuiButton(5, this.width / 2 - 75, this.height / 2 + 74, 150, 20, "Settings"));
 
-            this.buttonList.add(new GuiButton(9, this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
+            if (ToggleChat.tutorialEnabled) this.buttonList.add(new GuiButton(9, this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
             this.buttonList.add(new GuiButton(10, 5, this.height - 25, 75, 20, "Back"));
 
             text.setText(input);
@@ -155,12 +156,19 @@ public class WhitelistGui {
 //                case 5:
 //                    new WhitelistSettings(this, 0).display();
 //                    break;
-                case 9:
-                    new TutorialGui.WhitelistTutorial(this, 0).display();
-                    break;
                 case 10:
                     new ToggleGui.ToggleChatMainGui(0).display();
                     break;
+            }
+
+            if (ToggleChat.tutorialEnabled) {
+                try {
+                    switch (button.id) {
+                        case 9:
+                            new me.boomboompower.all.togglechat.gui.tutorial.TutorialGui.WhitelistTutorial(this, 0).display();
+                            break;
+                    }
+                } catch (Exception ex) {}
             }
         }
 
@@ -421,7 +429,7 @@ public class WhitelistGui {
         public void drawScreen(int x, int y, float ticks) {
             drawDefaultBackground();
 
-            TutorialGui.writeInformation(this.width / 2, this.height / 2 - 60, 15,
+            GuiUtils.writeInformation(this.width / 2, this.height / 2 - 60, 15,
                     String.format("Are you sure you wish to clear &6%s %s&r from your whitelist?", ToggleChat.whitelist.size(), (ToggleChat.whitelist.size() == 1 ? "entry" : "entries")),
                     "This action cannot be undone, use at your own risk!"
             );

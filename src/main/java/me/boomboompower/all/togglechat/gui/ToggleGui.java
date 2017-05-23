@@ -17,6 +17,7 @@
 package me.boomboompower.all.togglechat.gui;
 
 import me.boomboompower.all.togglechat.Options;
+import me.boomboompower.all.togglechat.ToggleChat;
 import me.boomboompower.all.togglechat.utils.Writer;
 
 import net.minecraft.client.Minecraft;
@@ -72,13 +73,12 @@ public class ToggleGui {
                 this.buttonList.add(new GuiButton(6, this.width / 2 - 75, this.height / 2 + 74, 150, 20, "Separators: " + (Options.showSeparators ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
             }
 
-            // Register tutorial buttons
-            this.buttonList.add(new GuiButton(7, this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
-
             // Register other buttons
-            this.buttonList.add(new GuiButton(8, 5, this.height - 25, 75, 20, "Whitelist"));
-            this.buttonList.add(new GuiButton(9, this.width - 135, this.height - 25, 65, 20, "Back"));
-            this.buttonList.add(new GuiButton(10, this.width - 70, this.height - 25, 65, 20, "Next"));
+            this.buttonList.add(new GuiButton(7, 5, this.height - 25, 75, 20, "Whitelist"));
+            this.buttonList.add(new GuiButton(8, this.width - 135, this.height - 25, 65, 20, "Back"));
+            this.buttonList.add(new GuiButton(9, this.width - 70, this.height - 25, 65, 20, "Next"));
+
+            if (ToggleChat.tutorialEnabled) this.buttonList.add(new GuiButton(10, this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
         }
 
         public void display() {
@@ -178,12 +178,9 @@ public class ToggleGui {
 
             switch (button.id) {
                 case 7:
-                    new TutorialGui.MainToggleTutorial(this, 0).display();
-                    break;
-                case 8:
                     new WhitelistGui.WhitelistMain().display();
                     break;
-                case 9:
+                case 8:
                     if (pageNumber > 0) {
                         new ToggleChatMainGui(pageNumber--);
                         createButtons();
@@ -191,10 +188,20 @@ public class ToggleGui {
                         mc.displayGuiScreen(null);
                     }
                     break;
-                case 10:
+                case 9:
                     new ToggleChatMainGui(pageNumber++);
                     createButtons();
                     break;
+            }
+
+            if (ToggleChat.tutorialEnabled) {
+                try {
+                    switch (button.id) {
+                        case 10:
+                            new me.boomboompower.all.togglechat.gui.tutorial.TutorialGui.MainToggleTutorial(this, 0).display();
+                            break;
+                    }
+                } catch (Exception ex) {}
             }
         }
 

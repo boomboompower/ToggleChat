@@ -41,6 +41,7 @@ public class ToggleChat {
     public static final String VERSION = "1.2.2";
 
     public static String USER_DIR;
+    public static Boolean tutorialEnabled = true;
 
     private static ToggleChat instance;
 
