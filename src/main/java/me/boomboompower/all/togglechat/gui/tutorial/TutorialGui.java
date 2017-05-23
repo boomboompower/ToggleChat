@@ -33,6 +33,9 @@ import java.io.IOException;
 
 /*
  * The most hard-coded messaging system you'll ever see!
+ *
+ * CREATED TO BE DELETED WITHOUT REPERCUSSIONS
+ * CHECKS ARE MADE IN THE OPTIONS CLASS <INIT> METHOD
  */
 public class TutorialGui {
 
