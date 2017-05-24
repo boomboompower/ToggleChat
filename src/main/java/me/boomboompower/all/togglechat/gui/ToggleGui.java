@@ -116,62 +116,62 @@ public class ToggleGui {
                 switch (button.id) {
                     case 0:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_TEAM);
-                        button.displayString = "Team: " + (Options.showTeam ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_TEAM);
                         break;
                     case 1:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_JOIN);
-                        button.displayString = "Join: " + (Options.showJoin ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_JOIN);
                         break;
                     case 2:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_LEAVE);
-                        button.displayString = "Leave: " + (Options.showLeave ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_LEAVE);
                         break;
                     case 3:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_GUILD);
-                        button.displayString = "Guild: " + (Options.showGuild ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_GUILD);
                         break;
                     case 4:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_PARTY);
-                        button.displayString = "Party: " + (Options.showParty ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_PARTY);
                         break;
                     case 5:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_SHOUT);
-                        button.displayString = "Shout: " + (Options.showShout ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_SHOUT);
                         break;
                     case 6:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_MESSAGE);
-                        button.displayString = "Messages: " + (Options.showMessage ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_MESSAGE);
                         break;
                 }
             } else {
                 switch (button.id) {
                     case 0:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_UHC);
-                        button.displayString = "UHC: " + (Options.showUHC ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_UHC);
                         break;
                     case 1:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_FRIENDREQ);
-                        button.displayString = "Friend requests: " + (Options.showFriendReqs ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_FRIENDREQ);
                         break;
                     case 2:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_PARTYINV);
-                        button.displayString = "Party invites: " + (Options.showPartyInv ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_PARTYINV);
                         break;
                     case 3:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_SPECTATOR);
-                        button.displayString = "Spectator: " + (Options.showSpec ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_SPECTATOR);
                         break;
                     case 4:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_COLORED_TEAM);
-                        button.displayString = "Colored team: " + (Options.showColored ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_COLORED_TEAM);
                         break;
                     case 5:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_HOUSING);
-                        button.displayString = "Housing: " + (Options.showColored ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_HOUSING);
                         break;
                     case 6:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_SEPARATOR);
-                        button.displayString = "Separators: " + (Options.showSeparators ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_SEPARATOR);
                         break;
                 }
             }

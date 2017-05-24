@@ -19,10 +19,15 @@ package me.boomboompower.all.togglechat;
 
 import me.boomboompower.all.togglechat.utils.GlobalUtils;
 import me.boomboompower.all.togglechat.utils.Writer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.util.List;
 
 public class Options {
+
+    private static final String ENABLED = EnumChatFormatting.GREEN + "Enabled";
+    private static final String DISABLED = EnumChatFormatting.RED + "Disabled";
 
     public static boolean showUHC = true;
     public static boolean showSpec = true;
@@ -152,6 +157,8 @@ public class Options {
                 return (showFriendReqs = !showFriendReqs);
             case CHAT_SPECTATOR:
                 return (showSpec = !showSpec);
+            case CHAT_SEPARATOR:
+                return (showSeparators = !showSeparators);
             case CHAT_COLORED_TEAM:
                 return (showColored = !showColored);
 
@@ -189,6 +196,76 @@ public class Options {
             default:
                 return true;
         }
+    }
+
+    public void updateButton(GuiButton button, ToggleType type) {
+        String prefix;
+        boolean enabled;
+
+        switch (type) {
+            case CHAT_UHC:
+                prefix = "UHC: ";
+                enabled = showUHC;
+                break;
+            case CHAT_TEAM:
+                prefix = "Team: ";
+                enabled = showTeam;
+                break;
+            case CHAT_JOIN:
+                prefix = "Join: ";
+                enabled = showJoin;
+                break;
+            case CHAT_LEAVE:
+                prefix = "Leave: ";
+                enabled = showLeave;
+                break;
+            case CHAT_GUILD:
+                prefix = "Guild: ";
+                enabled = showGuild;
+                break;
+            case CHAT_PARTY:
+                prefix = "Party: ";
+                enabled = showParty;
+                break;
+            case CHAT_SHOUT:
+                prefix = "Shout: ";
+                enabled = showShout;
+                break;
+            case CHAT_MESSAGE:
+                prefix = "Messages: ";
+                enabled = showMessage;
+                break;
+            case CHAT_HOUSING:
+                prefix = "Housing: ";
+                enabled = showHousing;
+                break;
+            case CHAT_PARTYINV:
+                prefix = "Party invites: ";
+                enabled = showPartyInv;
+                break;
+            case CHAT_FRIENDREQ:
+                prefix = "Friend requests: ";
+                enabled = showPartyInv;
+                break;
+            case CHAT_SPECTATOR:
+                prefix = "Spectator: ";
+                enabled = showPartyInv;
+                break;
+            case CHAT_SEPARATOR:
+                prefix = "Separator: ";
+                enabled = showPartyInv;
+                break;
+            case CHAT_COLORED_TEAM:
+                prefix = "Colored team: ";
+                enabled = showPartyInv;
+                break;
+            default:
+                prefix = String.format("Unknown (ID:%s): ", button.id);
+                enabled = false;
+                break;
+        }
+
+        button.displayString = prefix + (enabled ? ENABLED : DISABLED);
     }
 
     private void doTutorialCheck() {
