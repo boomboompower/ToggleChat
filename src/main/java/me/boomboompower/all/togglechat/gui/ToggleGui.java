@@ -95,8 +95,8 @@ public class ToggleGui {
             super.drawDefaultBackground();
             drawCenteredString(this.fontRendererObj, String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
 
-            buttonList.get(9).enabled = pageNumber == 1; // Back
-            buttonList.get(10).enabled = pageNumber == 0; // Next
+            buttonList.get(8).enabled = pageNumber == 1; // Back
+            buttonList.get(9).enabled = pageNumber == 0; // Next
 
             super.drawScreen(x, y, ticks);
         }
