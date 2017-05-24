@@ -245,19 +245,19 @@ public class Options {
                 break;
             case CHAT_FRIENDREQ:
                 prefix = "Friend requests: ";
-                enabled = showPartyInv;
+                enabled = showFriendReqs;
                 break;
             case CHAT_SPECTATOR:
                 prefix = "Spectator: ";
-                enabled = showPartyInv;
+                enabled = showSpec;
                 break;
             case CHAT_SEPARATOR:
                 prefix = "Separator: ";
-                enabled = showPartyInv;
+                enabled = showSeparators;
                 break;
             case CHAT_COLORED_TEAM:
                 prefix = "Colored team: ";
-                enabled = showPartyInv;
+                enabled = showColored;
                 break;
             default:
                 prefix = String.format("Unknown (ID:%s): ", button.id);
