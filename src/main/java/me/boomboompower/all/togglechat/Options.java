@@ -129,7 +129,7 @@ public class Options {
         switch (type) {
             // Which chat should be toggled
             case CHAT_UHC:
-                return (showTeam = !showTeam);
+                return (showUHC = !showUHC);
             case CHAT_TEAM:
                 return (showTeam = !showTeam);
             case CHAT_JOIN:

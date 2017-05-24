@@ -171,7 +171,7 @@ public class ToggleGui {
                         break;
                     case 6:
                         Options.getInstance().toggle(Options.ToggleType.CHAT_SEPARATOR);
-                        button.displayString = "Separators: " + (Options.showColored ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
+                        button.displayString = "Separators: " + (Options.showSeparators ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled");
                         break;
                 }
             }
