@@ -15,18 +15,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.all.togglechat.gui.tutorial;
+package me.boomboompower.all.togglechat.tutorial;
 
 import me.boomboompower.all.togglechat.gui.utils.CenterStringBuilder;
 import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.*;
 import java.io.IOException;
@@ -39,12 +35,12 @@ import java.io.IOException;
  */
 public class TutorialGui {
 
-    public static class MainToggleTutorial extends GuiScreen {
+    public static class MainToggleTutorialGui extends GuiScreen {
 
         private GuiScreen previousScreen;
         private int pageNumber;
 
-        public MainToggleTutorial(GuiScreen previous, int pageNumber) {
+        public MainToggleTutorialGui(GuiScreen previous, int pageNumber) {
             this.previousScreen = previous;
             this.pageNumber = pageNumber;
         }
@@ -53,16 +49,6 @@ public class TutorialGui {
         public void initGui() {
             this.buttonList.add(new GuiButton(0, this.width / 2 - 200, this.height - 25, 150, 20, "Previous"));
             this.buttonList.add(new GuiButton(1, this.width / 2 + 50, this.height - 25, 150, 20, "Next"));
-        }
-
-        public void display() {
-            FMLCommonHandler.instance().bus().register(this);
-        }
-
-        @SubscribeEvent
-        public void onClientTick(TickEvent.ClientTickEvent event) {
-            FMLCommonHandler.instance().bus().unregister(this);
-            Minecraft.getMinecraft().displayGuiScreen(this);
         }
 
         @Override
@@ -82,7 +68,7 @@ public class TutorialGui {
         @Override
         protected void keyTyped(char c, int key) throws IOException {
             if (key == 1) {
-                mc.displayGuiScreen(previousScreen);
+                GuiUtils.display(previousScreen);
             }
         }
 
@@ -92,13 +78,13 @@ public class TutorialGui {
             switch (button.id) {
                 case 0:
                     if (pageNumber > 0) {
-                        new MainToggleTutorial(this, pageNumber--);
+                        GuiUtils.display(new MainToggleTutorialGui(this, pageNumber--));
                     } else {
-                        mc.displayGuiScreen(previousScreen);
+                        GuiUtils.display(previousScreen);
                     }
                     break;
                 case 1:
-                    new MainToggleTutorial(this, pageNumber++);
+                    GuiUtils.display(new MainToggleTutorialGui(this, pageNumber++));
                     break;
             }
         }
@@ -307,12 +293,12 @@ public class TutorialGui {
         }
     }
 
-    public static class WhitelistTutorial extends GuiScreen {
+    public static class WhitelistTutorialGui extends GuiScreen {
         
         private GuiScreen previousScreen;
         private int pageNumber;
 
-        public WhitelistTutorial(GuiScreen previous, int pageNumber) {
+        public WhitelistTutorialGui(GuiScreen previous, int pageNumber) {
             this.previousScreen = previous;
             this.pageNumber = pageNumber;
         }
@@ -321,16 +307,6 @@ public class TutorialGui {
         public void initGui() {
             this.buttonList.add(new GuiButton(0, this.width / 2 - 200, this.height - 25, 150, 20, "Previous"));
             this.buttonList.add(new GuiButton(1, this.width / 2 + 50, this.height - 25, 150, 20, "Next"));
-        }
-
-        public void display() {
-            FMLCommonHandler.instance().bus().register(this);
-        }
-
-        @SubscribeEvent
-        public void onClientTick(TickEvent.ClientTickEvent event) {
-            FMLCommonHandler.instance().bus().unregister(this);
-            Minecraft.getMinecraft().displayGuiScreen(this);
         }
 
         @Override
@@ -350,7 +326,7 @@ public class TutorialGui {
         @Override
         protected void keyTyped(char c, int key) throws IOException {
             if (key == 1) {
-                mc.displayGuiScreen(previousScreen);
+                GuiUtils.display(previousScreen);
             }
         }
 
@@ -360,13 +336,13 @@ public class TutorialGui {
             switch (button.id) {
                 case 0:
                     if (pageNumber > 0) {
-                        new TutorialGui.MainToggleTutorial(this, pageNumber--);
+                        new TutorialGui.MainToggleTutorialGui(this, pageNumber--);
                     } else {
-                        mc.displayGuiScreen(previousScreen);
+                        GuiUtils.display(previousScreen);
                     }
                     break;
                 case 1:
-                    new TutorialGui.MainToggleTutorial(this, pageNumber++);
+                    GuiUtils.display(new TutorialGui.MainToggleTutorialGui(this, pageNumber++));
                     break;
             }
         }

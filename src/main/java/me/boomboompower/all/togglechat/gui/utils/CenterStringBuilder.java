@@ -18,6 +18,7 @@
 package me.boomboompower.all.togglechat.gui.utils;
 
 import me.boomboompower.all.togglechat.utils.GlobalUtils;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.EnumChatFormatting;

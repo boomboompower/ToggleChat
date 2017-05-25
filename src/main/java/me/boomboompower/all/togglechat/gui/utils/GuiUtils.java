@@ -17,7 +17,9 @@
 
 package me.boomboompower.all.togglechat.gui.utils;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
 
 public class GuiUtils {
@@ -39,5 +41,9 @@ public class GuiUtils {
             drawCentered(new CenterStringBuilder(color + s, startingX, startingY));
             startingY += separation;
         }
+    }
+
+    public static void display(GuiScreen gui) {
+        Minecraft.getMinecraft().displayGuiScreen(gui);
     }
 }

@@ -17,6 +17,7 @@
 package me.boomboompower.all.togglechat.command;
 
 import me.boomboompower.all.togglechat.gui.WhitelistGui;
+import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
@@ -59,9 +60,9 @@ public class WhitelistCommand implements ICommand {
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         if (args.length == 0) {
-            new WhitelistGui.WhitelistMain().display();
+            GuiUtils.display(new WhitelistGui.WhitelistMainGui());
         } else {
-            new WhitelistGui.WhitelistMain(args[0]).display();
+            GuiUtils.display(new WhitelistGui.WhitelistMainGui(args[0]));
         }
     }
 

@@ -18,28 +18,25 @@ package me.boomboompower.all.togglechat.gui;
 
 import me.boomboompower.all.togglechat.Options;
 import me.boomboompower.all.togglechat.ToggleChat;
+import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
 import me.boomboompower.all.togglechat.utils.Writer;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.*;
 
 public class ToggleGui {
 
-    //        - 94
-    //        - 70
-    //        - 46
-    //        - 22
-    //        + 2
-    //        + 26
-    //        + 50
-    //        + 74
+    //        - 99
+    //        - 75
+    //        - 51
+    //        - 27
+    //        - 3
+    //        + 21
+    //        + 45
+    //        + 69
 
     public static class ToggleChatMainGui extends GuiScreen {
 
@@ -56,21 +53,21 @@ public class ToggleGui {
         private void createButtons() {
             buttonList.clear();
             if (pageNumber == 0) {
-                this.buttonList.add(new GuiButton(0, this.width / 2 - 75, this.height / 2 - 70, 150, 20, "Team: " + (Options.showTeam ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(1, this.width / 2 - 75, this.height / 2 - 46, 150, 20, "Join: " + (Options.showJoin ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Leave: " + (Options.showLeave ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(3, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Guild: " + (Options.showGuild ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Party: " + (Options.showParty ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(5, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Shout: " + (Options.showShout ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(6, this.width / 2 - 75, this.height / 2 + 74, 150, 20, "Messages: " + (Options.showMessage ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+                this.buttonList.add(new GuiButton(0, this.width / 2 - 75, this.height / 2 - 75, 150, 20, "Team: " + (Options.showTeam ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+                this.buttonList.add(new GuiButton(1, this.width / 2 - 75, this.height / 2 - 51, 150, 20, "Join: " + (Options.showJoin ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+                this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 - 27, 150, 20, "Leave: " + (Options.showLeave ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+                this.buttonList.add(new GuiButton(3, this.width / 2 - 75, this.height / 2 - 3, 150, 20, "Guild: " + (Options.showGuild ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+                this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 21, 150, 20, "Party: " + (Options.showParty ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+                this.buttonList.add(new GuiButton(5, this.width / 2 - 75, this.height / 2 + 45, 150, 20, "Shout: " + (Options.showShout ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+                this.buttonList.add(new GuiButton(6, this.width / 2 - 75, this.height / 2 + 69, 150, 20, "Messages: " + (Options.showMessage ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
             } else {
-                this.buttonList.add(new GuiButton(0, this.width / 2 - 75, this.height / 2 - 70, 150, 20, "UHC: " + (Options.showUHC ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(1, this.width / 2 - 75, this.height / 2 - 46, 150, 20, "Friend requests: " + (Options.showFriendReqs ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Party invites: " + (Options.showPartyInv ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(3, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Spectator: " + (Options.showSpec ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Colored team: " + (Options.showColored ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(5, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Housing: " + (Options.showHousing ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
-                this.buttonList.add(new GuiButton(6, this.width / 2 - 75, this.height / 2 + 74, 150, 20, "Separators: " + (Options.showSeparators ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+                this.buttonList.add(new GuiButton(0, this.width / 2 - 75, this.height / 2 - 75, 150, 20, "UHC: " + (Options.showUHC ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+                this.buttonList.add(new GuiButton(1, this.width / 2 - 75, this.height / 2 - 51, 150, 20, "Friend requests: " + (Options.showFriendReqs ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+                this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 - 27, 150, 20, "Party invites: " + (Options.showPartyInv ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+                this.buttonList.add(new GuiButton(3, this.width / 2 - 75, this.height / 2 - 3, 150, 20, "Spectator: " + (Options.showSpec ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+                this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 21, 150, 20, "Colored team: " + (Options.showColored ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+                this.buttonList.add(new GuiButton(5, this.width / 2 - 75, this.height / 2 + 45, 150, 20, "Housing: " + (Options.showHousing ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
+                this.buttonList.add(new GuiButton(6, this.width / 2 - 75, this.height / 2 + 69, 150, 20, "Separators: " + (Options.showSeparators ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled")));
             }
 
             // Register other buttons
@@ -79,16 +76,6 @@ public class ToggleGui {
             this.buttonList.add(new GuiButton(9, this.width - 70, this.height - 25, 65, 20, "Next"));
 
             if (ToggleChat.tutorialEnabled) this.buttonList.add(new GuiButton(10, this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
-        }
-
-        public void display() {
-            FMLCommonHandler.instance().bus().register(this);
-        }
-
-        @SubscribeEvent
-        public void onClientTick(TickEvent.ClientTickEvent event) {
-            FMLCommonHandler.instance().bus().unregister(this);
-            Minecraft.getMinecraft().displayGuiScreen(this);
         }
 
         public void drawScreen(int x, int y, float ticks) {
@@ -103,7 +90,7 @@ public class ToggleGui {
 
         protected void keyTyped(char c, int key) {
             if (key == 1) {
-                mc.displayGuiScreen(null);
+                GuiUtils.display(null);
             }
         }
 
@@ -178,18 +165,18 @@ public class ToggleGui {
 
             switch (button.id) {
                 case 7:
-                    new WhitelistGui.WhitelistMain().display();
+                    GuiUtils.display(new WhitelistGui.WhitelistMainGui());
                     break;
                 case 8:
                     if (pageNumber > 0) {
-                        new ToggleChatMainGui(pageNumber--);
+                        GuiUtils.display(new ToggleChatMainGui(pageNumber--));
                         createButtons();
                     } else {
-                        mc.displayGuiScreen(null);
+                        GuiUtils.display(null);
                     }
                     break;
                 case 9:
-                    new ToggleChatMainGui(pageNumber++);
+                    GuiUtils.display(new ToggleChatMainGui(pageNumber++));
                     createButtons();
                     break;
             }
@@ -198,7 +185,7 @@ public class ToggleGui {
                 try {
                     switch (button.id) {
                         case 10:
-                            new me.boomboompower.all.togglechat.gui.tutorial.TutorialGui.MainToggleTutorial(this, 0).display();
+                            GuiUtils.display(new me.boomboompower.all.togglechat.tutorial.TutorialGui.MainToggleTutorialGui(this, 0));
                             break;
                     }
                 } catch (Exception ex) {}

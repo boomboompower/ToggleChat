@@ -17,6 +17,8 @@
 package me.boomboompower.all.togglechat.command;
 
 import me.boomboompower.all.togglechat.gui.ToggleGui;
+import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
+
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -54,7 +56,7 @@ public class ToggleCommand implements ICommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-        new ToggleGui.ToggleChatMainGui(0).display();
+        GuiUtils.display(new ToggleGui.ToggleChatMainGui(0));
     }
 
     @Override

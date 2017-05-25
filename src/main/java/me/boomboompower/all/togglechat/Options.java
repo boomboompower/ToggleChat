@@ -270,7 +270,7 @@ public class Options {
 
     private void doTutorialCheck() {
         try {
-            Class.forName("me.boomboompower.all.togglechat.gui.tutorial.TutorialGui");
+            Class.forName("me.boomboompower.all.togglechat.tutorial.TutorialGui");
         } catch (Exception ex) {
             ToggleChat.tutorialEnabled = false;
         }
