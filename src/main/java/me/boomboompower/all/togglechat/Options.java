@@ -19,6 +19,7 @@ package me.boomboompower.all.togglechat;
 
 import me.boomboompower.all.togglechat.utils.GlobalUtils;
 import me.boomboompower.all.togglechat.utils.Writer;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.EnumChatFormatting;
 

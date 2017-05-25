@@ -17,7 +17,6 @@
 package me.boomboompower.all.togglechat.command;
 
 import me.boomboompower.all.togglechat.gui.ToggleGui;
-import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
 
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
