@@ -44,6 +44,6 @@ public class GuiUtils {
     }
 
     public static void display(GuiScreen gui) {
-        Minecraft.getMinecraft().displayGuiScreen(gui);
+        Minecraft.getMinecraft().currentScreen = gui;
     }
 }

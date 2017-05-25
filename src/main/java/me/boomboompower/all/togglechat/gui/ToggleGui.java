@@ -18,12 +18,15 @@ package me.boomboompower.all.togglechat.gui;
 
 import me.boomboompower.all.togglechat.Options;
 import me.boomboompower.all.togglechat.ToggleChat;
-import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
 import me.boomboompower.all.togglechat.utils.Writer;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.*;
 
@@ -41,9 +44,12 @@ public class ToggleGui {
     public static class ToggleChatMainGui extends GuiScreen {
 
         private int pageNumber;
+        private Minecraft mc;
 
         public ToggleChatMainGui(int pageNumber) {
             this.pageNumber = pageNumber;
+
+            this.mc = Minecraft.getMinecraft();
         }
 
         public void initGui() {
@@ -90,7 +96,7 @@ public class ToggleGui {
 
         protected void keyTyped(char c, int key) {
             if (key == 1) {
-                GuiUtils.display(null);
+                mc.displayGuiScreen(null);
             }
         }
 
@@ -165,18 +171,18 @@ public class ToggleGui {
 
             switch (button.id) {
                 case 7:
-                    GuiUtils.display(new WhitelistGui.WhitelistMainGui());
+                    new WhitelistGui.WhitelistMainGui().display();
                     break;
                 case 8:
                     if (pageNumber > 0) {
-                        GuiUtils.display(new ToggleChatMainGui(pageNumber--));
+                        new ToggleChatMainGui(pageNumber--);
                         createButtons();
                     } else {
-                        GuiUtils.display(null);
+                        mc.displayGuiScreen(null);
                     }
                     break;
                 case 9:
-                    GuiUtils.display(new ToggleChatMainGui(pageNumber++));
+                    new ToggleChatMainGui(pageNumber++);
                     createButtons();
                     break;
             }
@@ -185,7 +191,7 @@ public class ToggleGui {
                 try {
                     switch (button.id) {
                         case 10:
-                            GuiUtils.display(new me.boomboompower.all.togglechat.tutorial.TutorialGui.MainToggleTutorialGui(this, 0));
+                            new me.boomboompower.all.togglechat.tutorial.TutorialGui.MainToggleTutorialGui(this, 0).display();
                             break;
                     }
                 } catch (Exception ex) {}
@@ -198,6 +204,16 @@ public class ToggleGui {
 
         public boolean doesGuiPauseGame() {
             return false;
+        }
+
+        public void display() {
+            FMLCommonHandler.instance().bus().register(this);
+        }
+
+        @SubscribeEvent
+        public void ClientTickEvent(TickEvent.ClientTickEvent event) {
+            FMLCommonHandler.instance().bus().unregister(this);
+            mc.displayGuiScreen(this);
         }
     }
 }

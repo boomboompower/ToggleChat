@@ -31,6 +31,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import org.lwjgl.input.Keyboard;
+
 import java.awt.*;
 import java.io.IOException;
 
@@ -49,6 +51,7 @@ public class WhitelistGui {
 
         private GuiTextField text;
         private String input = "";
+        private Minecraft mc;
 
         public WhitelistMainGui() {
             this("");
@@ -56,10 +59,14 @@ public class WhitelistGui {
 
         public WhitelistMainGui(String input) {
             this.input = input;
+
+            this.mc = Minecraft.getMinecraft();
         }
 
         @Override
         public void initGui() {
+            Keyboard.enableRepeatEvents(true);
+
             text = new GuiTextField(0, this.fontRendererObj, this.width / 2 - 75, this.height / 2 - 58, 150, 20);
             this.buttonList.add(new GuiButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add"));
             this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove"));
@@ -85,7 +92,9 @@ public class WhitelistGui {
 
         @Override
         protected void keyTyped(char c, int key) throws IOException {
-            if (Character.isLetterOrDigit(c)) {
+            if (key == 1) {
+                mc.displayGuiScreen(null);
+            } else if (Character.isLetterOrDigit(c) || c == '_') { // Sorry to anyone who originally used other things
                 super.keyTyped(c, key);
                 text.textboxKeyTyped(c, key);
             }
@@ -118,7 +127,7 @@ public class WhitelistGui {
                     } else {
                         sendChatMessage("The whitelist already contained " + goldify(text.getText()) + "!");
                     }
-                    Minecraft.getMinecraft().displayGuiScreen(null);
+                    mc.displayGuiScreen(null);
                     break;
                 case 2:
                     if (text.getText().isEmpty()) {
@@ -129,27 +138,21 @@ public class WhitelistGui {
                         removeFromWhitelist(text.getText());
                         sendChatMessage("Removed " + goldify(text.getText()) + " from the whitelist!");
                     }
-                    Minecraft.getMinecraft().displayGuiScreen(null);
+                    mc.displayGuiScreen(null);
                     break;
                 case 3:
                     if (!ToggleChat.whitelist.isEmpty()) {
-                        new WhitelistClearConfirmationGui(this);
+                        new WhitelistClearConfirmationGui(this).display();
                     } else {
                         sendChatMessage("The whitelist is already empty!");
-                        Minecraft.getMinecraft().displayGuiScreen(null);
+                        mc.displayGuiScreen(null);
                     }
-
                     break;
                 case 4:
                     new WhitelistEntriesGui(this, 1).display();
-//                    displayWhitelist();
-//                    Minecraft.getMinecraft().displayGuiScreen(null);
                     break;
-//                case 5:
-//                    new WhitelistSettings(this, 0).display();
-//                    break;
                 case 10:
-                    GuiUtils.display(new ToggleGui.ToggleChatMainGui(0));
+                    new ToggleGui.ToggleChatMainGui(0).display();
                     break;
             }
 
@@ -157,18 +160,17 @@ public class WhitelistGui {
                 try {
                     switch (button.id) {
                         case 9:
-                            GuiUtils.display(new me.boomboompower.all.togglechat.tutorial.TutorialGui.WhitelistTutorialGui(this, 0));
+                            new me.boomboompower.all.togglechat.tutorial.TutorialGui.WhitelistTutorialGui(this, 0).display();
                             break;
                     }
                 } catch (Exception ex) {}
             }
         }
 
-
-
         @Override
         public void onGuiClosed() {
             Writer.execute(true);
+            Keyboard.enableRepeatEvents(false);
         }
 
         @Override
@@ -207,33 +209,6 @@ public class WhitelistGui {
             }
         }
 
-        private void displayWhitelist() {
-            if (ToggleChat.whitelist.size() > 0) {
-                sendChatMessage("Displaying " + goldify(String.valueOf(ToggleChat.whitelist.size())) + (ToggleChat.whitelist.size() == 1 ? " entry" : " entries") + " from the whitelist!");
-                for (String word: ToggleChat.whitelist) {
-                    sendChatMessage(EnumChatFormatting.GOLD + "\u25CF " + word);
-                }
-            } else {
-                sendChatMessage(EnumChatFormatting.RED + "There is nothing on your whitelist!");
-            }
-        }
-    }
-
-    public static class WhitelistEntriesGui extends GuiScreen {
-
-        private GuiScreen previousScreen;
-        private int pageNumber;
-
-        public WhitelistEntriesGui(GuiScreen previous, int pageNumber) {
-            this.previousScreen = previous;
-            this.pageNumber = pageNumber;
-        }
-
-        @Override
-        public void initGui() {
-            makeButtons();
-        }
-
         public void display() {
             FMLCommonHandler.instance().bus().register(this);
         }
@@ -241,7 +216,28 @@ public class WhitelistGui {
         @SubscribeEvent
         public void onClientTick(TickEvent.ClientTickEvent event) {
             FMLCommonHandler.instance().bus().unregister(this);
-            Minecraft.getMinecraft().displayGuiScreen(this);
+            mc.displayGuiScreen(this);
+        }
+    }
+
+    public static class WhitelistEntriesGui extends GuiScreen {
+
+        private GuiScreen previousScreen;
+        private boolean pageInvalid;
+        private int pageNumber;
+        private Minecraft mc;
+
+        public WhitelistEntriesGui(GuiScreen previous, int pageNumber) {
+            this.previousScreen = previous;
+            this.pageNumber = pageNumber;
+            this.pageInvalid = false;
+
+            this.mc = Minecraft.getMinecraft();
+        }
+
+        @Override
+        public void initGui() {
+            makeButtons();
         }
 
         @Override
@@ -272,10 +268,12 @@ public class WhitelistGui {
                 int pages = (int) Math.ceil((double) ToggleChat.whitelist.size() / 10D);
 
                 if (pageNumber < 1 || pageNumber > pages) {
-                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 80, 20, EnumChatFormatting.RED, String.format("Invalid page number (%s)", (EnumChatFormatting.DARK_RED + String.valueOf(pageNumber) + EnumChatFormatting.RED)));
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 40, 20, EnumChatFormatting.RED, String.format("Invalid page number (%s)", (EnumChatFormatting.DARK_RED + String.valueOf(pageNumber) + EnumChatFormatting.RED)));
+                    pageInvalid = true;
                     return;
                 }
 
+                pageInvalid = false;
                 buttonList.get(1).enabled = pageNumber != pages; // Next
 
                 GuiUtils.drawCentered(new CenterStringBuilder(String.format("Page %s/%s", (pageNumber), pages), this.width / 2, this.height / 2 - 95));
@@ -295,8 +293,8 @@ public class WhitelistGui {
         }
 
         private void drawBox() {
-            if (ToggleChat.whitelist.size() > 0) {
-                drawRect(this.width / 2 - 60, this.height / 2 - 80, this.width / 2 + 60, this.height / 2 + 60, new Color(155, 155, 155, 75).getRGB());
+            if (ToggleChat.whitelist.size() > 0 && !pageInvalid) {
+                drawRect(this.width / 2 - 60, this.height / 2 - 80, this.width / 2 + 60, this.height / 2 + 60, new Color(105, 105, 105, 75).getRGB());
 
                 drawHorizontalLine(this.width / 2 - 60, width / 2 + 60, this.height / 2 - 80, Color.WHITE.getRGB());
                 drawHorizontalLine(this.width / 2 - 60, width / 2 + 60, this.height / 2 + 60, Color.WHITE.getRGB());
@@ -309,7 +307,7 @@ public class WhitelistGui {
         @Override
         protected void keyTyped(char c, int key) throws IOException {
             if (key == 1) {
-                GuiUtils.display(previousScreen);
+                mc.displayGuiScreen(previousScreen);
             }
         }
 
@@ -325,7 +323,7 @@ public class WhitelistGui {
                     if (pageNumber > 1) {
                         new WhitelistEntriesGui(this, pageNumber--);
                     } else {
-                        GuiUtils.display(previousScreen);
+                        mc.displayGuiScreen(previousScreen);
                     }
                     break;
                 case 1:
@@ -346,6 +344,16 @@ public class WhitelistGui {
         @Override
         public void sendChatMessage(String message) {
             Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
+        }
+
+        public void display() {
+            FMLCommonHandler.instance().bus().register(this);
+        }
+
+        @SubscribeEvent
+        public void onClientTick(TickEvent.ClientTickEvent event) {
+            FMLCommonHandler.instance().bus().unregister(this);
+            mc.displayGuiScreen(this);
         }
     }
 
@@ -526,9 +534,12 @@ public class WhitelistGui {
     public static class WhitelistClearConfirmationGui extends GuiScreen {
 
         private GuiScreen previousScreen;
+        private Minecraft mc;
 
         public WhitelistClearConfirmationGui(GuiScreen previous) {
             this.previousScreen = previous;
+
+            this.mc = Minecraft.getMinecraft();
         }
 
         @Override
@@ -552,7 +563,7 @@ public class WhitelistGui {
         @Override
         protected void keyTyped(char c, int key) throws IOException {
             if (key == 1) {
-                GuiUtils.display(previousScreen);
+                mc.displayGuiScreen(previousScreen);
             }
         }
 
@@ -565,12 +576,12 @@ public class WhitelistGui {
         protected void actionPerformed(GuiButton button) {
             switch (button.id) {
                 case 0:
-                    GuiUtils.display(new WhitelistMainGui());
+                    new WhitelistMainGui().display();
                     break;
                 case 1:
                     ToggleChat.whitelist.clear();
                     sendChatMessage("Cleared the whitelist!");
-                    GuiUtils.display(null);
+                    mc.displayGuiScreen(null);
                     break;
             }
         }
@@ -588,6 +599,16 @@ public class WhitelistGui {
         @Override
         public void sendChatMessage(String message) {
             Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
+        }
+
+        public void display() {
+            FMLCommonHandler.instance().bus().register(this);
+        }
+
+        @SubscribeEvent
+        public void onClientTick(TickEvent.ClientTickEvent event) {
+            FMLCommonHandler.instance().bus().unregister(this);
+            mc.displayGuiScreen(this);
         }
     }
 }
