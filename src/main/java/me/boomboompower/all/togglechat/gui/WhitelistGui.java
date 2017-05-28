@@ -19,6 +19,7 @@ package me.boomboompower.all.togglechat.gui;
 import me.boomboompower.all.togglechat.ToggleChat;
 import me.boomboompower.all.togglechat.gui.utils.CenterStringBuilder;
 import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.all.togglechat.tutorial.TutorialGui;
 import me.boomboompower.all.togglechat.utils.Writer;
 
 import net.minecraft.client.Minecraft;
@@ -94,7 +95,7 @@ public class WhitelistGui {
         protected void keyTyped(char c, int key) throws IOException {
             if (key == 1) {
                 mc.displayGuiScreen(null);
-            } else if (Character.isLetterOrDigit(c) || c == '_') { // Sorry to anyone who originally used other things
+            } else if (Character.isLetterOrDigit(c) || c == '_' || key == 14) { // Sorry to anyone who originally used other things
                 super.keyTyped(c, key);
                 text.textboxKeyTyped(c, key);
             }
@@ -357,6 +358,87 @@ public class WhitelistGui {
         }
     }
 
+    public static class WhitelistClearConfirmationGui extends GuiScreen {
+
+        private GuiScreen previousScreen;
+        private Minecraft mc;
+
+        public WhitelistClearConfirmationGui(GuiScreen previous) {
+            this.previousScreen = previous;
+
+            this.mc = Minecraft.getMinecraft();
+        }
+
+        @Override
+        public void initGui() {
+            this.buttonList.add(new GuiButton(0, this.width / 2 - 200, this.height / 2 + 30, 150, 20, "Cancel"));
+            this.buttonList.add(new GuiButton(1, this.width / 2 + 50, this.height / 2 + 30, 150, 20, "Confirm"));
+        }
+
+        @Override
+        public void drawScreen(int x, int y, float ticks) {
+            drawDefaultBackground();
+
+            GuiUtils.writeInformation(this.width / 2, this.height / 2 - 60, 15,
+                    String.format("Are you sure you wish to clear &6%s %s&r from your whitelist?", ToggleChat.whitelist.size(), (ToggleChat.whitelist.size() == 1 ? "entry" : "entries")),
+                    "This action cannot be undone, use at your own risk!"
+            );
+
+            super.drawScreen(x, y, ticks);
+        }
+
+        @Override
+        protected void keyTyped(char c, int key) throws IOException {
+            if (key == 1) {
+                mc.displayGuiScreen(previousScreen);
+            }
+        }
+
+        @Override
+        public void updateScreen() {
+            super.updateScreen();
+        }
+
+        @Override
+        protected void actionPerformed(GuiButton button) {
+            switch (button.id) {
+                case 0:
+                    mc.displayGuiScreen(previousScreen);
+                    break;
+                case 1:
+                    ToggleChat.whitelist.clear();
+                    sendChatMessage("Cleared the whitelist!");
+                    mc.displayGuiScreen(null);
+                    break;
+            }
+        }
+
+        @Override
+        public void onGuiClosed() {
+            Writer.execute(false, true);
+        }
+
+        @Override
+        public boolean doesGuiPauseGame() {
+            return false;
+        }
+
+        @Override
+        public void sendChatMessage(String message) {
+            Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
+        }
+
+        public void display() {
+            FMLCommonHandler.instance().bus().register(this);
+        }
+
+        @SubscribeEvent
+        public void onClientTick(TickEvent.ClientTickEvent event) {
+            FMLCommonHandler.instance().bus().unregister(this);
+            mc.displayGuiScreen(this);
+        }
+    }
+
 //        public static class WhitelistSettings extends GuiScreen {
 //
 //        private GuiScreen previousScreen;
@@ -530,85 +612,4 @@ public class WhitelistGui {
 //            Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
 //        }
 //    }
-
-    public static class WhitelistClearConfirmationGui extends GuiScreen {
-
-        private GuiScreen previousScreen;
-        private Minecraft mc;
-
-        public WhitelistClearConfirmationGui(GuiScreen previous) {
-            this.previousScreen = previous;
-
-            this.mc = Minecraft.getMinecraft();
-        }
-
-        @Override
-        public void initGui() {
-            this.buttonList.add(new GuiButton(0, this.width / 2 - 200, this.height / 2 + 30, 150, 20, "Cancel"));
-            this.buttonList.add(new GuiButton(1, this.width / 2 + 50, this.height / 2 + 30, 150, 20, "Confirm"));
-        }
-
-        @Override
-        public void drawScreen(int x, int y, float ticks) {
-            drawDefaultBackground();
-
-            GuiUtils.writeInformation(this.width / 2, this.height / 2 - 60, 15,
-                    String.format("Are you sure you wish to clear &6%s %s&r from your whitelist?", ToggleChat.whitelist.size(), (ToggleChat.whitelist.size() == 1 ? "entry" : "entries")),
-                    "This action cannot be undone, use at your own risk!"
-            );
-
-            super.drawScreen(x, y, ticks);
-        }
-
-        @Override
-        protected void keyTyped(char c, int key) throws IOException {
-            if (key == 1) {
-                mc.displayGuiScreen(previousScreen);
-            }
-        }
-
-        @Override
-        public void updateScreen() {
-            super.updateScreen();
-        }
-
-        @Override
-        protected void actionPerformed(GuiButton button) {
-            switch (button.id) {
-                case 0:
-                    new WhitelistMainGui().display();
-                    break;
-                case 1:
-                    ToggleChat.whitelist.clear();
-                    sendChatMessage("Cleared the whitelist!");
-                    mc.displayGuiScreen(null);
-                    break;
-            }
-        }
-
-        @Override
-        public void onGuiClosed() {
-            Writer.execute(false, true);
-        }
-
-        @Override
-        public boolean doesGuiPauseGame() {
-            return false;
-        }
-
-        @Override
-        public void sendChatMessage(String message) {
-            Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
-        }
-
-        public void display() {
-            FMLCommonHandler.instance().bus().register(this);
-        }
-
-        @SubscribeEvent
-        public void onClientTick(TickEvent.ClientTickEvent event) {
-            FMLCommonHandler.instance().bus().unregister(this);
-            mc.displayGuiScreen(this);
-        }
-    }
 }

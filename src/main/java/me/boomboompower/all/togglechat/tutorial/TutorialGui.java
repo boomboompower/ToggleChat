@@ -456,4 +456,79 @@ public class TutorialGui {
             mc.displayGuiScreen(this);
         }
     }
+
+//    public static class TutorialGuiDeletionConfirmationGui extends GuiScreen {
+//
+//        private GuiScreen previousScreen;
+//        private Minecraft mc;
+//
+//        public TutorialGuiDeletionConfirmationGui(GuiScreen previous) {
+//            this.previousScreen = previous;
+//
+//            this.mc = Minecraft.getMinecraft();
+//        }
+//
+//        @Override
+//        public void initGui() {
+//            this.buttonList.add(new GuiButton(0, this.width / 2 - 200, this.height / 2 + 30, 150, 20, "Cancel"));
+//            this.buttonList.add(new GuiButton(1, this.width / 2 + 50, this.height / 2 + 30, 150, 20, "Confirm"));
+//        }
+//
+//        @Override
+//        public void drawScreen(int x, int y, float ticks) {
+//            drawDefaultBackground();
+//
+//            GuiUtils.drawCentered(new CenterStringBuilder("Are you sure you wish to remove tutorials", this.width / 2, this.height / 2 - 60));
+//            GuiUtils.drawCentered(new CenterStringBuilder("&4&lDOING SO IS PERMANENT AND MAY CAUSE INSTABILITES!", this.width / 2, this.height / 2 + 20).translateCodes());
+//
+//            super.drawScreen(x, y, ticks);
+//        }
+//
+//        @Override
+//        protected void keyTyped(char c, int key) throws IOException {
+//            if (key == 1) {
+//                mc.displayGuiScreen(previousScreen);
+//            }
+//        }
+//
+//        @Override
+//        protected void actionPerformed(GuiButton button) {
+//            switch (button.id) {
+//                case 0:
+//                    mc.displayGuiScreen(previousScreen);
+//                    break;
+//                case 1:
+//                    try {
+//                        // TODO Add method to remove
+//                        sendChatMessage("Successfully removed tutorials!");
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                        sendChatMessage("An error occured whilst removing tutorials");
+//                        sendChatMessage("Check console for more information!");
+//                    }
+//                    mc.displayGuiScreen(null);
+//                    break;
+//            }
+//        }
+//
+//        @Override
+//        public boolean doesGuiPauseGame() {
+//            return false;
+//        }
+//
+//        @Override
+//        public void sendChatMessage(String message) {
+//            Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
+//        }
+//
+//        public void display() {
+//            FMLCommonHandler.instance().bus().register(this);
+//        }
+//
+//        @SubscribeEvent
+//        public void onClientTick(TickEvent.ClientTickEvent event) {
+//            FMLCommonHandler.instance().bus().unregister(this);
+//            mc.displayGuiScreen(this);
+//        }
+//    }
 }

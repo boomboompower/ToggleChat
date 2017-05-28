@@ -17,12 +17,14 @@
 
 package me.boomboompower.all.togglechat;
 
+import me.boomboompower.all.togglechat.loading.ToggleTypes;
 import me.boomboompower.all.togglechat.utils.GlobalUtils;
 import me.boomboompower.all.togglechat.utils.Writer;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Options {
@@ -31,7 +33,6 @@ public class Options {
     private static final String DISABLED = EnumChatFormatting.RED + "Disabled";
 
     public static boolean showUHC = true;
-    public static boolean showSpec = true;
     public static boolean showTeam = true;
     public static boolean showJoin = true;
     public static boolean showLeave = true;
@@ -42,6 +43,7 @@ public class Options {
     public static boolean showColored = true;
     public static boolean showMessage = true;
     public static boolean showPartyInv = true;
+    public static boolean showSpectator = true;
     public static boolean showFriendReqs = true;
     public static boolean showSeparators = true;
 
@@ -62,14 +64,41 @@ public class Options {
 
     private static Options instance;
 
+    public static HashMap<Integer, ToggleTypes.ToggleBase> baseTypes = new HashMap<Integer, ToggleTypes.ToggleBase>();
+
+    static {
+        baseTypes.put(0, new ToggleTypes.TypeUHC());
+        baseTypes.put(1, new ToggleTypes.TypeTeam());
+        baseTypes.put(2, new ToggleTypes.TypeJoin());
+        baseTypes.put(3, new ToggleTypes.TypeLeave());
+        baseTypes.put(4, new ToggleTypes.TypeGuild());
+        baseTypes.put(5, new ToggleTypes.TypeParty());
+        baseTypes.put(6, new ToggleTypes.TypeShout());
+        baseTypes.put(7, new ToggleTypes.TypeHousing());
+        baseTypes.put(8, new ToggleTypes.TypeColored());
+        baseTypes.put(9, new ToggleTypes.TypeMessage());
+        baseTypes.put(10, new ToggleTypes.TypePartyInvite());
+        baseTypes.put(11, new ToggleTypes.TypeSpectator());
+        baseTypes.put(12, new ToggleTypes.TypeFriendRequest());
+        baseTypes.put(13, new ToggleTypes.TypeSeparators());
+    }
+
     public Options() {
         instance = this;
 
         doTutorialCheck();
     }
 
-    public static Options getInstance() {
-        return instance;
+    public void addType(ToggleTypes.ToggleBase... bases) {
+        if (bases.length > 0) {
+            for (ToggleTypes.ToggleBase base : bases) {
+                if (!baseTypes.containsKey(base.getId())) {
+                    baseTypes.put(base.getId(), base);
+                } else {
+                    throw new RuntimeException(String.format("baseTypes entry is already loaded. (ID: %s)", base.getId()));
+                }
+            }
+        }
     }
 
     public void setup(ConfigType type, List<String> lines) {
@@ -88,7 +117,7 @@ public class Options {
                     Options.showPartyInv = Boolean.parseBoolean(lines.get(8));
                     Options.showFriendReqs = Boolean.parseBoolean(lines.get(9));
 
-                    Options.showSpec = Boolean.parseBoolean(lines.get(10));
+                    Options.showSpectator = Boolean.parseBoolean(lines.get(10));
                     Options.showColored = Boolean.parseBoolean(lines.get(11));
 
                     Options.showHousing = Boolean.parseBoolean(lines.get(12));
@@ -157,7 +186,7 @@ public class Options {
             case CHAT_FRIENDREQ:
                 return (showFriendReqs = !showFriendReqs);
             case CHAT_SPECTATOR:
-                return (showSpec = !showSpec);
+                return (showSpectator = !showSpectator);
             case CHAT_SEPARATOR:
                 return (showSeparators = !showSeparators);
             case CHAT_COLORED_TEAM:
@@ -250,7 +279,7 @@ public class Options {
                 break;
             case CHAT_SPECTATOR:
                 prefix = "Spectator: ";
-                enabled = showSpec;
+                enabled = showSpectator;
                 break;
             case CHAT_SEPARATOR:
                 prefix = "Separator: ";
@@ -267,6 +296,10 @@ public class Options {
         }
 
         button.displayString = prefix + (enabled ? ENABLED : DISABLED);
+    }
+
+    public static Options getInstance() {
+        return instance;
     }
 
     private void doTutorialCheck() {

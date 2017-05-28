@@ -16,6 +16,7 @@
  */
 package me.boomboompower.all.togglechat;
 
+import me.boomboompower.all.togglechat.loading.ToggleTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -33,48 +34,55 @@ public class ToggleEvents {
         boolean cancelled = false;
         if (message == null) return;
         if (!containsWhitelisted(message)) {
-            if (isChat(ChatType.GUILD, message) && !Options.showGuild) {
-                cancelled = true;
+
+            for (ToggleTypes.ToggleBase base : Options.baseTypes) {
+                if (base.isMessage(message) && !base.isEnabled()) {
+                    cancelled = true;
+                    break;
+                }
             }
-            if (isChat(ChatType.PARTY, message) && !Options.showParty) {
-                cancelled = true;
-            }
-            if (isChat(ChatType.JOIN, message) && !Options.showJoin) {
-                cancelled = true;
-            }
-            if (isChat(ChatType.LEAVE, message) && !Options.showLeave) {
-                cancelled = true;
-            }
-            if (isChat(ChatType.SPECTATOR, message) && !Options.showSpec) {
-                cancelled = true;
-            }
-            if (isChat(ChatType.SHOUT, message) && !Options.showShout) {
-                cancelled = true;
-            }
-            if (isChat(ChatType.COLORED, message) && !Options.showColored) {
-                cancelled = true;
-            }
-            if (isChat(ChatType.TEAM, message) && !Options.showTeam) {
-                cancelled = true;
-            }
-            if (isChat(ChatType.MESSAGE, message) && !Options.showMessage) {
-                cancelled = true;
-            }
-            if (isChat(ChatType.HOUSING, message) && !Options.showHousing) {
-                cancelled = true;
-            }
-            if (isChat(ChatType.UHC, message) && !Options.showUHC) {
-                cancelled = true;
-            }
-            if (isChat(ChatType.SEPARATORS, message) && !Options.showSeparators) {
-                cancelled = true;
-            }
-            if (isChat(ChatType.PARTYINVITE, message) && !Options.showPartyInv) {
-                cancelled = true;
-            }
-            if (isChat(ChatType.FRIENDREQUEST, message) && !Options.showFriendReqs) {
-                cancelled = true;
-            }
+//            if (isChat(ChatType.GUILD, message) && !Options.showGuild) {
+//                cancelled = true;
+//            }
+//            if (isChat(ChatType.PARTY, message) && !Options.showParty) {
+//                cancelled = true;
+//            }
+//            if (isChat(ChatType.JOIN, message) && !Options.showJoin) {
+//                cancelled = true;
+//            }
+//            if (isChat(ChatType.LEAVE, message) && !Options.showLeave) {
+//                cancelled = true;
+//            }
+//            if (isChat(ChatType.SPECTATOR, message) && !Options.showSpectator) {
+//                cancelled = true;
+//            }
+//            if (isChat(ChatType.SHOUT, message) && !Options.showShout) {
+//                cancelled = true;
+//            }
+//            if (isChat(ChatType.COLORED, message) && !Options.showColored) {
+//                cancelled = true;
+//            }
+//            if (isChat(ChatType.TEAM, message) && !Options.showTeam) {
+//                cancelled = true;
+//            }
+//            if (isChat(ChatType.MESSAGE, message) && !Options.showMessage) {
+//                cancelled = true;
+//            }
+//            if (isChat(ChatType.HOUSING, message) && !Options.showHousing) {
+//                cancelled = true;
+//            }
+//            if (isChat(ChatType.UHC, message) && !Options.showUHC) {
+//                cancelled = true;
+//            }
+//            if (isChat(ChatType.SEPARATORS, message) && !Options.showSeparators) {
+//                cancelled = true;
+//            }
+//            if (isChat(ChatType.PARTYINVITE, message) && !Options.showPartyInv) {
+//                cancelled = true;
+//            }
+//            if (isChat(ChatType.FRIENDREQUEST, message) && !Options.showFriendReqs) {
+//                cancelled = true;
+//            }
         }
         event.setCanceled(cancelled);
     }
@@ -136,16 +144,7 @@ public class ToggleEvents {
             case FRIENDREQUEST:
                 return ToggleChat.containsIgnoreCase(message, "Friend request from ") || (message.contains("Click one") && message.contains("[ACCEPT]") && message.contains("[DENY]"));
             default:
-                return true;
-        }
-    }
-
-    @SubscribeEvent
-    public void onSk1erChat(ClientChatReceivedEvent event) {
-        if (event.message == null || event.message.getUnformattedText().isEmpty()) return;
-
-        if (event.message.getFormattedText().startsWith("§aG >")) {
-            Minecraft.getMinecraft().ingameGUI.getChatGUI().deleteChatLine(Minecraft.getMinecraft().ingameGUI.getChatGUI().getLineCount());
+                return false;
         }
     }
 

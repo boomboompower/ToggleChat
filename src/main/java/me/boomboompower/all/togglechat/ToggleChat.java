@@ -40,8 +40,9 @@ public class ToggleChat {
     public static final String MODID = "publictogglechat";
     public static final String VERSION = "1.2.2";
 
-    public static String USER_DIR;
     public static Boolean tutorialEnabled = true;
+    public static String USER_DIR;
+    public static File modJar;
 
     private static ToggleChat instance;
 
@@ -62,6 +63,7 @@ public class ToggleChat {
 
         data.credits = "2Pi for the initial idea behind the mod!";
 
+        modJar = event.getSourceFile();
         new Options();
     }
 

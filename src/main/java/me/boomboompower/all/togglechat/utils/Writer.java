@@ -65,7 +65,7 @@ public class Writer implements Runnable {
             this.write(e, Options.showFriendReqs + ls);
 
             // The following cannot be moved (since v1.1.0)
-            this.write(e, Options.showSpec + ls);
+            this.write(e, Options.showSpectator + ls);
             this.write(e, Options.showColored + ls);
 
             // The following cannot be moved (since v1.1.7)
