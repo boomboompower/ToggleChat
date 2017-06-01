@@ -35,7 +35,8 @@ public class ToggleEvents {
         if (message == null) return;
         if (!containsWhitelisted(message)) {
 
-            for (ToggleTypes.ToggleBase base : Options.baseTypes) {
+            for (int i = 0; i < Options.baseTypes.size(); i++) {
+                ToggleTypes.ToggleBase base = Options.baseTypes.get(i);
                 if (base.isMessage(message) && !base.isEnabled()) {
                     cancelled = true;
                     break;

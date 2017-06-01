@@ -25,22 +25,10 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class ToggleTypes {
 
-    private static ToggleTypes instance;
+    private static final String ENABLED = EnumChatFormatting.GREEN + "Enabled";
+    private static final String DISABLED = EnumChatFormatting.RED + "Disabled";
 
-    public TypeUHC uhc;
-    public TypeTeam team;
-    public TypeJoin join;
-    public TypeLeave leave;
-    public TypeGuild guild;
-    public TypeParty party;
-    public TypeShout shout;
-    public TypeHousing housing;
-    public TypeColored colored;
-    public TypeMessage message;
-    public TypePartyInvite partyInvite;
-    public TypeSpectator spectator;
-    public TypeFriendRequest friendRequest;
-    public TypeSeparators separators;
+    private static ToggleTypes instance;
 
     public ToggleTypes() {
         instance = this;
@@ -108,7 +96,8 @@ public class ToggleTypes {
 
         @Override
         public void onClick(GuiButton button) {
-
+            Options.showUHC = !Options.showUHC;
+            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
         }
     }
 
@@ -136,7 +125,8 @@ public class ToggleTypes {
 
         @Override
         public void onClick(GuiButton button) {
-
+            Options.showTeam = !Options.showTeam;
+            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
         }
     }
 
@@ -164,7 +154,8 @@ public class ToggleTypes {
 
         @Override
         public void onClick(GuiButton button) {
-
+            Options.showJoin = !Options.showJoin;
+            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
         }
     }
 
@@ -192,7 +183,8 @@ public class ToggleTypes {
 
         @Override
         public void onClick(GuiButton button) {
-
+            Options.showLeave = !Options.showLeave;
+            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
         }
     }
 
@@ -220,7 +212,8 @@ public class ToggleTypes {
 
         @Override
         public void onClick(GuiButton button) {
-
+            Options.showGuild = !Options.showGuild;
+            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
         }
     }
 
@@ -248,7 +241,8 @@ public class ToggleTypes {
 
         @Override
         public void onClick(GuiButton button) {
-
+            Options.showParty = !Options.showParty;
+            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
         }
     }
 
@@ -276,12 +270,12 @@ public class ToggleTypes {
 
         @Override
         public void onClick(GuiButton button) {
-
+            Options.showShout = !Options.showShout;
+            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
         }
     }
 
     public static class TypeHousing implements ToggleBase {
-
 
         @Override
         public String getName() {
@@ -290,7 +284,7 @@ public class ToggleTypes {
 
         @Override
         public int getId() {
-            return 7;
+            return 11;
         }
 
         @Override
@@ -305,7 +299,8 @@ public class ToggleTypes {
 
         @Override
         public void onClick(GuiButton button) {
-
+            Options.showHousing = !Options.showHousing;
+            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
         }
     }
 
@@ -318,7 +313,7 @@ public class ToggleTypes {
 
         @Override
         public int getId() {
-            return 8;
+            return 12;
         }
 
         @Override
@@ -333,7 +328,8 @@ public class ToggleTypes {
 
         @Override
         public void onClick(GuiButton button) {
-
+            Options.showColored = !Options.showColored;
+            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
         }
     }
 
@@ -346,7 +342,7 @@ public class ToggleTypes {
 
         @Override
         public int getId() {
-            return 9;
+            return 13;
         }
 
         @Override
@@ -361,7 +357,8 @@ public class ToggleTypes {
 
         @Override
         public void onClick(GuiButton button) {
-
+            Options.showMessage = !Options.showMessage;
+            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
         }
     }
 
@@ -374,7 +371,7 @@ public class ToggleTypes {
 
         @Override
         public int getId() {
-            return 10;
+            return 14;
         }
 
         @Override
@@ -389,7 +386,8 @@ public class ToggleTypes {
 
         @Override
         public void onClick(GuiButton button) {
-
+            Options.showPartyInv = !Options.showPartyInv;
+            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
         }
     }
 
@@ -402,7 +400,7 @@ public class ToggleTypes {
 
         @Override
         public int getId() {
-            return 11;
+            return 15;
         }
 
         @Override
@@ -417,7 +415,8 @@ public class ToggleTypes {
 
         @Override
         public void onClick(GuiButton button) {
-
+            Options.showSpectator = !Options.showSpectator;
+            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
         }
     }
 
@@ -430,7 +429,7 @@ public class ToggleTypes {
 
         @Override
         public int getId() {
-            return 12;
+            return 16;
         }
 
         @Override
@@ -445,7 +444,8 @@ public class ToggleTypes {
 
         @Override
         public void onClick(GuiButton button) {
-
+            Options.showFriendReqs = !Options.showFriendReqs;
+            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
         }
     }
 
@@ -458,7 +458,7 @@ public class ToggleTypes {
 
         @Override
         public int getId() {
-            return 13;
+            return 17;
         }
 
         @Override
@@ -473,7 +473,8 @@ public class ToggleTypes {
 
         @Override
         public void onClick(GuiButton button) {
-
+            Options.showSeparators = !Options.showSeparators;
+            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
         }
     }
 

@@ -19,7 +19,6 @@ package me.boomboompower.all.togglechat.gui;
 import me.boomboompower.all.togglechat.ToggleChat;
 import me.boomboompower.all.togglechat.gui.utils.CenterStringBuilder;
 import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
-import me.boomboompower.all.togglechat.tutorial.TutorialGui;
 import me.boomboompower.all.togglechat.utils.Writer;
 
 import net.minecraft.client.Minecraft;
@@ -153,7 +152,7 @@ public class WhitelistGui {
                     new WhitelistEntriesGui(this, 1).display();
                     break;
                 case 10:
-                    new ToggleGui.ToggleChatMainGui(0).display();
+                    new ToggleGui.ToggleChatMainGui(1).display();
                     break;
             }
 

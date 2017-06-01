@@ -18,6 +18,9 @@ package me.boomboompower.all.togglechat.gui;
 
 import me.boomboompower.all.togglechat.Options;
 import me.boomboompower.all.togglechat.ToggleChat;
+import me.boomboompower.all.togglechat.gui.utils.CenterStringBuilder;
+import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.all.togglechat.loading.ToggleTypes;
 import me.boomboompower.all.togglechat.utils.Writer;
 
 import net.minecraft.client.Minecraft;
@@ -43,6 +46,10 @@ public class ToggleGui {
 
     public static class ToggleChatMainGui extends GuiScreen {
 
+        private GuiButton whitelist;
+        private GuiButton back;
+        private GuiButton next;
+
         private int pageNumber;
         private Minecraft mc;
 
@@ -52,32 +59,56 @@ public class ToggleGui {
             this.mc = Minecraft.getMinecraft();
         }
 
+        @Override
         public void initGui() {
             createDefaultButtons();
-
-            createButtons();
         }
 
         private void createDefaultButtons() {
             buttonList.clear();
 
-            this.buttonList.add(new GuiButton(7, 5, this.height - 25, 75, 20, "Whitelist"));
-            this.buttonList.add(new GuiButton(8, this.width - 135, this.height - 25, 65, 20, "Back"));
-            this.buttonList.add(new GuiButton(9, this.width - 70, this.height - 25, 65, 20, "Next"));
+            setupPage();
 
             if (ToggleChat.tutorialEnabled) this.buttonList.add(new GuiButton(10, this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
         }
 
-        public void createButtons() {
+        private void setupPage() {
+            if (Options.baseTypes.size() > 0) {
 
+                int pages = (int) Math.ceil((double) Options.baseTypes.size() / 7D);
+
+                if (pageNumber < 1 || pageNumber > pages) {
+                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 40, 20, EnumChatFormatting.RED, String.format("Invalid page number (%s)", (EnumChatFormatting.DARK_RED + String.valueOf(pageNumber) + EnumChatFormatting.RED)));
+                    return;
+                }
+
+                GuiUtils.drawCenteredString(this.fontRendererObj, String.format("Page %s/%s", pageNumber, pages), this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
+
+                final int[] buttonId = {0};
+                final int[] position = {this.height / 2 - 75};
+
+                Options.baseTypes.values().stream().skip((pageNumber - 1) * 7).limit(7).forEach(baseType -> {
+                    this.buttonList.add(new GuiButton(baseType.getId(), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), (baseType.isEnabled() ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled"))));
+                    position[0] += 24;
+                });
+
+                this.buttonList.add(this.whitelist = new GuiButton(7, 5, this.height - 25, 75, 20, "Whitelist"));
+                this.buttonList.add(this.back = new GuiButton(8, this.width - 135, this.height - 25, 65, 20, "Back"));
+                this.buttonList.add(this.next = new GuiButton(9, this.width - 70, this.height - 25, 65, 20, "Next"));
+
+                back.enabled = pageNumber > 1;
+                next.enabled = pageNumber != pages; // Next
+
+                return;
+            }
+
+            GuiUtils.writeInformation(this.width / 2, this.height / 2 - 50, 20, "There are no entries on the whitelist!", "Insert some words then return to this page!");
         }
 
         public void drawScreen(int x, int y, float ticks) {
             super.drawDefaultBackground();
-            drawCenteredString(this.fontRendererObj, String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
 
-            buttonList.get(8).enabled = pageNumber == 1; // Back
-            buttonList.get(9).enabled = pageNumber == 0; // Next
+            drawCenteredString(this.fontRendererObj, String.format("Page %s/%s", (pageNumber), (int) Math.ceil((double) Options.baseTypes.size() / 7D)), this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
 
             super.drawScreen(x, y, ticks);
         }
@@ -93,96 +124,36 @@ public class ToggleGui {
         }
 
         protected void actionPerformed(GuiButton button) {
-            if (pageNumber == 0) {
+            if (button.id == 7 || button.id == 8 || button.id == 9 || button.id == 10) {
                 switch (button.id) {
-                    case 0:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_TEAM);
-                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_TEAM);
+                    case 7:
+                        new WhitelistGui.WhitelistMainGui().display();
                         break;
-                    case 1:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_JOIN);
-                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_JOIN);
+                    case 8:
+                        new ToggleChatMainGui(pageNumber--);
+                        createDefaultButtons();
                         break;
-                    case 2:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_LEAVE);
-                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_LEAVE);
+                    case 9:
+                        new ToggleChatMainGui(pageNumber++);
+                        createDefaultButtons();
                         break;
-                    case 3:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_GUILD);
-                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_GUILD);
-                        break;
-                    case 4:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_PARTY);
-                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_PARTY);
-                        break;
-                    case 5:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_SHOUT);
-                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_SHOUT);
-                        break;
-                    case 6:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_MESSAGE);
-                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_MESSAGE);
-                        break;
+                }
+                if (ToggleChat.tutorialEnabled) {
+                    try {
+                        switch (button.id) {
+                            case 10:
+                                new me.boomboompower.all.togglechat.tutorial.TutorialGui.MainToggleTutorialGui(this, 0).display();
+                                break;
+                        }
+                    } catch (Exception ex) {}
                 }
             } else {
-                switch (button.id) {
-                    case 0:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_UHC);
-                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_UHC);
+                for (ToggleTypes.ToggleBase base : Options.baseTypes.values()) {
+                    if (base.getId() == button.id) {
+                        base.onClick(button);
                         break;
-                    case 1:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_FRIENDREQ);
-                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_FRIENDREQ);
-                        break;
-                    case 2:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_PARTYINV);
-                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_PARTYINV);
-                        break;
-                    case 3:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_SPECTATOR);
-                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_SPECTATOR);
-                        break;
-                    case 4:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_COLORED_TEAM);
-                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_COLORED_TEAM);
-                        break;
-                    case 5:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_HOUSING);
-                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_HOUSING);
-                        break;
-                    case 6:
-                        Options.getInstance().toggle(Options.ToggleType.CHAT_SEPARATOR);
-                        Options.getInstance().updateButton(button, Options.ToggleType.CHAT_SEPARATOR);
-                        break;
+                    }
                 }
-            }
-
-            switch (button.id) {
-                case 7:
-                    new WhitelistGui.WhitelistMainGui().display();
-                    break;
-                case 8:
-                    if (pageNumber > 0) {
-                        new ToggleChatMainGui(pageNumber--);
-                        createButtons();
-                    } else {
-                        mc.displayGuiScreen(null);
-                    }
-                    break;
-                case 9:
-                    new ToggleChatMainGui(pageNumber++);
-                    createButtons();
-                    break;
-            }
-
-            if (ToggleChat.tutorialEnabled) {
-                try {
-                    switch (button.id) {
-                        case 10:
-                            new me.boomboompower.all.togglechat.tutorial.TutorialGui.MainToggleTutorialGui(this, 0).display();
-                            break;
-                    }
-                } catch (Exception ex) {}
             }
         }
 

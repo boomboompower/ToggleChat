@@ -354,13 +354,13 @@ public class TutorialGui {
             switch (button.id) {
                 case 0:
                     if (pageNumber > 0) {
-                        new TutorialGui.MainToggleTutorialGui(this, pageNumber--);
+                        new MainToggleTutorialGui(this, pageNumber--);
                     } else {
                         mc.displayGuiScreen(previousScreen);
                     }
                     break;
                 case 1:
-                    new TutorialGui.MainToggleTutorialGui(this, pageNumber++);
+                    new MainToggleTutorialGui(this, pageNumber++);
                     break;
             }
         }

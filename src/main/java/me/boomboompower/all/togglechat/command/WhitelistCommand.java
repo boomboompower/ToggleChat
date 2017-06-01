@@ -16,9 +16,12 @@
  */
 package me.boomboompower.all.togglechat.command;
 
+import me.boomboompower.all.togglechat.Options;
 import me.boomboompower.all.togglechat.gui.WhitelistGui;
 
+import me.boomboompower.all.togglechat.loading.ToggleTypes;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;

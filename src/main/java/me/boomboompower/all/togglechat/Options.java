@@ -21,7 +21,6 @@ import me.boomboompower.all.togglechat.loading.ToggleTypes;
 import me.boomboompower.all.togglechat.utils.GlobalUtils;
 import me.boomboompower.all.togglechat.utils.Writer;
 
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.HashMap;
@@ -74,13 +73,13 @@ public class Options {
         baseTypes.put(4, new ToggleTypes.TypeGuild());
         baseTypes.put(5, new ToggleTypes.TypeParty());
         baseTypes.put(6, new ToggleTypes.TypeShout());
-        baseTypes.put(7, new ToggleTypes.TypeHousing());
-        baseTypes.put(8, new ToggleTypes.TypeColored());
-        baseTypes.put(9, new ToggleTypes.TypeMessage());
-        baseTypes.put(10, new ToggleTypes.TypePartyInvite());
-        baseTypes.put(11, new ToggleTypes.TypeSpectator());
-        baseTypes.put(12, new ToggleTypes.TypeFriendRequest());
-        baseTypes.put(13, new ToggleTypes.TypeSeparators());
+        baseTypes.put(11, new ToggleTypes.TypeHousing());
+        baseTypes.put(12, new ToggleTypes.TypeColored());
+        baseTypes.put(13, new ToggleTypes.TypeMessage());
+        baseTypes.put(14, new ToggleTypes.TypePartyInvite());
+        baseTypes.put(15, new ToggleTypes.TypeSpectator());
+        baseTypes.put(16, new ToggleTypes.TypeFriendRequest());
+        baseTypes.put(17, new ToggleTypes.TypeSeparators());
     }
 
     public Options() {
@@ -92,7 +91,7 @@ public class Options {
     public void addType(ToggleTypes.ToggleBase... bases) {
         if (bases.length > 0) {
             for (ToggleTypes.ToggleBase base : bases) {
-                if (!baseTypes.containsKey(base.getId())) {
+                if (!baseTypes.containsKey(base.getId()) && base.getId() > 16) {
                     baseTypes.put(base.getId(), base);
                 } else {
                     throw new RuntimeException(String.format("baseTypes entry is already loaded. (ID: %s)", base.getId()));
@@ -160,144 +159,6 @@ public class Options {
         }
     }
 
-    public boolean toggle(ToggleType type) {
-        switch (type) {
-            // Which chat should be toggled
-            case CHAT_UHC:
-                return (showUHC = !showUHC);
-            case CHAT_TEAM:
-                return (showTeam = !showTeam);
-            case CHAT_JOIN:
-                return (showJoin = !showJoin);
-            case CHAT_LEAVE:
-                return (showLeave = !showLeave);
-            case CHAT_GUILD:
-                return (showGuild = !showGuild);
-            case CHAT_PARTY:
-                return (showParty = !showParty);
-            case CHAT_SHOUT:
-                return (showShout = !showShout);
-            case CHAT_MESSAGE:
-                return (showMessage = !showMessage);
-            case CHAT_HOUSING:
-                return (showHousing = !showHousing);
-            case CHAT_PARTYINV:
-                return (showPartyInv = !showPartyInv);
-            case CHAT_FRIENDREQ:
-                return (showFriendReqs = !showFriendReqs);
-            case CHAT_SPECTATOR:
-                return (showSpectator = !showSpectator);
-            case CHAT_SEPARATOR:
-                return (showSeparators = !showSeparators);
-            case CHAT_COLORED_TEAM:
-                return (showColored = !showColored);
-
-//            // Whitelist chat ignore list.
-//            case WHITELIST_UHC:
-//                return (ignoreUHC = !ignoreUHC);
-//            case WHITELIST_TEAM:
-//                return (ignoreTeam = !ignoreTeam);
-//            case WHITELIST_JOIN:
-//                return (ignoreJoin = !ignoreJoin);
-//            case WHITELIST_LEAVE:
-//                return (ignoreLeave = !ignoreLeave);
-//            case WHITELIST_GUILD:
-//                return (ignoreGuild = !ignoreGuild);
-//            case WHITELIST_PARTY:
-//                return (ignoreParty = !ignoreParty);
-//            case WHITELIST_SHOUT:
-//                return (ignoreShout = !ignoreShout);
-//            case WHITELIST_MESSAGE:
-//                return (ignoreMessage = !ignoreMessage);
-//            case WHITELIST_HOUSING:
-//                return (ignoreHousing = !ignoreHousing);
-//            case WHITELIST_PARTYINV:
-//                return (ignorePartyInv = !ignorePartyInv);
-//            case WHITELIST_FRIENDREQ:
-//                return (ignoreFriendReqs = !ignoreFriendReqs);
-//            case WHITELIST_SPECTATOR:
-//                return (ignoreSpec = !ignoreSpec);
-//            case WHITELIST_SEPARATOR:
-//                return (ignoreSeparators = !ignoreSeparators);
-//            case WHITELIST_COLORED_TEAM:
-//                return (ignoreColored = !ignoreColored);
-
-            // Should never happen
-            default:
-                return true;
-        }
-    }
-
-    public void updateButton(GuiButton button, ToggleType type) {
-        String prefix;
-        boolean enabled;
-
-        switch (type) {
-            case CHAT_UHC:
-                prefix = "UHC: ";
-                enabled = showUHC;
-                break;
-            case CHAT_TEAM:
-                prefix = "Team: ";
-                enabled = showTeam;
-                break;
-            case CHAT_JOIN:
-                prefix = "Join: ";
-                enabled = showJoin;
-                break;
-            case CHAT_LEAVE:
-                prefix = "Leave: ";
-                enabled = showLeave;
-                break;
-            case CHAT_GUILD:
-                prefix = "Guild: ";
-                enabled = showGuild;
-                break;
-            case CHAT_PARTY:
-                prefix = "Party: ";
-                enabled = showParty;
-                break;
-            case CHAT_SHOUT:
-                prefix = "Shout: ";
-                enabled = showShout;
-                break;
-            case CHAT_MESSAGE:
-                prefix = "Messages: ";
-                enabled = showMessage;
-                break;
-            case CHAT_HOUSING:
-                prefix = "Housing: ";
-                enabled = showHousing;
-                break;
-            case CHAT_PARTYINV:
-                prefix = "Party invites: ";
-                enabled = showPartyInv;
-                break;
-            case CHAT_FRIENDREQ:
-                prefix = "Friend requests: ";
-                enabled = showFriendReqs;
-                break;
-            case CHAT_SPECTATOR:
-                prefix = "Spectator: ";
-                enabled = showSpectator;
-                break;
-            case CHAT_SEPARATOR:
-                prefix = "Separator: ";
-                enabled = showSeparators;
-                break;
-            case CHAT_COLORED_TEAM:
-                prefix = "Colored team: ";
-                enabled = showColored;
-                break;
-            default:
-                prefix = String.format("Unknown (ID:%s): ", button.id);
-                enabled = false;
-                break;
-        }
-
-        button.displayString = prefix + (enabled ? ENABLED : DISABLED);
-    }
-
     public static Options getInstance() {
         return instance;
     }
@@ -315,40 +176,5 @@ public class Options {
         WHITELIST_OPTIONS();
 
         ConfigType() {}
-    }
-
-    public enum ToggleType {
-        CHAT_UHC(),
-        CHAT_TEAM(),
-        CHAT_JOIN(),
-        CHAT_LEAVE(),
-        CHAT_GUILD(),
-        CHAT_PARTY(),
-        CHAT_SHOUT(),
-        CHAT_MESSAGE(),
-        CHAT_HOUSING(),
-        CHAT_PARTYINV(),
-        CHAT_FRIENDREQ(),
-        CHAT_SPECTATOR(),
-        CHAT_SEPARATOR(),
-        CHAT_COLORED_TEAM(),
-
-//        WHITELIST_UHC(),
-//        WHITELIST_TEAM(),
-//        WHITELIST_JOIN(),
-//        WHITELIST_LEAVE(),
-//        WHITELIST_GUILD(),
-//        WHITELIST_PARTY(),
-//        WHITELIST_SHOUT(),
-//        WHITELIST_MESSAGE(),
-//        WHITELIST_HOUSING(),
-//        WHITELIST_PARTYINV(),
-//        WHITELIST_FRIENDREQ(),
-//        WHITELIST_SPECTATOR(),
-//        WHITELIST_SEPARATOR(),
-//        WHITELIST_COLORED_TEAM()
-        ;
-
-        ToggleType() {}
     }
 }
