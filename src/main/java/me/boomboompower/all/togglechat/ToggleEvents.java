@@ -17,9 +17,8 @@
 package me.boomboompower.all.togglechat;
 
 import me.boomboompower.all.togglechat.loading.ToggleTypes;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+
+import me.boomboompower.all.togglechat.utils.GlobalUtils;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -31,65 +30,18 @@ public class ToggleEvents {
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onChatReceive(ClientChatReceivedEvent event) {
         String message = event.message.getUnformattedText();
-        boolean cancelled = false;
-        if (message == null) return;
-        if (!containsWhitelisted(message)) {
-
-            for (int i = 0; i < Options.baseTypes.size(); i++) {
-                ToggleTypes.ToggleBase base = Options.baseTypes.get(i);
-                if (base.isMessage(message) && !base.isEnabled()) {
-                    cancelled = true;
-                    break;
+        try {
+            if (!containsWhitelisted(message)) {
+                for (ToggleTypes.ToggleBase type : Options.baseTypes.values()) {
+                    if (type.isMessage(message) && !type.isEnabled()) {
+                        event.setCanceled(true);
+                        break;
+                    }
                 }
             }
-//            if (isChat(ChatType.GUILD, message) && !Options.showGuild) {
-//                cancelled = true;
-//            }
-//            if (isChat(ChatType.PARTY, message) && !Options.showParty) {
-//                cancelled = true;
-//            }
-//            if (isChat(ChatType.JOIN, message) && !Options.showJoin) {
-//                cancelled = true;
-//            }
-//            if (isChat(ChatType.LEAVE, message) && !Options.showLeave) {
-//                cancelled = true;
-//            }
-//            if (isChat(ChatType.SPECTATOR, message) && !Options.showSpectator) {
-//                cancelled = true;
-//            }
-//            if (isChat(ChatType.SHOUT, message) && !Options.showShout) {
-//                cancelled = true;
-//            }
-//            if (isChat(ChatType.COLORED, message) && !Options.showColored) {
-//                cancelled = true;
-//            }
-//            if (isChat(ChatType.TEAM, message) && !Options.showTeam) {
-//                cancelled = true;
-//            }
-//            if (isChat(ChatType.MESSAGE, message) && !Options.showMessage) {
-//                cancelled = true;
-//            }
-//            if (isChat(ChatType.HOUSING, message) && !Options.showHousing) {
-//                cancelled = true;
-//            }
-//            if (isChat(ChatType.UHC, message) && !Options.showUHC) {
-//                cancelled = true;
-//            }
-//            if (isChat(ChatType.SEPARATORS, message) && !Options.showSeparators) {
-//                cancelled = true;
-//            }
-//            if (isChat(ChatType.PARTYINVITE, message) && !Options.showPartyInv) {
-//                cancelled = true;
-//            }
-//            if (isChat(ChatType.FRIENDREQUEST, message) && !Options.showFriendReqs) {
-//                cancelled = true;
-//            }
+        } catch (Exception e1) {
+            GlobalUtils.log(e1.getMessage() != null ? e1.getMessage() : e1.getCause());
         }
-        event.setCanceled(cancelled);
-    }
-
-    public void sendChatMessage(String message) {
-        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
     }
 
     private boolean containsWhitelisted(String message) {
@@ -99,73 +51,5 @@ public class ToggleEvents {
             contains[0] = true;
         }});
         return contains[0];
-    }
-
-    private boolean isChat(ChatType type, String message) {
-        switch (type) {
-            case UHC:
-                boolean isUHC = false;
-
-                char[] charzz = message.toCharArray();
-
-                if (charzz.length > 3) {
-                    if (charzz[0] == '[' && (charzz[3] == ']' || charzz[4] == ']')) {
-                        if (Character.isDigit(charzz[1])) {
-                            if (Character.isDefined(charzz[2]) || Character.isDefined(charzz[3])) {
-                                isUHC = true;
-                            }
-                        }
-                    }
-                }
-                return isUHC;
-            case TEAM:
-                return message.startsWith("[TEAM] ");
-            case JOIN:
-                return message.endsWith(" joined.");
-            case LEAVE:
-                return message.endsWith(" left.");
-            case GUILD:
-                return message.startsWith("Guild > ") || message.startsWith("G > ");
-            case PARTY:
-                return message.startsWith("Party > ") || message.startsWith("P > ");
-            case SHOUT:
-                return message.startsWith("[SHOUT] ");
-            case COLORED:
-                return message.startsWith("[BLUE] ") || message.startsWith("[YELLOW] ") || message.startsWith("[GREEN] ") || message.startsWith("[RED] ") || message.startsWith("[WHITE] ") || message.startsWith("[PURPLE] ");
-            case HOUSING:
-                return message.startsWith("[OWNER] ") || message.startsWith("[CO-OWNER] ") || message.startsWith("[RES] ");
-            case MESSAGE:
-                return message.startsWith("To ") || message.startsWith("From ");
-            case SPECTATOR:
-                return message.startsWith("[SPECTATOR] ");
-            case SEPARATORS:
-                return message.equalsIgnoreCase("-----------------------------------------------------");
-            case PARTYINVITE:
-                return ToggleChat.containsIgnoreCase(message, "has invited you to join ") || ToggleChat.containsIgnoreCase(message, "60 seconds to accept") || (EnumChatFormatting.getTextWithoutFormattingCodes(message).contains("The party invite from ") && message.endsWith(" has expired."));
-            case FRIENDREQUEST:
-                return ToggleChat.containsIgnoreCase(message, "Friend request from ") || (message.contains("Click one") && message.contains("[ACCEPT]") && message.contains("[DENY]"));
-            default:
-                return false;
-        }
-    }
-
-    public enum ChatType {
-        UHC(),
-        NONE(),
-        TEAM(),
-        JOIN(),
-        LEAVE(),
-        GUILD(),
-        PARTY(),
-        SHOUT(),
-        COLORED(),
-        HOUSING(),
-        MESSAGE(),
-        SPECTATOR(),
-        SEPARATORS(),
-        PARTYINVITE(),
-        FRIENDREQUEST();
-
-        ChatType() {}
     }
 }

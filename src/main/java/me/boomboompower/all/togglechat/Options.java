@@ -100,62 +100,32 @@ public class Options {
         }
     }
 
-    public void setup(ConfigType type, List<String> lines) {
-        switch (type) {
-            case MAIN_OPTIONS:
-                try {
-                    Options.showTeam = Boolean.parseBoolean(lines.get(0));
-                    Options.showJoin = Boolean.parseBoolean(lines.get(1));
-                    Options.showLeave = Boolean.parseBoolean(lines.get(2));
-                    Options.showGuild = Boolean.parseBoolean(lines.get(3));
-                    Options.showParty = Boolean.parseBoolean(lines.get(4));
-                    Options.showShout = Boolean.parseBoolean(lines.get(5));
-                    Options.showMessage = Boolean.parseBoolean(lines.get(6));
+    public void setup(List<String> lines) {
+        try {
+            Options.showTeam = Boolean.parseBoolean(lines.get(0));
+            Options.showJoin = Boolean.parseBoolean(lines.get(1));
+            Options.showLeave = Boolean.parseBoolean(lines.get(2));
+            Options.showGuild = Boolean.parseBoolean(lines.get(3));
+            Options.showParty = Boolean.parseBoolean(lines.get(4));
+            Options.showShout = Boolean.parseBoolean(lines.get(5));
+            Options.showMessage = Boolean.parseBoolean(lines.get(6));
 
-                    Options.showUHC = Boolean.parseBoolean(lines.get(7));
-                    Options.showPartyInv = Boolean.parseBoolean(lines.get(8));
-                    Options.showFriendReqs = Boolean.parseBoolean(lines.get(9));
+            Options.showUHC = Boolean.parseBoolean(lines.get(7));
+            Options.showPartyInv = Boolean.parseBoolean(lines.get(8));
+            Options.showFriendReqs = Boolean.parseBoolean(lines.get(9));
 
-                    Options.showSpectator = Boolean.parseBoolean(lines.get(10));
-                    Options.showColored = Boolean.parseBoolean(lines.get(11));
+            Options.showSpectator = Boolean.parseBoolean(lines.get(10));
+            Options.showColored = Boolean.parseBoolean(lines.get(11));
 
-                    Options.showHousing = Boolean.parseBoolean(lines.get(12));
-                    Options.showColored = Boolean.parseBoolean(lines.get(13));
-                } catch (Exception ex) {
-                    GlobalUtils.log("Failed to setup all main option values. Rewriting!");
-                    Writer.execute();
-                    GlobalUtils.log("------------------- ERROR -------------------");
-                    ex.printStackTrace();
-                    GlobalUtils.log("------------------- ERROR -------------------");
-                    GlobalUtils.log("The error and its details are shown above.");
-                }
-                break;
-//            case WHITELIST_OPTIONS:
-//                try {
-//                    Options.ignoreUHC = Boolean.parseBoolean(lines.get(0));
-//                    Options.ignoreSpec = Boolean.parseBoolean(lines.get(1));
-//                    Options.ignoreTeam = Boolean.parseBoolean(lines.get(2));
-//                    Options.ignoreJoin = Boolean.parseBoolean(lines.get(3));
-//                    Options.ignoreLeave = Boolean.parseBoolean(lines.get(4));
-//                    Options.ignoreGuild = Boolean.parseBoolean(lines.get(5));
-//                    Options.ignoreParty = Boolean.parseBoolean(lines.get(6));
-//                    Options.ignoreShout = Boolean.parseBoolean(lines.get(7));
-//                    Options.ignoreHousing = Boolean.parseBoolean(lines.get(8));
-//                    Options.ignoreColored = Boolean.parseBoolean(lines.get(9));
-//                    Options.ignoreMessage = Boolean.parseBoolean(lines.get(10));
-//                    Options.ignorePartyInv = Boolean.parseBoolean(lines.get(11));
-//                    Options.ignoreFriendReqs = Boolean.parseBoolean(lines.get(12));
-//                    Options.ignoreSeparators = Boolean.parseBoolean(lines.get(13));
-//                }
-//                catch (Exception ex) {
-//                    GlobalUtils.log("Failed to setup whitelist ignoring values. Rewriting!");
-//                    Writer.execute(false, true);
-//                    GlobalUtils.log("------------------- ERROR -------------------");
-//                    ex.printStackTrace();
-//                    GlobalUtils.log("------------------- ERROR -------------------");
-//                    GlobalUtils.log("The error and its details are shown above.");
-//                }
-//                break;
+            Options.showHousing = Boolean.parseBoolean(lines.get(12));
+            Options.showColored = Boolean.parseBoolean(lines.get(13));
+        } catch (Exception ex) {
+            GlobalUtils.log("Failed to setup all main option values. Rewriting!");
+            Writer.execute();
+            GlobalUtils.log("------------------- ERROR -------------------");
+            ex.printStackTrace();
+            GlobalUtils.log("------------------- ERROR -------------------");
+            GlobalUtils.log("The error and its details are shown above.");
         }
     }
 
@@ -169,12 +139,5 @@ public class Options {
         } catch (Exception ex) {
             ToggleChat.tutorialEnabled = false;
         }
-    }
-
-    public enum ConfigType {
-        MAIN_OPTIONS(),
-        WHITELIST_OPTIONS();
-
-        ConfigType() {}
     }
 }

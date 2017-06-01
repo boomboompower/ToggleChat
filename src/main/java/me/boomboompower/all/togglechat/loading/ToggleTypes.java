@@ -53,10 +53,6 @@ public class ToggleTypes {
         default String getDisplayName() {
             return getName() + ": %s";
         }
-
-        default Boolean defaultValue() {
-            return false;
-        }
     }
 
     public static class TypeUHC implements ToggleBase {
@@ -202,7 +198,7 @@ public class ToggleTypes {
 
         @Override
         public boolean isMessage(String message) {
-            return message.startsWith("Guild > ") || message.startsWith("G > ");
+            return message.startsWith("Guild > "); // || message.startsWith("G > ");
         }
 
         @Override
@@ -231,7 +227,7 @@ public class ToggleTypes {
 
         @Override
         public boolean isMessage(String message) {
-            return message.startsWith("Party > ") || message.startsWith("P > ");
+            return message.startsWith("Party > "); // || message.startsWith("P > ");
         }
 
         @Override

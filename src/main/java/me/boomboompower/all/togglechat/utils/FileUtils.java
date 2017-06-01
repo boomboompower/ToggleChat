@@ -54,7 +54,7 @@ public class FileUtils {
                        for (int i = 0; i <= 13; i++) {
                            entries.add((String) options.get(i));
                        }
-                       Options.getInstance().setup(Options.ConfigType.MAIN_OPTIONS, entries);
+                       Options.getInstance().setup(entries);
                    } else {
                        executeWriter = true;
                    }
