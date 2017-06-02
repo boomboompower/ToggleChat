@@ -18,7 +18,6 @@ package me.boomboompower.all.togglechat.gui;
 
 import me.boomboompower.all.togglechat.Options;
 import me.boomboompower.all.togglechat.ToggleChat;
-import me.boomboompower.all.togglechat.gui.utils.CenterStringBuilder;
 import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
 import me.boomboompower.all.togglechat.loading.ToggleTypes;
 import me.boomboompower.all.togglechat.utils.Writer;
@@ -26,7 +25,6 @@ import me.boomboompower.all.togglechat.utils.Writer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -50,11 +48,13 @@ public class ToggleGui {
         private GuiButton back;
         private GuiButton next;
 
+        private boolean nobuttons = false;
+
         private int pageNumber;
         private Minecraft mc;
 
         public ToggleChatMainGui(int pageNumber) {
-            this.pageNumber = pageNumber;
+            this.pageNumber = 50;
 
             this.mc = Minecraft.getMinecraft();
         }
@@ -74,21 +74,19 @@ public class ToggleGui {
 
         private void setupPage() {
             if (Options.baseTypes.size() > 0) {
+                nobuttons = false;
 
                 int pages = (int) Math.ceil((double) Options.baseTypes.size() / 7D);
 
                 if (pageNumber < 1 || pageNumber > pages) {
-                    GuiUtils.writeInformation(this.width / 2, this.height / 2 - 40, 20, EnumChatFormatting.RED, String.format("Invalid page number (%s)", (EnumChatFormatting.DARK_RED + String.valueOf(pageNumber) + EnumChatFormatting.RED)));
-                    return;
+                    pageNumber = 0;
                 }
-
-                GuiUtils.drawCenteredString(this.fontRendererObj, String.format("Page %s/%s", pageNumber, pages), this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
 
                 final int[] buttonId = {0};
                 final int[] position = {this.height / 2 - 75};
 
                 Options.baseTypes.values().stream().skip((pageNumber - 1) * 7).limit(7).forEach(baseType -> {
-                    this.buttonList.add(new GuiButton(baseType.getId(), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), (baseType.isEnabled() ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled"))));
+                    this.buttonList.add(new GuiButton(baseType.getId(), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), (baseType.isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED))));
                     position[0] += 24;
                 });
 
@@ -101,14 +99,19 @@ public class ToggleGui {
 
                 return;
             }
-
-            GuiUtils.writeInformation(this.width / 2, this.height / 2 - 50, 20, "There are no entries on the whitelist!", "Insert some words then return to this page!");
+            nobuttons = true;
         }
 
         public void drawScreen(int x, int y, float ticks) {
             super.drawDefaultBackground();
 
-            drawCenteredString(this.fontRendererObj, String.format("Page %s/%s", (pageNumber), (int) Math.ceil((double) Options.baseTypes.size() / 7D)), this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
+            if (nobuttons) {
+                drawCenteredString(this.fontRendererObj, "There are no buttons loaded!", this.width / 2, this.height / 2 - 50, Color.WHITE.getRGB());
+                drawCenteredString(this.fontRendererObj, "Buttons must've not loaded correctly", this.width / 2, this.height / 2 - 30, Color.WHITE.getRGB());
+                drawCenteredString(this.fontRendererObj, "Please contact boomboompower!", this.width / 2, this.height / 2, Color.WHITE.getRGB());
+            } else {
+                drawCenteredString(this.fontRendererObj, String.format("Page %s/%s", (pageNumber), (int) Math.ceil((double) Options.baseTypes.size() / 7D)), this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
+            }
 
             super.drawScreen(x, y, ticks);
         }

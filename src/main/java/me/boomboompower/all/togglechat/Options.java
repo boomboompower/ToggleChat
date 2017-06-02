@@ -14,22 +14,16 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package me.boomboompower.all.togglechat;
 
 import me.boomboompower.all.togglechat.loading.ToggleTypes;
 import me.boomboompower.all.togglechat.utils.GlobalUtils;
 import me.boomboompower.all.togglechat.utils.Writer;
 
-import net.minecraft.util.EnumChatFormatting;
-
 import java.util.HashMap;
 import java.util.List;
 
 public class Options {
-
-    private static final String ENABLED = EnumChatFormatting.GREEN + "Enabled";
-    private static final String DISABLED = EnumChatFormatting.RED + "Disabled";
 
     public static boolean showUHC = true;
     public static boolean showTeam = true;

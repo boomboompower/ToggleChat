@@ -14,29 +14,16 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package me.boomboompower.all.togglechat.loading;
 
 import me.boomboompower.all.togglechat.Options;
 import me.boomboompower.all.togglechat.ToggleChat;
 
+import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.EnumChatFormatting;
 
 public class ToggleTypes {
-
-    private static final String ENABLED = EnumChatFormatting.GREEN + "Enabled";
-    private static final String DISABLED = EnumChatFormatting.RED + "Disabled";
-
-    private static ToggleTypes instance;
-
-    public ToggleTypes() {
-        instance = this;
-    }
-
-    public static ToggleTypes getInstance() {
-        return instance;
-    }
 
     public interface ToggleBase {
 
@@ -93,7 +80,7 @@ public class ToggleTypes {
         @Override
         public void onClick(GuiButton button) {
             Options.showUHC = !Options.showUHC;
-            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
+            button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
         }
     }
 
@@ -122,7 +109,7 @@ public class ToggleTypes {
         @Override
         public void onClick(GuiButton button) {
             Options.showTeam = !Options.showTeam;
-            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
+            button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
         }
     }
 
@@ -151,7 +138,7 @@ public class ToggleTypes {
         @Override
         public void onClick(GuiButton button) {
             Options.showJoin = !Options.showJoin;
-            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
+            button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
         }
     }
 
@@ -180,7 +167,7 @@ public class ToggleTypes {
         @Override
         public void onClick(GuiButton button) {
             Options.showLeave = !Options.showLeave;
-            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
+            button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
         }
     }
 
@@ -209,7 +196,7 @@ public class ToggleTypes {
         @Override
         public void onClick(GuiButton button) {
             Options.showGuild = !Options.showGuild;
-            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
+            button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
         }
     }
 
@@ -238,7 +225,7 @@ public class ToggleTypes {
         @Override
         public void onClick(GuiButton button) {
             Options.showParty = !Options.showParty;
-            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
+            button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
         }
     }
 
@@ -267,7 +254,7 @@ public class ToggleTypes {
         @Override
         public void onClick(GuiButton button) {
             Options.showShout = !Options.showShout;
-            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
+            button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
         }
     }
 
@@ -296,7 +283,7 @@ public class ToggleTypes {
         @Override
         public void onClick(GuiButton button) {
             Options.showHousing = !Options.showHousing;
-            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
+            button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
         }
     }
 
@@ -325,7 +312,7 @@ public class ToggleTypes {
         @Override
         public void onClick(GuiButton button) {
             Options.showColored = !Options.showColored;
-            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
+            button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
         }
     }
 
@@ -354,7 +341,7 @@ public class ToggleTypes {
         @Override
         public void onClick(GuiButton button) {
             Options.showMessage = !Options.showMessage;
-            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
+            button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
         }
     }
 
@@ -383,7 +370,7 @@ public class ToggleTypes {
         @Override
         public void onClick(GuiButton button) {
             Options.showPartyInv = !Options.showPartyInv;
-            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
+            button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
         }
     }
 
@@ -412,7 +399,7 @@ public class ToggleTypes {
         @Override
         public void onClick(GuiButton button) {
             Options.showSpectator = !Options.showSpectator;
-            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
+            button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
         }
     }
 
@@ -441,7 +428,7 @@ public class ToggleTypes {
         @Override
         public void onClick(GuiButton button) {
             Options.showFriendReqs = !Options.showFriendReqs;
-            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
+            button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
         }
     }
 
@@ -470,7 +457,7 @@ public class ToggleTypes {
         @Override
         public void onClick(GuiButton button) {
             Options.showSeparators = !Options.showSeparators;
-            button.displayString = String.format(getDisplayName(), isEnabled() ? ENABLED : DISABLED);
+            button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
         }
     }
 

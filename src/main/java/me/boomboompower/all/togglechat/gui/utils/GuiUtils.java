@@ -14,36 +14,70 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package me.boomboompower.all.togglechat.gui.utils;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
 
+/*
+ * An attempt at creating an easier way to do things in GUI's
+ *
+ * Initially these methods were only used in the WhitelistGui class,
+ * however they were moved here so other GUI classes could use them.
+ */
 public class GuiUtils {
 
+    public static final String ENABLED = EnumChatFormatting.GREEN + "Enabled";
+    public static final String DISABLED = EnumChatFormatting.RED + "Disabled";
+
+    /*
+     * Default constructor, no need to create an instance of this class
+     */
+    private GuiUtils() {
+    }
+
+    /*
+     * Base method for writing on the screen.
+     *
+     * fontRender - The fontRender to write onto
+     * text - The message to be written onto the screen
+     * x - the x coordinate of the text
+     * y - the y coordinate of the text
+     * color - the color of the message
+     */
     public static void drawCenteredString(FontRenderer fontRenderer, String text, int x, int y, int color) {
         fontRenderer.drawStringWithShadow(text, (float) (x - fontRenderer.getStringWidth(text) / 2), (float) y, color);
     }
 
+    /*
+     * An additional way of using the drawCenteredString
+     */
     public static void drawCentered(CenterStringBuilder builder) {
         drawCenteredString(builder.getFontRender(), builder.translateCodes().getMessage(), builder.getX(), builder.getY(), builder.getColor().getRGB());
     }
 
+    /*
+     * Optional method for writeInformation(...) so that the color variable is not essential.
+     *
+     * Write multiple lines on the screen at once, separated by the separation variable.
+     * This is done by using a simple loop through the lines variable, and each time another
+     * String is found, it will be written to the screen and the y will have the separation amount added.
+     */
     public static void writeInformation(int startingX, int startingY, int separation, String... lines) {
         writeInformation(startingX, startingY, separation, EnumChatFormatting.WHITE, lines);
     }
 
+    /*
+     * Default method for writeInformation(...) with the color variable present
+     *
+     * Write multiple lines on the screen at once, separated by the separation variable.
+     * This is done by using a simple loop through the lines variable, and each time another
+     * String is found, it will be written to the screen and the y will have the separation amount added.
+     */
     public static void writeInformation(int startingX, int startingY, int separation, EnumChatFormatting color, String... lines) {
         for (String s : lines) {
             drawCentered(new CenterStringBuilder(color + s, startingX, startingY));
             startingY += separation;
         }
-    }
-
-    public static void display(GuiScreen gui) {
-        Minecraft.getMinecraft().currentScreen = gui;
     }
 }

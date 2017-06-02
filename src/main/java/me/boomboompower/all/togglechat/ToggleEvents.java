@@ -17,15 +17,16 @@
 package me.boomboompower.all.togglechat;
 
 import me.boomboompower.all.togglechat.loading.ToggleTypes;
-
 import me.boomboompower.all.togglechat.utils.GlobalUtils;
+
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ToggleEvents {
 
-    public ToggleEvents() {}
+    public ToggleEvents() {
+    }
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onChatReceive(ClientChatReceivedEvent event) {
