@@ -41,7 +41,7 @@ public class ToggleEvents {
                 }
             }
         } catch (Exception e1) {
-            GlobalUtils.log(e1.getMessage() != null ? e1.getMessage() : e1.getCause());
+            GlobalUtils.log("Issue has been encountered: " + (e1.getMessage() != null ? e1.getMessage() : e1.getCause()));
         }
     }
 

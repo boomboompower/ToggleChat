@@ -79,7 +79,7 @@ public class ToggleGui {
                 int pages = (int) Math.ceil((double) Options.baseTypes.size() / 7D);
 
                 if (pageNumber < 1 || pageNumber > pages) {
-                    pageNumber = 0;
+                    pageNumber = 1;
                 }
 
                 final int[] buttonId = {0};
