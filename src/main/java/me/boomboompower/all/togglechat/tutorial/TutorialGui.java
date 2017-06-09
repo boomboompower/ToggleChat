@@ -40,7 +40,11 @@ public class TutorialGui {
 
     public static class MainToggleTutorialGui extends GuiScreen {
 
+        private GuiButton back;
+        private GuiButton next;
+
         private GuiScreen previousScreen;
+
         private int pageNumber;
         private Minecraft mc;
 
@@ -53,8 +57,8 @@ public class TutorialGui {
 
         @Override
         public void initGui() {
-            this.buttonList.add(new GuiButton(0, this.width / 2 - 200, this.height - 25, 150, 20, "Previous"));
-            this.buttonList.add(new GuiButton(1, this.width / 2 + 50, this.height - 25, 150, 20, "Next"));
+            this.buttonList.add(this.back = new GuiButton(0, this.width / 2 - 200, this.height - 25, 150, 20, "Previous"));
+            this.buttonList.add(this.next = new GuiButton(1, this.width / 2 + 50, this.height - 25, 150, 20, "Next"));
         }
 
         @Override
@@ -66,7 +70,7 @@ public class TutorialGui {
 
             writePage();
 
-            buttonList.get(1).enabled = pageNumber < 7;
+            next.enabled = pageNumber < 7;
 
             super.drawScreen(x, y, ticks);
         }

@@ -56,8 +56,7 @@ public class Options {
 //    public static boolean ignoreSeparators = false;
 
     private static Options instance;
-
-    public static HashMap<Integer, ToggleTypes.ToggleBase> baseTypes = new HashMap<Integer, ToggleTypes.ToggleBase>();
+    private static HashMap<Integer, ToggleTypes.ToggleBase> baseTypes = new HashMap<Integer, ToggleTypes.ToggleBase>();
 
     static {
         baseTypes.put(0, new ToggleTypes.TypeUHC());
@@ -85,13 +84,24 @@ public class Options {
     public void addType(ToggleTypes.ToggleBase... bases) {
         if (bases.length > 0) {
             for (ToggleTypes.ToggleBase base : bases) {
-                if (!baseTypes.containsKey(base.getId()) && base.getId() > 16) {
+                if (!baseTypes.containsKey(base.getId()) && base.getId() > 17) {
                     baseTypes.put(base.getId(), base);
                 } else {
                     throw new RuntimeException(String.format("baseTypes entry is already loaded. (ID: %s)", base.getId()));
                 }
             }
         }
+    }
+
+    /*
+     * Prevent people wiping the original
+     * list by providing a new temporary one
+     */
+    public HashMap<Integer, ToggleTypes.ToggleBase> getBaseTypes() {
+        HashMap<Integer, ToggleTypes.ToggleBase> tempHashMap = new HashMap<>();
+        baseTypes.forEach(tempHashMap::put);
+
+        return tempHashMap;
     }
 
     public void setup(List<String> lines) {

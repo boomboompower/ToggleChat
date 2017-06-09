@@ -33,7 +33,7 @@ public class ToggleEvents {
         String message = event.message.getUnformattedText();
         try {
             if (!containsWhitelisted(message)) {
-                for (ToggleTypes.ToggleBase type : Options.baseTypes.values()) {
+                for (ToggleTypes.ToggleBase type : Options.getInstance().getBaseTypes().values()) {
                     if (type.isMessage(message) && !type.isEnabled()) {
                         event.setCanceled(true);
                         break;

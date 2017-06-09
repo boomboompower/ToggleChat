@@ -31,7 +31,7 @@ public class FileUtils {
    public FileUtils() {
    }
 
-   public static void getVars() throws Throwable {
+   public static void getVars() {
        try {
            File e = new File(ToggleChat.USER_DIR);
            if (!e.exists()) {
@@ -58,7 +58,7 @@ public class FileUtils {
                        executeWriter = true;
                    }
                } catch (Throwable var31) {
-                   throw var31;
+                   var31.printStackTrace();
                }
            }
 
@@ -98,7 +98,7 @@ public class FileUtils {
                Writer.execute(false);
            }
        } catch (IOException var32) {
-           throw var32;
+           var32.printStackTrace();
        }
    }
 

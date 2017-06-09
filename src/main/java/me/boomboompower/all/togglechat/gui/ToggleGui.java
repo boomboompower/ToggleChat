@@ -73,10 +73,10 @@ public class ToggleGui {
         }
 
         private void setupPage() {
-            if (Options.baseTypes.size() > 0) {
+            if (Options.getInstance().getBaseTypes().size() > 0) {
                 nobuttons = false;
 
-                int pages = (int) Math.ceil((double) Options.baseTypes.size() / 7D);
+                int pages = (int) Math.ceil((double) Options.getInstance().getBaseTypes().size() / 7D);
 
                 if (pageNumber < 1 || pageNumber > pages) {
                     pageNumber = 1;
@@ -85,7 +85,7 @@ public class ToggleGui {
                 final int[] buttonId = {0};
                 final int[] position = {this.height / 2 - 75};
 
-                Options.baseTypes.values().stream().skip((pageNumber - 1) * 7).limit(7).forEach(baseType -> {
+                Options.getInstance().getBaseTypes().values().stream().skip((pageNumber - 1) * 7).limit(7).forEach(baseType -> {
                     this.buttonList.add(new GuiButton(baseType.getId(), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), (baseType.isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED))));
                     position[0] += 24;
                 });
@@ -110,7 +110,7 @@ public class ToggleGui {
                 drawCenteredString(this.fontRendererObj, "Buttons must've not loaded correctly", this.width / 2, this.height / 2 - 30, Color.WHITE.getRGB());
                 drawCenteredString(this.fontRendererObj, "Please contact boomboompower!", this.width / 2, this.height / 2, Color.WHITE.getRGB());
             } else {
-                drawCenteredString(this.fontRendererObj, String.format("Page %s/%s", (pageNumber), (int) Math.ceil((double) Options.baseTypes.size() / 7D)), this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
+                drawCenteredString(this.fontRendererObj, String.format("Page %s/%s", (pageNumber), (int) Math.ceil((double) Options.getInstance().getBaseTypes().size() / 7D)), this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
             }
 
             super.drawScreen(x, y, ticks);
@@ -151,7 +151,7 @@ public class ToggleGui {
                     } catch (Exception ex) {}
                 }
             } else {
-                for (ToggleTypes.ToggleBase base : Options.baseTypes.values()) {
+                for (ToggleTypes.ToggleBase base : Options.getInstance().getBaseTypes().values()) {
                     if (base.getId() == button.id) {
                         base.onClick(button);
                         break;

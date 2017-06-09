@@ -19,6 +19,7 @@ package me.boomboompower.all.togglechat.gui;
 import me.boomboompower.all.togglechat.ToggleChat;
 import me.boomboompower.all.togglechat.gui.utils.CenterStringBuilder;
 import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.all.togglechat.utils.GlobalUtils;
 import me.boomboompower.all.togglechat.utils.Writer;
 
 import net.minecraft.client.Minecraft;
@@ -114,44 +115,45 @@ public class WhitelistGui {
 
         @Override
         protected void actionPerformed(GuiButton button) {
+            boolean dontClose = false;
+
             switch (button.id) {
                 case 0:
                     // Dont need to do anything
                     break;
                 case 1:
                     if (text.getText().isEmpty()) {
-                        sendChatMessage("No name given!");
+                        GlobalUtils.sendChatMessage("No name given!");
                     } else if (!whitelistContains(text.getText())) {
                         ToggleChat.whitelist.add(text.getText());
-                        sendChatMessage("Added " + goldify(text.getText()) + " to the whitelist!");
+                        GlobalUtils.sendChatMessage("Added &6" + text.getText() + "&7 to the whitelist!");
                     } else {
-                        sendChatMessage("The whitelist already contained " + goldify(text.getText()) + "!");
+                        GlobalUtils.sendChatMessage("The whitelist already contained &6" + text.getText() + "&7!");
                     }
-                    mc.displayGuiScreen(null);
                     break;
                 case 2:
                     if (text.getText().isEmpty()) {
-                        sendChatMessage("No name given!");
+                        GlobalUtils.sendChatMessage("No name given!");
                     } else if (!whitelistContains(text.getText())) {
-                        sendChatMessage("The whitelist does not contain " + goldify(text.getText()) + "!");
+                        GlobalUtils.sendChatMessage("The whitelist does not contain &6" + text.getText() + "&7!");
                     } else {
                         removeFromWhitelist(text.getText());
-                        sendChatMessage("Removed " + goldify(text.getText()) + " from the whitelist!");
+                        GlobalUtils.sendChatMessage("Removed &6" + text.getText() + "&7 from the whitelist!");
                     }
-                    mc.displayGuiScreen(null);
                     break;
                 case 3:
                     if (!ToggleChat.whitelist.isEmpty()) {
                         new WhitelistClearConfirmationGui(this).display();
                     } else {
-                        sendChatMessage("The whitelist is already empty!");
-                        mc.displayGuiScreen(null);
+                        GlobalUtils.sendChatMessage("The whitelist is already empty!");
                     }
                     break;
                 case 4:
+                    dontClose = true;
                     new WhitelistEntriesGui(this, 1).display();
                     break;
                 case 10:
+                    dontClose = true;
                     new ToggleGui.ToggleChatMainGui(1).display();
                     break;
             }
@@ -160,10 +162,15 @@ public class WhitelistGui {
                 try {
                     switch (button.id) {
                         case 9:
+                            dontClose = true;
                             new me.boomboompower.all.togglechat.tutorial.TutorialGui.WhitelistTutorialGui(this, 0).display();
                             break;
                     }
                 } catch (Exception ex) {}
+            }
+
+            if (!dontClose) {
+                mc.displayGuiScreen(null);
             }
         }
 
@@ -176,15 +183,6 @@ public class WhitelistGui {
         @Override
         public boolean doesGuiPauseGame() {
             return false;
-        }
-
-        @Override
-        public void sendChatMessage(String message) {
-            Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
-        }
-
-        private String goldify(String name) {
-            return EnumChatFormatting.GOLD + name + EnumChatFormatting.GRAY;
         }
 
         private boolean whitelistContains(String message) {
@@ -222,7 +220,11 @@ public class WhitelistGui {
 
     public static class WhitelistEntriesGui extends GuiScreen {
 
+        private GuiButton back;
+        private GuiButton next;
+
         private GuiScreen previousScreen;
+
         private boolean pageInvalid;
         private int pageNumber;
         private Minecraft mc;
@@ -254,10 +256,10 @@ public class WhitelistGui {
 
         private void makeButtons() {
             if (ToggleChat.whitelist.size() > 0) {
-                this.buttonList.add(new GuiButton(0, this.width / 2 - 200, this.height / 2 + 80, 150, 20, "Back"));
-                this.buttonList.add(new GuiButton(1, this.width / 2 + 50, this.height / 2 + 80, 150, 20, "Next"));
+                this.buttonList.add(this.back = new GuiButton(0, this.width / 2 - 200, this.height / 2 + 80, 150, 20, "Back"));
+                this.buttonList.add(this.next = new GuiButton(1, this.width / 2 + 50, this.height / 2 + 80, 150, 20, "Next"));
             } else {
-                this.buttonList.add(new GuiButton(0, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Back"));
+                this.buttonList.add(this.back = new GuiButton(0, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Back"));
             }
         }
 
@@ -274,7 +276,7 @@ public class WhitelistGui {
                 }
 
                 pageInvalid = false;
-                buttonList.get(1).enabled = pageNumber != pages; // Next
+                next.enabled = pageNumber != pages; // Next
 
                 GuiUtils.drawCentered(new CenterStringBuilder(String.format("Page %s/%s", (pageNumber), pages), this.width / 2, this.height / 2 - 95));
                 GuiUtils.drawCentered(new CenterStringBuilder(String.format("There is a total of %s %s on the whitelist!", EnumChatFormatting.GOLD + String.valueOf(totalEntries), (totalEntries > 1 ? "entries" : "entry") + EnumChatFormatting.RESET), this.width / 2, this.height / 2 + 65));
@@ -333,17 +335,8 @@ public class WhitelistGui {
         }
 
         @Override
-        public void onGuiClosed() {
-        }
-
-        @Override
         public boolean doesGuiPauseGame() {
             return false;
-        }
-
-        @Override
-        public void sendChatMessage(String message) {
-            Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
         }
 
         public void display() {
@@ -406,7 +399,7 @@ public class WhitelistGui {
                     break;
                 case 1:
                     ToggleChat.whitelist.clear();
-                    sendChatMessage("Cleared the whitelist!");
+                    GlobalUtils.sendChatMessage("Cleared the whitelist!");
                     mc.displayGuiScreen(null);
                     break;
             }
@@ -420,11 +413,6 @@ public class WhitelistGui {
         @Override
         public boolean doesGuiPauseGame() {
             return false;
-        }
-
-        @Override
-        public void sendChatMessage(String message) {
-            Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
         }
 
         public void display() {
@@ -604,11 +592,6 @@ public class WhitelistGui {
 //        @Override
 //        public boolean doesGuiPauseGame() {
 //            return false;
-//        }
-//
-//        @Override
-//        public void sendChatMessage(String message) {
-//            Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
 //        }
 //    }
 }

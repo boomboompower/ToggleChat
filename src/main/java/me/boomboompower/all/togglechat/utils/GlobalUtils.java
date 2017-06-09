@@ -28,7 +28,7 @@ public class GlobalUtils {
     }
 
     public static void sendChatMessage(String message) {
-        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + message));
+        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + translateAlternateColorCodes('&', message)));
     }
 
     public static String translateAlternateColorCodes(char altColorChar, String textToTranslate) {

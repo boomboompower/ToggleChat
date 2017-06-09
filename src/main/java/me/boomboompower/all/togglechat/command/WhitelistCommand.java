@@ -85,10 +85,13 @@ public class WhitelistCommand implements ICommand {
         return 0;
     }
 
+    /*
+     * Get the names of all online players
+     */
     private List<String> getArgs() {
         List<String> names = new ArrayList<String>();
         for (Entity o : Minecraft.getMinecraft().theWorld.playerEntities) {
-            names.add(o.getName());
+            names.add(EnumChatFormatting.getTextWithoutFormattingCodes(o.getName()));
         }
         return names;
     }
