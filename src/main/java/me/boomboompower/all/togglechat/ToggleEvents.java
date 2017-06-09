@@ -48,7 +48,7 @@ public class ToggleEvents {
     private boolean containsWhitelisted(String message) {
         final boolean[] contains = {false};
         ToggleChat.whitelist.forEach(s -> {
-        if (ToggleChat.containsIgnoreCase(message, s)) {
+        if (GlobalUtils.containsIgnoreCase(message, s)) {
             contains[0] = true;
         }});
         return contains[0];

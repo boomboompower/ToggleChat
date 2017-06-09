@@ -21,6 +21,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.util.regex.Pattern;
+
 public class GlobalUtils {
 
     public static void log(Object message) {
@@ -29,6 +31,10 @@ public class GlobalUtils {
 
     public static void sendChatMessage(String message) {
         Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + translateAlternateColorCodes('&', message)));
+    }
+
+    public static boolean containsIgnoreCase(String message, String contains) {
+        return Pattern.compile(Pattern.quote(contains), Pattern.CASE_INSENSITIVE).matcher(message).find();
     }
 
     public static String translateAlternateColorCodes(char altColorChar, String textToTranslate) {

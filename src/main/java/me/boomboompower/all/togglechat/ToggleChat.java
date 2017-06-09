@@ -79,13 +79,8 @@ public class ToggleChat {
         }
     }
 
-
     public static ToggleChat instance() {
         return instance;
-    }
-
-    public static boolean containsIgnoreCase(String message, String contains) {
-        return Pattern.compile(Pattern.quote(contains), Pattern.CASE_INSENSITIVE).matcher(message).find();
     }
 
     private void registerCommands(ICommand... commands) {

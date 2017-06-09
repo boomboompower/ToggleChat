@@ -17,9 +17,9 @@
 package me.boomboompower.all.togglechat.loading;
 
 import me.boomboompower.all.togglechat.Options;
-import me.boomboompower.all.togglechat.ToggleChat;
-
 import me.boomboompower.all.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.all.togglechat.utils.GlobalUtils;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -359,7 +359,7 @@ public class ToggleTypes {
 
         @Override
         public boolean isMessage(String message) {
-            return ToggleChat.containsIgnoreCase(message, "has invited you to join ") || ToggleChat.containsIgnoreCase(message, "60 seconds to accept") || (withoutColors(message).contains("The party invite from ") && withoutColors(message).endsWith(" has expired."));
+            return GlobalUtils.containsIgnoreCase(message, "has invited you to join ") || GlobalUtils.containsIgnoreCase(message, "60 seconds to accept") || (withoutColors(message).contains("The party invite from ") && withoutColors(message).endsWith(" has expired."));
         }
 
         @Override
@@ -417,7 +417,7 @@ public class ToggleTypes {
 
         @Override
         public boolean isMessage(String message) {
-            return ToggleChat.containsIgnoreCase(message, "Friend request from ") || (message.contains("Click one") && message.contains("[ACCEPT]") && message.contains("[DENY]"));
+            return GlobalUtils.containsIgnoreCase(message, "Friend request from ") || (message.contains("Click one") && message.contains("[ACCEPT]") && message.contains("[DENY]"));
         }
 
         @Override
