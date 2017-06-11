@@ -26,9 +26,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -118,9 +117,6 @@ public class WhitelistGui {
             boolean dontClose = false;
 
             switch (button.id) {
-                case 0:
-                    // Dont need to do anything
-                    break;
                 case 1:
                     if (text.getText().isEmpty()) {
                         GlobalUtils.sendChatMessage("No name given!");
@@ -143,6 +139,7 @@ public class WhitelistGui {
                     break;
                 case 3:
                     if (!ToggleChat.whitelist.isEmpty()) {
+                        dontClose = true;
                         new WhitelistClearConfirmationGui(this).display();
                     } else {
                         GlobalUtils.sendChatMessage("The whitelist is already empty!");
@@ -208,12 +205,12 @@ public class WhitelistGui {
         }
 
         public void display() {
-            FMLCommonHandler.instance().bus().register(this);
+            MinecraftForge.EVENT_BUS.register(this);
         }
 
         @SubscribeEvent
         public void onClientTick(TickEvent.ClientTickEvent event) {
-            FMLCommonHandler.instance().bus().unregister(this);
+            MinecraftForge.EVENT_BUS.unregister(this);
             mc.displayGuiScreen(this);
         }
     }
@@ -340,12 +337,12 @@ public class WhitelistGui {
         }
 
         public void display() {
-            FMLCommonHandler.instance().bus().register(this);
+            MinecraftForge.EVENT_BUS.register(this);
         }
 
         @SubscribeEvent
         public void onClientTick(TickEvent.ClientTickEvent event) {
-            FMLCommonHandler.instance().bus().unregister(this);
+            MinecraftForge.EVENT_BUS.unregister(this);
             mc.displayGuiScreen(this);
         }
     }
@@ -416,12 +413,12 @@ public class WhitelistGui {
         }
 
         public void display() {
-            FMLCommonHandler.instance().bus().register(this);
+            MinecraftForge.EVENT_BUS.register(this);
         }
 
         @SubscribeEvent
         public void onClientTick(TickEvent.ClientTickEvent event) {
-            FMLCommonHandler.instance().bus().unregister(this);
+            MinecraftForge.EVENT_BUS.unregister(this);
             mc.displayGuiScreen(this);
         }
     }
@@ -467,12 +464,12 @@ public class WhitelistGui {
 //        }
 //
 //        public void display() {
-//            FMLCommonHandler.instance().bus().register(this);
+//            MinecraftForge.EVENT_BUS.register(this);
 //        }
 //
 //        @SubscribeEvent
 //        public void onClientTick(TickEvent.ClientTickEvent event) {
-//            FMLCommonHandler.instance().bus().unregister(this);
+//            MinecraftForge.EVENT_BUS.unregister(this);
 //            Minecraft.getMinecraft().displayGuiScreen(this);
 //        }
 //

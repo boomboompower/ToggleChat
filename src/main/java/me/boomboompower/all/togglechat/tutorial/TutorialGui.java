@@ -23,7 +23,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -302,12 +302,12 @@ public class TutorialGui {
         }
 
         public void display() {
-            FMLCommonHandler.instance().bus().register(this);
+            MinecraftForge.EVENT_BUS.register(this);
         }
 
         @SubscribeEvent
         public void onClientTick(TickEvent.ClientTickEvent event) {
-            FMLCommonHandler.instance().bus().unregister(this);
+            MinecraftForge.EVENT_BUS.unregister(this);
             mc.displayGuiScreen(this);
         }
     }
@@ -450,12 +450,12 @@ public class TutorialGui {
         }
 
         public void display() {
-            FMLCommonHandler.instance().bus().register(this);
+            MinecraftForge.EVENT_BUS.register(this);
         }
 
         @SubscribeEvent
         public void onClientTick(TickEvent.ClientTickEvent event) {
-            FMLCommonHandler.instance().bus().unregister(this);
+            MinecraftForge.EVENT_BUS.unregister(this);
             mc.displayGuiScreen(this);
         }
     }
@@ -525,12 +525,12 @@ public class TutorialGui {
 //        }
 //
 //        public void display() {
-//            FMLCommonHandler.instance().bus().register(this);
+//            MinecraftForge.EVENT_BUS.register(this);
 //        }
 //
 //        @SubscribeEvent
 //        public void onClientTick(TickEvent.ClientTickEvent event) {
-//            FMLCommonHandler.instance().bus().unregister(this);
+//            MinecraftForge.EVENT_BUS.unregister(this);
 //            mc.displayGuiScreen(this);
 //        }
 //    }
