@@ -42,13 +42,7 @@ public class ToggleChat {
     public static Boolean tutorialEnabled = true;
     public static String USER_DIR;
 
-    private static ToggleChat instance;
-
     public static ArrayList<String> whitelist = new ArrayList<String>();
-
-    public ToggleChat() {
-        instance = this;
-    }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -76,10 +70,6 @@ public class ToggleChat {
         } catch (Throwable var21) {
             var21.printStackTrace();
         }
-    }
-
-    public static ToggleChat instance() {
-        return instance;
     }
 
     private void registerCommands(ICommand... commands) {
