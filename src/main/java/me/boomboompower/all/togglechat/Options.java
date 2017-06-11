@@ -140,7 +140,7 @@ public class Options {
             Options.showColored = Boolean.parseBoolean(lines.get(11));
 
             Options.showHousing = Boolean.parseBoolean(lines.get(12));
-            Options.showColored = Boolean.parseBoolean(lines.get(13));
+            Options.showSeparators = Boolean.parseBoolean(lines.get(13));
         } catch (Exception ex) {
             GlobalUtils.log("Failed to setup all main option values. Rewriting!");
             Writer.execute();
