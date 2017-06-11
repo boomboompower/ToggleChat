@@ -54,7 +54,7 @@ public class ToggleGui {
         private Minecraft mc;
 
         public ToggleChatMainGui(int pageNumber) {
-            this.pageNumber = 50;
+            this.pageNumber = pageNumber;
 
             this.mc = Minecraft.getMinecraft();
         }
@@ -82,7 +82,6 @@ public class ToggleGui {
                     pageNumber = 1;
                 }
 
-                final int[] buttonId = {0};
                 final int[] position = {this.height / 2 - 75};
 
                 Options.getInstance().getBaseTypes().values().stream().skip((pageNumber - 1) * 7).limit(7).forEach(baseType -> {
