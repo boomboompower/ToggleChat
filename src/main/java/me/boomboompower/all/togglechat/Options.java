@@ -81,6 +81,12 @@ public class Options {
         doTutorialCheck();
     }
 
+    /**
+     * Allow other developers to add their own custom toggle buttons
+     * (As long as they aren't registered as one of our private ids)
+     *
+     * @param bases Buttons to be added
+     */
     public void addType(ToggleTypes.ToggleBase... bases) {
         if (bases.length > 0) {
             for (ToggleTypes.ToggleBase base : bases) {
@@ -90,6 +96,18 @@ public class Options {
                     throw new RuntimeException(String.format("baseTypes entry is already loaded. (ID: %s)", base.getId()));
                 }
             }
+        }
+    }
+
+    /**
+     * Allow other developers to remove buttons (as long as they aren't)
+     * one of our private ids
+     *
+     * @param base Button to be removed
+     */
+    public void removeType(ToggleTypes.ToggleBase base) {
+        if (baseTypes.containsKey(base.getId()) && base.getId() > 17) {
+            baseTypes.remove(base.getId());
         }
     }
 
