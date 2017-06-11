@@ -32,7 +32,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 @Mod(modid = ToggleChat.MODID, version = ToggleChat.VERSION, acceptedMinecraftVersions="*")
 public class ToggleChat {
