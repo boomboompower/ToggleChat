@@ -1,0 +1,86 @@
+@import url("fonts.css");
+@import url("button.css");
+
+html {
+	background-image: url("../images/back.gif");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+body {
+	font-family: "Open Sans", Helvetica, sans-serif;
+	text-align: center;
+	color: #fff;
+}
+
+hr {
+	border-style: solid;
+}
+
+a {
+	transition: color 0.2s ease, border-bottom-color 0.2s ease;
+	border-bottom: dashed 1px;
+	text-decoration: none;
+	color: inherit;
+}
+
+a:hover {
+	border-bottom-color: transparent;
+}
+
+#content a:not(.question) {
+	color: #009fff;
+}
+
+/* Question */
+a.question {
+    border-bottom: solid 2px;
+    cursor: help;
+    color: #999;
+}
+
+#topNav {
+	display: inline-block;
+	font-size: 20px;
+	cursor: pointer;
+	position: fixed;
+    padding: 0;
+    right: 35;
+}
+
+#topNav span:hover {
+	color: #E8E8E8;
+}
+
+#lines {
+	content: url("../images/lines.png");
+	position: relative;
+	width: 25px;
+	height: 25px;
+	top: 5px;
+}
+
+#lines:hover {
+	content: url("../images/lines_dark.png");
+}
+
+#content {
+	font-family: 'Overpass', sans-serif;
+	font-size: 200%;
+	position: relative;
+    top: 70;
+}
+
+.title {
+	position: relative;
+	top: 50px;	
+}
+
+.title h1 {
+	font-size: 40px;
+}
+
+::selection {
+    background: #ddf;
+}

@@ -95,7 +95,6 @@ public class WhitelistGui {
             if (key == 1) {
                 mc.displayGuiScreen(null);
             } else if (Character.isLetterOrDigit(c) || c == '_' || key == 14) { // Sorry to anyone who originally used other things
-                super.keyTyped(c, key);
                 text.textboxKeyTyped(c, key);
             }
         }

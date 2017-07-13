@@ -185,7 +185,7 @@ public class ToggleTypes {
 
         @Override
         public boolean isMessage(String message) {
-            return message.startsWith("Guild > "); // || message.startsWith("G > ");
+            return message.startsWith("Guild > ") || message.startsWith("G > ");
         }
 
         @Override

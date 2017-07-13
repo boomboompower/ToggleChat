@@ -1,0 +1,70 @@
+.nav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+	text-decoration: none;
+	font-size: 25px;
+	color: #818181;
+}
+
+.nav a {
+	font-size: 25px;
+    padding: 8px 8px 8px 5px;
+	border-bottom: none;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.nav a:hover, .offcanvas a:focus {
+    color: #f1f1f1;
+}
+
+.nav a:hover:not(.navClose):not(.selected) {
+    box-shadow: inset 0px 0px 5px 3px rgba(0,0,0,0.1);
+	background-color: #333;
+}
+
+.nav .navClose {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
+}
+
+@media screen and (max-height: 450px) {
+    .nav {padding-top: 15px;}
+    .nav a {font-size: 18px;}
+}
+
+.nav .special {
+	color: ed4933;
+}
+
+.nav hr {
+	color: #555;
+	-webkit-margin-before: 0.2em;
+    -webkit-margin-after: 0.2em;
+    -webkit-margin-start: 40px;
+    -webkit-margin-end: 40px;
+}
+
+.nav .selected {
+    box-shadow: inset 0px 0px 5px 3px rgba(0,0,0,0.1);
+    background-color: #009fff;
+    color: #f1f1f1;
+    cursor: default;
+}
