@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
 	document.getElementById('topNav').addEventListener('click', openNav);
+	document.getElementById('back').addEventListener('click', goBack);
 
 	$("#hr").animate({
 		width: "20%"
@@ -43,4 +44,8 @@ function download(version) {
 
 function log(message) {
 	console.log(message);
+}
+
+function goBack() {
+    history.back();
 }

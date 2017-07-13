@@ -27,7 +27,8 @@
     color: #f1f1f1;
 }
 
-.nav a:hover:not(.navClose) {
+.nav a:hover:not(.navClose):not(.selected) {
+    box-shadow: inset 0px 0px 5px 3px rgba(0,0,0,0.1);
 	background-color: #333;
 }
 
@@ -59,4 +60,11 @@
     -webkit-margin-after: 0.2em;
     -webkit-margin-start: 40px;
     -webkit-margin-end: 40px;
+}
+
+.nav .selected {
+    box-shadow: inset 0px 0px 5px 3px rgba(0,0,0,0.1);
+    background-color: #009fff;
+    color: #f1f1f1;
+    cursor: default;
 }
