@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.all.togglechat.utils;
+package me.boomboompower.togglechat.utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
@@ -25,26 +25,7 @@ import java.util.regex.Pattern;
 
 public class GlobalUtils {
 
-    public static void log(Object message) {
-        System.out.println(message);
-    }
-
-    public static void sendChatMessage(String message) {
-        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.AQUA + "T" + EnumChatFormatting.BLUE + "C" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY + translateAlternateColorCodes('&', message)));
-    }
-
     public static boolean containsIgnoreCase(String message, String contains) {
         return Pattern.compile(Pattern.quote(contains), Pattern.CASE_INSENSITIVE).matcher(message).find();
-    }
-
-    public static String translateAlternateColorCodes(char altColorChar, String textToTranslate) {
-        char[] b = textToTranslate.toCharArray();
-        for (int i = 0; i < b.length - 1; i++) {
-            if (b[i] == altColorChar && "0123456789AaBbCcDdEeFfKkLlMmNnOoRr".indexOf(b[i+1]) > -1) {
-                b[i] = '\u00A7';
-                b[i+1] = Character.toLowerCase(b[i+1]);
-            }
-        }
-        return new String(b);
     }
 }

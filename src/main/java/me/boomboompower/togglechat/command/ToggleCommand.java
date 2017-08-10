@@ -14,15 +14,15 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.boomboompower.all.togglechat.command;
+package me.boomboompower.togglechat.command;
 
-import me.boomboompower.all.togglechat.gui.ToggleGui;
+import me.boomboompower.togglechat.gui.togglechat.MainGui;
+import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class ToggleCommand implements ICommand {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return EnumChatFormatting.RED + "Usage: /chattoggle";
+        return ChatColor.RED + "Usage: /chattoggle";
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ToggleCommand implements ICommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-        new ToggleGui.ToggleChatMainGui(1).display();
+        new MainGui(1).display();
     }
 
     @Override

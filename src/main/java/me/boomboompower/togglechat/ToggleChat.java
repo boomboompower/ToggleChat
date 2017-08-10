@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2016 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -14,11 +14,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.boomboompower.all.togglechat;
+package me.boomboompower.togglechat;
 
-import me.boomboompower.all.togglechat.command.ToggleCommand;
-import me.boomboompower.all.togglechat.command.WhitelistCommand;
-import me.boomboompower.all.togglechat.utils.FileUtils;
+import me.boomboompower.togglechat.command.ToggleCommand;
+import me.boomboompower.togglechat.command.WhitelistCommand;
+import me.boomboompower.togglechat.config.ConfigLoader;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommand;
@@ -39,10 +39,14 @@ public class ToggleChat {
     public static final String MODID = "publictogglechat";
     public static final String VERSION = "1.2.5";
 
-    public static Boolean tutorialEnabled = true;
-    public static String USER_DIR;
+    private ArrayList<String> whitelist = new ArrayList<String>();
 
-    public static ArrayList<String> whitelist = new ArrayList<String>();
+    private ConfigLoader configLoader;
+
+    private Boolean tutorialEnabled = true;
+
+    @Mod.Instance
+    private static ToggleChat instance;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -56,6 +60,7 @@ public class ToggleChat {
         data.credits = "2Pi for the initial idea behind the mod!";
 
         new Options();
+        configLoader = new ConfigLoader("mods" + File.separator + "togglechat" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId() + File.separator);
     }
 
     @Mod.EventHandler
@@ -63,13 +68,28 @@ public class ToggleChat {
         MinecraftForge.EVENT_BUS.register(new ToggleEvents());
         registerCommands(new ToggleCommand(), new WhitelistCommand());
 
-        USER_DIR = "mods" + File.separator + "togglechat" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId() + File.separator;
+        configLoader.loadToggles();
+        configLoader.saveWhitelist();
+    }
 
-        try {
-            FileUtils.getVars();
-        } catch (Throwable var21) {
-            var21.printStackTrace();
-        }
+    public void disableTutorial() {
+        this.tutorialEnabled = false;
+    }
+
+    public boolean isTutorialEnabled() {
+        return this.tutorialEnabled;
+    }
+
+    public ArrayList<String> getWhitelist() {
+        return this.whitelist;
+    }
+
+    public ConfigLoader getConfigLoader() {
+        return this.configLoader;
+    }
+
+    public static ToggleChat getInstance() {
+        return instance;
     }
 
     private void registerCommands(ICommand... commands) {

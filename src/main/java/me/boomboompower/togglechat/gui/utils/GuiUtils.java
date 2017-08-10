@@ -14,10 +14,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.boomboompower.all.togglechat.gui.utils;
+package me.boomboompower.togglechat.gui.utils;
+
+import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.EnumChatFormatting;
 
 /*
  * An attempt at creating an easier way to do things in GUI's
@@ -27,8 +28,8 @@ import net.minecraft.util.EnumChatFormatting;
  */
 public class GuiUtils {
 
-    public static final String ENABLED = EnumChatFormatting.GREEN + "Enabled";
-    public static final String DISABLED = EnumChatFormatting.RED + "Disabled";
+    public static final String ENABLED = ChatColor.GREEN + "Enabled";
+    public static final String DISABLED = ChatColor.RED + "Disabled";
 
     /*
      * Default constructor, no need to create an instance of this class
@@ -64,7 +65,7 @@ public class GuiUtils {
      * String is found, it will be written to the screen and the y will have the separation amount added.
      */
     public static void writeInformation(int startingX, int startingY, int separation, String... lines) {
-        writeInformation(startingX, startingY, separation, EnumChatFormatting.WHITE, lines);
+        writeInformation(startingX, startingY, separation, ChatColor.WHITE, lines);
     }
 
     /*
@@ -74,7 +75,7 @@ public class GuiUtils {
      * This is done by using a simple loop through the lines variable, and each time another
      * String is found, it will be written to the screen and the y will have the separation amount added.
      */
-    public static void writeInformation(int startingX, int startingY, int separation, EnumChatFormatting color, String... lines) {
+    public static void writeInformation(int startingX, int startingY, int separation, ChatColor color, String... lines) {
         for (String s : lines) {
             drawCentered(new CenterStringBuilder(color + s, startingX, startingY));
             startingY += separation;

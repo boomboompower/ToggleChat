@@ -14,9 +14,9 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.boomboompower.all.togglechat.gui.utils;
+package me.boomboompower.togglechat.gui.utils;
 
-import me.boomboompower.all.togglechat.utils.GlobalUtils;
+import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -83,7 +83,7 @@ public class CenterStringBuilder {
      * Replaces all '&' characters with the color-code symbols.
      */
     public CenterStringBuilder translateCodes() {
-        this.message = GlobalUtils.translateAlternateColorCodes('&', this.message);
+        this.message = ChatColor.translateAlternateColorCodes('&', this.message);
 
         return get();
     }

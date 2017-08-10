@@ -14,9 +14,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.boomboompower.all.togglechat.command;
+package me.boomboompower.togglechat.command;
 
-import me.boomboompower.all.togglechat.gui.WhitelistGui;
+import me.boomboompower.togglechat.gui.whitelist.WhitelistMainGui;
+import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
@@ -25,7 +26,6 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,7 @@ public class WhitelistCommand implements ICommand {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return EnumChatFormatting.RED + "Usage: /whitelist <player>";
+        return ChatColor.RED + "Usage: /whitelist <player>";
     }
 
     @Override
@@ -59,9 +59,9 @@ public class WhitelistCommand implements ICommand {
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         if (args.length == 0) {
-            new WhitelistGui.WhitelistMainGui().display();
+            new WhitelistMainGui().display();
         } else {
-            new WhitelistGui.WhitelistMainGui(args[0]).display();
+            new WhitelistMainGui(args[0]).display();
         }
     }
 
@@ -91,7 +91,7 @@ public class WhitelistCommand implements ICommand {
     private List<String> getArgs() {
         List<String> names = new ArrayList<String>();
         for (Entity o : Minecraft.getMinecraft().theWorld.playerEntities) {
-            names.add(EnumChatFormatting.getTextWithoutFormattingCodes(o.getName()));
+            names.add(ChatColor.stripColor(o.getName()));
         }
         return names;
     }
