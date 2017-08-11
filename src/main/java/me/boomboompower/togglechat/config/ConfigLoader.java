@@ -154,6 +154,6 @@ public class ConfigLoader {
     }
 
     protected void log(String message, Object... replace) {
-        System.out.println(String.format("[%s] " + message, replace));
+        System.out.println(String.format("[ConfigLoader] " + message, replace));
     }
 }
