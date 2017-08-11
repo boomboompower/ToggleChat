@@ -33,8 +33,4 @@ public interface ToggleBase {
     default String getDisplayName() {
         return getName() + ": %s";
     }
-
-    default boolean useUnformattedMessage() {
-        return true;
-    }
 }

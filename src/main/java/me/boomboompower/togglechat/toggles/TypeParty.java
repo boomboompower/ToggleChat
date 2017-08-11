@@ -19,7 +19,6 @@ package me.boomboompower.togglechat.toggles;
 
 import me.boomboompower.togglechat.Options;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
-import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraft.client.gui.GuiButton;
 
@@ -37,7 +36,7 @@ public class TypeParty implements ToggleBase {
 
     @Override
     public boolean isMessage(String message) {
-        return message.startsWith(ChatColor.BLUE + "Party > ") || message.startsWith(ChatColor.BLUE + "P > ");
+        return message.startsWith("Party > ") || message.startsWith("P > ");
     }
 
     @Override
@@ -49,10 +48,5 @@ public class TypeParty implements ToggleBase {
     public void onClick(GuiButton button) {
         Options.showParty = !Options.showParty;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
-    }
-
-    @Override
-    public boolean useUnformattedMessage() {
-        return false;
     }
 }

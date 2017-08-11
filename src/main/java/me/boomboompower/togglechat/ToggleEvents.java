@@ -31,19 +31,18 @@ public class ToggleEvents {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onChatReceive(ClientChatReceivedEvent event) {
-        String formattedText = event.message.getFormattedText();
         String unformattedText = ChatColor.stripColor(event.message.getUnformattedText());
         try {
             if (!containsWhitelisted(unformattedText)) {
                 for (ToggleBase type : Options.getInstance().getBaseTypes().values()) {
-                    if (type.isMessage(type.useUnformattedMessage() ? unformattedText : formattedText) && !type.isEnabled()) {
+                    if (type.isMessage(unformattedText) && !type.isEnabled()) {
                         event.setCanceled(true);
                         break;
                     }
                 }
             }
         } catch (Exception e1) {
-            GlobalUtils.log("Issue has been encountered: " + (e1.getMessage() != null ? e1.getMessage() : e1.getCause()));
+            System.out.println("Issue has been encountered: " + (e1.getMessage() != null ? e1.getMessage() : e1.getCause()));
         }
     }
 

@@ -19,7 +19,6 @@ package me.boomboompower.togglechat.toggles;
 
 import me.boomboompower.togglechat.Options;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
-import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraft.client.gui.GuiButton;
 
@@ -37,7 +36,7 @@ public class TypeTeam implements ToggleBase {
 
     @Override
     public boolean isMessage(String message) {
-        return message.startsWith(ChatColor.BLUE + "[TEAM] ");
+        return message.startsWith("[TEAM] ");
     }
 
     @Override
@@ -49,10 +48,5 @@ public class TypeTeam implements ToggleBase {
     public void onClick(GuiButton button) {
         Options.showTeam = !Options.showTeam;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
-    }
-
-    @Override
-    public boolean useUnformattedMessage() {
-        return false;
     }
 }
