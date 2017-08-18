@@ -159,10 +159,12 @@ public class MainGui extends GuiScreen {
         }
     }
 
+    @Override
     public void onGuiClosed() {
         ToggleChat.getInstance().getConfigLoader().saveToggles();
     }
 
+    @Override
     public boolean doesGuiPauseGame() {
         return false;
     }

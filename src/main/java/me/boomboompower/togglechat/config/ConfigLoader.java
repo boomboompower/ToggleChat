@@ -73,7 +73,7 @@ public class ConfigLoader {
             Options.showPartyInv = configJson.has("showPartyInv") && configJson.get("showPartyInv").getAsBoolean();
             Options.showSpectator = configJson.has("showSpectator") && configJson.get("showSpectator").getAsBoolean();
             Options.showFriendReqs = configJson.has("showFriendReqs") && configJson.get("showFriendReqs").getAsBoolean();
-            Options.showGuild = configJson.has("showSeparators") && configJson.get("showSeparators").getAsBoolean();
+            Options.showSeparators = configJson.has("showSeparators") && configJson.get("showSeparators").getAsBoolean();
 
         } else {
             saveToggles();
