@@ -64,7 +64,7 @@ public class MainGui extends GuiScreen {
 
         setupPage();
 
-        if (ToggleChatMod.getInstance().isTutorialEnabled()) this.buttonList.add(new ModernButton(0, "Inbuilt_Tutorial", this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
+        if (ToggleChatMod.getInstance().isTutorialEnabled()) this.buttonList.add(new ModernButton(0, "inbuilt_tutorial", this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
     }
 
     private void setupPage() {
@@ -88,11 +88,11 @@ public class MainGui extends GuiScreen {
             ModernButton next;
 
             this.buttonList.add(new ModernButton(1, "inbuilt_whitelist", 5, this.height - 25, 75, 20, "Whitelist"));
-            this.buttonList.add(back = new ModernButton(2, "inbuilt_back", this.width - 135, this.height - 25, 65, 20, "Back"));
+            this.buttonList.add(back = new ModernButton(2, "inbuilt_back", this.width - 140, this.height - 25, 65, 20, "Back"));
             this.buttonList.add(next = new ModernButton(3, "inbuilt_next", this.width - 70, this.height - 25, 65, 20, "Next"));
 
-            back.enabled = pageNumber > 1;
-            next.enabled = pageNumber != pages; // Next
+            back.enabled = this.pageNumber > 1;
+            next.enabled = this.pageNumber != pages; // Next
 
             return;
         }
@@ -129,22 +129,21 @@ public class MainGui extends GuiScreen {
         switch (id) {
             case 1:
                 new WhitelistMainGui().display();
-                break;
+                return;
             case 2:
                 new MainGui(this.pageNumber--);
                 createDefaultButtons();
-                break;
+                return;
             case 3:
                 new MainGui(this.pageNumber++);
                 createDefaultButtons();
-                break;
+                return;
         }
         if (ToggleChatMod.getInstance().isTutorialEnabled()) {
             try {
-                switch (id) {
-                    case 0:
-                        new me.boomboompower.togglechat.tutorial.MainTutorialGui(this, 0).display();
-                        break;
+                if (((ModernButton) button).buttonIdName.equals("inbuilt_tutorial")) {
+                    new me.boomboompower.togglechat.tutorial.MainTutorialGui(this, 0).display();
+                    return;
                 }
             } catch (Exception ex) {}
         }

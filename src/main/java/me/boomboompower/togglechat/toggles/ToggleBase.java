@@ -21,7 +21,7 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.toggles.defaults.*;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created to replace the old ToggleBase class
@@ -32,7 +32,7 @@ import java.util.HashMap;
 public abstract class ToggleBase {
 
     /* Name | ToggleBase */
-    private static final HashMap<String, ToggleBase> toggles = new HashMap<>();
+    private static final LinkedHashMap<String, ToggleBase> toggles = new LinkedHashMap<>();
 
     /**
      * Default constructor for ToggleBase
@@ -167,8 +167,8 @@ public abstract class ToggleBase {
      *
      * @return The toggle list
      */
-    public static HashMap<String, ToggleBase> getToggles() {
-        HashMap<String, ToggleBase> newInput = new HashMap<>();
+    public static LinkedHashMap<String, ToggleBase> getToggles() {
+        LinkedHashMap<String, ToggleBase> newInput = new LinkedHashMap<>();
         toggles.forEach(newInput::put);
         return newInput;
     }
