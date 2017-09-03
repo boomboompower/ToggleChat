@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,12 +17,13 @@
 
 package me.boomboompower.togglechat.toggles;
 
-import me.boomboompower.togglechat.Options;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
 
 import net.minecraft.client.gui.GuiButton;
 
 public class TypeUHC implements ToggleBase {
+
+    private boolean showUHC = true;
 
     @Override
     public String getName() {
@@ -38,12 +39,12 @@ public class TypeUHC implements ToggleBase {
     public boolean isMessage(String message) {
         boolean isUHC = false;
 
-        char[] charzz = message.toCharArray();
+        char[] chars = message.toCharArray();
 
-        if (charzz.length > 3) {
-            if (charzz[0] == '[' && (charzz[3] == ']' || charzz[4] == ']')) {
-                if (Character.isDigit(charzz[1])) {
-                    if (Character.isDefined(charzz[2]) || Character.isDefined(charzz[3])) {
+        if (chars.length > 3) {
+            if (chars[0] == '[' && (chars[3] == ']' || chars[4] == ']')) {
+                if (Character.isDigit(chars[1])) {
+                    if (Character.isDefined(chars[2]) || Character.isDefined(chars[3])) {
                         isUHC = true;
                     }
                 }
@@ -54,12 +55,17 @@ public class TypeUHC implements ToggleBase {
 
     @Override
     public boolean isEnabled() {
-        return Options.showUHC;
+        return this.showUHC;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.showUHC = enabled;
     }
 
     @Override
     public void onClick(GuiButton button) {
-        Options.showUHC = !Options.showUHC;
+        this.showUHC = !this.showUHC;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 }

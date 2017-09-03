@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,12 +17,13 @@
 
 package me.boomboompower.togglechat.toggles;
 
-import me.boomboompower.togglechat.Options;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
 
 import net.minecraft.client.gui.GuiButton;
 
 public class TypeParty implements ToggleBase {
+
+    private boolean showPartyChat = true;
 
     @Override
     public String getName() {
@@ -41,12 +42,17 @@ public class TypeParty implements ToggleBase {
 
     @Override
     public boolean isEnabled() {
-        return Options.showParty;
+        return this.showPartyChat;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.showPartyChat = enabled;
     }
 
     @Override
     public void onClick(GuiButton button) {
-        Options.showParty = !Options.showParty;
+        this.showPartyChat = !this.showPartyChat;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 }

@@ -17,42 +17,39 @@
 
 package me.boomboompower.togglechat.toggles;
 
-import me.boomboompower.togglechat.gui.utils.GuiUtils;
-
 import net.minecraft.client.gui.GuiButton;
 
-public class TypeSpectator implements ToggleBase {
+public class ToggleGlobal implements ToggleBase {
 
-    private boolean showSpecChat = true;
+    public boolean showGlobal = true;
 
     @Override
     public String getName() {
-        return "Spectator";
+        return "Global";
     }
 
     @Override
     public int getId() {
-        return 15;
+        return 18;
     }
 
     @Override
     public boolean isMessage(String message) {
-        return message.startsWith("[SPECTATOR] ");
+        return false;
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showSpecChat;
+        return this.showGlobal;
     }
 
     @Override
     public void setEnabled(boolean enabled) {
-        this.showSpecChat = enabled;
+
     }
 
     @Override
     public void onClick(GuiButton button) {
-        this.showSpecChat = !this.showSpecChat;
-        button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
+
     }
 }

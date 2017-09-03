@@ -23,23 +23,13 @@ import java.util.HashMap;
 
 public class Options {
 
-    public static boolean showUHC = true;
-    public static boolean showTeam = true;
-    public static boolean showJoin = true;
-    public static boolean showLeave = true;
-    public static boolean showGuild = true;
-    public static boolean showParty = true;
-    public static boolean showShout = true;
-    public static boolean showHousing = true;
-    public static boolean showColored = true;
-    public static boolean showMessage = true;
-    public static boolean showPartyInv = true;
-    public static boolean showSpectator = true;
-    public static boolean showFriendReqs = true;
-    public static boolean showSeparators = true;
+    /*
+     * TODO  |  redo this class & other stuff because it's
+     * TODO  |  extremely redundant & old.
+     */
 
     private static Options instance;
-    private static UnmodifiableHashMap<Integer, ToggleBase> baseTypes = new UnmodifiableHashMap<Integer, ToggleBase>();
+    private static UnmodifiableHashMap<Integer, ToggleBase> baseTypes = new UnmodifiableHashMap<>();
 
     static {
         baseTypes.put(0, new TypeUHC());
@@ -56,6 +46,7 @@ public class Options {
         baseTypes.put(15, new TypeSpectator());
         baseTypes.put(16, new TypeFriendRequest());
         baseTypes.put(17, new TypeSeparator());
+        baseTypes.put(18, new ToggleGlobal());
     }
 
     public Options() {
@@ -73,7 +64,7 @@ public class Options {
     public void addType(ToggleBase... bases) {
         if (bases.length > 0) {
             for (ToggleBase base : bases) {
-                if (!baseTypes.containsKey(base.getId()) && base.getId() > 17) {
+                if (!baseTypes.containsKey(base.getId()) && base.getId() > 18) {
                     baseTypes.put(base.getId(), base);
                 } else {
                     throw new RuntimeException(String.format("baseTypes entry is already loaded. (ID: %s)", base.getId()));

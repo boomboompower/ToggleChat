@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,13 +17,14 @@
 
 package me.boomboompower.togglechat.toggles;
 
-import me.boomboompower.togglechat.Options;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
 import me.boomboompower.togglechat.utils.GlobalUtils;
 
 import net.minecraft.client.gui.GuiButton;
 
 public class TypeFriendRequest implements ToggleBase {
+
+    private boolean showFriendRequests = true;
 
     @Override
     public String getName() {
@@ -42,12 +43,17 @@ public class TypeFriendRequest implements ToggleBase {
 
     @Override
     public boolean isEnabled() {
-        return Options.showFriendReqs;
+        return this.showFriendRequests;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.showFriendRequests = enabled;
     }
 
     @Override
     public void onClick(GuiButton button) {
-        Options.showFriendReqs = !Options.showFriendReqs;
+        this.showFriendRequests = !this.showFriendRequests;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 }

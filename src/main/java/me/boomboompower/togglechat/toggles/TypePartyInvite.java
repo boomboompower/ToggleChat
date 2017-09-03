@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
 
 package me.boomboompower.togglechat.toggles;
 
-import me.boomboompower.togglechat.Options;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
 import me.boomboompower.togglechat.utils.GlobalUtils;
 
@@ -25,6 +24,8 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.EnumChatFormatting;
 
 public class TypePartyInvite implements ToggleBase {
+
+    private boolean showPartyInvites = true;
 
     @Override
     public String getName() {
@@ -43,12 +44,17 @@ public class TypePartyInvite implements ToggleBase {
 
     @Override
     public boolean isEnabled() {
-        return Options.showPartyInv;
+        return this.showPartyInvites;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.showPartyInvites = enabled;
     }
 
     @Override
     public void onClick(GuiButton button) {
-        Options.showPartyInv = !Options.showPartyInv;
+        this.showPartyInvites = !this.showPartyInvites;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 

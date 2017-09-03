@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,12 +17,13 @@
 
 package me.boomboompower.togglechat.toggles;
 
-import me.boomboompower.togglechat.Options;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
 
 import net.minecraft.client.gui.GuiButton;
 
 public class TypeMessages implements ToggleBase {
+
+    private boolean showPrivateMessages = true;
 
     @Override
     public String getName() {
@@ -41,12 +42,17 @@ public class TypeMessages implements ToggleBase {
 
     @Override
     public boolean isEnabled() {
-        return Options.showMessage;
+        return this.showPrivateMessages;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.showPrivateMessages = enabled;
     }
 
     @Override
     public void onClick(GuiButton button) {
-        Options.showMessage = !Options.showMessage;
+        this.showPrivateMessages = !this.showPrivateMessages;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 }
