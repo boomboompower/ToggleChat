@@ -17,9 +17,15 @@
 
 package me.boomboompower.togglechat.toggles;
 
+import me.boomboompower.togglechat.gui.utils.GuiUtils;
+
 import net.minecraft.client.gui.GuiButton;
 
-public class ToggleGlobal implements ToggleBase {
+import java.util.regex.Pattern;
+
+public class TypeGlobal implements ToggleBase {
+
+    private Pattern chatPattern = Pattern.compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
 
     public boolean showGlobal = true;
 
@@ -29,13 +35,18 @@ public class ToggleGlobal implements ToggleBase {
     }
 
     @Override
+    public String getDisplayName() {
+        return "Global Chat: %s";
+    }
+
+    @Override
     public int getId() {
         return 18;
     }
 
     @Override
     public boolean isMessage(String message) {
-        return false;
+        return this.chatPattern.matcher(message).find();
     }
 
     @Override
@@ -45,11 +56,12 @@ public class ToggleGlobal implements ToggleBase {
 
     @Override
     public void setEnabled(boolean enabled) {
-
+        this.showGlobal = enabled;
     }
 
     @Override
     public void onClick(GuiButton button) {
-
+        this.showGlobal = !showGlobal;
+        button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 }

@@ -46,7 +46,7 @@ public class Options {
         baseTypes.put(15, new TypeSpectator());
         baseTypes.put(16, new TypeFriendRequest());
         baseTypes.put(17, new TypeSeparator());
-        baseTypes.put(18, new ToggleGlobal());
+        baseTypes.put(18, new TypeGlobal());
     }
 
     public Options() {
