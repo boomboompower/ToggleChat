@@ -15,44 +15,39 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles;
+package me.boomboompower.togglechat.toggles.defaults;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import net.minecraft.client.gui.GuiButton;
+public class TypeHousing extends ToggleBase {
 
-public class TypeGuild implements ToggleBase {
-
-    private boolean showGuild = true;
+    private boolean showHousing = true;
 
     @Override
     public String getName() {
-        return "Guild";
+        return "Housing";
     }
 
     @Override
-    public int getId() {
-        return 4;
-    }
-
-    @Override
-    public boolean isMessage(String message) {
-        return message.startsWith("Guild > ") || message.startsWith("G > ");
+    public boolean shouldToggle(String message) {
+        return message.startsWith("[OWNER] ") || message.startsWith("[CO-OWNER] ") || message.startsWith("[RES] ");
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showGuild;
+        return this.showHousing;
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.showGuild = enabled;
+    public void setToggled(boolean enabled) {
+        this.showHousing = enabled;
     }
 
     @Override
-    public void onClick(GuiButton button) {
-        this.showGuild = !this.showGuild;
+    public void onClick(ModernButton button) {
+        this.showHousing = !this.showHousing;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 }

@@ -15,13 +15,13 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles;
+package me.boomboompower.togglechat.toggles.defaults;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import net.minecraft.client.gui.GuiButton;
-
-public class TypeColored implements ToggleBase {
+public class TypeColored extends ToggleBase {
 
     private boolean showColored = true;
 
@@ -31,12 +31,7 @@ public class TypeColored implements ToggleBase {
     }
 
     @Override
-    public int getId() {
-        return 12;
-    }
-
-    @Override
-    public boolean isMessage(String message) {
+    public boolean shouldToggle(String message) {
         return message.startsWith("[BLUE] ") ||
                 message.startsWith("[YELLOW] ") ||
                 message.startsWith("[GREEN] ") ||
@@ -52,12 +47,12 @@ public class TypeColored implements ToggleBase {
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
+    public void setToggled(boolean enabled) {
         this.showColored = enabled;
     }
 
     @Override
-    public void onClick(GuiButton button) {
+    public void onClick(ModernButton button) {
         this.showColored = !this.showColored;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }

@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -14,11 +14,14 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package me.boomboompower.togglechat;
 
 import me.boomboompower.togglechat.command.ToggleCommand;
 import me.boomboompower.togglechat.command.WhitelistCommand;
 import me.boomboompower.togglechat.config.ConfigLoader;
+import me.boomboompower.togglechat.toggles.ToggleBase;
+import me.boomboompower.togglechat.utils.WebsiteUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommand;
@@ -28,25 +31,27 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
 import java.util.ArrayList;
 
-@Mod(modid = ToggleChat.MODID, version = ToggleChat.VERSION, acceptedMinecraftVersions="*")
-public class ToggleChat {
+@Mod(modid = ToggleChatMod.MODID, version = ToggleChatMod.VERSION, acceptedMinecraftVersions="*")
+public class ToggleChatMod {
 
     public static final String MODID = "publictogglechat";
-    public static final String VERSION = "1.2.5";
+    public static final String VERSION = "2.0.0";
 
-    private ArrayList<String> whitelist = new ArrayList<String>();
+    private ArrayList<String> whitelist = new ArrayList<>();
 
+    private WebsiteUtils websiteUtils;
     private ConfigLoader configLoader;
 
     private Boolean tutorialEnabled = true;
 
     @Mod.Instance
-    private static ToggleChat instance;
+    private static ToggleChatMod instance;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -59,17 +64,26 @@ public class ToggleChat {
 
         data.credits = "2Pi for the initial idea behind the mod!";
 
-        new Options();
-        configLoader = new ConfigLoader("mods" + File.separator + "togglechat" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId() + File.separator);
+        this.websiteUtils = new WebsiteUtils("ToggleChat");
+        this.configLoader = new ConfigLoader("mods" + File.separator + "togglechat" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId() + File.separator);
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        ToggleBase.remake();
+
         MinecraftForge.EVENT_BUS.register(new ToggleEvents());
         registerCommands(new ToggleCommand(), new WhitelistCommand());
 
-        configLoader.loadToggles();
-        configLoader.saveWhitelist();
+        Minecraft.getMinecraft().addScheduledTask(() -> this.websiteUtils.begin());
+    }
+
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        Minecraft.getMinecraft().addScheduledTask(() -> {
+            this.configLoader.loadToggles();
+            this.configLoader.loadWhitelist();
+        });
     }
 
     public void disableTutorial() {
@@ -88,7 +102,11 @@ public class ToggleChat {
         return this.configLoader;
     }
 
-    public static ToggleChat getInstance() {
+    public WebsiteUtils getWebsiteUtils() {
+        return this.websiteUtils;
+    }
+
+    public static ToggleChatMod getInstance() {
         return instance;
     }
 

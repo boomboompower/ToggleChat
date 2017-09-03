@@ -15,44 +15,43 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles;
+package me.boomboompower.togglechat.toggles.defaults;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import net.minecraft.client.gui.GuiButton;
+import java.util.regex.Pattern;
 
-public class TypeLeave implements ToggleBase {
+public class TypeShout extends ToggleBase {
 
-    private boolean showLeave = true;
+    private Pattern shoutPattern = Pattern.compile("\\[SHOUT\\] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+
+    private boolean showShout = true;
 
     @Override
     public String getName() {
-        return "Leave";
+        return "Shout";
     }
 
     @Override
-    public int getId() {
-        return 3;
-    }
-
-    @Override
-    public boolean isMessage(String message) {
-        return message.endsWith(" left.");
+    public boolean shouldToggle(String message) {
+        return this.shoutPattern.matcher(message).matches();
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showLeave;
+        return this.showShout;
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.showLeave = enabled;
+    public void setToggled(boolean enabled) {
+        this.showShout = enabled;
     }
 
     @Override
-    public void onClick(GuiButton button) {
-        this.showLeave = !this.showLeave;
+    public void onClick(ModernButton button) {
+        this.showShout = !this.showShout;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 }

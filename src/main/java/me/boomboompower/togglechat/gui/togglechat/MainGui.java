@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,13 +17,12 @@
 
 package me.boomboompower.togglechat.gui.togglechat;
 
-import me.boomboompower.togglechat.Options;
-import me.boomboompower.togglechat.ToggleChat;
+import me.boomboompower.togglechat.ToggleChatMod;
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
 import me.boomboompower.togglechat.gui.whitelist.WhitelistMainGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import me.boomboompower.togglechat.tutorial.MainTutorialGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -43,10 +42,6 @@ public class MainGui extends GuiScreen {
     //        + 21
     //        + 45
     //        + 69
-
-    private GuiButton whitelist;
-    private GuiButton back;
-    private GuiButton next;
 
     private boolean nobuttons = false;
 
@@ -69,47 +64,50 @@ public class MainGui extends GuiScreen {
 
         setupPage();
 
-        if (ToggleChat.getInstance().isTutorialEnabled()) this.buttonList.add(new GuiButton(10, this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
+        if (ToggleChatMod.getInstance().isTutorialEnabled()) this.buttonList.add(new ModernButton(0, "Inbuilt_Tutorial", this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
     }
 
     private void setupPage() {
-        if (Options.getInstance().getBaseTypes().size() > 0) {
-            nobuttons = false;
+        if (ToggleBase.getToggles().values().size() > 0) {
+            this.nobuttons = false;
 
-            int pages = (int) Math.ceil((double) Options.getInstance().getBaseTypes().size() / 7D);
+            int pages = (int) Math.ceil((double) ToggleBase.getToggles().size() / 7D);
 
-            if (pageNumber < 1 || pageNumber > pages) {
-                pageNumber = 1;
+            if (this.pageNumber < 1 || this.pageNumber > pages) {
+                this.pageNumber = 1;
             }
 
             final int[] position = {this.height / 2 - 75};
 
-            Options.getInstance().getBaseTypes().values().stream().skip((pageNumber - 1) * 7).limit(7).forEach(baseType -> {
-                this.buttonList.add(new GuiButton(baseType.getId(), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), (baseType.isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED))));
+            ToggleBase.getToggles().values().stream().skip((pageNumber - 1) * 7).limit(7).forEach(baseType -> {
+                this.buttonList.add(new ModernButton(0, baseType.getName().toLowerCase().replace(" ", "_"), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), (baseType.isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED))));
                 position[0] += 24;
             });
 
-            this.buttonList.add(this.whitelist = new GuiButton(7, 5, this.height - 25, 75, 20, "Whitelist"));
-            this.buttonList.add(this.back = new GuiButton(8, this.width - 135, this.height - 25, 65, 20, "Back"));
-            this.buttonList.add(this.next = new GuiButton(9, this.width - 70, this.height - 25, 65, 20, "Next"));
+            ModernButton back;
+            ModernButton next;
+
+            this.buttonList.add(new ModernButton(1, "inbuilt_whitelist", 5, this.height - 25, 75, 20, "Whitelist"));
+            this.buttonList.add(back = new ModernButton(2, "inbuilt_back", this.width - 135, this.height - 25, 65, 20, "Back"));
+            this.buttonList.add(next = new ModernButton(3, "inbuilt_next", this.width - 70, this.height - 25, 65, 20, "Next"));
 
             back.enabled = pageNumber > 1;
             next.enabled = pageNumber != pages; // Next
 
             return;
         }
-        nobuttons = true;
+        this.nobuttons = true;
     }
 
     public void drawScreen(int x, int y, float ticks) {
         super.drawDefaultBackground();
 
-        if (nobuttons) {
+        if (this.nobuttons) {
             drawCenteredString(this.fontRendererObj, "There are no buttons loaded!", this.width / 2, this.height / 2 - 50, Color.WHITE.getRGB());
             drawCenteredString(this.fontRendererObj, "Buttons must've not loaded correctly", this.width / 2, this.height / 2 - 30, Color.WHITE.getRGB());
             drawCenteredString(this.fontRendererObj, "Please contact boomboompower!", this.width / 2, this.height / 2, Color.WHITE.getRGB());
         } else {
-            drawCenteredString(this.fontRendererObj, String.format("Page %s/%s", (pageNumber), (int) Math.ceil((double) Options.getInstance().getBaseTypes().size() / 7D)), this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
+            drawCenteredString(this.fontRendererObj, String.format("Page %s/%s", (this.pageNumber), (int) Math.ceil((double) ToggleBase.getToggles().size() / 7D)), this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
         }
 
         super.drawScreen(x, y, ticks);
@@ -117,7 +115,7 @@ public class MainGui extends GuiScreen {
 
     protected void keyTyped(char c, int key) {
         if (key == 1) {
-            mc.displayGuiScreen(null);
+            this.mc.displayGuiScreen(null);
         }
     }
 
@@ -126,42 +124,41 @@ public class MainGui extends GuiScreen {
     }
 
     protected void actionPerformed(GuiButton button) {
-        if (button.id == 7 || button.id == 8 || button.id == 9 || button.id == 10) {
-            switch (button.id) {
-                case 7:
-                    new WhitelistMainGui().display();
-                    break;
-                case 8:
-                    new MainGui(pageNumber--);
-                    createDefaultButtons();
-                    break;
-                case 9:
-                    new MainGui(pageNumber++);
-                    createDefaultButtons();
-                    break;
-            }
-            if (ToggleChat.getInstance().isTutorialEnabled()) {
-                try {
-                    switch (button.id) {
-                        case 10:
-                            new MainTutorialGui(this, 0).display();
-                            break;
-                    }
-                } catch (Exception ex) {}
-            }
-        } else {
-            for (ToggleBase base : Options.getInstance().getBaseTypes().values()) {
-                if (base.getId() == button.id) {
-                    base.onClick(button);
-                    break;
+        int id = ((ModernButton) button).id;
+
+        switch (id) {
+            case 1:
+                new WhitelistMainGui().display();
+                break;
+            case 2:
+                new MainGui(this.pageNumber--);
+                createDefaultButtons();
+                break;
+            case 3:
+                new MainGui(this.pageNumber++);
+                createDefaultButtons();
+                break;
+        }
+        if (ToggleChatMod.getInstance().isTutorialEnabled()) {
+            try {
+                switch (id) {
+                    case 0:
+                        new me.boomboompower.togglechat.tutorial.MainTutorialGui(this, 0).display();
+                        break;
                 }
+            } catch (Exception ex) {}
+        }
+        for (ToggleBase base : ToggleBase.getToggles().values()) {
+            if (base.getName().toLowerCase().replace(" ", "_").equals(((ModernButton) button).buttonIdName)) {
+                base.onClick((ModernButton) button);
+                break;
             }
         }
     }
 
     @Override
     public void onGuiClosed() {
-        ToggleChat.getInstance().getConfigLoader().saveToggles();
+        ToggleChatMod.getInstance().getConfigLoader().saveToggles();
     }
 
     @Override
@@ -176,6 +173,6 @@ public class MainGui extends GuiScreen {
     @SubscribeEvent
     public void ClientTickEvent(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
-        mc.displayGuiScreen(this);
+        Minecraft.getMinecraft().displayGuiScreen(this);
     }
 }

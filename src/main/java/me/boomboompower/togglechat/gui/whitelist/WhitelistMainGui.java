@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,15 +17,15 @@
 
 package me.boomboompower.togglechat.gui.whitelist;
 
-import me.boomboompower.togglechat.ToggleChat;
+import me.boomboompower.togglechat.ToggleChatMod;
+import me.boomboompower.togglechat.gui.modern.ModernButton;
+import me.boomboompower.togglechat.gui.modern.ModernTextBox;
 import me.boomboompower.togglechat.gui.togglechat.MainGui;
 import me.boomboompower.togglechat.utils.ChatColor;
 
-import me.boomboompower.togglechat.tutorial.WhitelistTutorialGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -38,7 +38,7 @@ import java.io.IOException;
 
 public class WhitelistMainGui extends GuiScreen {
 
-    private GuiTextField text;
+    private ModernTextBox text;
     private String input = "";
     private Minecraft mc;
 
@@ -56,24 +56,24 @@ public class WhitelistMainGui extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        text = new GuiTextField(0, this.fontRendererObj, this.width / 2 - 75, this.height / 2 - 58, 150, 20);
-        this.buttonList.add(new GuiButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add"));
-        this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove"));
-        this.buttonList.add(new GuiButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear"));
-        this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List"));
+        this.text = new ModernTextBox(0, this.width / 2 - 75, this.height / 2 - 58, 150, 20);
+        this.buttonList.add(new ModernButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add"));
+        this.buttonList.add(new ModernButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove"));
+        this.buttonList.add(new ModernButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear"));
+        this.buttonList.add(new ModernButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List"));
 
-        if (ToggleChat.getInstance().isTutorialEnabled()) this.buttonList.add(new GuiButton(9, this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
-        this.buttonList.add(new GuiButton(10, 5, this.height - 25, 75, 20, "Back"));
+        if (ToggleChatMod.getInstance().isTutorialEnabled()) this.buttonList.add(new ModernButton(9, this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
+        this.buttonList.add(new ModernButton(10, 5, this.height - 25, 75, 20, "Back"));
 
-        text.setText(input);
-        text.setMaxStringLength(16);
-        text.setFocused(true);
+        this.text.setText(input);
+        this.text.setMaxStringLength(16);
+        this.text.setFocused(true);
     }
 
     @Override
     public void drawScreen(int x, int y, float ticks) {
         drawDefaultBackground();
-        text.drawTextBox();
+        this.text.drawTextBox();
         drawCenteredString(this.fontRendererObj, "Whitelist", this.width / 2, this.height / 2 - 82, Color.WHITE.getRGB());
         super.drawScreen(x, y, ticks);
     }
@@ -81,51 +81,51 @@ public class WhitelistMainGui extends GuiScreen {
     @Override
     protected void keyTyped(char c, int key) throws IOException {
         if (key == 1) {
-            mc.displayGuiScreen(null);
+            this.mc.displayGuiScreen(null);
         } else if (Character.isLetterOrDigit(c) || c == '_' || key == 14) { // Sorry to anyone who originally used other things
-            text.textboxKeyTyped(c, key);
+            this.text.textboxKeyTyped(c, key);
         }
     }
 
     @Override
     protected void mouseClicked(int x, int y, int btn) throws IOException {
         super.mouseClicked(x, y, btn);
-        text.mouseClicked(x, y, btn);
+        this.text.mouseClicked(x, y, btn);
     }
 
     @Override
     public void updateScreen() {
         super.updateScreen();
-        text.updateCursorCounter();
+        this.text.updateCursorCounter();
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
         boolean dontClose = false;
 
-        switch (button.id) {
+        switch (((ModernButton) button).id) {
             case 1:
-                if (text.getText().isEmpty()) {
+                if (this.text.getText().isEmpty()) {
                     sendChatMessage("No name given!");
-                } else if (!whitelistContains(text.getText())) {
-                    ToggleChat.getInstance().getWhitelist().add(text.getText());
-                    sendChatMessage("Added &6" + text.getText() + "&7 to the whitelist!");
+                } else if (!whitelistContains(this.text.getText())) {
+                    ToggleChatMod.getInstance().getWhitelist().add(this.text.getText());
+                    sendChatMessage("Added &6" + this.text.getText() + "&7 to the whitelist!");
                 } else {
-                    sendChatMessage("The whitelist already contained &6" + text.getText() + "&7!");
+                    sendChatMessage("The whitelist already contained &6" + this.text.getText() + "&7!");
                 }
                 break;
             case 2:
-                if (text.getText().isEmpty()) {
+                if (this.text.getText().isEmpty()) {
                     sendChatMessage("No name given!");
-                } else if (!whitelistContains(text.getText())) {
-                    sendChatMessage("The whitelist does not contain &6" + text.getText() + "&7!");
+                } else if (!whitelistContains(this.text.getText())) {
+                    sendChatMessage("The whitelist does not contain &6" + this.text.getText() + "&7!");
                 } else {
-                    removeFromWhitelist(text.getText());
-                    sendChatMessage("Removed &6" + text.getText() + "&7 from the whitelist!");
+                    removeFromWhitelist(this.text.getText());
+                    sendChatMessage("Removed &6" + this.text.getText() + "&7 from the whitelist!");
                 }
                 break;
             case 3:
-                if (!ToggleChat.getInstance().getWhitelist().isEmpty()) {
+                if (!ToggleChatMod.getInstance().getWhitelist().isEmpty()) {
                     dontClose = true;
                     new WhitelistClearConfirmationGui(this).display();
                 } else {
@@ -142,25 +142,25 @@ public class WhitelistMainGui extends GuiScreen {
                 break;
         }
 
-        if (ToggleChat.getInstance().isTutorialEnabled()) {
+        if (ToggleChatMod.getInstance().isTutorialEnabled()) {
             try {
-                switch (button.id) {
+                switch (((ModernButton) button).id) {
                     case 9:
                         dontClose = true;
-                        new WhitelistTutorialGui(this, 0).display();
+                        new me.boomboompower.togglechat.tutorial.WhitelistTutorialGui(this, 0).display();
                         break;
                 }
             } catch (Exception ex) {}
         }
 
         if (!dontClose) {
-            mc.displayGuiScreen(null);
+            this.mc.displayGuiScreen(null);
         }
     }
 
     @Override
     public void onGuiClosed() {
-        ToggleChat.getInstance().getConfigLoader().saveWhitelist();
+        ToggleChatMod.getInstance().getConfigLoader().saveWhitelist();
         Keyboard.enableRepeatEvents(false);
     }
 
@@ -177,7 +177,7 @@ public class WhitelistMainGui extends GuiScreen {
     private boolean whitelistContains(String message) {
         boolean contains = false;
 
-        for (String s : ToggleChat.getInstance().getWhitelist()) {
+        for (String s : ToggleChatMod.getInstance().getWhitelist()) {
             if (s.equalsIgnoreCase(message)) {
                 contains = true;
                 break;
@@ -188,9 +188,9 @@ public class WhitelistMainGui extends GuiScreen {
     }
 
     private void removeFromWhitelist(String username) {
-        for (String s: ToggleChat.getInstance().getWhitelist()) {
+        for (String s: ToggleChatMod.getInstance().getWhitelist()) {
             if (s.equalsIgnoreCase(username)) {
-                ToggleChat.getInstance().getWhitelist().remove(s);
+                ToggleChatMod.getInstance().getWhitelist().remove(s);
                 break;
             }
         }
@@ -203,6 +203,6 @@ public class WhitelistMainGui extends GuiScreen {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
-        mc.displayGuiScreen(this);
+        Minecraft.getMinecraft().displayGuiScreen(this);
     }
 }

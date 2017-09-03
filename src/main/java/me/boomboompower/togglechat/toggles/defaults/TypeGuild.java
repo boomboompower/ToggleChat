@@ -15,44 +15,44 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles;
+package me.boomboompower.togglechat.toggles.defaults;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import net.minecraft.client.gui.GuiButton;
+import java.util.regex.Pattern;
 
-public class TypeParty implements ToggleBase {
+public class TypeGuild extends ToggleBase {
 
-    private boolean showPartyChat = true;
+    public Pattern guildPattern = Pattern.compile("Guild > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    public Pattern shortGuildPattern = Pattern.compile("G > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+
+    private boolean showGuild = true;
 
     @Override
     public String getName() {
-        return "Party";
+        return "Guild";
     }
 
     @Override
-    public int getId() {
-        return 5;
-    }
-
-    @Override
-    public boolean isMessage(String message) {
-        return message.startsWith("Party > ") || message.startsWith("P > ");
+    public boolean shouldToggle(String message) {
+        return this.guildPattern.matcher(message).matches() || this.shortGuildPattern.matcher(message).matches();
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showPartyChat;
+        return this.showGuild;
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.showPartyChat = enabled;
+    public void setToggled(boolean enabled) {
+        this.showGuild = enabled;
     }
 
     @Override
-    public void onClick(GuiButton button) {
-        this.showPartyChat = !this.showPartyChat;
+    public void onClick(ModernButton button) {
+        this.showGuild = !this.showGuild;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 }

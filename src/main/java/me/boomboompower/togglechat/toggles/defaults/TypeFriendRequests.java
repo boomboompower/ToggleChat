@@ -15,57 +15,45 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles;
+package me.boomboompower.togglechat.toggles.defaults;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import net.minecraft.client.gui.GuiButton;
+import java.util.regex.Pattern;
 
-public class TypeUHC implements ToggleBase {
+public class TypeFriendRequests extends ToggleBase {
 
-    private boolean showUHC = true;
+    private boolean showFriendRequests = true;
 
     @Override
     public String getName() {
-        return "UHC";
+        return "Friend requests";
     }
 
     @Override
-    public int getId() {
-        return 0;
-    }
-
-    @Override
-    public boolean isMessage(String message) {
-        boolean isUHC = false;
-
-        char[] chars = message.toCharArray();
-
-        if (chars.length > 3) {
-            if (chars[0] == '[' && (chars[3] == ']' || chars[4] == ']')) {
-                if (Character.isDigit(chars[1])) {
-                    if (Character.isDefined(chars[2]) || Character.isDefined(chars[3])) {
-                        isUHC = true;
-                    }
-                }
-            }
-        }
-        return isUHC;
+    public boolean shouldToggle(String message) {
+        return containsIgnoreCase(message, "Friend request from ") || (message.contains("Click one") && message.contains("[ACCEPT]") && message.contains("[DENY]"));
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showUHC;
+        return this.showFriendRequests;
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.showUHC = enabled;
+    public void setToggled(boolean enabled) {
+        this.showFriendRequests = enabled;
     }
 
     @Override
-    public void onClick(GuiButton button) {
-        this.showUHC = !this.showUHC;
+    public void onClick(ModernButton button) {
+        this.showFriendRequests = !this.showFriendRequests;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
+    }
+
+    private boolean containsIgnoreCase(String message, String contains) {
+        return Pattern.compile(Pattern.quote(contains), Pattern.CASE_INSENSITIVE).matcher(message).find();
     }
 }

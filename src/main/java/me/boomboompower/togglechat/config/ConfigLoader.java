@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@ package me.boomboompower.togglechat.config;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import me.boomboompower.togglechat.Options;
-import me.boomboompower.togglechat.ToggleChat;
+import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.io.*;
@@ -62,8 +61,8 @@ public class ConfigLoader {
                 saveToggles();
             }
 
-            for (ToggleBase base : Options.getInstance().getBaseTypes().values()) {
-                base.setEnabled(this.configJson.has("show" + base.getName().replace(" ", "_")) && this.configJson.get("show" + base.getName().replace(" ", "_")).getAsBoolean());
+            for (ToggleBase base : ToggleBase.getToggles().values()) {
+                base.setToggled(this.configJson.has("show" + base.getName().replace(" ", "_")) && this.configJson.get("show" + base.getName().replace(" ", "_")).getAsBoolean());
             }
 
         } else {
@@ -78,7 +77,7 @@ public class ConfigLoader {
             FileWriter writer = new FileWriter(this.toggleFile);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
 
-            for (ToggleBase type : Options.getInstance().getBaseTypes().values()) {
+            for (ToggleBase type : ToggleBase.getToggles().values()) {
                 this.configJson.addProperty("show" + type.getName().replace(" ", "_"), type.isEnabled());
             }
 
@@ -98,7 +97,7 @@ public class ConfigLoader {
 
                 for (String s : reader.lines().collect(Collectors.toList())) {
                     if (s != null && s.toCharArray().length <= 16 && !s.contains(" ")) { // We don't want to load something that is over 16 characters, or has spaces in it!
-                        ToggleChat.getInstance().getWhitelist().add(s);
+                        ToggleChatMod.getInstance().getWhitelist().add(s);
                     }
                 }
             }
@@ -111,7 +110,7 @@ public class ConfigLoader {
        try {
            FileWriter e = new FileWriter(this.whitelistFile);
 
-           for (String s : ToggleChat.getInstance().getWhitelist()) {
+           for (String s : ToggleChatMod.getInstance().getWhitelist()) {
                e.write(s + System.lineSeparator());
            }
 

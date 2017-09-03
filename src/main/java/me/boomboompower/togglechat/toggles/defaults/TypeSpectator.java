@@ -15,44 +15,43 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles;
+package me.boomboompower.togglechat.toggles.defaults;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import net.minecraft.client.gui.GuiButton;
+import java.util.regex.Pattern;
 
-public class TypeJoin implements ToggleBase {
+public class TypeSpectator extends ToggleBase {
 
-    private boolean showJoin = true;
+    private Pattern spectatorPattern = Pattern.compile("\\[SPECTATOR\\] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+
+    private boolean showSpecChat = true;
 
     @Override
     public String getName() {
-        return "Join";
+        return "Spectator";
     }
 
     @Override
-    public int getId() {
-        return 2;
-    }
-
-    @Override
-    public boolean isMessage(String message) {
-        return message.endsWith(" joined.");
+    public boolean shouldToggle(String message) {
+        return this.spectatorPattern.matcher(message).matches();
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showJoin;
+        return this.showSpecChat;
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.showJoin = enabled;
+    public void setToggled(boolean enabled) {
+        this.showSpecChat = enabled;
     }
 
     @Override
-    public void onClick(GuiButton button) {
-        this.showJoin = !this.showJoin;
+    public void onClick(ModernButton button) {
+        this.showSpecChat = !this.showSpecChat;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 }

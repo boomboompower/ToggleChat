@@ -17,64 +17,159 @@
 
 package me.boomboompower.togglechat.toggles;
 
-import net.minecraft.client.gui.GuiButton;
+import me.boomboompower.togglechat.gui.modern.ModernButton;
+import me.boomboompower.togglechat.toggles.defaults.*;
+
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
- * A fairly old interface to configure and check Toggles
+ * Created to replace the old ToggleBase class
+ *      because it was really trash
+ *
+ * @author boomboompower
  */
-public interface ToggleBase {
+public abstract class ToggleBase {
+
+    /* Name | ToggleBase */
+    private static final HashMap<String, ToggleBase> toggles = new HashMap<>();
 
     /**
-     * Gets the base name of the toggle. Used in saving & loading
-     *
-     * @return the toggle base name
+     * Default constructor for ToggleBase
      */
-    public String getName();
+    public ToggleBase() {
+    }
 
     /**
-     * Gets the id, external loaders cannot use ids below 17
+     * Run through all bases and check if the
+     *      given text should be toggled
      *
-     * @return the toggle's id
+     * @param input text to test
+     * @return the formatted text
      */
-    public int getId();
+    public static boolean isEnabled(String input) {
+        for (ToggleBase parser : toggles.values()) {
+            if (parser.shouldToggle(input)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
-     * Determines if the message triggers the toggle check
+     * Adds the developers own ToggleBase
      *
-     * @param message Message input that will be tested
-     * @return true if the message should be toggled
+     * @param toggleBase the developers toggle
      */
-    public boolean isMessage(String message);
+    public static void addToggle(ToggleBase toggleBase) {
+        if (toggleBase != null && toggleBase.getName() != null) toggles.put(toggleBase.getName().toLowerCase().replace(" ", "_"), toggleBase);
+    }
 
     /**
-     * Checks to see if the given toggle is on/off
-     *
-     * @return true if the message should be shown
+     * Clears all toggles and readds default ones
      */
-    public boolean isEnabled();
+    public static void remake() {
+        toggles.clear();
+        toggles.put("uhc", new TypeUHC());
+        toggles.put("team", new TypeTeam());
+        toggles.put("join", new TypeJoin());
+        toggles.put("leave", new TypeLeave());
+        toggles.put("guild", new TypeGuild());
+        toggles.put("party", new TypeParty());
+        toggles.put("shout", new TypeShout());
+        toggles.put("housing", new TypeHousing());
+        toggles.put("global", new TypeGlobal());
+        toggles.put("colored_team", new TypeColored());
+        toggles.put("messages", new TypeMessages());
+        toggles.put("party_invites", new TypePartyInvites());
+        toggles.put("spectator", new TypeSpectator());
+        toggles.put("friend_requests", new TypeFriendRequests());
+        toggles.put("separators", new TypeMessageSeparator());
+    }
 
     /**
-     * Called when the button is clicked. Should be
-     *      used to toggle on/off or do something else
+     * Gets a toggle by the given name, may return null
      *
-     * @param button the button that was clicked
+     * @param name the toggle's name
+     * @return a ToggleBase instance if found, or else null
      */
-    public void onClick(GuiButton button);
+    public static ToggleBase getToggle(String name) {
+        return toggles.getOrDefault(name, null);
+    }
 
     /**
-     * Unrequired method to toggle on/off. Used in loading
+     * Checks to see if the registered parsers contains a parser
+     *      with the given name.
      *
-     * @param enabled if the message should be enabled
+     * @param name The toggle's name to test for
+     * @return true if it is registered
      */
-    public default void setEnabled(boolean enabled) {}
+    public static boolean hasToggle(String name) {
+        return toggles.containsKey(name);
+    }
 
     /**
-     * Unrequired method to get the displayname of the button
-     *      Can be changed but this is the recommended format
+     * Returns the name of the specified ToggleBase
      *
-     * @return the displayName of the button
+     * @return the name of the specified ToggleBase, cannot be null
      */
-    default String getDisplayName() {
+    public abstract String getName();
+
+    /**
+     * Checks the given text to see if it should be toggled
+     *
+     * @param message message to test
+     * @return true if the message matches the toggle test
+     */
+    public abstract boolean shouldToggle(final String message);
+
+    /**
+     * Checks to see if the given chat is enabled
+     *
+     * @return true if the player wants to see the given chat
+     */
+    public abstract boolean isEnabled();
+
+    /**
+     * Sets the message to be toggled or not. Is used in
+     *      toggle loading
+     *
+     * @param isToggled used in loading to set the toggled enabled/disabled
+     */
+    public abstract void setToggled(boolean isToggled);
+
+    /**
+     * Called when the button is first clicked. Toggle logic should
+     *      go here. Such as turning your setting on/off
+     *
+     * @param button The button that was pressed
+     */
+    public abstract void onClick(ModernButton button);
+
+    /**
+     * Gets the display format for the button.
+     *      Will be formatted when loaded
+     *
+     * @return The button display format
+     */
+    public String getDisplayName() {
         return getName() + ": %s";
+    }
+
+    @Override
+    public String toString() {
+        return "MessageBase{parsers=" + Arrays.toString(toggles.keySet().toArray()) + '}';
+    }
+
+    /**
+     * Creates a new temporary HashMap for toggles.
+     *      this is to prevent HashMap.clear
+     *
+     * @return The toggle list
+     */
+    public static HashMap<String, ToggleBase> getToggles() {
+        HashMap<String, ToggleBase> newInput = new HashMap<>();
+        toggles.forEach(newInput::put);
+        return newInput;
     }
 }

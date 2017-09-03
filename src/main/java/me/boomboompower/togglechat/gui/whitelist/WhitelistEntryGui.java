@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,7 +17,8 @@
 
 package me.boomboompower.togglechat.gui.whitelist;
 
-import me.boomboompower.togglechat.ToggleChat;
+import me.boomboompower.togglechat.ToggleChatMod;
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.CenterStringBuilder;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
 import me.boomboompower.togglechat.utils.ChatColor;
@@ -34,8 +35,7 @@ import java.io.IOException;
 
 public class WhitelistEntryGui extends GuiScreen {
 
-    private GuiButton back;
-    private GuiButton next;
+    private ModernButton next;
 
     private GuiScreen previousScreen;
 
@@ -69,35 +69,35 @@ public class WhitelistEntryGui extends GuiScreen {
     }
 
     private void makeButtons() {
-        if (ToggleChat.getInstance().getWhitelist().size() > 0) {
-            this.buttonList.add(this.back = new GuiButton(0, this.width / 2 - 200, this.height / 2 + 80, 150, 20, "Back"));
-            this.buttonList.add(this.next = new GuiButton(1, this.width / 2 + 50, this.height / 2 + 80, 150, 20, "Next"));
+        if (ToggleChatMod.getInstance().getWhitelist().size() > 0) {
+            this.buttonList.add(new ModernButton(0, this.width / 2 - 200, this.height / 2 + 80, 150, 20, "Back"));
+            this.buttonList.add(this.next = new ModernButton(1, this.width / 2 + 50, this.height / 2 + 80, 150, 20, "Next"));
         } else {
-            this.buttonList.add(this.back = new GuiButton(0, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Back"));
+            this.buttonList.add(new ModernButton(0, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Back"));
         }
     }
 
     private void setupPage() {
-        if (ToggleChat.getInstance().getWhitelist().size() > 0) {
+        if (ToggleChatMod.getInstance().getWhitelist().size() > 0) {
 
-            int totalEntries = ToggleChat.getInstance().getWhitelist().size();
-            int pages = (int) Math.ceil((double) ToggleChat.getInstance().getWhitelist().size() / 10D);
+            int totalEntries = ToggleChatMod.getInstance().getWhitelist().size();
+            int pages = (int) Math.ceil((double) ToggleChatMod.getInstance().getWhitelist().size() / 10D);
 
-            if (pageNumber < 1 || pageNumber > pages) {
+            if (this.pageNumber < 1 || this.pageNumber > pages) {
                 GuiUtils.writeInformation(this.width / 2, this.height / 2 - 40, 20, ChatColor.RED, String.format("Invalid page number (%s)", (ChatColor.DARK_RED + String.valueOf(pageNumber) + ChatColor.RED)));
-                pageInvalid = true;
+                this.pageInvalid = true;
                 return;
             }
 
-            pageInvalid = false;
-            next.enabled = pageNumber != pages; // Next
+            this.pageInvalid = false;
+            this.next.enabled = pageNumber != pages; // Next
 
-            GuiUtils.drawCentered(new CenterStringBuilder(String.format("Page %s/%s", (pageNumber), pages), this.width / 2, this.height / 2 - 95));
+            GuiUtils.drawCentered(new CenterStringBuilder(String.format("Page %s/%s", (this.pageNumber), pages), this.width / 2, this.height / 2 - 95));
             GuiUtils.drawCentered(new CenterStringBuilder(String.format("There is a total of %s %s on the whitelist!", ChatColor.GOLD + String.valueOf(totalEntries), (totalEntries > 1 ? "entries" : "entry") + ChatColor.RESET), this.width / 2, this.height / 2 + 65));
 
             final int[] position = {this.height / 2 - 73};
 
-            ToggleChat.getInstance().getWhitelist().stream().skip((pageNumber - 1) * 10).limit(10).forEach(word -> {
+            ToggleChatMod.getInstance().getWhitelist().stream().skip((this.pageNumber - 1) * 10).limit(10).forEach(word -> {
                 GuiUtils.drawCentered(new CenterStringBuilder(word, this.width / 2, position[0]));
                 position[0] += 13;
             });
@@ -109,7 +109,7 @@ public class WhitelistEntryGui extends GuiScreen {
     }
 
     private void drawBox() {
-        if (ToggleChat.getInstance().getWhitelist().size() > 0 && !pageInvalid) {
+        if (ToggleChatMod.getInstance().getWhitelist().size() > 0 && !pageInvalid) {
             drawRect(this.width / 2 - 60, this.height / 2 - 80, this.width / 2 + 60, this.height / 2 + 60, new Color(105, 105, 105, 75).getRGB());
 
             drawHorizontalLine(this.width / 2 - 60, width / 2 + 60, this.height / 2 - 80, Color.WHITE.getRGB());
@@ -123,7 +123,7 @@ public class WhitelistEntryGui extends GuiScreen {
     @Override
     protected void keyTyped(char c, int key) throws IOException {
         if (key == 1) {
-            mc.displayGuiScreen(previousScreen);
+            this.mc.displayGuiScreen(this.previousScreen);
         }
     }
 
@@ -134,16 +134,16 @@ public class WhitelistEntryGui extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        switch (button.id) {
+        switch (((ModernButton) button).id) {
             case 0:
-                if (pageNumber > 1) {
-                    new WhitelistEntryGui(this, pageNumber--);
+                if (this.pageNumber > 1) {
+                    new WhitelistEntryGui(this, this.pageNumber--);
                 } else {
-                    mc.displayGuiScreen(previousScreen);
+                    this.mc.displayGuiScreen(previousScreen);
                 }
                 break;
             case 1:
-                new WhitelistEntryGui(this, pageNumber++);
+                new WhitelistEntryGui(this, this.pageNumber++);
                 break;
         }
     }
@@ -160,6 +160,6 @@ public class WhitelistEntryGui extends GuiScreen {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
-        mc.displayGuiScreen(this);
+        Minecraft.getMinecraft().displayGuiScreen(this);
     }
 }

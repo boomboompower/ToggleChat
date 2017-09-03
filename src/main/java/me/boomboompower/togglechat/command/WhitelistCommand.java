@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package me.boomboompower.togglechat.command;
 
 import me.boomboompower.togglechat.gui.whitelist.WhitelistMainGui;
@@ -35,7 +36,7 @@ public class WhitelistCommand implements ICommand {
     private final List<String> aliases;
 
     public WhitelistCommand() {
-        aliases = new ArrayList<String>();
+        aliases = new ArrayList<>();
         aliases.add("wl");
         aliases.add("white");
         aliases.add("whitelist");
@@ -72,7 +73,7 @@ public class WhitelistCommand implements ICommand {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        return args.length == 1 ? CommandBase.getListOfStringsMatchingLastWord(args, getArgs()) : new ArrayList<String>();
+        return args.length == 1 ? CommandBase.getListOfStringsMatchingLastWord(args, getArgs()) : new ArrayList<>();
     }
 
     @Override
@@ -89,7 +90,7 @@ public class WhitelistCommand implements ICommand {
      * Get the names of all online players
      */
     private List<String> getArgs() {
-        List<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
         for (Entity o : Minecraft.getMinecraft().theWorld.playerEntities) {
             names.add(ChatColor.stripColor(o.getName()));
         }

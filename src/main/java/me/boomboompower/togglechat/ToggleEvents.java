@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -14,15 +14,17 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package me.boomboompower.togglechat;
 
 import me.boomboompower.togglechat.toggles.ToggleBase;
 import me.boomboompower.togglechat.utils.ChatColor;
-import me.boomboompower.togglechat.utils.GlobalUtils;
 
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.regex.Pattern;
 
 public class ToggleEvents {
 
@@ -34,8 +36,8 @@ public class ToggleEvents {
         String unformattedText = ChatColor.stripColor(event.message.getUnformattedText());
         try {
             if (!containsWhitelisted(unformattedText)) {
-                for (ToggleBase type : Options.getInstance().getBaseTypes().values()) {
-                    if (type.isMessage(unformattedText) && !type.isEnabled()) {
+                for (ToggleBase type : ToggleBase.getToggles().values()) {
+                    if (type.shouldToggle(unformattedText) && !type.isEnabled()) {
                         event.setCanceled(true);
                         break;
                     }
@@ -48,10 +50,14 @@ public class ToggleEvents {
 
     private boolean containsWhitelisted(String message) {
         final boolean[] contains = {false};
-        ToggleChat.getInstance().getWhitelist().forEach(s -> {
-        if (GlobalUtils.containsIgnoreCase(message, s)) {
+        ToggleChatMod.getInstance().getWhitelist().forEach(s -> {
+        if (containsIgnoreCase(message, s)) {
             contains[0] = true;
         }});
         return contains[0];
+    }
+
+    private boolean containsIgnoreCase(String message, String contains) {
+        return Pattern.compile(Pattern.quote(contains), Pattern.CASE_INSENSITIVE).matcher(message).find();
     }
 }

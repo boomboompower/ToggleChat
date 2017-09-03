@@ -15,44 +15,40 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles;
+package me.boomboompower.togglechat.toggles.defaults;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import net.minecraft.client.gui.GuiButton;
 
-public class TypeSpectator implements ToggleBase {
+public class TypeMessageSeparator extends ToggleBase {
 
-    private boolean showSpecChat = true;
+    private boolean showSeparators = true;
 
     @Override
     public String getName() {
-        return "Spectator";
+        return "Separators";
     }
 
     @Override
-    public int getId() {
-        return 15;
-    }
-
-    @Override
-    public boolean isMessage(String message) {
-        return message.startsWith("[SPECTATOR] ");
+    public boolean shouldToggle(String message) {
+        return message.equalsIgnoreCase("-----------------------------------------------------");
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showSpecChat;
+        return this.showSeparators;
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.showSpecChat = enabled;
+    public void setToggled(boolean enabled) {
+        this.showSeparators = enabled;
     }
 
     @Override
-    public void onClick(GuiButton button) {
-        this.showSpecChat = !this.showSpecChat;
+    public void onClick(ModernButton button) {
+        this.showSeparators = !this.showSeparators;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 }

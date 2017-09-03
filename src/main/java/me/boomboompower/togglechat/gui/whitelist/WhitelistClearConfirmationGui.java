@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,7 +17,8 @@
 
 package me.boomboompower.togglechat.gui.whitelist;
 
-import me.boomboompower.togglechat.ToggleChat;
+import me.boomboompower.togglechat.ToggleChatMod;
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
 import me.boomboompower.togglechat.utils.ChatColor;
 
@@ -44,8 +45,8 @@ public class WhitelistClearConfirmationGui extends GuiScreen {
 
     @Override
     public void initGui() {
-        this.buttonList.add(new GuiButton(0, this.width / 2 - 200, this.height / 2 + 30, 150, 20, "Cancel"));
-        this.buttonList.add(new GuiButton(1, this.width / 2 + 50, this.height / 2 + 30, 150, 20, "Confirm"));
+        this.buttonList.add(new ModernButton(0, this.width / 2 - 200, this.height / 2 + 30, 150, 20, "Cancel"));
+        this.buttonList.add(new ModernButton(1, this.width / 2 + 50, this.height / 2 + 30, 150, 20, "Confirm"));
     }
 
     @Override
@@ -53,7 +54,7 @@ public class WhitelistClearConfirmationGui extends GuiScreen {
         drawDefaultBackground();
 
         GuiUtils.writeInformation(this.width / 2, this.height / 2 - 60, 15,
-                String.format("Are you sure you wish to clear &6%s %s&r from your whitelist?", ToggleChat.getInstance().getWhitelist().size(), (ToggleChat.getInstance().getWhitelist().size() == 1 ? "entry" : "entries")),
+                String.format("Are you sure you wish to clear &6%s %s&r from your whitelist?", ToggleChatMod.getInstance().getWhitelist().size(), (ToggleChatMod.getInstance().getWhitelist().size() == 1 ? "entry" : "entries")),
                 "This action cannot be undone, use at your own risk!"
         );
 
@@ -63,7 +64,7 @@ public class WhitelistClearConfirmationGui extends GuiScreen {
     @Override
     protected void keyTyped(char c, int key) throws IOException {
         if (key == 1) {
-            mc.displayGuiScreen(previousScreen);
+            this.mc.displayGuiScreen(this.previousScreen);
         }
     }
 
@@ -74,21 +75,21 @@ public class WhitelistClearConfirmationGui extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        switch (button.id) {
+        switch (((ModernButton) button).id) {
             case 0:
-                mc.displayGuiScreen(previousScreen);
+                this.mc.displayGuiScreen(this.previousScreen);
                 break;
             case 1:
-                ToggleChat.getInstance().getWhitelist().clear();
+                ToggleChatMod.getInstance().getWhitelist().clear();
                 sendChatMessage("Cleared the whitelist!");
-                mc.displayGuiScreen(null);
+                this.mc.displayGuiScreen(null);
                 break;
         }
     }
 
     @Override
     public void onGuiClosed() {
-        ToggleChat.getInstance().getConfigLoader().saveWhitelist();
+        ToggleChatMod.getInstance().getConfigLoader().saveWhitelist();
     }
 
     @Override
@@ -108,6 +109,6 @@ public class WhitelistClearConfirmationGui extends GuiScreen {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
-        mc.displayGuiScreen(this);
+        Minecraft.getMinecraft().displayGuiScreen(this);
     }
 }

@@ -15,44 +15,43 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles;
+package me.boomboompower.togglechat.toggles.defaults;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import net.minecraft.client.gui.GuiButton;
+import java.util.regex.Pattern;
 
-public class TypeSeparator implements ToggleBase {
+public class TypeJoin extends ToggleBase {
 
-    private boolean showSeparators = true;
+    private Pattern joinPattern = Pattern.compile("(?<player>\\S{1,16})(\\s+)(joined\\.)");
+
+    private boolean showJoin = true;
 
     @Override
     public String getName() {
-        return "Separators";
+        return "Join";
     }
 
     @Override
-    public int getId() {
-        return 17;
-    }
-
-    @Override
-    public boolean isMessage(String message) {
-        return message.equalsIgnoreCase("-----------------------------------------------------");
+    public boolean shouldToggle(String message) {
+        return this.joinPattern.matcher(message).matches();
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showSeparators;
+        return this.showJoin;
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.showSeparators = enabled;
+    public void setToggled(boolean enabled) {
+        this.showJoin = enabled;
     }
 
     @Override
-    public void onClick(GuiButton button) {
-        this.showSeparators = !this.showSeparators;
+    public void onClick(ModernButton button) {
+        this.showJoin = !this.showJoin;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 }

@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package me.boomboompower.togglechat.gui.utils;
 
 import me.boomboompower.togglechat.utils.ChatColor;
@@ -47,7 +48,7 @@ public class GuiUtils {
      * color - the color of the message
      */
     public static void drawCenteredString(FontRenderer fontRenderer, String text, int x, int y, int color) {
-        fontRenderer.drawStringWithShadow(text, (float) (x - fontRenderer.getStringWidth(text) / 2), (float) y, color);
+        fontRenderer.drawString(text, (float) (x - fontRenderer.getStringWidth(text) / 2), (float) y, color, false);
     }
 
     /*

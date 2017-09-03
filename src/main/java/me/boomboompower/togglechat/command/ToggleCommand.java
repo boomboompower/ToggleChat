@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package me.boomboompower.togglechat.command;
 
 import me.boomboompower.togglechat.gui.togglechat.MainGui;
@@ -32,7 +33,7 @@ public class ToggleCommand implements ICommand {
     private final List<String> aliases;
 
     public ToggleCommand() {
-        aliases = new ArrayList<String>();
+        aliases = new ArrayList<>();
         aliases.add("tc");
         aliases.add("toggle");
         aliases.add("chattoggle");
@@ -65,7 +66,7 @@ public class ToggleCommand implements ICommand {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 
     @Override

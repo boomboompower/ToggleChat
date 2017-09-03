@@ -15,44 +15,44 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles;
+package me.boomboompower.togglechat.toggles.defaults;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import net.minecraft.client.gui.GuiButton;
+import java.util.regex.Pattern;
 
-public class TypeHousing implements ToggleBase {
+public class TypeParty extends ToggleBase {
 
-    private boolean showHousing = true;
+    public Pattern partyPattern = Pattern.compile("Party > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    public Pattern shortPartyPattern = Pattern.compile("P > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+
+    private boolean showPartyChat = true;
 
     @Override
     public String getName() {
-        return "Housing";
+        return "Party";
     }
 
     @Override
-    public int getId() {
-        return 11;
-    }
-
-    @Override
-    public boolean isMessage(String message) {
-        return message.startsWith("[OWNER] ") || message.startsWith("[CO-OWNER] ") || message.startsWith("[RES] ");
+    public boolean shouldToggle(String message) {
+        return this.partyPattern.matcher(message).matches() || this.shortPartyPattern.matcher(message).matches();
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showHousing;
+        return this.showPartyChat;
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.showHousing = enabled;
+    public void setToggled(boolean enabled) {
+        this.showPartyChat = enabled;
     }
 
     @Override
-    public void onClick(GuiButton button) {
-        this.showHousing = !this.showHousing;
+    public void onClick(ModernButton button) {
+        this.showPartyChat = !this.showPartyChat;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 }

@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2016 boomboompower
+ *     Copyright (C) 2017 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 
 package me.boomboompower.togglechat.tutorial;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.CenterStringBuilder;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
 import me.boomboompower.togglechat.utils.ChatColor;
@@ -52,8 +53,8 @@ public class WhitelistTutorialGui extends GuiScreen {
 
     @Override
     public void initGui() {
-        this.buttonList.add(new GuiButton(0, this.width / 2 - 200, this.height - 25, 150, 20, "Previous"));
-        this.buttonList.add(new GuiButton(1, this.width / 2 + 50, this.height - 25, 150, 20, "Next"));
+        this.buttonList.add(new ModernButton(0, this.width / 2 - 200, this.height - 25, 150, 20, "Previous"));
+        this.buttonList.add(new ModernButton(1, this.width / 2 + 50, this.height - 25, 150, 20, "Next"));
     }
 
     @Override
@@ -65,7 +66,7 @@ public class WhitelistTutorialGui extends GuiScreen {
 
         writePage();
 
-        buttonList.get(1).enabled = pageNumber < 2;
+        ((ModernButton) this.buttonList.get(1)).enabled = this.pageNumber < 2;
 
         super.drawScreen(x, y, ticks);
     }
@@ -73,22 +74,22 @@ public class WhitelistTutorialGui extends GuiScreen {
     @Override
     protected void keyTyped(char c, int key) throws IOException {
         if (key == 1) {
-            mc.displayGuiScreen(previousScreen);
+            this.mc.displayGuiScreen(this.previousScreen);
         }
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        switch (button.id) {
+        switch (((ModernButton) button).id) {
             case 0:
-                if (pageNumber > 0) {
-                    new MainTutorialGui(this, pageNumber--);
+                if (this.pageNumber > 0) {
+                    new me.boomboompower.togglechat.tutorial.MainTutorialGui(this, this.pageNumber--);
                 } else {
-                    mc.displayGuiScreen(previousScreen);
+                    this.mc.displayGuiScreen(this.previousScreen);
                 }
                 break;
             case 1:
-                new MainTutorialGui(this, pageNumber++);
+                new me.boomboompower.togglechat.tutorial.MainTutorialGui(this, this.pageNumber++);
                 break;
         }
     }
@@ -100,9 +101,9 @@ public class WhitelistTutorialGui extends GuiScreen {
 
     private void setupInfo() {
         GuiUtils.drawCentered(new CenterStringBuilder("Whitelist Tutorial", this.width / 2, this.height / 2 - 115));
-        GuiUtils.drawCentered(new CenterStringBuilder(String.format("Page %s", (pageNumber + 1)), this.width / 2, this.height / 2 - 105));
+        GuiUtils.drawCentered(new CenterStringBuilder(String.format("Page %s", (this.pageNumber + 1)), this.width / 2, this.height / 2 - 105));
 
-        drawHorizontalLine(width / 2 - 80, width / 2 + 80, this.height / 2 - 95, Color.WHITE.getRGB());
+        drawHorizontalLine(this.width / 2 - 80, this.width / 2 + 80, this.height / 2 - 95, Color.WHITE.getRGB());
     }
 
     private void writePage() {
@@ -181,6 +182,6 @@ public class WhitelistTutorialGui extends GuiScreen {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
-        mc.displayGuiScreen(this);
+        Minecraft.getMinecraft().displayGuiScreen(this);
     }
 }

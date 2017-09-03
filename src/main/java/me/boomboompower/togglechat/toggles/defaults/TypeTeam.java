@@ -15,44 +15,43 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles;
+package me.boomboompower.togglechat.toggles.defaults;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import net.minecraft.client.gui.GuiButton;
+import java.util.regex.Pattern;
 
-public class TypeMessages implements ToggleBase {
+public class TypeTeam extends ToggleBase {
 
-    private boolean showPrivateMessages = true;
+    private Pattern teamPattern = Pattern.compile("\\[TEAM\\] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+
+    private boolean showTeam = true;
 
     @Override
     public String getName() {
-        return "Messages";
+        return "Team";
     }
 
     @Override
-    public int getId() {
-        return 13;
-    }
-
-    @Override
-    public boolean isMessage(String message) {
-        return message.startsWith("To ") || message.startsWith("From ");
+    public boolean shouldToggle(String message) {
+        return this.teamPattern.matcher(message).matches();
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showPrivateMessages;
+        return this.showTeam;
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.showPrivateMessages = enabled;
+    public void setToggled(boolean enabled) {
+        this.showTeam = enabled;
     }
 
     @Override
-    public void onClick(GuiButton button) {
-        this.showPrivateMessages = !this.showPrivateMessages;
+    public void onClick(ModernButton button) {
+        this.showTeam = !this.showTeam;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 }

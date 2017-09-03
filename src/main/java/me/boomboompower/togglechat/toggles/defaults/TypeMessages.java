@@ -15,45 +15,39 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles;
+package me.boomboompower.togglechat.toggles.defaults;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
-import me.boomboompower.togglechat.utils.GlobalUtils;
+import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import net.minecraft.client.gui.GuiButton;
+public class TypeMessages extends ToggleBase {
 
-public class TypeFriendRequest implements ToggleBase {
-
-    private boolean showFriendRequests = true;
+    private boolean showPrivateMessages = true;
 
     @Override
     public String getName() {
-        return "Friend requests";
+        return "Messages";
     }
 
     @Override
-    public int getId() {
-        return 16;
-    }
-
-    @Override
-    public boolean isMessage(String message) {
-        return GlobalUtils.containsIgnoreCase(message, "Friend request from ") || (message.contains("Click one") && message.contains("[ACCEPT]") && message.contains("[DENY]"));
+    public boolean shouldToggle(String message) {
+        return message.startsWith("To ") || message.startsWith("From ");
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showFriendRequests;
+        return this.showPrivateMessages;
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.showFriendRequests = enabled;
+    public void setToggled(boolean enabled) {
+        this.showPrivateMessages = enabled;
     }
 
     @Override
-    public void onClick(GuiButton button) {
-        this.showFriendRequests = !this.showFriendRequests;
+    public void onClick(ModernButton button) {
+        this.showPrivateMessages = !this.showPrivateMessages;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
 }

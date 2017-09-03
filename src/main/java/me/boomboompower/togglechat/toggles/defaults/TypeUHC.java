@@ -15,50 +15,52 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles;
+package me.boomboompower.togglechat.toggles.defaults;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
-import me.boomboompower.togglechat.utils.GlobalUtils;
+import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.util.EnumChatFormatting;
+public class TypeUHC extends ToggleBase {
 
-public class TypePartyInvite implements ToggleBase {
-
-    private boolean showPartyInvites = true;
+    private boolean showUHC = true;
 
     @Override
     public String getName() {
-        return "Party invites";
+        return "UHC";
     }
 
     @Override
-    public int getId() {
-        return 14;
-    }
+    public boolean shouldToggle(String message) {
+        boolean isUHC = false;
 
-    @Override
-    public boolean isMessage(String message) {
-        return GlobalUtils.containsIgnoreCase(message, "has invited you to join ") || GlobalUtils.containsIgnoreCase(message, "60 seconds to accept") || (withoutColors(message).contains("The party invite from ") && withoutColors(message).endsWith(" has expired."));
+        char[] chars = message.toCharArray();
+
+        if (chars.length > 3) {
+            if (chars[0] == '[' && (chars[3] == ']' || chars[4] == ']')) {
+                if (Character.isDigit(chars[1])) {
+                    if (Character.isDefined(chars[2]) || Character.isDefined(chars[3])) {
+                        isUHC = true;
+                    }
+                }
+            }
+        }
+        return isUHC;
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showPartyInvites;
+        return this.showUHC;
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.showPartyInvites = enabled;
+    public void setToggled(boolean enabled) {
+        this.showUHC = enabled;
     }
 
     @Override
-    public void onClick(GuiButton button) {
-        this.showPartyInvites = !this.showPartyInvites;
+    public void onClick(ModernButton button) {
+        this.showUHC = !this.showUHC;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
-    }
-
-    private String withoutColors(String message) {
-        return EnumChatFormatting.getTextWithoutFormattingCodes(message);
     }
 }

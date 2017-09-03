@@ -15,15 +15,15 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles;
+package me.boomboompower.togglechat.toggles.defaults;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
-
-import net.minecraft.client.gui.GuiButton;
+import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.regex.Pattern;
 
-public class TypeGlobal implements ToggleBase {
+public class TypeGlobal extends ToggleBase {
 
     private Pattern chatPattern = Pattern.compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
 
@@ -40,13 +40,8 @@ public class TypeGlobal implements ToggleBase {
     }
 
     @Override
-    public int getId() {
-        return 18;
-    }
-
-    @Override
-    public boolean isMessage(String message) {
-        return this.chatPattern.matcher(message).find();
+    public boolean shouldToggle(String message) {
+        return this.chatPattern.matcher(message).matches();
     }
 
     @Override
@@ -55,12 +50,12 @@ public class TypeGlobal implements ToggleBase {
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
+    public void setToggled(boolean enabled) {
         this.showGlobal = enabled;
     }
 
     @Override
-    public void onClick(GuiButton button) {
+    public void onClick(ModernButton button) {
         this.showGlobal = !showGlobal;
         button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
     }
