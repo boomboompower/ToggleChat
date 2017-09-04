@@ -4,6 +4,7 @@
 		
         <link href="https://boomboompower.github.io/ToggleChat/files/css/main.css" rel="stylesheet" type="text/css">
         <link href="https://boomboompower.github.io/ToggleChat/files/css/nav.css" rel="stylesheet" type="text/css">
+        <link href="./files/css/custom.css" rel="stylesheet" type="text/css">
 
         <script type="text/javascript" src="https://boomboompower.github.io/ToggleChat/files/js/main.js"></script>
         <script type="text/javascript" src="https://boomboompower.github.io/ToggleChat/files/js/sub.js"></script>
@@ -13,7 +14,7 @@
         <!-- NAVBAR START -->
         <div id="navBar" class="nav">
 			<a href="javascript:void(0)" class="navClose" onclick="closeNav()">&times;</a>
-            <a href="#" id="back">Home</a>
+            <a href="#" id="home">Home</a>
 			<a class="special" href="#" onclick="downloadPage()">Downloads</a>
 			<a class="selected" href="#">Information</a>
 			<a href="#">Source</a>
@@ -32,9 +33,92 @@
                 </div>
                 <hr id="hr">
             </div>
-			<div id="content">
-				<p>A list of all different Toggle Types and what they do</p>
-			</div>
+            <div id="content">
+                <p style="-webkit-margin-after: 0.7em;">A list of all different Toggle Types and what they do</p>
+                <table style="width: 70%;" class="center">
+                    <tbody><tr>
+                        <th>Toggle Name</th>
+                        <th>What it toggles</th>
+                    </tr>
+                    <tr>
+                        <td>UHC</td>
+                        <td>"<font style="font-weight: bold; color: #ff9800;">[00&#x272b;]</font>" Turns ALL UHC chat on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Team</td>
+                        <td>"<font style="font-weight: bold; color: #03a9f4;">[TEAM]</font>" Turns ALL Team chat on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Join</td>
+                        <td>"<font style="font-weight: bold; color: #ffeb3b;">player joined.</font>" Turns ALL join notifications on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Leave</td>
+                        <td>"<font style="font-weight: bold; color: #ffeb3b;">player left.</font>" Turns ALL leave notifications on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Guild</td>
+                        <td>"<font style="font-weight: bold; color: #43a047;">Guild ></font>" Turns ALL guild chat on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Party</td>
+                        <td>"<font style="font-weight: bold; color: #03a9f4;">Party ></font>" Turns ALL party chat on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Shout</td>
+                        <td>"<font style="font-weight: bold; color: #ff9800;">[SHOUT]</font>" Turns ALL shouts on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Housing</td>
+                        <td>"<font style="font-weight: bold; color: #ff9800;">[OWNER]</font>",
+                            "<font style="font-weight: bold; color: #ff9800;">[CO-OWNER]</font>",
+                            "<font style="font-weight: bold; color: #ff9800;">[RES]</font>" Turns ALL housing chat on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Global</td>
+                        <td>"<font style="font-weight: bold; color: #757575;">Player: HELLO</font>" Turns ALL general chat on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Colored Team</td>
+                        <td>"<font style="font-weight: bold; color: #FFEB3B;">[YELLOW]</font>",
+                            "<font style="font-weight: bold; color: #ffffff;">[WHITE]</font>",
+                            "<font style="font-weight: bold; color: #00ff0a;">[GREEN]</font>",
+                            "<font style="font-weight: bold; color: #03a9f4;">[BLUE]</font>",
+                            "<font style="font-weight: bold; color: #f10f10;">[RED]</font>" Turns ALL colored team chats on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Messages</td>
+                        <td>"<font style="font-weight: bold; color: #cc93d8;">To Player</font>",
+                            "<font style="font-weight: bold; color: #cc93d8;">From Player</font>", Turns ALL private messages on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Party Invites</td>
+                        <td>"<font style="font-weight: bold; color: #FFEB3B;">player has invited you to join their party</font>" Turns ALL party invites on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Spectator Chat</td>
+                        <td>"<font style="font-weight: bold; color: #757575;">[SPECTATOR]</font>" Turns ALL spectator chats on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Friend Requests</td>
+                        <td>"<font style="font-weight: bold; color: #FFEB3B;">Friend request from player</font>" Turns ALL friend request notifications on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Separators</td>
+                        <td>"<font style="font-weight: bold; color: #fff;">---------------</font>" Turns ALL line separators on/off</td>
+                    </tr>
+                    </tbody></table>
+                    <p>
+                        <button onclick="removeBackground()">Remove Background</button>
+                    </p>
+                <br>
+            </div>
         </div>
     </body>
+    <script>
+        function removeBackground() {
+            document.getElementsByTagName("html")[0].style.background = "#000 repeat";
+            document.getElementsByTagName("button")[0].style.display = "none";
+        }
+    </script>
 </html>

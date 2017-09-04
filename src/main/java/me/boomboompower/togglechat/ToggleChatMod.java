@@ -48,8 +48,6 @@ public class ToggleChatMod {
     private WebsiteUtils websiteUtils;
     private ConfigLoader configLoader;
 
-    private Boolean tutorialEnabled = true;
-
     @Mod.Instance
     private static ToggleChatMod instance;
 
@@ -84,14 +82,6 @@ public class ToggleChatMod {
             this.configLoader.loadToggles();
             this.configLoader.loadWhitelist();
         });
-    }
-
-    public void disableTutorial() {
-        this.tutorialEnabled = false;
-    }
-
-    public boolean isTutorialEnabled() {
-        return this.tutorialEnabled;
     }
 
     public ArrayList<String> getWhitelist() {

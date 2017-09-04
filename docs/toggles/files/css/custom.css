@@ -1,0 +1,27 @@
+table, th, td {
+    border: 1px solid white;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+
+table.center {
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.title {
+    top: 40px;
+}
+
+#content {
+    top: 30;
+}
+
+button {
+    width: 20em;
+    letter-spacing: 0.15em;
+}

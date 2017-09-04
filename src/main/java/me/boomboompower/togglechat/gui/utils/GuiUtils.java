@@ -19,7 +19,9 @@ package me.boomboompower.togglechat.gui.utils;
 
 import me.boomboompower.togglechat.utils.ChatColor;
 
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.Minecraft;
+
+import java.awt.*;
 
 /*
  * An attempt at creating an easier way to do things in GUI's
@@ -47,15 +49,8 @@ public class GuiUtils {
      * y - the y coordinate of the text
      * color - the color of the message
      */
-    public static void drawCenteredString(FontRenderer fontRenderer, String text, int x, int y, int color) {
-        fontRenderer.drawString(text, (float) (x - fontRenderer.getStringWidth(text) / 2), (float) y, color, false);
-    }
-
-    /*
-     * An additional way of using the drawCenteredString
-     */
-    public static void drawCentered(CenterStringBuilder builder) {
-        drawCenteredString(builder.getFontRender(), builder.translateCodes().getMessage(), builder.getX(), builder.getY(), builder.getColor().getRGB());
+    public static void drawCenteredString(String text, int x, int y, int color) {
+        Minecraft.getMinecraft().fontRendererObj.drawString(text, (float) (x - Minecraft.getMinecraft().fontRendererObj.getStringWidth(text) / 2), (float) y, color, false);
     }
 
     /*
@@ -78,7 +73,7 @@ public class GuiUtils {
      */
     public static void writeInformation(int startingX, int startingY, int separation, ChatColor color, String... lines) {
         for (String s : lines) {
-            drawCentered(new CenterStringBuilder(color + s, startingX, startingY));
+            drawCenteredString(color + s, startingX, startingY, Color.WHITE.getRGB());
             startingY += separation;
         }
     }

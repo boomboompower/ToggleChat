@@ -62,7 +62,6 @@ public class WhitelistMainGui extends GuiScreen {
         this.buttonList.add(new ModernButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear"));
         this.buttonList.add(new ModernButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List"));
 
-        if (ToggleChatMod.getInstance().isTutorialEnabled()) this.buttonList.add(new ModernButton(9, this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
         this.buttonList.add(new ModernButton(10, 5, this.height - 25, 75, 20, "Back"));
 
         this.text.setText(input);
@@ -140,17 +139,6 @@ public class WhitelistMainGui extends GuiScreen {
                 dontClose = true;
                 new MainGui(1).display();
                 break;
-        }
-
-        if (ToggleChatMod.getInstance().isTutorialEnabled()) {
-            try {
-                switch (((ModernButton) button).id) {
-                    case 9:
-                        dontClose = true;
-                        new me.boomboompower.togglechat.tutorial.WhitelistTutorialGui(this, 0).display();
-                        break;
-                }
-            } catch (Exception ex) {}
         }
 
         if (!dontClose) {

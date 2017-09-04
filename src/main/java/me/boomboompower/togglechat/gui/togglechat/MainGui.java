@@ -63,8 +63,6 @@ public class MainGui extends GuiScreen {
         buttonList.clear();
 
         setupPage();
-
-        if (ToggleChatMod.getInstance().isTutorialEnabled()) this.buttonList.add(new ModernButton(0, "inbuilt_tutorial", this.width / 2 - 70, this.height - 25, 140, 20, "Tutorial"));
     }
 
     private void setupPage() {
@@ -138,14 +136,6 @@ public class MainGui extends GuiScreen {
                 this.pageNumber++;
                 createDefaultButtons();
                 return;
-        }
-        if (ToggleChatMod.getInstance().isTutorialEnabled()) {
-            try {
-                if (((ModernButton) button).buttonIdName.equals("inbuilt_tutorial")) {
-                    new me.boomboompower.togglechat.tutorial.MainTutorialGui(this, 0).display();
-                    return;
-                }
-            } catch (Exception ex) {}
         }
         for (ToggleBase base : ToggleBase.getToggles().values()) {
             if (base.getName().toLowerCase().replace(" ", "_").equals(((ModernButton) button).buttonIdName)) {

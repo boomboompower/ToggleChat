@@ -19,7 +19,6 @@ package me.boomboompower.togglechat.gui.whitelist;
 
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.utils.CenterStringBuilder;
 import me.boomboompower.togglechat.gui.utils.GuiUtils;
 import me.boomboompower.togglechat.utils.ChatColor;
 
@@ -92,13 +91,13 @@ public class WhitelistEntryGui extends GuiScreen {
             this.pageInvalid = false;
             this.next.enabled = pageNumber != pages; // Next
 
-            GuiUtils.drawCentered(new CenterStringBuilder(String.format("Page %s/%s", (this.pageNumber), pages), this.width / 2, this.height / 2 - 95));
-            GuiUtils.drawCentered(new CenterStringBuilder(String.format("There is a total of %s %s on the whitelist!", ChatColor.GOLD + String.valueOf(totalEntries), (totalEntries > 1 ? "entries" : "entry") + ChatColor.RESET), this.width / 2, this.height / 2 + 65));
+            GuiUtils.drawCenteredString(String.format("Page %s/%s", (this.pageNumber), pages), this.width / 2, this.height / 2 - 95, Color.WHITE.getRGB());
+            GuiUtils.drawCenteredString(String.format("There is a total of %s %s on the whitelist!", ChatColor.GOLD + String.valueOf(totalEntries), (totalEntries > 1 ? "entries" : "entry") + ChatColor.RESET), this.width / 2, this.height / 2 + 65, Color.WHITE.getRGB());
 
             final int[] position = {this.height / 2 - 73};
 
             ToggleChatMod.getInstance().getWhitelist().stream().skip((this.pageNumber - 1) * 10).limit(10).forEach(word -> {
-                GuiUtils.drawCentered(new CenterStringBuilder(word, this.width / 2, position[0]));
+                GuiUtils.drawCenteredString(word, this.width / 2, position[0], Color.WHITE.getRGB());
                 position[0] += 13;
             });
 
