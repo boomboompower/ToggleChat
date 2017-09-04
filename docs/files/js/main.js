@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
 
 	document.getElementById('topNav').addEventListener('click', openNav);
-	document.getElementById('downloadButton').addEventListener('click', downloadPage);
 
 	$("#hr").animate({
 		width: "30%"

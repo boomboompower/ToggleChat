@@ -72,7 +72,7 @@ public class WhitelistMainGui extends GuiScreen {
 
     @Override
     public void drawScreen(int x, int y, float ticks) {
-        drawDefaultBackground();
+        drawGuiBackground();
         this.text.drawTextBox();
         drawCenteredString(this.fontRendererObj, "Whitelist", this.width / 2, this.height / 2 - 82, Color.WHITE.getRGB());
         super.drawScreen(x, y, ticks);
@@ -204,5 +204,11 @@ public class WhitelistMainGui extends GuiScreen {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
         Minecraft.getMinecraft().displayGuiScreen(this);
+    }
+
+    public void drawGuiBackground() {
+        long lastPress = System.currentTimeMillis();
+        int color = Math.min(255, (int) (2L * (System.currentTimeMillis() - lastPress)));
+        drawRect(0, 0, width, height, 2013265920 + (color << 16) + (color << 8) + color);
     }
 }

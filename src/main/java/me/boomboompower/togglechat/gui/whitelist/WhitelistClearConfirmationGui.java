@@ -51,7 +51,7 @@ public class WhitelistClearConfirmationGui extends GuiScreen {
 
     @Override
     public void drawScreen(int x, int y, float ticks) {
-        drawDefaultBackground();
+        drawGuiBackground();
 
         GuiUtils.writeInformation(this.width / 2, this.height / 2 - 60, 15,
                 String.format("Are you sure you wish to clear &6%s %s&r from your whitelist?", ToggleChatMod.getInstance().getWhitelist().size(), (ToggleChatMod.getInstance().getWhitelist().size() == 1 ? "entry" : "entries")),
@@ -110,5 +110,11 @@ public class WhitelistClearConfirmationGui extends GuiScreen {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
         Minecraft.getMinecraft().displayGuiScreen(this);
+    }
+
+    public void drawGuiBackground() {
+        long lastPress = System.currentTimeMillis();
+        int color = Math.min(255, (int) (2L * (System.currentTimeMillis() - lastPress)));
+        drawRect(0, 0, width, height, 2013265920 + (color << 16) + (color << 8) + color);
     }
 }

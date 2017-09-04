@@ -53,7 +53,7 @@ public class MainTutorialGui extends GuiScreen {
 
     @Override
     public void drawScreen(int x, int y, float ticks) {
-        drawDefaultBackground();
+        drawGuiBackground();
 
         // Setup header and footer
         setupInfo();
@@ -299,5 +299,11 @@ public class MainTutorialGui extends GuiScreen {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
         Minecraft.getMinecraft().displayGuiScreen(this);
+    }
+
+    public void drawGuiBackground() {
+        long lastPress = System.currentTimeMillis();
+        int color = Math.min(255, (int) (2L * (System.currentTimeMillis() - lastPress)));
+        drawRect(0, 0, width, height, 2013265920 + (color << 16) + (color << 8) + color);
     }
 }

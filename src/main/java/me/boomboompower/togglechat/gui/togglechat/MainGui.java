@@ -100,7 +100,7 @@ public class MainGui extends GuiScreen {
     }
 
     public void drawScreen(int x, int y, float ticks) {
-        super.drawDefaultBackground();
+        drawGuiBackground();
 
         if (this.nobuttons) {
             drawCenteredString(this.fontRendererObj, "There are no buttons loaded!", this.width / 2, this.height / 2 - 50, Color.WHITE.getRGB());
@@ -131,11 +131,11 @@ public class MainGui extends GuiScreen {
                 new WhitelistMainGui().display();
                 return;
             case 2:
-                new MainGui(this.pageNumber--);
+                --this.pageNumber;
                 createDefaultButtons();
                 return;
             case 3:
-                new MainGui(this.pageNumber++);
+                this.pageNumber++;
                 createDefaultButtons();
                 return;
         }
@@ -173,5 +173,11 @@ public class MainGui extends GuiScreen {
     public void ClientTickEvent(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
         Minecraft.getMinecraft().displayGuiScreen(this);
+    }
+
+    public void drawGuiBackground() {
+        long lastPress = System.currentTimeMillis();
+        int color = Math.min(255, (int) (2L * (System.currentTimeMillis() - lastPress)));
+        drawRect(0, 0, this.width, this.height, 2013265920 + (color << 16) + (color << 8) + color);
     }
 }
