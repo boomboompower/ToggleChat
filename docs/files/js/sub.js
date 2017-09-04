@@ -11,11 +11,11 @@ function openPage(pageType) {
     } else if (pageType == "toggles") {
         location = "https://boomboompower.github.io/ToggleChat/toggles";
     }
-    window.location.assign(location);
+    window.location = location;
 }
 
 function goHome() {
-    window.location.assign("https://boomboompower.github.io/ToggleChat/");
+    window.location = "https://boomboompower.github.io/ToggleChat/";
 }
 
 function download(version) {
