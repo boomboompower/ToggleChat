@@ -16,17 +16,11 @@ function downloadPage() {
 function openNav() {
 	change("-250px", 2);
     setNav("250px", 2);
-	
-	document.getElementById("navBar").style.borderLeftWidth = "2px";
-	document.getElementById("navBar").style.borderLeftStyle = "dashed";
 }
 
 function closeNav() {
 	change("0", 1);
 	setNav("0", 1);
-	
-	document.getElementById("navBar").style.borderLeftWidth = "0px";
-	document.getElementById("navBar").style.borderLeftStyle = "none";
 }
 
 function change(width, time) {
