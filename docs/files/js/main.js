@@ -9,8 +9,23 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 });
 
+function openPage(pageType) {
+    var location = "https://boomboompower.github.io/ToggleChat/";
+
+    if (pageType == "downloads") {
+        location = "https://boomboompower.github.io/ToggleChat/downloads";
+    } else if (pageType == "toggles") {
+        location = "https://boomboompower.github.io/ToggleChat/toggles";
+    }
+    window.location.href = location;
+}
+
 function downloadPage() {
     window.location = "downloads";
+}
+
+function sourcePage() {
+    window.open("https://github.com/boomboompower/ToggleChat");
 }
 
 function openNav() {
