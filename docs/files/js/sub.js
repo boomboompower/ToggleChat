@@ -17,3 +17,7 @@ function openPage(pageType) {
 function goHome() {
     window.location.assign("https://boomboompower.github.io/ToggleChat/");
 }
+
+function download(version) {
+    window.open("dl/ToggleChat-" + version + "-SNAPSHOT.jar");
+}
