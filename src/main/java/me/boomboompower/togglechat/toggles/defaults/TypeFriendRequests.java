@@ -18,7 +18,7 @@
 package me.boomboompower.togglechat.toggles.defaults;
 
 import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.regex.Pattern;
@@ -34,7 +34,7 @@ public class TypeFriendRequests extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        return containsIgnoreCase(message, "Friend request from ") || (message.contains("Click one") && message.contains("[ACCEPT]") && message.contains("[DENY]"));
+        return Pattern.compile(Pattern.quote("Friend request from "), Pattern.CASE_INSENSITIVE).matcher(message).find() || (message.contains("Click one") && message.contains("[ACCEPT]") && message.contains("[DENY]"));
     }
 
     @Override
@@ -50,10 +50,6 @@ public class TypeFriendRequests extends ToggleBase {
     @Override
     public void onClick(ModernButton button) {
         this.showFriendRequests = !this.showFriendRequests;
-        button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
-    }
-
-    private boolean containsIgnoreCase(String message, String contains) {
-        return Pattern.compile(Pattern.quote(contains), Pattern.CASE_INSENSITIVE).matcher(message).find();
+        button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
     }
 }

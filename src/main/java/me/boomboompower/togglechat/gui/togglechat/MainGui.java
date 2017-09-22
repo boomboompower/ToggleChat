@@ -19,20 +19,18 @@ package me.boomboompower.togglechat.gui.togglechat;
 
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.gui.whitelist.WhitelistMainGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.*;
 
-public class MainGui extends GuiScreen {
+public class MainGui extends ModernGui {
 
     //        - 99
     //        - 75
@@ -46,12 +44,9 @@ public class MainGui extends GuiScreen {
     private boolean nobuttons = false;
 
     private int pageNumber;
-    private Minecraft mc;
 
     public MainGui(int pageNumber) {
         this.pageNumber = pageNumber;
-
-        this.mc = Minecraft.getMinecraft();
     }
 
     @Override
@@ -60,7 +55,7 @@ public class MainGui extends GuiScreen {
     }
 
     private void createDefaultButtons() {
-        buttonList.clear();
+        this.buttonList.clear();
 
         setupPage();
     }
@@ -78,7 +73,7 @@ public class MainGui extends GuiScreen {
             final int[] position = {this.height / 2 - 75};
 
             ToggleBase.getToggles().values().stream().skip((pageNumber - 1) * 7).limit(7).forEach(baseType -> {
-                this.buttonList.add(new ModernButton(0, baseType.getName().toLowerCase().replace(" ", "_"), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), (baseType.isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED))));
+                this.buttonList.add(new ModernButton(0, baseType.getName().toLowerCase().replace(" ", "_"), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), (baseType.isEnabled() ? ENABLED : DISABLED))));
                 position[0] += 24;
             });
 
@@ -89,8 +84,8 @@ public class MainGui extends GuiScreen {
             this.buttonList.add(back = new ModernButton(2, "inbuilt_back", this.width - 140, this.height - 25, 65, 20, "Back"));
             this.buttonList.add(next = new ModernButton(3, "inbuilt_next", this.width - 70, this.height - 25, 65, 20, "Next"));
 
-            back.enabled = this.pageNumber > 1;
-            next.enabled = this.pageNumber != pages; // Next
+            back.setEnabled(this.pageNumber > 1);
+            next.setEnabled(this.pageNumber != pages); // Next
 
             return;
         }
@@ -98,7 +93,7 @@ public class MainGui extends GuiScreen {
     }
 
     public void drawScreen(int x, int y, float ticks) {
-        drawGuiBackground();
+        drawDefaultBackground();
 
         if (this.nobuttons) {
             drawCenteredString(this.fontRendererObj, "There are no buttons loaded!", this.width / 2, this.height / 2 - 50, Color.WHITE.getRGB());
@@ -111,20 +106,9 @@ public class MainGui extends GuiScreen {
         super.drawScreen(x, y, ticks);
     }
 
-    protected void keyTyped(char c, int key) {
-        if (key == 1) {
-            this.mc.displayGuiScreen(null);
-        }
-    }
-
-    public void updateScreen() {
-        super.updateScreen();
-    }
-
-    protected void actionPerformed(GuiButton button) {
-        int id = ((ModernButton) button).id;
-
-        switch (id) {
+    @Override
+    public void buttonPressed(ModernButton button) {
+        switch (button.getId()) {
             case 1:
                 new WhitelistMainGui().display();
                 return;
@@ -138,8 +122,8 @@ public class MainGui extends GuiScreen {
                 return;
         }
         for (ToggleBase base : ToggleBase.getToggles().values()) {
-            if (base.getName().toLowerCase().replace(" ", "_").equals(((ModernButton) button).buttonIdName)) {
-                base.onClick((ModernButton) button);
+            if (base.getName().toLowerCase().replace(" ", "_").equals(button.getButtonId())) {
+                base.onClick(button);
                 break;
             }
         }
@@ -150,11 +134,6 @@ public class MainGui extends GuiScreen {
         ToggleChatMod.getInstance().getConfigLoader().saveToggles();
     }
 
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
-    }
-
     public void display() {
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -163,11 +142,5 @@ public class MainGui extends GuiScreen {
     public void ClientTickEvent(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
         Minecraft.getMinecraft().displayGuiScreen(this);
-    }
-
-    public void drawGuiBackground() {
-        long lastPress = System.currentTimeMillis();
-        int color = Math.min(255, (int) (2L * (System.currentTimeMillis() - lastPress)));
-        drawRect(0, 0, this.width, this.height, 2013265920 + (color << 16) + (color << 8) + color);
     }
 }

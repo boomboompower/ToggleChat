@@ -19,20 +19,18 @@ package me.boomboompower.togglechat.gui.whitelist;
 
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.*;
-import java.io.IOException;
 
-public class WhitelistEntryGui extends GuiScreen {
+public class WhitelistEntryGui extends ModernGui {
 
     private ModernButton next;
 
@@ -52,22 +50,6 @@ public class WhitelistEntryGui extends GuiScreen {
 
     @Override
     public void initGui() {
-        makeButtons();
-    }
-
-    @Override
-    public void drawScreen(int x, int y, float ticks) {
-        drawGuiBackground();
-        drawCenteredString(this.fontRendererObj, "Whitelist Entries", this.width / 2, this.height / 2 - 105, Color.WHITE.getRGB());
-
-        drawBox();
-
-        setupPage();
-
-        super.drawScreen(x, y, ticks);
-    }
-
-    private void makeButtons() {
         if (ToggleChatMod.getInstance().getWhitelist().size() > 0) {
             this.buttonList.add(new ModernButton(0, this.width / 2 - 200, this.height / 2 + 80, 150, 20, "Back"));
             this.buttonList.add(this.next = new ModernButton(1, this.width / 2 + 50, this.height / 2 + 80, 150, 20, "Next"));
@@ -76,38 +58,12 @@ public class WhitelistEntryGui extends GuiScreen {
         }
     }
 
-    private void setupPage() {
-        if (ToggleChatMod.getInstance().getWhitelist().size() > 0) {
+    @Override
+    public void drawScreen(int x, int y, float ticks) {
+        drawDefaultBackground();
 
-            int totalEntries = ToggleChatMod.getInstance().getWhitelist().size();
-            int pages = (int) Math.ceil((double) ToggleChatMod.getInstance().getWhitelist().size() / 10D);
+        drawCenteredString(this.fontRendererObj, "Whitelist Entries", this.width / 2, this.height / 2 - 105, Color.WHITE.getRGB());
 
-            if (this.pageNumber < 1 || this.pageNumber > pages) {
-                GuiUtils.writeInformation(this.width / 2, this.height / 2 - 40, 20, ChatColor.RED, String.format("Invalid page number (%s)", (ChatColor.DARK_RED + String.valueOf(pageNumber) + ChatColor.RED)));
-                this.pageInvalid = true;
-                return;
-            }
-
-            this.pageInvalid = false;
-            this.next.enabled = pageNumber != pages; // Next
-
-            GuiUtils.drawCenteredString(String.format("Page %s/%s", (this.pageNumber), pages), this.width / 2, this.height / 2 - 95, Color.WHITE.getRGB());
-            GuiUtils.drawCenteredString(String.format("There is a total of %s %s on the whitelist!", ChatColor.GOLD + String.valueOf(totalEntries), (totalEntries > 1 ? "entries" : "entry") + ChatColor.RESET), this.width / 2, this.height / 2 + 65, Color.WHITE.getRGB());
-
-            final int[] position = {this.height / 2 - 73};
-
-            ToggleChatMod.getInstance().getWhitelist().stream().skip((this.pageNumber - 1) * 10).limit(10).forEach(word -> {
-                GuiUtils.drawCenteredString(word, this.width / 2, position[0], Color.WHITE.getRGB());
-                position[0] += 13;
-            });
-
-            return;
-        }
-
-        GuiUtils.writeInformation(this.width / 2, this.height / 2 - 50, 20, "There are no entries on the whitelist!", "Insert some words then return to this page!");
-    }
-
-    private void drawBox() {
         if (ToggleChatMod.getInstance().getWhitelist().size() > 0 && !pageInvalid) {
             drawRect(this.width / 2 - 60, this.height / 2 - 80, this.width / 2 + 60, this.height / 2 + 60, new Color(105, 105, 105, 75).getRGB());
 
@@ -117,23 +73,42 @@ public class WhitelistEntryGui extends GuiScreen {
             drawVerticalLine(this.width / 2 - 60, this.height / 2 - 80, this.height / 2 + 60, Color.WHITE.getRGB());
             drawVerticalLine(this.width / 2 + 60, this.height / 2 - 80, this.height / 2 + 60, Color.WHITE.getRGB());
         }
-    }
 
-    @Override
-    protected void keyTyped(char c, int key) throws IOException {
-        if (key == 1) {
-            this.mc.displayGuiScreen(this.previousScreen);
+        if (ToggleChatMod.getInstance().getWhitelist().size() > 0) {
+
+            int totalEntries = ToggleChatMod.getInstance().getWhitelist().size();
+            int pages = (int) Math.ceil((double) ToggleChatMod.getInstance().getWhitelist().size() / 10D);
+
+            if (this.pageNumber < 1 || this.pageNumber > pages) {
+                writeInformation(this.width / 2, this.height / 2 - 40, 20, String.format(ChatColor.RED + "Invalid page number (%s)", (ChatColor.DARK_RED + String.valueOf(pageNumber) + ChatColor.RED)));
+                this.pageInvalid = true;
+                return;
+            }
+
+            this.pageInvalid = false;
+            this.next.setEnabled(pageNumber != pages); // Next
+
+            drawCenteredString(String.format("Page %s/%s", (this.pageNumber), pages), this.width / 2, this.height / 2 - 95, Color.WHITE.getRGB());
+            drawCenteredString(String.format("There is a total of %s %s on the whitelist!", ChatColor.GOLD + String.valueOf(totalEntries), (totalEntries > 1 ? "entries" : "entry") + ChatColor.RESET), this.width / 2, this.height / 2 + 65, Color.WHITE.getRGB());
+
+            final int[] position = {this.height / 2 - 73};
+
+            ToggleChatMod.getInstance().getWhitelist().stream().skip((this.pageNumber - 1) * 10).limit(10).forEach(word -> {
+                drawCenteredString(word, this.width / 2, position[0], Color.WHITE.getRGB());
+                position[0] += 13;
+            });
+
+            return;
         }
+
+        writeInformation(this.width / 2, this.height / 2 - 50, 20, "There are no entries on the whitelist!", "Insert some words then return to this page!");
+
+        super.drawScreen(x, y, ticks);
     }
 
     @Override
-    public void updateScreen() {
-        super.updateScreen();
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton button) {
-        switch (((ModernButton) button).id) {
+    public void buttonPressed(ModernButton button) {
+        switch (button.getId()) {
             case 0:
                 if (this.pageNumber > 1) {
                     new WhitelistEntryGui(this, this.pageNumber--);
@@ -147,11 +122,6 @@ public class WhitelistEntryGui extends GuiScreen {
         }
     }
 
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
-    }
-
     public void display() {
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -160,11 +130,5 @@ public class WhitelistEntryGui extends GuiScreen {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
         Minecraft.getMinecraft().displayGuiScreen(this);
-    }
-
-    public void drawGuiBackground() {
-        long lastPress = System.currentTimeMillis();
-        int color = Math.min(255, (int) (2L * (System.currentTimeMillis() - lastPress)));
-        drawRect(0, 0, width, height, 2013265920 + (color << 16) + (color << 8) + color);
     }
 }

@@ -18,9 +18,8 @@
 package me.boomboompower.togglechat.toggles.defaults;
 
 import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
-
 
 public class TypeMessageSeparator extends ToggleBase {
 
@@ -49,6 +48,6 @@ public class TypeMessageSeparator extends ToggleBase {
     @Override
     public void onClick(ModernButton button) {
         this.showSeparators = !this.showSeparators;
-        button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
+        button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
     }
 }

@@ -18,7 +18,7 @@
 package me.boomboompower.togglechat.toggles.defaults;
 
 import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.regex.Pattern;
@@ -36,7 +36,7 @@ public class TypeLeave extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        return message.endsWith(" left.");
+        return this.leavePattern.matcher(message).matches();
     }
 
     @Override
@@ -52,6 +52,6 @@ public class TypeLeave extends ToggleBase {
     @Override
     public void onClick(ModernButton button) {
         this.showLeave = !this.showLeave;
-        button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
+        button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
     }
 }

@@ -29,16 +29,16 @@ import java.awt.*;
 
 public class ModernButton extends GuiButton {
 
-    public int id;
-    public int width;
-    public int height;
-    public int xPosition;
-    public int yPosition;
-    public boolean enabled;
-    public boolean visible;
-    public boolean hovered;
-    public String buttonIdName;
-    public String displayString;
+    private int id;
+    private int width;
+    private int height;
+    private int xPosition;
+    private int yPosition;
+    private boolean enabled;
+    private boolean visible;
+    private boolean hovered;
+    private String buttonIdName;
+    private String displayString;
 
     public ModernButton(int buttonId, int x, int y, String buttonText) {
         this(buttonId, "", x, y, 200, 20, buttonText);
@@ -110,34 +110,35 @@ public class ModernButton extends GuiButton {
         }
     }
 
-    /**
-     * Returns true if the mouse has been pressed on this control. Equivalent of MouseListener.mousePressed(MouseEvent
-     * e).
-     */
+    @Override
     public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
         return this.enabled && this.visible && mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
     }
 
-    /**
-     * Whether the mouse cursor is currently over the button.
-     */
-    public boolean isMouseOver()
-    {
+    @Override
+    public boolean isMouseOver() {
         return this.hovered;
     }
 
+    @Override
     public void playPressSound(SoundHandler soundHandlerIn) {
         soundHandlerIn.playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
     }
 
+    @Override
     public int getButtonWidth()
     {
         return this.width;
     }
 
+    @Override
     public void setWidth(int width)
     {
         this.width = width;
+    }
+
+    public String getButtonId() {
+        return this.buttonIdName;
     }
 
     public String getText() {
@@ -146,5 +147,17 @@ public class ModernButton extends GuiButton {
 
     public void setText(String text) {
         this.displayString = text != null ? text : "";
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    public void setEnabled(boolean isEnabled) {
+        this.enabled = isEnabled;
+    }
+
+    public int getId() {
+        return this.id;
     }
 }

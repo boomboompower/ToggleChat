@@ -18,14 +18,14 @@
 package me.boomboompower.togglechat.toggles.defaults;
 
 import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.regex.Pattern;
 
 public class TypeShout extends ToggleBase {
 
-    private Pattern shoutPattern = Pattern.compile("\\[SHOUT\\] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private Pattern shoutPattern = Pattern.compile("\\[SHOUT] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
 
     private boolean showShout = true;
 
@@ -52,6 +52,6 @@ public class TypeShout extends ToggleBase {
     @Override
     public void onClick(ModernButton button) {
         this.showShout = !this.showShout;
-        button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
+        button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
     }
 }

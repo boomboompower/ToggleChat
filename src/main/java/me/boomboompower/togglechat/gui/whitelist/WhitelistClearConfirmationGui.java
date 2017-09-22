@@ -19,25 +19,19 @@ package me.boomboompower.togglechat.gui.whitelist;
 
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.utils.GuiUtils;
-import me.boomboompower.togglechat.utils.ChatColor;
+import me.boomboompower.togglechat.gui.modern.ModernGui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.io.IOException;
+public class WhitelistClearConfirmationGui extends ModernGui {
 
-public class WhitelistClearConfirmationGui extends GuiScreen {
-
-    private GuiScreen previousScreen;
+    private ModernGui previousScreen;
     private Minecraft mc;
 
-    public WhitelistClearConfirmationGui(GuiScreen previous) {
+    public WhitelistClearConfirmationGui(ModernGui previous) {
         this.previousScreen = previous;
 
         this.mc = Minecraft.getMinecraft();
@@ -51,9 +45,9 @@ public class WhitelistClearConfirmationGui extends GuiScreen {
 
     @Override
     public void drawScreen(int x, int y, float ticks) {
-        drawGuiBackground();
+        drawDefaultBackground();
 
-        GuiUtils.writeInformation(this.width / 2, this.height / 2 - 60, 15,
+        writeInformation(this.width / 2, this.height / 2 - 60, 15,
                 String.format("Are you sure you wish to clear &6%s %s&r from your whitelist?", ToggleChatMod.getInstance().getWhitelist().size(), (ToggleChatMod.getInstance().getWhitelist().size() == 1 ? "entry" : "entries")),
                 "This action cannot be undone, use at your own risk!"
         );
@@ -62,20 +56,8 @@ public class WhitelistClearConfirmationGui extends GuiScreen {
     }
 
     @Override
-    protected void keyTyped(char c, int key) throws IOException {
-        if (key == 1) {
-            this.mc.displayGuiScreen(this.previousScreen);
-        }
-    }
-
-    @Override
-    public void updateScreen() {
-        super.updateScreen();
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton button) {
-        switch (((ModernButton) button).id) {
+    public void buttonPressed(ModernButton button) {
+        switch (button.getId()) {
             case 0:
                 this.mc.displayGuiScreen(this.previousScreen);
                 break;
@@ -92,16 +74,6 @@ public class WhitelistClearConfirmationGui extends GuiScreen {
         ToggleChatMod.getInstance().getConfigLoader().saveWhitelist();
     }
 
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
-    }
-
-    @Override
-    public void sendChatMessage(String msg) {
-        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(ChatColor.AQUA + "T" + ChatColor.BLUE + "C" + ChatColor.DARK_GRAY + " > " + ChatColor.GRAY + ChatColor.translateAlternateColorCodes('&', msg)));
-    }
-
     public void display() {
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -110,11 +82,5 @@ public class WhitelistClearConfirmationGui extends GuiScreen {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
         Minecraft.getMinecraft().displayGuiScreen(this);
-    }
-
-    public void drawGuiBackground() {
-        long lastPress = System.currentTimeMillis();
-        int color = Math.min(255, (int) (2L * (System.currentTimeMillis() - lastPress)));
-        drawRect(0, 0, width, height, 2013265920 + (color << 16) + (color << 8) + color);
     }
 }

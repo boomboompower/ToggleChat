@@ -19,14 +19,11 @@ package me.boomboompower.togglechat.gui.whitelist;
 
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
+import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.gui.modern.ModernTextBox;
 import me.boomboompower.togglechat.gui.togglechat.MainGui;
-import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -34,9 +31,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
-import java.io.IOException;
 
-public class WhitelistMainGui extends GuiScreen {
+public class WhitelistMainGui extends ModernGui {
 
     private ModernTextBox text;
     private String input = "";
@@ -56,7 +52,7 @@ public class WhitelistMainGui extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        this.text = new ModernTextBox(0, this.width / 2 - 75, this.height / 2 - 58, 150, 20);
+        this.textList.add(this.text = new ModernTextBox(this.width / 2 - 75, this.height / 2 - 58, 150, 20));
         this.buttonList.add(new ModernButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add"));
         this.buttonList.add(new ModernButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove"));
         this.buttonList.add(new ModernButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear"));
@@ -64,32 +60,24 @@ public class WhitelistMainGui extends GuiScreen {
 
         this.buttonList.add(new ModernButton(10, 5, this.height - 25, 75, 20, "Back"));
 
-        this.text.setText(input);
-        this.text.setMaxStringLength(16);
+        this.text.setText(this.input);
         this.text.setFocused(true);
     }
 
     @Override
     public void drawScreen(int x, int y, float ticks) {
-        drawGuiBackground();
-        this.text.drawTextBox();
+        drawDefaultBackground();
         drawCenteredString(this.fontRendererObj, "Whitelist", this.width / 2, this.height / 2 - 82, Color.WHITE.getRGB());
         super.drawScreen(x, y, ticks);
     }
 
     @Override
-    protected void keyTyped(char c, int key) throws IOException {
+    protected void keyTyped(char c, int key) {
         if (key == 1) {
             this.mc.displayGuiScreen(null);
         } else if (Character.isLetterOrDigit(c) || c == '_' || key == 14) { // Sorry to anyone who originally used other things
             this.text.textboxKeyTyped(c, key);
         }
-    }
-
-    @Override
-    protected void mouseClicked(int x, int y, int btn) throws IOException {
-        super.mouseClicked(x, y, btn);
-        this.text.mouseClicked(x, y, btn);
     }
 
     @Override
@@ -99,10 +87,8 @@ public class WhitelistMainGui extends GuiScreen {
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) {
-        boolean dontClose = false;
-
-        switch (((ModernButton) button).id) {
+    public void buttonPressed(ModernButton button) {
+        switch (button.getId()) {
             case 1:
                 if (this.text.getText().isEmpty()) {
                     sendChatMessage("No name given!");
@@ -112,6 +98,7 @@ public class WhitelistMainGui extends GuiScreen {
                 } else {
                     sendChatMessage("The whitelist already contained &6" + this.text.getText() + "&7!");
                 }
+                this.mc.displayGuiScreen(null);
                 break;
             case 2:
                 if (this.text.getText().isEmpty()) {
@@ -122,27 +109,22 @@ public class WhitelistMainGui extends GuiScreen {
                     removeFromWhitelist(this.text.getText());
                     sendChatMessage("Removed &6" + this.text.getText() + "&7 from the whitelist!");
                 }
+                this.mc.displayGuiScreen(null);
                 break;
             case 3:
                 if (!ToggleChatMod.getInstance().getWhitelist().isEmpty()) {
-                    dontClose = true;
                     new WhitelistClearConfirmationGui(this).display();
                 } else {
+                    this.mc.displayGuiScreen(null);
                     sendChatMessage("The whitelist is already empty!");
                 }
                 break;
             case 4:
-                dontClose = true;
                 new WhitelistEntryGui(this, 1).display();
                 break;
             case 10:
-                dontClose = true;
                 new MainGui(1).display();
                 break;
-        }
-
-        if (!dontClose) {
-            this.mc.displayGuiScreen(null);
         }
     }
 
@@ -150,16 +132,6 @@ public class WhitelistMainGui extends GuiScreen {
     public void onGuiClosed() {
         ToggleChatMod.getInstance().getConfigLoader().saveWhitelist();
         Keyboard.enableRepeatEvents(false);
-    }
-
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
-    }
-
-    @Override
-    public void sendChatMessage(String msg) {
-        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(ChatColor.AQUA + "T" + ChatColor.BLUE + "C" + ChatColor.DARK_GRAY + " > " + ChatColor.GRAY + ChatColor.translateAlternateColorCodes('&', msg)));
     }
     
     private boolean whitelistContains(String message) {
@@ -192,11 +164,5 @@ public class WhitelistMainGui extends GuiScreen {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
         Minecraft.getMinecraft().displayGuiScreen(this);
-    }
-
-    public void drawGuiBackground() {
-        long lastPress = System.currentTimeMillis();
-        int color = Math.min(255, (int) (2L * (System.currentTimeMillis() - lastPress)));
-        drawRect(0, 0, width, height, 2013265920 + (color << 16) + (color << 8) + color);
     }
 }

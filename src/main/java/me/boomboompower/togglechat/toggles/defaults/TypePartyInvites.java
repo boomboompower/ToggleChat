@@ -18,7 +18,7 @@
 package me.boomboompower.togglechat.toggles.defaults;
 
 import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.utils.GuiUtils;
+import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import net.minecraft.util.EnumChatFormatting;
@@ -52,7 +52,7 @@ public class TypePartyInvites extends ToggleBase {
     @Override
     public void onClick(ModernButton button) {
         this.showPartyInvites = !this.showPartyInvites;
-        button.displayString = String.format(getDisplayName(), isEnabled() ? GuiUtils.ENABLED : GuiUtils.DISABLED);
+        button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
     }
 
     private String withoutColors(String message) {
