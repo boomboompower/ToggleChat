@@ -44,6 +44,7 @@ public class ConfigLoader {
         this.toggleFile = new File(directory + "options.nn");
         this.whitelistFile = new File(directory + "whitelist.nn");
     }
+
     public void loadToggles() {
         if (exists(this.toggleFile)) {
             try {

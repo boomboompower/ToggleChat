@@ -24,6 +24,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -34,6 +35,7 @@ public class ModernButton extends GuiButton {
     private int height;
     private int xPosition;
     private int yPosition;
+    private boolean isNew;
     private boolean enabled;
     private boolean visible;
     private boolean hovered;
@@ -93,9 +95,9 @@ public class ModernButton extends GuiButton {
             int i = this.getHoverState(this.hovered);
 
             if (this.enabled) {
-                drawRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height, new Color(255, 255, 255, 75).getRGB());
+                drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + height, new Color(255, 255, 255, 75).getRGB());
             } else {
-                drawRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height,  new Color(100, 100, 100, 75).getRGB());
+                drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + height,  new Color(100, 100, 100, 75).getRGB());
             }
 
             this.mouseDragged(mc, mouseX, mouseY);

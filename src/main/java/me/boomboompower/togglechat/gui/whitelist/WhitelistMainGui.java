@@ -49,7 +49,11 @@ public class WhitelistMainGui extends ModernGui {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
+        this.textList.clear();
+        this.buttonList.clear();
+
         this.textList.add(this.text = new ModernTextBox(this.width / 2 - 75, this.height / 2 - 58, 150, 20));
+
         this.buttonList.add(new ModernButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add"));
         this.buttonList.add(new ModernButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove"));
         this.buttonList.add(new ModernButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear"));
@@ -72,7 +76,7 @@ public class WhitelistMainGui extends ModernGui {
     protected void keyTyped(char c, int key) {
         if (key == 1) {
             this.mc.displayGuiScreen(null);
-        } else if (Character.isLetterOrDigit(c) || c == '_' || key == 14) { // Sorry to anyone who originally used other things
+        } else if (Character.isLetterOrDigit(c) || c == '_' || key == 14 || isCool(key)) { // Sorry to anyone who originally used other things
             this.text.textboxKeyTyped(c, key);
         }
     }
@@ -158,5 +162,9 @@ public class WhitelistMainGui extends ModernGui {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
         Minecraft.getMinecraft().displayGuiScreen(this);
+    }
+
+    private boolean isCool(int keyCode) {
+        return isKeyComboCtrlA(keyCode) || isKeyComboCtrlC(keyCode) || isKeyComboCtrlX(keyCode) || isKeyComboCtrlV(keyCode);
     }
 }

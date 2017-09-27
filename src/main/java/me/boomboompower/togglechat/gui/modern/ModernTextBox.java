@@ -661,16 +661,12 @@ public class ModernTextBox extends Gui {
     }
 
     private String format(String input) {
-        if (this.onlyAllowNumbers) {
-            StringBuilder builder = new StringBuilder();
-            for (char c : input.toCharArray()) {
-                if (Character.isDigit(c)) {
-                    builder.append(c);
-                }
+        StringBuilder builder = new StringBuilder();
+        for (char c : input.toCharArray()) {
+            if (Character.isLetterOrDigit(c) || c == '_') {
+                builder.append(c);
             }
-            return builder.toString();
-        } else {
-            return input;
         }
+        return builder.toString().trim();
     }
 }

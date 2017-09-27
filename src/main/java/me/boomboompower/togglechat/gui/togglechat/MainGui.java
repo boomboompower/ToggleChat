@@ -72,7 +72,7 @@ public class MainGui extends ModernGui {
 
             final int[] position = {this.height / 2 - 75};
 
-            ToggleBase.getToggles().values().stream().skip((pageNumber - 1) * 7).limit(7).forEach(baseType -> {
+            ToggleBase.getToggles().values().stream().skip((this.pageNumber - 1) * 7).limit(7).forEach(baseType -> {
                 this.buttonList.add(new ModernButton(0, baseType.getName().toLowerCase().replace(" ", "_"), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), (baseType.isEnabled() ? ENABLED : DISABLED))));
                 position[0] += 24;
             });
