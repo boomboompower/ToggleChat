@@ -70,7 +70,7 @@ public abstract class ToggleBase {
      */
     public static void remake() {
         toggles.clear();
-        toggles.put("uhc", new TypeUHC());
+        toggles.put("special", new TypeSpecial());
         toggles.put("team", new TypeTeam());
         toggles.put("join", new TypeJoin());
         toggles.put("leave", new TypeLeave());

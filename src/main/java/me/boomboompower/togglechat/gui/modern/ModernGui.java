@@ -23,7 +23,10 @@ import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.Timer;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.awt.*;
 import java.util.List;
@@ -34,7 +37,7 @@ public abstract class ModernGui extends GuiScreen {
     protected final FontRenderer fontRendererObj = this.mc.fontRendererObj;
 
     public static final String ENABLED = ChatColor.GREEN + "Enabled";
-    public static final String DISABLED = ChatColor.RED + "Disabled";
+    public static final String DISABLED = ChatColor.GRAY + "Disabled";
 
     protected List<ModernTextBox> textList = Lists.newArrayList();
 

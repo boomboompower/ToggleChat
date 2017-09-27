@@ -36,7 +36,6 @@ public class WhitelistMainGui extends ModernGui {
 
     private ModernTextBox text;
     private String input = "";
-    private Minecraft mc;
 
     public WhitelistMainGui() {
         this("");
@@ -44,8 +43,6 @@ public class WhitelistMainGui extends ModernGui {
 
     public WhitelistMainGui(String input) {
         this.input = input;
-
-        this.mc = Minecraft.getMinecraft();
     }
 
     @Override
@@ -98,7 +95,6 @@ public class WhitelistMainGui extends ModernGui {
                 } else {
                     sendChatMessage("The whitelist already contained &6" + this.text.getText() + "&7!");
                 }
-                this.mc.displayGuiScreen(null);
                 break;
             case 2:
                 if (this.text.getText().isEmpty()) {
@@ -109,13 +105,11 @@ public class WhitelistMainGui extends ModernGui {
                     removeFromWhitelist(this.text.getText());
                     sendChatMessage("Removed &6" + this.text.getText() + "&7 from the whitelist!");
                 }
-                this.mc.displayGuiScreen(null);
                 break;
             case 3:
                 if (!ToggleChatMod.getInstance().getWhitelist().isEmpty()) {
                     new WhitelistClearConfirmationGui(this).display();
                 } else {
-                    this.mc.displayGuiScreen(null);
                     sendChatMessage("The whitelist is already empty!");
                 }
                 break;

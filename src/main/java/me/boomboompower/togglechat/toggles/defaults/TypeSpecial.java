@@ -21,18 +21,23 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
-public class TypeUHC extends ToggleBase {
+public class TypeSpecial extends ToggleBase {
 
-    private boolean showUHC = true;
+    private boolean showSpecial = true;
 
     @Override
     public String getName() {
-        return "UHC";
+        return "Special";
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "UHC/Bedwars: %s";
     }
 
     @Override
     public boolean shouldToggle(String message) {
-        boolean isUHC = false;
+        boolean isSpecial = false;
 
         char[] chars = message.toCharArray();
 
@@ -40,27 +45,27 @@ public class TypeUHC extends ToggleBase {
             if (chars[0] == '[' && (chars[3] == ']' || chars[4] == ']')) {
                 if (Character.isDigit(chars[1])) {
                     if (Character.isDefined(chars[2]) || Character.isDefined(chars[3])) {
-                        isUHC = true;
+                        isSpecial = true;
                     }
                 }
             }
         }
-        return isUHC;
+        return isSpecial;
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showUHC;
+        return this.showSpecial;
     }
 
     @Override
     public void setToggled(boolean enabled) {
-        this.showUHC = enabled;
+        this.showSpecial = enabled;
     }
 
     @Override
     public void onClick(ModernButton button) {
-        this.showUHC = !this.showUHC;
+        this.showSpecial = !this.showSpecial;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
     }
 }

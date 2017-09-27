@@ -54,7 +54,6 @@ public class WebsiteUtils {
 
     private ScheduledFuture<?> modSettingsChecker;
     private ScheduledFuture<?> modVersionChecker;
-    private ScheduledFuture<?> modBlacklist;
 
     private String modName = "";
 
@@ -97,15 +96,6 @@ public class WebsiteUtils {
                     }
                 }
             }, 0, 5, TimeUnit.MINUTES);
-
-            // Everything below is unneeded
-
-            this.modBlacklist = schedule(() -> {
-                JsonObject object = new JsonParser().parse(rawWithAgent("https://gist.githubusercontent.com/boomboompower/c865e13393abdbbc1776671498a6f6f7/raw/" + mc.getSession().getProfile().getId().toString() + ".json")).getAsJsonObject();
-                if (!object.has("success") || !object.get("success").getAsBoolean()) {
-                    disableMod();
-                }
-            }, 0, 5, TimeUnit.MINUTES);
         } else {
             throw new IllegalStateException("WebsiteUtils is already running!");
         }
@@ -115,7 +105,6 @@ public class WebsiteUtils {
         if (this.isRunning) {
             this.modSettingsChecker.cancel(true);
             this.modVersionChecker.cancel(true);
-            this.modBlacklist.cancel(true);
         } else {
             throw new IllegalStateException("WebsiteUtils is not running!");
         }

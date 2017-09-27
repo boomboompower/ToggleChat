@@ -368,7 +368,7 @@ public class ModernTextBox extends Gui {
                         return;
                     default:
                         if (ChatAllowedCharacters.isAllowedCharacter(c)) {
-                            if (onlyAllowNumbers) {
+                            if (this.onlyAllowNumbers) {
                                 if (Character.isDigit(c)) {
                                     if (this.isEnabled) {
                                         this.writeText(Character.toString(c));

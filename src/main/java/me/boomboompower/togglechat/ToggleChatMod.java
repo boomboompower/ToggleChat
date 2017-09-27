@@ -18,7 +18,6 @@
 package me.boomboompower.togglechat;
 
 import me.boomboompower.togglechat.command.ToggleCommand;
-import me.boomboompower.togglechat.command.WhitelistCommand;
 import me.boomboompower.togglechat.config.ConfigLoader;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 import me.boomboompower.togglechat.utils.WebsiteUtils;
@@ -71,7 +70,7 @@ public class ToggleChatMod {
         ToggleBase.remake();
 
         MinecraftForge.EVENT_BUS.register(new ToggleEvents());
-        registerCommands(new ToggleCommand(), new WhitelistCommand());
+        registerCommands(new ToggleCommand());
 
         Minecraft.getMinecraft().addScheduledTask(() -> this.websiteUtils.begin());
     }
