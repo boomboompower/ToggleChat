@@ -17,6 +17,7 @@
 
 package me.boomboompower.togglechat.gui.modern;
 
+import me.boomboompower.togglechat.toggles.ToggleBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
@@ -41,6 +42,8 @@ public class ModernButton extends GuiButton {
     private boolean hovered;
     private String buttonIdName;
     private String displayString;
+
+    private ToggleBase buttonData;
 
     public ModernButton(int buttonId, int x, int y, String buttonText) {
         this(buttonId, "", x, y, 200, 20, buttonText);
@@ -157,6 +160,20 @@ public class ModernButton extends GuiButton {
 
     public void setEnabled(boolean isEnabled) {
         this.enabled = isEnabled;
+    }
+
+    public boolean hasButtonData() {
+        return this.buttonData != null;
+    }
+
+    public ModernButton setButtonData(ToggleBase buttonData) {
+        this.buttonData = buttonData;
+
+        return this;
+    }
+
+    public ToggleBase getButtonData() {
+        return this.buttonData;
     }
 
     public int getId() {

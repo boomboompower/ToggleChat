@@ -21,11 +21,12 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeSpectator extends ToggleBase {
 
-    private Pattern spectatorPattern = Pattern.compile("\\[SPECTATOR\\] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private Pattern spectatorPattern = Pattern.compile("\\[SPECTATOR] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
 
     private boolean showSpecChat = true;
 
@@ -53,5 +54,22 @@ public class TypeSpectator extends ToggleBase {
     public void onClick(ModernButton button) {
         this.showSpecChat = !this.showSpecChat;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+    }
+
+    @Override
+    public LinkedList<String> getDescription() {
+        return asLinked(
+                "Toggles all spectator",
+                "chat messages",
+                "",
+                "Message format",
+                "&7[SPECTATOR] &7Player&r: Hi",
+                "&7[SPECTATOR] &a[VIP] Player&r: Hi",
+                "&7[SPECTATOR] &b[MVP] Player&r: Hi",
+                "",
+                "Useful to ignore",
+                "post-game chat",
+                "messages"
+        );
     }
 }

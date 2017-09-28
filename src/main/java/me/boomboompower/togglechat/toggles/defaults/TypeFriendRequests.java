@@ -21,6 +21,7 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeFriendRequests extends ToggleBase {
@@ -51,5 +52,19 @@ public class TypeFriendRequests extends ToggleBase {
     public void onClick(ModernButton button) {
         this.showFriendRequests = !this.showFriendRequests;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+    }
+
+    @Override
+    public LinkedList<String> getDescription() {
+        return asLinked(
+                "Toggles the ability to see",
+                "new friend requests from",
+                "other players.",
+                "",
+                "It can be useful if you",
+                "wish to keep friend",
+                "requests open, but don\'t",
+                "want to see notifications"
+        );
     }
 }

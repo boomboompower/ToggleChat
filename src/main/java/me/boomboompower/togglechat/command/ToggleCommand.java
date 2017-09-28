@@ -26,18 +26,10 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ToggleCommand implements ICommand {
-
-    private final List<String> aliases;
-
-    public ToggleCommand() {
-        aliases = new ArrayList<>();
-        aliases.add("tc");
-        aliases.add("toggle");
-        aliases.add("chattoggle");
-    }
 
     @Override
     public String getCommandName() {
@@ -51,7 +43,7 @@ public class ToggleCommand implements ICommand {
 
     @Override
     public List<String> getCommandAliases() {
-        return aliases;
+        return Arrays.asList("tc", "toggle");
     }
 
     @Override

@@ -23,7 +23,9 @@ import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.gui.whitelist.WhitelistMainGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import me.boomboompower.togglechat.utils.ChatColor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -73,7 +75,7 @@ public class MainGui extends ModernGui {
             final int[] position = {this.height / 2 - 75};
 
             ToggleBase.getToggles().values().stream().skip((this.pageNumber - 1) * 7).limit(7).forEach(baseType -> {
-                this.buttonList.add(new ModernButton(0, baseType.getName().toLowerCase().replace(" ", "_"), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), (baseType.isEnabled() ? ENABLED : DISABLED))));
+                this.buttonList.add(new ModernButton(0, baseType.getName().toLowerCase().replace(" ", "_"), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), (baseType.isEnabled() ? ENABLED : DISABLED))).setButtonData(baseType));
                 position[0] += 24;
             });
 
@@ -104,6 +106,8 @@ public class MainGui extends ModernGui {
         }
 
         super.drawScreen(x, y, ticks);
+
+        checkHover();
     }
 
     @Override
@@ -125,6 +129,25 @@ public class MainGui extends ModernGui {
             if (base.getName().toLowerCase().replace(" ", "_").equals(button.getButtonId())) {
                 base.onClick(button);
                 break;
+            }
+        }
+    }
+
+    private void checkHover() {
+        for (GuiButton old : this.buttonList) {
+            if (!(old instanceof ModernButton)) return;
+            ModernButton button = (ModernButton) old;
+
+            if (button.isMouseOver() && button.hasButtonData()) {
+                ToggleBase toggleBase = button.getButtonData();
+
+                if (toggleBase.getDescription() == null || toggleBase.getDescription().isEmpty()) return;
+
+                final int[] position = {this.height / 2 - 75};
+                toggleBase.getDescription().forEach(text -> {
+                    drawCenteredString(ChatColor.translateAlternateColorCodes(text), this.width / 2 + 150, position[0], Color.WHITE.getRGB());
+                    position[0] += 10;
+                });
             }
         }
     }

@@ -21,6 +21,7 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeGlobal extends ToggleBase {
@@ -58,6 +59,25 @@ public class TypeGlobal extends ToggleBase {
     public void onClick(ModernButton button) {
         this.showGlobal = !showGlobal;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+    }
+
+    @Override
+    public LinkedList<String> getDescription() {
+        return asLinked(
+                "Turns all general player",
+                "chat on or off",
+                "",
+                "These are the formats",
+                "&7Player: Hi",
+                "&a[VIP] Player&r: Hi",
+                "&a[VIP&6+&a] Player&r: Hi",
+                "&b[MVP] Player&r: Hi",
+                "&b[MVP&c+&b] Player&r: Hi",
+                "",
+                "Useful to prevent spam",
+                "or any unwanted chat",
+                "messages"
+        );
     }
 
     private boolean isNotOtherChat(String input) {

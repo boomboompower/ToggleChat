@@ -21,6 +21,7 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeParty extends ToggleBase {
@@ -54,5 +55,19 @@ public class TypeParty extends ToggleBase {
     public void onClick(ModernButton button) {
         this.showPartyChat = !this.showPartyChat;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+    }
+
+    @Override
+    public LinkedList<String> getDescription() {
+        return asLinked(
+                "Toggles all party",
+                "chat messages",
+                "",
+                "Toggle format",
+                "&9Party > &7Player: Hello",
+                "",
+                "Fairly useful when",
+                "You\'re in a large party"
+        );
     }
 }

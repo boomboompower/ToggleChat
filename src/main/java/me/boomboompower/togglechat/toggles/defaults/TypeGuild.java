@@ -21,6 +21,7 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeGuild extends ToggleBase {
@@ -54,5 +55,20 @@ public class TypeGuild extends ToggleBase {
     public void onClick(ModernButton button) {
         this.showGuild = !this.showGuild;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+    }
+
+    @Override
+    public LinkedList<String> getDescription() {
+        return asLinked(
+                "Toggles all guild",
+                "chat messages",
+                "",
+                "This is a feature hypixel",
+                "should offer, but doesn\'t",
+                "",
+                "This works regardless of if",
+                "the player has or hasn\'t",
+                "got a rank"
+        );
     }
 }

@@ -23,6 +23,7 @@ import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import net.minecraft.util.EnumChatFormatting;
 
+import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypePartyInvites extends ToggleBase {
@@ -53,6 +54,18 @@ public class TypePartyInvites extends ToggleBase {
     public void onClick(ModernButton button) {
         this.showPartyInvites = !this.showPartyInvites;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+    }
+
+    @Override
+    public LinkedList<String> getDescription() {
+        return asLinked(
+                "Toggles the ability to see",
+                "party invites from",
+                "other players.",
+                "",
+                "This goes well with",
+                "separators toggled"
+        );
     }
 
     private String withoutColors(String message) {

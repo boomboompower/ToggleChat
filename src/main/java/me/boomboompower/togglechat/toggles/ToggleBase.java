@@ -22,6 +22,7 @@ import me.boomboompower.togglechat.toggles.defaults.*;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 /**
  * Created to replace the old ToggleBase class
@@ -70,13 +71,13 @@ public abstract class ToggleBase {
      */
     public static void remake() {
         toggles.clear();
-        toggles.put("special", new TypeSpecial());
         toggles.put("team", new TypeTeam());
         toggles.put("join", new TypeJoin());
         toggles.put("leave", new TypeLeave());
         toggles.put("guild", new TypeGuild());
         toggles.put("party", new TypeParty());
         toggles.put("shout", new TypeShout());
+        toggles.put("special", new TypeSpecial());
         toggles.put("housing", new TypeHousing());
         toggles.put("global", new TypeGlobal());
         toggles.put("colored_team", new TypeColored());
@@ -147,6 +148,13 @@ public abstract class ToggleBase {
     public abstract void onClick(ModernButton button);
 
     /**
+     * Gets the description of the toggle. Can be null
+     *
+     * @return description of the toggle
+     */
+    public abstract LinkedList<String> getDescription();
+
+    /**
      * Gets the display format for the button.
      *      Will be formatted when loaded
      *
@@ -171,5 +179,19 @@ public abstract class ToggleBase {
         LinkedHashMap<String, ToggleBase> newInput = new LinkedHashMap<>();
         toggles.forEach(newInput::put);
         return newInput;
+    }
+
+    /**
+     * Assistance in linked-list creation
+     *
+     * @param entry the array by which the list will be backed
+     * @param <T> the class of the objects in the list
+     * @return a list view of the specified array
+     */
+    @SafeVarargs
+    public final <T> LinkedList<T> asLinked(T... entry) {
+        LinkedList<T> list = new LinkedList<>();
+        list.addAll(Arrays.asList(entry));
+        return list;
     }
 }

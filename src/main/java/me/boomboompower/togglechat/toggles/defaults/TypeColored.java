@@ -21,6 +21,8 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import java.util.LinkedList;
+
 public class TypeColored extends ToggleBase {
 
     private boolean showColored = true;
@@ -55,5 +57,22 @@ public class TypeColored extends ToggleBase {
     public void onClick(ModernButton button) {
         this.showColored = !this.showColored;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+    }
+
+    @Override
+    public LinkedList<String> getDescription() {
+        return asLinked(
+                "Disables colored chat",
+                "messages in multiple games",
+                "",
+                "Toggles things like these",
+                "&e[YELLOW]",
+                "&d[PURPLE]",
+                "&a[GREEN]",
+                "&c[RED]",
+                "",
+                "This is good for games",
+                "such as paintball"
+        );
     }
 }

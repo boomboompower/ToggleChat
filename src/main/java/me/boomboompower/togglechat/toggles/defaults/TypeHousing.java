@@ -21,6 +21,8 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import java.util.LinkedList;
+
 public class TypeHousing extends ToggleBase {
 
     private boolean showHousing = true;
@@ -49,5 +51,18 @@ public class TypeHousing extends ToggleBase {
     public void onClick(ModernButton button) {
         this.showHousing = !this.showHousing;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+    }
+
+    @Override
+    public LinkedList<String> getDescription() {
+        return asLinked(
+                "Toggles all Housing chat",
+                "messages that start with",
+                "the following",
+                "",
+                "&6[OWNER]",
+                "&6[CO-OWNER]",
+                "&6[RES]"
+        );
     }
 }

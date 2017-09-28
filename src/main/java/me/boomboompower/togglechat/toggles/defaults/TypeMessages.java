@@ -21,6 +21,8 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import java.util.LinkedList;
+
 public class TypeMessages extends ToggleBase {
 
     private boolean showPrivateMessages = true;
@@ -49,5 +51,18 @@ public class TypeMessages extends ToggleBase {
     public void onClick(ModernButton button) {
         this.showPrivateMessages = !this.showPrivateMessages;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+    }
+
+    @Override
+    public LinkedList<String> getDescription() {
+        return asLinked(
+                "Toggles all incoming",
+                "private messages",
+                "or any being sent",
+                "",
+                "These are the formats",
+                "&dFrom &7Player: Hello",
+                "&dTo &7Player: Hello"
+        );
     }
 }

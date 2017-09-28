@@ -21,11 +21,12 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeTeam extends ToggleBase {
 
-    private Pattern teamPattern = Pattern.compile("\\[TEAM\\] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private Pattern teamPattern = Pattern.compile("\\[TEAM] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
 
     private boolean showTeam = true;
 
@@ -53,5 +54,21 @@ public class TypeTeam extends ToggleBase {
     public void onClick(ModernButton button) {
         this.showTeam = !this.showTeam;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+    }
+
+    @Override
+    public LinkedList<String> getDescription() {
+        return asLinked(
+                "Toggles all",
+                "incoming team messages",
+                "",
+                "Message format:",
+                "&9[TEAM] &7Player&r: Hi",
+                "&9[TEAM] &a[VIP] Player&r: Hi",
+                "&9[TEAM] &b[MVP] Player&r: Hi",
+                "",
+                "Useful for large",
+                "team games"
+        );
     }
 }

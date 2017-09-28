@@ -21,6 +21,7 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeLeave extends ToggleBase {
@@ -53,5 +54,21 @@ public class TypeLeave extends ToggleBase {
     public void onClick(ModernButton button) {
         this.showLeave = !this.showLeave;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+    }
+
+    @Override
+    public LinkedList<String> getDescription() {
+        return asLinked(
+                "Toggles all leave",
+                "notification messages",
+                "or anything matching",
+                "this format",
+                "",
+                "&ePlayer left.",
+                "",
+                "This is good for",
+                "people with a large",
+                "friends list"
+        );
     }
 }

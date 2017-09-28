@@ -21,6 +21,7 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeShout extends ToggleBase {
@@ -53,5 +54,21 @@ public class TypeShout extends ToggleBase {
     public void onClick(ModernButton button) {
         this.showShout = !this.showShout;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+    }
+
+    @Override
+    public LinkedList<String> getDescription() {
+        return asLinked(
+                "Toggles all shout",
+                "chat messages",
+                "",
+                "Message format",
+                "&6[SHOUT] &7Player&r: Hello",
+                "&6[SHOUT] &a[VIP] Player&r: Hello",
+                "&6[SHOUT] &b[MVP] Player&r: Hello",
+                "",
+                "Good for large minigames",
+                "such as Mega Skywars"
+        );
     }
 }

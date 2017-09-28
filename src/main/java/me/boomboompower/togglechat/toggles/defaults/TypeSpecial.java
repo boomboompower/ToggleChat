@@ -21,6 +21,8 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import java.util.LinkedList;
+
 public class TypeSpecial extends ToggleBase {
 
     private boolean showSpecial = true;
@@ -67,5 +69,18 @@ public class TypeSpecial extends ToggleBase {
     public void onClick(ModernButton button) {
         this.showSpecial = !this.showSpecial;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+    }
+
+    @Override
+    public LinkedList<String> getDescription() {
+        return asLinked(
+                "Toggles all uhc",
+                "or bedwars chat",
+                "",
+                "Message format",
+                "&6[1\u272A] &7Player&r: Hi",
+                "&6[2\u272A] &a[VIP] Player&r: Hi",
+                "&6[3\u272A] &b[MVP] Player&r: Hi"
+        );
     }
 }

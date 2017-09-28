@@ -21,6 +21,8 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import java.util.LinkedList;
+
 public class TypeMessageSeparator extends ToggleBase {
 
     private boolean showSeparators = true;
@@ -49,5 +51,19 @@ public class TypeMessageSeparator extends ToggleBase {
     public void onClick(ModernButton button) {
         this.showSeparators = !this.showSeparators;
         button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+    }
+
+    @Override
+    public LinkedList<String> getDescription() {
+        return asLinked(
+                "Toggles all messages that",
+                "are the same length as",
+                "Hypixels\' message",
+                "separators",
+                "",
+                "Checks for separators",
+                "that look like this",
+                "---------------------"
+        );
     }
 }
