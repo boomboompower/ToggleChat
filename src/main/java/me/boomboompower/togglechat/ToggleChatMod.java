@@ -34,7 +34,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 @Mod(modid = ToggleChatMod.MODID, version = ToggleChatMod.VERSION, acceptedMinecraftVersions="*")
 public class ToggleChatMod {
@@ -42,7 +42,7 @@ public class ToggleChatMod {
     public static final String MODID = "publictogglechat";
     public static final String VERSION = "2.0.0";
 
-    private ArrayList<String> whitelist = new ArrayList<>();
+    private LinkedList<String> whitelist = new LinkedList<>();
 
     private WebsiteUtils websiteUtils;
     private ConfigLoader configLoader;
@@ -83,7 +83,7 @@ public class ToggleChatMod {
         });
     }
 
-    public ArrayList<String> getWhitelist() {
+    public LinkedList<String> getWhitelist() {
         return this.whitelist;
     }
 

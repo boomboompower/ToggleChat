@@ -34,6 +34,10 @@ import java.awt.*;
 
 public class WhitelistMainGui extends ModernGui {
 
+    private ModernButton add;
+    private ModernButton remove;
+    private ModernButton clear;
+
     private ModernTextBox text;
     private String input = "";
 
@@ -54,9 +58,9 @@ public class WhitelistMainGui extends ModernGui {
 
         this.textList.add(this.text = new ModernTextBox(this.width / 2 - 75, this.height / 2 - 58, 150, 20));
 
-        this.buttonList.add(new ModernButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add"));
-        this.buttonList.add(new ModernButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove"));
-        this.buttonList.add(new ModernButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear"));
+        this.buttonList.add(this.add = new ModernButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add"));
+        this.buttonList.add(this.remove = new ModernButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove"));
+        this.buttonList.add(this.clear = new ModernButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear"));
         this.buttonList.add(new ModernButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List"));
 
         this.buttonList.add(new ModernButton(10, 5, this.height - 25, 75, 20, "Back"));
@@ -69,6 +73,11 @@ public class WhitelistMainGui extends ModernGui {
     public void drawScreen(int x, int y, float ticks) {
         drawDefaultBackground();
         drawCenteredString(this.fontRendererObj, "Whitelist", this.width / 2, this.height / 2 - 82, Color.WHITE.getRGB());
+
+        this.add.setEnabled(!text.getText().isEmpty());
+        this.remove.setEnabled(!text.getText().isEmpty());
+        this.clear.setEnabled(!ToggleChatMod.getInstance().getWhitelist().isEmpty());
+
         super.drawScreen(x, y, ticks);
     }
 
@@ -93,11 +102,12 @@ public class WhitelistMainGui extends ModernGui {
             case 1:
                 if (this.text.getText().isEmpty()) {
                     sendChatMessage("No name given!");
-                } else if (!whitelistContains(this.text.getText())) {
+                } else if (whitelistContains(this.text.getText())) {
+                    sendChatMessage("The whitelist already contained &6" + this.text.getText() + "&7!");
+                } else {
                     ToggleChatMod.getInstance().getWhitelist().add(this.text.getText());
                     sendChatMessage("Added &6" + this.text.getText() + "&7 to the whitelist!");
-                } else {
-                    sendChatMessage("The whitelist already contained &6" + this.text.getText() + "&7!");
+                    this.text.setText("");
                 }
                 break;
             case 2:
@@ -108,6 +118,7 @@ public class WhitelistMainGui extends ModernGui {
                 } else {
                     removeFromWhitelist(this.text.getText());
                     sendChatMessage("Removed &6" + this.text.getText() + "&7 from the whitelist!");
+                    this.text.setText("");
                 }
                 break;
             case 3:

@@ -39,20 +39,24 @@ public class TypeSpecial extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        boolean isSpecial = false;
-
         char[] chars = message.toCharArray();
+        boolean hasNum = false;
 
-        if (chars.length > 3) {
-            if (chars[0] == '[' && (chars[3] == ']' || chars[4] == ']')) {
-                if (Character.isDigit(chars[1])) {
-                    if (Character.isDefined(chars[2]) || Character.isDefined(chars[3])) {
-                        isSpecial = true;
-                    }
-                }
+        if (chars.length < 3 || !message.startsWith("[")) {
+            return false;
+        }
+
+        for (int i = 1; i < chars.length; i++) {
+            if (Character.isDigit(chars[i])) {
+                hasNum = true;
+                continue;
+            }
+
+            if (Character.isDefined(chars[i]) && chars.length >= i + 1 && chars[i + 1] == ']' && hasNum) {
+                return true;
             }
         }
-        return isSpecial;
+        return false;
     }
 
     @Override
@@ -78,9 +82,9 @@ public class TypeSpecial extends ToggleBase {
                 "or bedwars chat",
                 "",
                 "Message format",
-                "&6[1\u272A] &7Player&r: Hi",
-                "&6[2\u272A] &a[VIP] Player&r: Hi",
-                "&6[3\u272A] &b[MVP] Player&r: Hi"
+                "&6[1\u272B] &7Player&r: Hi",
+                "&6[2\u272B] &a[VIP] Player&r: Hi",
+                "&6[3\u272B] &b[MVP] Player&r: Hi"
         );
     }
 }

@@ -23,10 +23,7 @@ import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.Timer;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.awt.*;
 import java.util.List;
@@ -150,7 +147,7 @@ public abstract class ModernGui extends GuiScreen {
 
     public void writeInformation(int startingX, int startingY, int separation, String... lines) {
         for (String s : lines) {
-            drawCenteredString(this.fontRendererObj, s, startingX, startingY, Color.WHITE.getRGB());
+            drawCenteredString(this.fontRendererObj, ChatColor.translateAlternateColorCodes('&', s), startingX, startingY, Color.WHITE.getRGB());
             startingY += separation;
         }
     }
