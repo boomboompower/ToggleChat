@@ -148,11 +148,22 @@ public abstract class ToggleBase {
     public abstract void onClick(ModernButton button);
 
     /**
-     * Gets the description of the toggle. Can be null
+     * Gets the description of the specified toggle,
+     *      this will show up in the main toggle gui
      *
-     * @return description of the toggle
+     * @return description of the toggle, can be null
      */
     public abstract LinkedList<String> getDescription();
+
+    /**
+     * Confirms if the toggle has a description
+     *      returns false if the description is null or empty
+     *
+     * @return true if the description is valid
+     */
+    public boolean hasDescription() {
+        return getDescription() != null && !getDescription().isEmpty();
+    }
 
     /**
      * Gets the display format for the button.

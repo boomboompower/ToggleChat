@@ -23,6 +23,7 @@ import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.gui.modern.ModernTextBox;
 import me.boomboompower.togglechat.gui.togglechat.MainGui;
 
+import me.boomboompower.togglechat.toggles.dummy.ToggleDummyMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -31,6 +32,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
+import java.text.Collator;
 
 public class WhitelistMainGui extends ModernGui {
 
@@ -58,10 +60,38 @@ public class WhitelistMainGui extends ModernGui {
 
         this.textList.add(this.text = new ModernTextBox(this.width / 2 - 75, this.height / 2 - 58, 150, 20));
 
-        this.buttonList.add(this.add = new ModernButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add"));
-        this.buttonList.add(this.remove = new ModernButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove"));
-        this.buttonList.add(this.clear = new ModernButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear"));
-        this.buttonList.add(new ModernButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List"));
+        this.buttonList.add(this.add = new ModernButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add").setButtonData(new ToggleDummyMessage(
+                "Adds a word to",
+                "the whitelist",
+                "",
+                "Messages containing",
+                "this word will not be",
+                "toggled"
+        )));
+        this.buttonList.add(this.remove = new ModernButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove").setButtonData(new ToggleDummyMessage(
+                "Removes a word from",
+                "the whitelist",
+                "",
+                "Messages containing",
+                "this will no longer",
+                "be ignored"
+        )));
+        this.buttonList.add(this.clear = new ModernButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear").setButtonData(new ToggleDummyMessage(
+                "Clears every word",
+                "from the whitelist",
+                "",
+                "This action cannot be",
+                "undone, use at your",
+                "own peril"
+        )));
+        this.buttonList.add(new ModernButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List").setButtonData(new ToggleDummyMessage(
+                "Shows a list of all",
+                "word entries in the",
+                "whitelist",
+                "",
+                "Also has a page system",
+                "for extra fanciness"
+        )));
 
         this.buttonList.add(new ModernButton(10, 5, this.height - 25, 75, 20, "Back"));
 
@@ -74,11 +104,13 @@ public class WhitelistMainGui extends ModernGui {
         drawDefaultBackground();
         drawCenteredString(this.fontRendererObj, "Whitelist", this.width / 2, this.height / 2 - 82, Color.WHITE.getRGB());
 
-        this.add.setEnabled(!text.getText().isEmpty());
-        this.remove.setEnabled(!text.getText().isEmpty());
+        this.add.setEnabled(!this.text.getText().isEmpty() && !whitelistContains(this.text.getText()));
+        this.remove.setEnabled(!this.text.getText().isEmpty() && whitelistContains(this.text.getText()));
         this.clear.setEnabled(!ToggleChatMod.getInstance().getWhitelist().isEmpty());
 
         super.drawScreen(x, y, ticks);
+
+        checkHover(this.height / 2 - 15);
     }
 
     @Override
@@ -108,6 +140,7 @@ public class WhitelistMainGui extends ModernGui {
                     ToggleChatMod.getInstance().getWhitelist().add(this.text.getText());
                     sendChatMessage("Added &6" + this.text.getText() + "&7 to the whitelist!");
                     this.text.setText("");
+                    ToggleChatMod.getInstance().getWhitelist().sort(Collator.getInstance());
                 }
                 break;
             case 2:
@@ -119,6 +152,7 @@ public class WhitelistMainGui extends ModernGui {
                     removeFromWhitelist(this.text.getText());
                     sendChatMessage("Removed &6" + this.text.getText() + "&7 from the whitelist!");
                     this.text.setText("");
+                    ToggleChatMod.getInstance().getWhitelist().sort(Collator.getInstance());
                 }
                 break;
             case 3:

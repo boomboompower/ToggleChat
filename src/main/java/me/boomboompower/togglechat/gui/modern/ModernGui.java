@@ -19,6 +19,7 @@ package me.boomboompower.togglechat.gui.modern;
 
 import com.google.common.collect.Lists;
 
+import me.boomboompower.togglechat.toggles.ToggleBase;
 import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraft.client.Minecraft;
@@ -102,29 +103,29 @@ public abstract class ModernGui extends GuiScreen {
     }
 
     @Override
-    public void drawDefaultBackground() {
+    public final void drawDefaultBackground() {
         Gui.drawRect(0, 0, this.width, this.height, 2013265920 + (2 << 16) + (2 << 8) + 2);
     }
 
     @Override
-    public void drawCenteredString(FontRenderer fontRendererIn, String text, int x, int y, int color) {
+    public final void drawCenteredString(FontRenderer fontRendererIn, String text, int x, int y, int color) {
         fontRendererIn.drawString(text, (float) (x - fontRendererIn.getStringWidth(text) / 2), (float) y, color, false);
     }
 
-    public void drawCenteredString(FontRenderer fontRendererIn, String text, int x, int y, int color, boolean shadow) {
+    public final void drawCenteredString(FontRenderer fontRendererIn, String text, int x, int y, int color, boolean shadow) {
         fontRendererIn.drawString(text, (float) (x - fontRendererIn.getStringWidth(text) / 2), (float) y, color, shadow);
     }
 
-    public void drawCenteredString(String text, int x, int y, int color) {
+    public final void drawCenteredString(String text, int x, int y, int color) {
         drawCenteredString(this.fontRendererObj, text, x, y, color, false);
     }
 
-    public void drawCenteredString(String text, int x, int y, int color, boolean shadow) {
+    public final void drawCenteredString(String text, int x, int y, int color, boolean shadow) {
         drawCenteredString(this.fontRendererObj, text, x, y, color, shadow);
     }
 
     @Override
-    public void drawString(FontRenderer fontRendererIn, String text, int x, int y, int color) {
+    public final void drawString(FontRenderer fontRendererIn, String text, int x, int y, int color) {
         fontRendererIn.drawString(text, (float) x, (float) y, color, false);
     }
 
@@ -141,8 +142,30 @@ public abstract class ModernGui extends GuiScreen {
     }
 
     @Override
-    public void sendChatMessage(String msg) {
+    public final void sendChatMessage(String msg) {
         Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(ChatColor.AQUA + "T" + ChatColor.BLUE + "C" + ChatColor.DARK_GRAY + " > " + ChatColor.GRAY + ChatColor.translateAlternateColorCodes('&', msg)));
+    }
+
+    public void buttonPressed(ModernButton button) {
+    }
+
+    public final void checkHover(int firstPosition) {
+        for (GuiButton old : this.buttonList) {
+            if (!(old instanceof ModernButton)) return;
+            ModernButton button = (ModernButton) old;
+
+            if (button.isMouseOver() && button.hasButtonData()) {
+                ToggleBase toggleBase = button.getButtonData();
+
+                if (!toggleBase.hasDescription()) return;
+
+                final int[] position = {firstPosition};
+                toggleBase.getDescription().forEach(text -> {
+                    drawCenteredString(ChatColor.translateAlternateColorCodes(text), this.width / 2 + 150, position[0], Color.WHITE.getRGB());
+                    position[0] += 10;
+                });
+            }
+        }
     }
 
     public void writeInformation(int startingX, int startingY, int separation, String... lines) {
@@ -150,8 +173,5 @@ public abstract class ModernGui extends GuiScreen {
             drawCenteredString(this.fontRendererObj, ChatColor.translateAlternateColorCodes('&', s), startingX, startingY, Color.WHITE.getRGB());
             startingY += separation;
         }
-    }
-
-    public void buttonPressed(ModernButton button) {
     }
 }

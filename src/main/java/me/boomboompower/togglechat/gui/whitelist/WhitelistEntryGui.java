@@ -64,7 +64,9 @@ public class WhitelistEntryGui extends ModernGui {
 
         drawCenteredString(this.fontRendererObj, "Whitelist Entries", this.width / 2, this.height / 2 - 105, Color.WHITE.getRGB());
 
-        if (ToggleChatMod.getInstance().getWhitelist().size() > 0 && !pageInvalid) {
+        super.drawScreen(x, y, ticks);
+
+        if (ToggleChatMod.getInstance().getWhitelist().size() > 0 && !this.pageInvalid) {
             drawRect(this.width / 2 - 60, this.height / 2 - 80, this.width / 2 + 60, this.height / 2 + 60, new Color(105, 105, 105, 75).getRGB());
 
             drawHorizontalLine(this.width / 2 - 60, width / 2 + 60, this.height / 2 - 80, Color.WHITE.getRGB());
@@ -102,8 +104,6 @@ public class WhitelistEntryGui extends ModernGui {
         }
 
         writeInformation(this.width / 2, this.height / 2 - 50, 20, "There are no entries on the whitelist!", "Insert some words then return to this page!");
-
-        super.drawScreen(x, y, ticks);
     }
 
     @Override

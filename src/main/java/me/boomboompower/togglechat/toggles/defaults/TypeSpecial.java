@@ -42,16 +42,26 @@ public class TypeSpecial extends ToggleBase {
         char[] chars = message.toCharArray();
         boolean hasNum = false;
 
+        // If the message length is less than 3 charaters or the message
+        // doesn't start with "[", don't run and assume it isn't special
         if (chars.length < 3 || !message.startsWith("[")) {
             return false;
         }
 
+        // Loop through all the characters after the "["
         for (int i = 1; i < chars.length; i++) {
+
+            // If the character is a number, trigger the flag
+            // and move to the next character
             if (Character.isDigit(chars[i])) {
                 hasNum = true;
                 continue;
             }
 
+            // If the following character is defined in unicode,
+            // the character following this character is "]" and
+            // the message number flag has been trigger,
+            // assume it's special and return true.
             if (Character.isDefined(chars[i]) && chars.length >= i + 1 && chars[i + 1] == ']' && hasNum) {
                 return true;
             }
