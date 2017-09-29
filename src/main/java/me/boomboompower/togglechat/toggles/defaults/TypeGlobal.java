@@ -81,6 +81,6 @@ public class TypeGlobal extends ToggleBase {
     }
 
     private boolean isNotOtherChat(String input) {
-        return !input.startsWith("[TEAM] ") && !input.startsWith("[SHOUT] ") && !input.startsWith("[SPECTATOR] ") && (hasToggle("colored_team") && !getToggle("colored_team").shouldToggle(input));
+        return !input.startsWith("[TEAM] ") && !input.startsWith("[SHOUT] ") && !input.startsWith("[SPECTATOR] ");
     }
 }

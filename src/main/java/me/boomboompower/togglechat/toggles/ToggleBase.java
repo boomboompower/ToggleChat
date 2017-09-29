@@ -84,6 +84,7 @@ public abstract class ToggleBase {
         toggles.put("messages", new TypeMessages());
         toggles.put("party_invites", new TypePartyInvites());
         toggles.put("spectator", new TypeSpectator());
+        toggles.put("lobby_join", new TypeLobbyJoin());
         toggles.put("friend_requests", new TypeFriendRequests());
         toggles.put("separators", new TypeMessageSeparator());
     }

@@ -62,8 +62,14 @@ public class TypeSpecial extends ToggleBase {
             // the character following this character is "]" and
             // the message number flag has been trigger,
             // assume it's special and return true.
-            if (Character.isDefined(chars[i]) && chars.length >= i + 1 && chars[i + 1] == ']' && hasNum) {
-                return true;
+            if (Character.isDefined(chars[i]) && hasNum) {
+                try {
+                    if (chars[i + 1] == ']') {
+                        return true;
+                    }
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                    return false;
+                }
             }
         }
         return false;
