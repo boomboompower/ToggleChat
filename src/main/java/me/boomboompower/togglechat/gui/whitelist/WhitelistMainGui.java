@@ -22,8 +22,8 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.gui.modern.ModernTextBox;
 import me.boomboompower.togglechat.gui.togglechat.MainGui;
-
 import me.boomboompower.togglechat.toggles.dummy.ToggleDummyMessage;
+
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -177,23 +177,19 @@ public class WhitelistMainGui extends ModernGui {
         Keyboard.enableRepeatEvents(false);
     }
     
-    private boolean whitelistContains(String message) {
-        boolean contains = false;
-
-        for (String s : ToggleChatMod.getInstance().getWhitelist()) {
-            if (s.equalsIgnoreCase(message)) {
-                contains = true;
-                break;
+    private boolean whitelistContains(String word) {
+        for (String whitelistWord : ToggleChatMod.getInstance().getWhitelist()) {
+            if (whitelistWord.equalsIgnoreCase(word)) {
+                return true;
             }
         }
-
-        return contains;
+        return false;
     }
 
-    private void removeFromWhitelist(String username) {
-        for (String s: ToggleChatMod.getInstance().getWhitelist()) {
-            if (s.equalsIgnoreCase(username)) {
-                ToggleChatMod.getInstance().getWhitelist().remove(s);
+    private void removeFromWhitelist(String word) {
+        for (String whitelistWord : ToggleChatMod.getInstance().getWhitelist()) {
+            if (whitelistWord.equalsIgnoreCase(word)) {
+                ToggleChatMod.getInstance().getWhitelist().remove(whitelistWord);
                 break;
             }
         }

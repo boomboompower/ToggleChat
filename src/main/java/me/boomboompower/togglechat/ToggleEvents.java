@@ -28,15 +28,23 @@ import java.util.regex.Pattern;
 
 public class ToggleEvents {
 
-    public ToggleEvents() {
-    }
-
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onChatReceive(ClientChatReceivedEvent event) {
+
+        // Strip the message of any colors for improved detectability
         String unformattedText = ChatColor.stripColor(event.message.getUnformattedText());
+
         try {
+            // Check if the message contains something from
+            // The whitelist, if it doesn't, continue!
             if (!containsWhitelisted(unformattedText)) {
+
+                // Loop through all the toggles
                 for (ToggleBase type : ToggleBase.getToggles().values()) {
+
+                    // If the toggle should toggle the specified message and
+                    // the toggle is not enabled (this message is turned off)
+                    // don't send the message to the player & stop looping
                     if (type.shouldToggle(unformattedText) && !type.isEnabled()) {
                         event.setCanceled(true);
                         break;
@@ -51,9 +59,10 @@ public class ToggleEvents {
     private boolean containsWhitelisted(String message) {
         final boolean[] contains = {false};
         ToggleChatMod.getInstance().getWhitelist().forEach(s -> {
-        if (containsIgnoreCase(message, s)) {
-            contains[0] = true;
-        }});
+            if (containsIgnoreCase(message, s)) {
+                contains[0] = true;
+            }
+        });
         return contains[0];
     }
 
