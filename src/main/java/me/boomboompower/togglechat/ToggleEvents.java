@@ -52,8 +52,7 @@ public class ToggleEvents {
                 }
             }
         } catch (Exception e1) {
-            e1.printStackTrace();
-            System.out.println("Issue has been encountered: " + (e1.getMessage() != null ? e1.getMessage() : e1.getCause()));
+            System.out.println("Issue has been encountered: " + (e1.getMessage() != null ? e1.getClass().getSimpleName() + ": " + e1.getMessage() : e1.getClass().getSimpleName() + ": " + e1.getCause()));
         }
     }
 

@@ -28,6 +28,10 @@ function sourcePage() {
     window.open("https://github.com/boomboompower/ToggleChat");
 }
 
+function forumThread() {
+    window.open("https://hypixel.net/threads/997547");
+}
+
 function openNav() {
 	change("-250px", 2);
     setNav("250px", 2);
