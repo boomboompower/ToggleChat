@@ -15,7 +15,7 @@ apply plugin: "net.minecraftforge.gradle.forge"
 
 version = "2.0.0-SNAPSHOT"
 group = "me.boomboompower.togglechat"
-archivesBaseName = "ToggleChat"
+archivesBaseName = "[1.8] ToggleChat"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
