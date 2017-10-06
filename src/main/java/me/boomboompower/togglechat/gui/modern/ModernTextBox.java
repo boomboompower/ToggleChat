@@ -284,17 +284,17 @@ public class ModernTextBox extends Gui {
      */
     public void textboxKeyTyped(char c, int keyCode) {
         if (this.isFocused && !this.running) {
-            if (GuiScreen.isKeyComboCtrlA(keyCode)) {
+            if (ModernGui.isKeyComboCtrlA(keyCode)) {
                 this.setCursorPositionEnd();
                 this.setSelectionPos(0);
-            } else if (GuiScreen.isKeyComboCtrlC(keyCode)) {
+            } else if (ModernGui.isKeyComboCtrlC(keyCode)) {
                 GuiScreen.setClipboardString(this.getSelectedText());
-            } else if (GuiScreen.isKeyComboCtrlV(keyCode)) {
+            } else if (ModernGui.isKeyComboCtrlV(keyCode)) {
                 if (this.isEnabled) {
                     this.writeText(format(GuiScreen.getClipboardString()));
                 }
 
-            } else if (GuiScreen.isKeyComboCtrlX(keyCode)) {
+            } else if (ModernGui.isKeyComboCtrlX(keyCode)) {
                 GuiScreen.setClipboardString(this.getSelectedText());
 
                 if (this.isEnabled) {
@@ -477,39 +477,40 @@ public class ModernTextBox extends Gui {
     /**
      * draws the vertical line cursor in the textbox
      */
-    private void drawCursorVertical(int p_146188_1_, int p_146188_2_, int p_146188_3_, int p_146188_4_) {
-        if (p_146188_1_ < p_146188_3_) {
-            int i = p_146188_1_;
-            p_146188_1_ = p_146188_3_;
-            p_146188_3_ = i;
+    private void drawCursorVertical(int p_drawCursorVertical_1_, int p_drawCursorVertical_2_, int p_drawCursorVertical_3_, int p_drawCursorVertical_4_) {
+        int var5;
+        if (p_drawCursorVertical_1_ < p_drawCursorVertical_3_) {
+            var5 = p_drawCursorVertical_1_;
+            p_drawCursorVertical_1_ = p_drawCursorVertical_3_;
+            p_drawCursorVertical_3_ = var5;
         }
 
-        if (p_146188_2_ < p_146188_4_) {
-            int j = p_146188_2_;
-            p_146188_2_ = p_146188_4_;
-            p_146188_4_ = j;
+        if (p_drawCursorVertical_2_ < p_drawCursorVertical_4_) {
+            var5 = p_drawCursorVertical_2_;
+            p_drawCursorVertical_2_ = p_drawCursorVertical_4_;
+            p_drawCursorVertical_4_ = var5;
         }
 
-        if (p_146188_3_ > this.xPosition + this.width) {
-            p_146188_3_ = this.xPosition + this.width;
+        if (p_drawCursorVertical_3_ > this.xPosition + this.width) {
+            p_drawCursorVertical_3_ = this.xPosition + this.width;
         }
 
-        if (p_146188_1_ > this.xPosition + this.width) {
-            p_146188_1_ = this.xPosition + this.width;
+        if (p_drawCursorVertical_1_ > this.xPosition + this.width) {
+            p_drawCursorVertical_1_ = this.xPosition + this.width;
         }
 
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        Tessellator var7 = Tessellator.getInstance();
+        WorldRenderer var6 = var7.getWorldRenderer();
         GlStateManager.color(0.0F, 0.0F, 255.0F, 255.0F);
         GlStateManager.disableTexture2D();
         GlStateManager.enableColorLogic();
         GlStateManager.colorLogicOp(5387);
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION);
-        worldrenderer.pos((double) p_146188_1_, (double) p_146188_4_, 0.0D).endVertex();
-        worldrenderer.pos((double) p_146188_3_, (double) p_146188_4_, 0.0D).endVertex();
-        worldrenderer.pos((double) p_146188_3_, (double) p_146188_2_, 0.0D).endVertex();
-        worldrenderer.pos((double) p_146188_1_, (double) p_146188_2_, 0.0D).endVertex();
-        tessellator.draw();
+        var6.startDrawingQuads();
+        var6.addVertex((double)p_drawCursorVertical_1_, (double)p_drawCursorVertical_4_, 0.0D);
+        var6.addVertex((double)p_drawCursorVertical_3_, (double)p_drawCursorVertical_4_, 0.0D);
+        var6.addVertex((double)p_drawCursorVertical_3_, (double)p_drawCursorVertical_2_, 0.0D);
+        var6.addVertex((double)p_drawCursorVertical_1_, (double)p_drawCursorVertical_2_, 0.0D);
+        var7.draw();
         GlStateManager.disableColorLogic();
         GlStateManager.enableTexture2D();
     }

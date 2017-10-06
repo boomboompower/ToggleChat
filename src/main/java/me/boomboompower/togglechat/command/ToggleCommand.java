@@ -32,7 +32,7 @@ import java.util.List;
 public class ToggleCommand implements ICommand {
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "chattoggle";
     }
 
@@ -42,17 +42,17 @@ public class ToggleCommand implements ICommand {
     }
 
     @Override
-    public List<String> getCommandAliases() {
+    public List getAliases() {
         return Arrays.asList("tc", "toggle");
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void execute(ICommandSender iCommandSender, String[] strings) throws CommandException {
         new MainGui(1).display();
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+    public boolean canCommandSenderUse(ICommandSender iCommandSender) {
         return true;
     }
 
@@ -67,7 +67,7 @@ public class ToggleCommand implements ICommand {
     }
 
     @Override
-    public int compareTo(ICommand o) {
+    public int compareTo(Object o) {
         return 0;
     }
 }

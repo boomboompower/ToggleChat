@@ -25,6 +25,8 @@ import me.boomboompower.togglechat.utils.ChatColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.util.List;
@@ -37,6 +39,8 @@ public abstract class ModernGui extends GuiScreen {
     public static final String ENABLED = ChatColor.GREEN + "Enabled";
     public static final String DISABLED = ChatColor.GRAY + "Disabled";
 
+    protected List<GuiLabel> labelList = Lists.newArrayList();
+    protected List<GuiButton> buttonList = Lists.newArrayList();
     protected List<ModernTextBox> textList = Lists.newArrayList();
 
     private GuiButton selectedButton;
@@ -79,13 +83,13 @@ public abstract class ModernGui extends GuiScreen {
 
                 if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
                     net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre event = new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, this.buttonList);
-                    if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) break;
+                    if (FMLCommonHandler.instance().bus().post(event)) break;
                     guibutton = event.button;
                     this.selectedButton = guibutton;
                     guibutton.playPressSound(this.mc.getSoundHandler());
                     this.actionPerformed(guibutton);
                     if (this.equals(this.mc.currentScreen))
-                        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.button, this.buttonList));
+                        FMLCommonHandler.instance().bus().post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.button, this.buttonList));
                 }
             }
         }
@@ -173,5 +177,30 @@ public abstract class ModernGui extends GuiScreen {
             drawCenteredString(this.fontRendererObj, ChatColor.translateAlternateColorCodes('&', s), startingX, startingY, Color.WHITE.getRGB());
             startingY += separation;
         }
+    }
+
+    public static boolean isAltKeyDown()
+    {
+        return Keyboard.isKeyDown(56) || Keyboard.isKeyDown(184);
+    }
+
+    public static boolean isKeyComboCtrlX(int keyID)
+    {
+        return keyID == 45 && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
+    }
+
+    public static boolean isKeyComboCtrlV(int keyID)
+    {
+        return keyID == 47 && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
+    }
+
+    public static boolean isKeyComboCtrlC(int keyID)
+    {
+        return keyID == 46 && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
+    }
+
+    public static boolean isKeyComboCtrlA(int keyID)
+    {
+        return keyID == 30 && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
     }
 }
