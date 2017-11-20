@@ -21,12 +21,14 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import net.minecraft.util.EnumChatFormatting;
-
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypePartyInvites extends ToggleBase {
+
+    private Pattern expiredPattern = Pattern.compile("The party invite (?<where>\\S{1,4}) (?<rank>\\[.+] )?(?<player>\\S{1,16}) has expired.");
+    public Pattern invitePattern = Pattern.compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}) has invited you to join their party!");
+    private Pattern otherInvitePattern = Pattern.compile("(?<inviteerank>\\[.+] )?(?<invitee>\\S{1,16}) invited (?<rank>\\[.+] )?(?<player>\\S{1,16}) to the party! They have 60 seconds to accept.");
 
     private boolean showPartyInvites = true;
 
@@ -37,7 +39,7 @@ public class TypePartyInvites extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        return containsIgnoreCase(message, "has invited you to join ") || containsIgnoreCase(message, "60 seconds to accept") || (withoutColors(message).contains("The party invite from ") && withoutColors(message).endsWith(" has expired."));
+        return this.expiredPattern.matcher(message).matches() || this.invitePattern.matcher(message).matches() || this.otherInvitePattern.matcher(message).matches();
     }
 
     @Override
@@ -66,10 +68,6 @@ public class TypePartyInvites extends ToggleBase {
                 "This goes well with",
                 "separators toggled"
         );
-    }
-
-    private String withoutColors(String message) {
-        return EnumChatFormatting.getTextWithoutFormattingCodes(message);
     }
 
     private boolean containsIgnoreCase(String message, String contains) {

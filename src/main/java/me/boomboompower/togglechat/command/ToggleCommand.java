@@ -27,6 +27,7 @@ import net.minecraft.util.BlockPos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ToggleCommand implements ICommand {
@@ -43,7 +44,7 @@ public class ToggleCommand implements ICommand {
 
     @Override
     public List<String> getCommandAliases() {
-        return Arrays.asList("tc", "toggle");
+        return Collections.singletonList("tc");
     }
 
     @Override

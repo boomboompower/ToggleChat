@@ -20,11 +20,10 @@ package me.boomboompower.togglechat;
 import me.boomboompower.togglechat.command.ToggleCommand;
 import me.boomboompower.togglechat.config.ConfigLoader;
 import me.boomboompower.togglechat.toggles.ToggleBase;
+import me.boomboompower.togglechat.utils.ChatColor;
 import me.boomboompower.togglechat.utils.WebsiteUtils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.command.ICommand;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -54,9 +53,9 @@ public class ToggleChatMod {
     public void preInit(FMLPreInitializationEvent event) {
         ModMetadata data = event.getModMetadata();
         data.version = VERSION;
-        data.name = EnumChatFormatting.GOLD + "Hypixel " + EnumChatFormatting.GRAY + "-" + EnumChatFormatting.GREEN + " ToggleChat";
+        data.name = ChatColor.GOLD + "Hypixel " + ChatColor.GRAY + "-" + ChatColor.GREEN + " ToggleChat";
         data.authorList.add("boomboompower");
-        data.description = "Use " + EnumChatFormatting.BLUE + "/tc" + EnumChatFormatting.RESET + " to get started! " + EnumChatFormatting.GRAY + "|" + EnumChatFormatting.RESET + " Made with " + EnumChatFormatting.LIGHT_PURPLE + "<3" + EnumChatFormatting.RESET + " by boomboompower";
+        data.description = "Use " + ChatColor.BLUE + "/tc" + ChatColor.RESET + " to get started! " + ChatColor.GRAY + "|" + ChatColor.RESET + " Made with " + ChatColor.LIGHT_PURPLE + "<3" + ChatColor.RESET + " by boomboompower";
         data.url = "https://hypixel.net/threads/997547";
 
         data.credits = "2Pi for the initial idea behind the mod!";
@@ -70,17 +69,15 @@ public class ToggleChatMod {
         ToggleBase.remake();
 
         MinecraftForge.EVENT_BUS.register(new ToggleEvents());
-        registerCommands(new ToggleCommand());
+        ClientCommandHandler.instance.registerCommand(new ToggleCommand());
 
         Minecraft.getMinecraft().addScheduledTask(() -> this.websiteUtils.begin());
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        Minecraft.getMinecraft().addScheduledTask(() -> {
-            this.configLoader.loadToggles();
-            this.configLoader.loadWhitelist();
-        });
+        this.configLoader.loadToggles();
+        this.configLoader.loadWhitelist();
     }
 
     public LinkedList<String> getWhitelist() {
@@ -97,15 +94,5 @@ public class ToggleChatMod {
 
     public static ToggleChatMod getInstance() {
         return instance;
-    }
-
-    private void registerCommands(ICommand... commands) {
-        for (ICommand command : commands) {
-            try {
-                ClientCommandHandler.instance.registerCommand(command);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
     }
 }
