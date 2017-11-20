@@ -22,11 +22,8 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.gui.whitelist.WhitelistMainGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
-
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import me.boomboompower.togglechat.toggles.dummy.ToggleDummyMessage;
+import net.minecraft.client.gui.GuiButton;
 
 import java.awt.*;
 
@@ -73,16 +70,19 @@ public class MainGui extends ModernGui {
             final int[] position = {this.height / 2 - 75};
 
             ToggleBase.getToggles().values().stream().skip((this.pageNumber - 1) * 7).limit(7).forEach(baseType -> {
-                this.buttonList.add(new ModernButton(0, baseType.getName().toLowerCase().replace(" ", "_"), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), (baseType.isEnabled() ? ENABLED : DISABLED))).setButtonData(baseType));
+                this.buttonList.add(new ModernButton(0, baseType.getName().toLowerCase().replace(" ", "_"), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), getStatus(baseType.isEnabled()))).setButtonData(baseType));
                 position[0] += 24;
             });
 
             ModernButton back;
             ModernButton next;
 
-            this.buttonList.add(new ModernButton(1, "inbuilt_whitelist", 5, this.height - 25, 75, 20, "Whitelist"));
+            this.buttonList.add(new ModernButton(1, "inbuilt_whitelist", 5, this.height - 25, 90, 20, "Whitelist"));
             this.buttonList.add(back = new ModernButton(2, "inbuilt_back", this.width - 140, this.height - 25, 65, 20, "Back"));
             this.buttonList.add(next = new ModernButton(3, "inbuilt_next", this.width - 70, this.height - 25, 65, 20, "Next"));
+            this.buttonList.add(new ModernButton(4, "inbuilt_theme", 5, this.height - 49, 90, 20, "Classic: " + getStatus(isClassic())).setButtonData(
+                    new ToggleDummyMessage("Changes the button", "theme to either", "&6Modern&r or &bClassic", "", "&6Modern&r is see-through", "&bClassic&r is texture based")
+            ));
 
             back.setEnabled(this.pageNumber > 1);
             next.setEnabled(this.pageNumber != pages); // Next
@@ -97,7 +97,7 @@ public class MainGui extends ModernGui {
 
         if (this.nobuttons) {
             drawCenteredString(this.fontRendererObj, "There are no buttons loaded!", this.width / 2, this.height / 2 - 50, Color.WHITE.getRGB());
-            drawCenteredString(this.fontRendererObj, "Buttons must've not loaded correctly", this.width / 2, this.height / 2 - 30, Color.WHITE.getRGB());
+            drawCenteredString(this.fontRendererObj, "Buttons have not loaded correctly", this.width / 2, this.height / 2 - 30, Color.WHITE.getRGB());
             drawCenteredString(this.fontRendererObj, "Please contact boomboompower!", this.width / 2, this.height / 2, Color.WHITE.getRGB());
         } else {
             drawCenteredString(this.fontRendererObj, String.format("Page %s/%s", (this.pageNumber), (int) Math.ceil((double) ToggleBase.getToggles().size() / 7D)), this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
@@ -115,12 +115,22 @@ public class MainGui extends ModernGui {
                 new WhitelistMainGui().display();
                 return;
             case 2:
-                --this.pageNumber;
-                createDefaultButtons();
+                this.mc.displayGuiScreen(new MainGui(this.pageNumber - 1));
                 return;
             case 3:
-                this.pageNumber++;
+                this.mc.displayGuiScreen(new MainGui(this.pageNumber + 1));
                 createDefaultButtons();
+                return;
+            case 4:
+                ToggleChatMod.getInstance().getConfigLoader().setClassicTheme(!isClassic());
+                button.setText("Classic: " + getStatus(isClassic()));
+
+                for (GuiButton buttons : this.buttonList) {
+                    if (buttons instanceof ModernButton && (((ModernButton) buttons).hasButtonData())) {
+                        ModernButton modern = (ModernButton) buttons;
+                        modern.setText(String.format(modern.getButtonData().getDisplayName(), ModernGui.getStatus(modern.getButtonData().isEnabled())));
+                    }
+                }
                 return;
         }
         for (ToggleBase base : ToggleBase.getToggles().values()) {
@@ -134,15 +144,5 @@ public class MainGui extends ModernGui {
     @Override
     public void onGuiClosed() {
         ToggleChatMod.getInstance().getConfigLoader().saveToggles();
-    }
-
-    public void display() {
-        MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    @SubscribeEvent
-    public void ClientTickEvent(TickEvent.ClientTickEvent event) {
-        MinecraftForge.EVENT_BUS.unregister(this);
-        Minecraft.getMinecraft().displayGuiScreen(this);
     }
 }

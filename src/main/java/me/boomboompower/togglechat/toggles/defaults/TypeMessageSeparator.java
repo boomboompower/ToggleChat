@@ -50,7 +50,7 @@ public class TypeMessageSeparator extends ToggleBase {
     @Override
     public void onClick(ModernButton button) {
         this.showSeparators = !this.showSeparators;
-        button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 
     @Override

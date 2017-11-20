@@ -77,16 +77,18 @@ public abstract class ToggleBase {
         toggles.put("guild", new TypeGuild());
         toggles.put("party", new TypeParty());
         toggles.put("shout", new TypeShout());
-        toggles.put("special", new TypeSpecial());
+        toggles.put("soul", new TypeSoulWell());
         toggles.put("housing", new TypeHousing());
-        toggles.put("global", new TypeGlobal());
-        toggles.put("colored_team", new TypeColored());
         toggles.put("messages", new TypeMessages());
+        toggles.put("global", new TypeGlobal());
+        toggles.put("special", new TypeSpecial());
+        toggles.put("colored_team", new TypeColored());
         toggles.put("party_invites", new TypePartyInvites());
+        toggles.put("mystery_box", new TypeMysteryBox());
         toggles.put("spectator", new TypeSpectator());
         toggles.put("lobby_join", new TypeLobbyJoin());
-        toggles.put("friend_requests", new TypeFriendRequests());
         toggles.put("separators", new TypeMessageSeparator());
+        toggles.put("friend_requests", new TypeFriendRequests());
     }
 
     /**

@@ -24,51 +24,54 @@ import me.boomboompower.togglechat.toggles.ToggleBase;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
-public class TypeJoin extends ToggleBase {
+public class TypeSoulWell extends ToggleBase {
 
-    private Pattern joinPattern = Pattern.compile("(?<player>\\S{1,16})(\\s+)(joined\\.)");
+    private Pattern soulPattern = Pattern.compile("(?<player>\\S{1,16}) has found (?<message>.*) in the Soul Well!");
 
-    private boolean showJoin = true;
+    public boolean showSouls = true;
 
     @Override
     public String getName() {
-        return "Join";
+        return "Soul";
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "Soul Well: %s";
     }
 
     @Override
     public boolean shouldToggle(String message) {
-        return this.joinPattern.matcher(message).matches();
+        return this.soulPattern.matcher(message).matches();
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showJoin;
+        return this.showSouls;
     }
 
     @Override
     public void setToggled(boolean enabled) {
-        this.showJoin = enabled;
+        this.showSouls = enabled;
     }
 
     @Override
     public void onClick(ModernButton button) {
-        this.showJoin = !this.showJoin;
+        this.showSouls = !this.showSouls;
         button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-                "Toggles all join",
-                "notification messages",
-                "or anything matching",
-                "this format",
+                "Turns off perk and kit",
+                "messages for skywars",
                 "",
-                "&ePlayer joined.",
+                "&bSk1er &7has found &6Slime",
+                "&6Cage &7in the &bSoul Well&r!",
                 "",
-                "This is good for",
-                "people with a large",
-                "friends list"
+                "Good for recording",
+                "in a skywars lobby"
         );
     }
 }

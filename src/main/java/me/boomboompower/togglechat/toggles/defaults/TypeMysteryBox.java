@@ -24,51 +24,55 @@ import me.boomboompower.togglechat.toggles.ToggleBase;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
-public class TypeJoin extends ToggleBase {
+public class TypeMysteryBox extends ToggleBase {
 
-    private Pattern joinPattern = Pattern.compile("(?<player>\\S{1,16})(\\s+)(joined\\.)");
+    private Pattern mysteryPattern = Pattern.compile("(?<player>\\S{1,16}) found a (?<star>\\S{1,5}) Mystery Box!");
+    private Pattern mysteryFoundPattern = Pattern.compile("\\[Mystery Box] (?<player>\\S{1,16}) found a (?<thing>.*)!");
 
-    private boolean showJoin = true;
+    public boolean showBox = true;
 
     @Override
     public String getName() {
-        return "Join";
+        return "Mystery box";
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "Mystery Box: %s";
     }
 
     @Override
     public boolean shouldToggle(String message) {
-        return this.joinPattern.matcher(message).matches();
+        return this.mysteryPattern.matcher(message).matches() || this.mysteryFoundPattern.matcher(message).matches();
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showJoin;
+        return this.showBox;
     }
 
     @Override
     public void setToggled(boolean enabled) {
-        this.showJoin = enabled;
+        this.showBox = enabled;
     }
 
     @Override
     public void onClick(ModernButton button) {
-        this.showJoin = !this.showJoin;
+        this.showBox = !this.showBox;
         button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-                "Toggles all join",
-                "notification messages",
-                "or anything matching",
-                "this format",
+                "Turns finding mystery box",
+                "messages on or off",
                 "",
-                "&ePlayer joined.",
+                "&7I &rfound a &e\u2730\u2730 &bMystery Box&r!",
+                "&b[Mystery Box] &7I &rfound a &6Dab&r!",
                 "",
-                "This is good for",
-                "people with a large",
-                "friends list"
+                "Useful to prevent those",
+                "weird box opening messages"
         );
     }
 }

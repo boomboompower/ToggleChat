@@ -56,7 +56,7 @@ public class TypeColored extends ToggleBase {
     @Override
     public void onClick(ModernButton button) {
         this.showColored = !this.showColored;
-        button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 
     @Override

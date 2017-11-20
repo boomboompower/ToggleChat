@@ -54,7 +54,7 @@ public class TypeGuild extends ToggleBase {
     @Override
     public void onClick(ModernButton button) {
         this.showGuild = !this.showGuild;
-        button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 
     @Override

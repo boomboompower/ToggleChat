@@ -24,11 +24,6 @@ import me.boomboompower.togglechat.gui.modern.ModernTextBox;
 import me.boomboompower.togglechat.gui.togglechat.MainGui;
 import me.boomboompower.togglechat.toggles.dummy.ToggleDummyMessage;
 
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -93,7 +88,7 @@ public class WhitelistMainGui extends ModernGui {
                 "for extra fanciness"
         )));
 
-        this.buttonList.add(new ModernButton(10, 5, this.height - 25, 75, 20, "Back"));
+        this.buttonList.add(new ModernButton(10, 5, this.height - 25, 90, 20, "Back"));
 
         this.text.setText(this.input);
         this.text.setFocused(true);
@@ -117,7 +112,18 @@ public class WhitelistMainGui extends ModernGui {
     protected void keyTyped(char c, int key) {
         if (key == 1) {
             this.mc.displayGuiScreen(null);
-        } else if (Character.isLetterOrDigit(c) || c == '_' || key == 14 || isCool(key)) { // Sorry to anyone who originally used other things
+        } else if (key == 28) {
+            if (this.text.getText().isEmpty()) {
+                sendChatMessage("No name given!");
+            } else if (whitelistContains(this.text.getText())) {
+                sendChatMessage("The whitelist already contained &6" + this.text.getText() + "&7!");
+            } else {
+                ToggleChatMod.getInstance().getWhitelist().add(this.text.getText());
+                sendChatMessage("Added &6" + this.text.getText() + "&7 to the whitelist!");
+                this.text.setText("");
+                ToggleChatMod.getInstance().getWhitelist().sort(Collator.getInstance());
+            }
+        } else if (Character.isLetterOrDigit(c) || c == '_' || key == 14 || isCool(key) || isCooler(c)) { // Sorry to anyone who originally used other things
             this.text.textboxKeyTyped(c, key);
         }
     }
@@ -195,17 +201,11 @@ public class WhitelistMainGui extends ModernGui {
         }
     }
 
-    public void display() {
-        MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
-        MinecraftForge.EVENT_BUS.unregister(this);
-        Minecraft.getMinecraft().displayGuiScreen(this);
-    }
-
     private boolean isCool(int keyCode) {
         return isKeyComboCtrlA(keyCode) || isKeyComboCtrlC(keyCode) || isKeyComboCtrlX(keyCode) || isKeyComboCtrlV(keyCode);
+    }
+
+    private boolean isCooler(char key) {
+        return key == '[' || key == ']';
     }
 }

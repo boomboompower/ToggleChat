@@ -410,10 +410,16 @@ public class ModernTextBox extends Gui {
      */
     public void drawTextBox() {
         if (this.getVisible()) {
-            if (this.isEnabled) {
-                drawRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height, new Color(0, 148, 255, 75).getRGB());
+
+            if (ModernGui.isClassic()) {
+                drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width + 1, this.yPosition + this.height + 1, -6250336);
+                drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + this.height, -16777216);
             } else {
-                drawRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height,  new Color(0, 125, 215, 75).getRGB());
+                if (this.isEnabled) {
+                    drawRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height, new Color(0, 148, 255, 75).getRGB());
+                } else {
+                    drawRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height,  new Color(0, 125, 215, 75).getRGB());
+                }
             }
 
             int i = this.isEnabled ? 14737632 : 7368816;
@@ -435,7 +441,7 @@ public class ModernTextBox extends Gui {
                 return;
             }
 
-            if (s.isEmpty() && !isFocused && isEnabled) {
+            if (s.isEmpty() && !isFocused && isEnabled && !ModernGui.isClassic()) {
                 this.fontRendererInstance.drawString(noTextMessage, ((this.xPosition + this.width / 2) - fontRendererInstance.getStringWidth(noTextMessage) / 2), this.yPosition + this.height / 2 - 4, i, false);
                 return;
             }
@@ -461,8 +467,7 @@ public class ModernTextBox extends Gui {
             if (flag1) {
                 if (flag2) {
                     Gui.drawRect(k1, i1 -1, k1 + 1, i1 + 1 + this.fontRendererInstance.FONT_HEIGHT, -3092272);
-                }
-                else {
+                } else {
                     this.fontRendererInstance.drawString("_", (float) k1, (float) i1, i, false);
                 }
             }

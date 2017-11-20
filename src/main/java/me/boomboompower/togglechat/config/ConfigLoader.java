@@ -35,6 +35,8 @@ public class ConfigLoader {
 
     private JsonObject configJson;
 
+    private boolean classicTheme = false;
+
     public ConfigLoader(String directory) {
         File e = new File(directory);
         if (!e.exists()) {
@@ -81,6 +83,8 @@ public class ConfigLoader {
             for (ToggleBase type : ToggleBase.getToggles().values()) {
                 this.configJson.addProperty("show" + type.getName().replace(" ", "_"), type.isEnabled());
             }
+
+            this.configJson.addProperty("classic", this.classicTheme);
 
             bufferedWriter.write(this.configJson.toString());
             bufferedWriter.close();
@@ -132,6 +136,14 @@ public class ConfigLoader {
 
     public File getWhitelistFile() {
         return this.whitelistFile;
+    }
+
+    public boolean isClassicTheme() {
+        return this.classicTheme;
+    }
+
+    public void setClassicTheme(boolean classicTheme) {
+        this.classicTheme = classicTheme;
     }
 
     protected void log(String message, Object... replace) {

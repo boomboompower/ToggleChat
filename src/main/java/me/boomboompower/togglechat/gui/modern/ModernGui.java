@@ -19,12 +19,16 @@ package me.boomboompower.togglechat.gui.modern;
 
 import com.google.common.collect.Lists;
 
+import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.*;
 import java.util.List;
@@ -33,9 +37,6 @@ public abstract class ModernGui extends GuiScreen {
 
     protected final Minecraft mc = Minecraft.getMinecraft();
     protected final FontRenderer fontRendererObj = this.mc.fontRendererObj;
-
-    public static final String ENABLED = ChatColor.GREEN + "Enabled";
-    public static final String DISABLED = ChatColor.GRAY + "Disabled";
 
     protected List<ModernTextBox> textList = Lists.newArrayList();
 
@@ -104,7 +105,7 @@ public abstract class ModernGui extends GuiScreen {
 
     @Override
     public final void drawDefaultBackground() {
-        Gui.drawRect(0, 0, this.width, this.height, 2013265920 + (2 << 16) + (2 << 8) + 2);
+        Gui.drawRect(0, 0, this.width, this.height, new Color(2, 2, 2, 120).getRGB());
     }
 
     @Override
@@ -173,5 +174,23 @@ public abstract class ModernGui extends GuiScreen {
             drawCenteredString(this.fontRendererObj, ChatColor.translateAlternateColorCodes('&', s), startingX, startingY, Color.WHITE.getRGB());
             startingY += separation;
         }
+    }
+
+    public final void display() {
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent
+    public final void onTick(TickEvent.ClientTickEvent event) {
+        MinecraftForge.EVENT_BUS.unregister(this);
+        Minecraft.getMinecraft().displayGuiScreen(this);
+    }
+
+    public static String getStatus(boolean in) {
+        return in ? ChatColor.GREEN + "Enabled" : (isClassic() ? ChatColor.RED : ChatColor.GRAY) + "Disabled";
+    }
+
+    public static boolean isClassic() {
+        return ToggleChatMod.getInstance().getConfigLoader().isClassicTheme();
     }
 }

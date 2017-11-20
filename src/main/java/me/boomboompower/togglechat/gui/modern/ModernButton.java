@@ -17,6 +17,7 @@
 
 package me.boomboompower.togglechat.gui.modern;
 
+import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -97,21 +98,30 @@ public class ModernButton extends GuiButton {
             this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
             int i = this.getHoverState(this.hovered);
 
-            if (this.enabled) {
-                drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + height, new Color(255, 255, 255, 75).getRGB());
+            if (ToggleChatMod.getInstance().getConfigLoader().isClassicTheme()) {
+                mc.getTextureManager().bindTexture(buttonTextures);
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+                GlStateManager.blendFunc(770, 771);
+                this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 46 + i * 20, this.width / 2, this.height);
+                this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, 200 - this.width / 2, 46 + i * 20, this.width / 2, this.height);
             } else {
-                drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + height,  new Color(100, 100, 100, 75).getRGB());
+                if (this.enabled) {
+                    drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + height, new Color(255, 255, 255, 75).getRGB());
+                } else {
+                    drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + height,  new Color(100, 100, 100, 75).getRGB());
+                }
             }
 
             this.mouseDragged(mc, mouseX, mouseY);
             int j = 14737632;
 
             if (!this.enabled) {
-                j = Color.WHITE.getRGB();
+                j = ModernGui.isClassic() ? 10526880 : Color.WHITE.getRGB();
             } else if (this.hovered) {
                 j = 16777120;
             }
-            fontrenderer.drawString(this.displayString, (this.xPosition + this.width / 2 - fontrenderer.getStringWidth(this.displayString) / 2), this.yPosition + (this.height - 8) / 2, j, false);
+            fontrenderer.drawString(this.displayString, (this.xPosition + this.width / 2 - fontrenderer.getStringWidth(this.displayString) / 2), this.yPosition + (this.height - 8) / 2, j, ModernGui.isClassic());
         }
     }
 

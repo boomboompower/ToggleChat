@@ -51,7 +51,7 @@ public class TypeFriendRequests extends ToggleBase {
     @Override
     public void onClick(ModernButton button) {
         this.showFriendRequests = !this.showFriendRequests;
-        button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 
     @Override

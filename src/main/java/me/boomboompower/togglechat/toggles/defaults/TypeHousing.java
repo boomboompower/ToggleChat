@@ -50,7 +50,7 @@ public class TypeHousing extends ToggleBase {
     @Override
     public void onClick(ModernButton button) {
         this.showHousing = !this.showHousing;
-        button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 
     @Override

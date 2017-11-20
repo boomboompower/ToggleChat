@@ -54,7 +54,7 @@ public class TypeParty extends ToggleBase {
     @Override
     public void onClick(ModernButton button) {
         this.showPartyChat = !this.showPartyChat;
-        button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class TypeParty extends ToggleBase {
                 "chat messages",
                 "",
                 "Toggle format",
-                "&9Party > &7Player: Hello",
+                "&9Party > &7Player&r: Hello",
                 "",
                 "Fairly useful when",
                 "You\'re in a large party"

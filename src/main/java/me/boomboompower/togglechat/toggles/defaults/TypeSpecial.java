@@ -88,7 +88,7 @@ public class TypeSpecial extends ToggleBase {
     @Override
     public void onClick(ModernButton button) {
         this.showSpecial = !this.showSpecial;
-        button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 
     @Override

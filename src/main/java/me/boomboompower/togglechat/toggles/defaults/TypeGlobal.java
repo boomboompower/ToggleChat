@@ -42,6 +42,14 @@ public class TypeGlobal extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
+        if (message.contains(":") && message.contains("distance") && message.endsWith("}")) {
+            return false; // Fix skywars debug being toggled
+        }
+
+        if (ToggleBase.hasToggle("team") && ToggleBase.getToggle("team").isEnabled() && message.startsWith("[TEAM]")) {
+            return false;
+        }
+
         return this.chatPattern.matcher(message).matches() && isNotOtherChat(message);
     }
 
@@ -57,8 +65,8 @@ public class TypeGlobal extends ToggleBase {
 
     @Override
     public void onClick(ModernButton button) {
-        this.showGlobal = !showGlobal;
-        button.setText(String.format(getDisplayName(), isEnabled() ? ModernGui.ENABLED : ModernGui.DISABLED));
+        this.showGlobal = !this.showGlobal;
+        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 
     @Override
