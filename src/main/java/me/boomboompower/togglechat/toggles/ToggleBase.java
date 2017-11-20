@@ -23,6 +23,7 @@ import me.boomboompower.togglechat.toggles.defaults.*;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.regex.Pattern;
 
 /**
  * Created to replace the old ToggleBase class
@@ -207,5 +208,17 @@ public abstract class ToggleBase {
         LinkedList<T> list = new LinkedList<>();
         list.addAll(Arrays.asList(entry));
         return list;
+    }
+
+    /**
+     * Checks if the message contains something without
+     *      being case-sensitive
+     *
+     * @param message The message to check
+     * @param contains the contents
+     * @return true if it contains it
+     */
+    public final boolean containsIgnoreCase(String message, String contains) {
+        return Pattern.compile(Pattern.quote(contains), Pattern.CASE_INSENSITIVE).matcher(message).find();
     }
 }
