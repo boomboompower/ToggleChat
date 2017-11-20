@@ -123,7 +123,6 @@ public class MainGui extends ModernGui {
                 return;
             case 4:
                 ToggleChatMod.getInstance().getConfigLoader().setClassicTheme(!isClassic());
-                button.setText("Classic: " + getStatus(isClassic()));
 
                 for (GuiButton buttons : this.buttonList) {
                     if (buttons instanceof ModernButton && (((ModernButton) buttons).hasButtonData())) {
@@ -131,6 +130,7 @@ public class MainGui extends ModernGui {
                         modern.setText(String.format(modern.getButtonData().getDisplayName(), ModernGui.getStatus(modern.getButtonData().isEnabled())));
                     }
                 }
+                button.setText("Classic: " + getStatus(isClassic()));
                 return;
         }
         for (ToggleBase base : ToggleBase.getToggles().values()) {
