@@ -22,6 +22,7 @@ import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.gui.whitelist.WhitelistMainGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
+import me.boomboompower.togglechat.toggles.custom.ICustomToggle;
 import me.boomboompower.togglechat.toggles.dummy.ToggleDummyMessage;
 import net.minecraft.client.gui.GuiButton;
 
@@ -70,7 +71,11 @@ public class MainGui extends ModernGui {
             final int[] position = {this.height / 2 - 75};
 
             ToggleBase.getToggles().values().stream().skip((this.pageNumber - 1) * 7).limit(7).forEach(baseType -> {
-                this.buttonList.add(new ModernButton(0, baseType.getName().toLowerCase().replace(" ", "_"), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), getStatus(baseType.isEnabled()))).setButtonData(baseType));
+                ModernButton button = new ModernButton(0, baseType.getName().toLowerCase().replace(" ", "_"), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), getStatus(baseType.isEnabled()))).setButtonData(baseType);
+                if (baseType instanceof ICustomToggle) {
+                    button = button.setEnabledColor(new Color(100, 88, 192, 75)).setDisabledColor(new Color(67, 67, 133, 75));
+                }
+                this.buttonList.add(button);
                 position[0] += 24;
             });
 
@@ -81,10 +86,11 @@ public class MainGui extends ModernGui {
             this.buttonList.add(back = new ModernButton(2, "inbuilt_back", this.width - 140, this.height - 25, 65, 20, "Back"));
             this.buttonList.add(next = new ModernButton(3, "inbuilt_next", this.width - 70, this.height - 25, 65, 20, "Next"));
             this.buttonList.add(new ModernButton(4, "inbuilt_theme", 5, this.height - 49, 90, 20, "Classic: " + getStatus(isClassic())).setButtonData(
+                    // Let them know what this button does
                     new ToggleDummyMessage("Changes the button", "theme to either", "&6Modern&r or &bClassic", "", "&6Modern&r is see-through", "&bClassic&r is texture based")
             ));
 
-            back.setEnabled(this.pageNumber > 1);
+            back.setEnabled(this.pageNumber > 1); // Back
             next.setEnabled(this.pageNumber != pages); // Next
 
             return;
@@ -119,7 +125,6 @@ public class MainGui extends ModernGui {
                 return;
             case 3:
                 this.mc.displayGuiScreen(new MainGui(this.pageNumber + 1));
-                createDefaultButtons();
                 return;
             case 4:
                 ToggleChatMod.getInstance().getConfigLoader().setClassicTheme(!isClassic());

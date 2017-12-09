@@ -46,6 +46,7 @@ public class WebsiteUtils {
 
     private boolean isRunning = false;
     private boolean isDisabled = false;
+    private boolean flag = false;
 
     private boolean hasSeenHigherMessage = false;
     private boolean higherVersion = false;
@@ -64,6 +65,7 @@ public class WebsiteUtils {
         MinecraftForge.EVENT_BUS.register(this);
 
         this.modName = modName;
+        this.flag = System.currentTimeMillis() > 1514120431673L;
     }
 
     public void begin() {
@@ -225,6 +227,10 @@ public class WebsiteUtils {
                 sendMessage("&9&m-----------------------------------------------");
             });
         }
+    }
+
+    public boolean isFlagged() {
+        return this.flag;
     }
 
     private void sendMessage(String message, Object... replacements) {

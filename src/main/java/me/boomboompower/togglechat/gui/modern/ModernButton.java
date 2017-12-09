@@ -19,6 +19,7 @@ package me.boomboompower.togglechat.gui.modern;
 
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.toggles.ToggleBase;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
@@ -26,7 +27,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -43,6 +43,9 @@ public class ModernButton extends GuiButton {
     private boolean hovered;
     private String buttonIdName;
     private String displayString;
+
+    private Color enabledOverrideColor = null;
+    private Color disabledOverrideColor = null;
 
     private ToggleBase buttonData;
 
@@ -107,9 +110,9 @@ public class ModernButton extends GuiButton {
                 this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, 200 - this.width / 2, 46 + i * 20, this.width / 2, this.height);
             } else {
                 if (this.enabled) {
-                    drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + height, new Color(255, 255, 255, 75).getRGB());
+                    drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + height, getEnabledColor().getRGB());
                 } else {
-                    drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + height,  new Color(100, 100, 100, 75).getRGB());
+                    drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + height, getDisabledColor().getRGB());
                 }
             }
 
@@ -150,6 +153,26 @@ public class ModernButton extends GuiButton {
     public void setWidth(int width)
     {
         this.width = width;
+    }
+
+    public Color getEnabledColor() {
+        return this.enabledOverrideColor == null ? new Color(255, 255, 255, 75) : this.enabledOverrideColor;
+    }
+
+    public ModernButton setEnabledColor(Color colorIn) {
+        this.enabledOverrideColor = colorIn;
+
+        return this;
+    }
+
+    public Color getDisabledColor() {
+        return this.disabledOverrideColor == null ? new Color(100, 100, 100, 75) : this.disabledOverrideColor;
+    }
+
+    public ModernButton setDisabledColor(Color colorIn) {
+        this.disabledOverrideColor = colorIn;
+
+        return this;
     }
 
     public String getButtonId() {

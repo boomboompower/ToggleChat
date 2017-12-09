@@ -18,6 +18,8 @@
 package me.boomboompower.togglechat.toggles;
 
 import me.boomboompower.togglechat.gui.modern.ModernButton;
+import me.boomboompower.togglechat.toggles.custom.ICustomToggle;
+import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 import me.boomboompower.togglechat.toggles.defaults.*;
 
 import java.util.Arrays;
@@ -35,6 +37,9 @@ public abstract class ToggleBase {
 
     /* Name | ToggleBase */
     private static final LinkedHashMap<String, ToggleBase> toggles = new LinkedHashMap<>();
+
+    /* Name | TypeCustom */
+    private static final LinkedHashMap<String, TypeCustom> custom = new LinkedHashMap<>();
 
     /**
      * Default constructor for ToggleBase
@@ -55,6 +60,11 @@ public abstract class ToggleBase {
                 return true;
             }
         }
+        for (TypeCustom custom : custom.values()) {
+            if (custom.shouldToggle(input)) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -64,7 +74,13 @@ public abstract class ToggleBase {
      * @param toggleBase the developers toggle
      */
     public static void addToggle(ToggleBase toggleBase) {
-        if (toggleBase != null && toggleBase.getName() != null) toggles.put(toggleBase.getName().toLowerCase().replace(" ", "_"), toggleBase);
+        if (toggleBase != null && toggleBase.getName() != null)  {
+            if (toggleBase instanceof ICustomToggle && toggleBase instanceof TypeCustom) {
+                custom.put(toggleBase.getName().toLowerCase().replace(" ", "_"), ((TypeCustom) toggleBase));
+            } else {
+                toggles.put(toggleBase.getName().toLowerCase().replace(" ", "_"), toggleBase);
+            }
+        }
     }
 
     /**
@@ -181,7 +197,19 @@ public abstract class ToggleBase {
 
     @Override
     public String toString() {
-        return "MessageBase{parsers=" + Arrays.toString(toggles.keySet().toArray()) + '}';
+        String message = "MessageBase{parsers = ";
+
+        if (toggles.isEmpty()) {
+            message += "[]";
+        } else {
+            message += Arrays.toString(toggles.keySet().toArray());
+        }
+
+        if (!custom.isEmpty()) {
+            message += ", custom = " + Arrays.toString(custom.keySet().toArray());
+        }
+
+        return message + "}";
     }
 
     /**
@@ -193,6 +221,7 @@ public abstract class ToggleBase {
     public static LinkedHashMap<String, ToggleBase> getToggles() {
         LinkedHashMap<String, ToggleBase> newInput = new LinkedHashMap<>();
         toggles.forEach(newInput::put);
+        custom.forEach(newInput::put);
         return newInput;
     }
 

@@ -22,29 +22,39 @@ import com.google.gson.JsonParser;
 
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.toggles.ToggleBase;
+import me.boomboompower.togglechat.toggles.custom.ToggleCondition;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class ConfigLoader {
 
     private File toggleFile;
     private File whitelistFile;
+    private File customToggleDir;
 
     private JsonObject configJson;
 
     private boolean classicTheme = false;
+    private boolean flagged = false;
 
     public ConfigLoader(String directory) {
         File e = new File(directory);
+
         if (!e.exists()) {
             e.mkdirs();
         }
 
         this.toggleFile = new File(directory + "options.nn");
         this.whitelistFile = new File(directory + "whitelist.nn");
+        this.flagged = ToggleChatMod.getInstance().getWebsiteUtils().isFlagged();
+
+        if (this.flagged) {
+            this.customToggleDir = new File(directory, "custom");
+        }
     }
 
     public void loadToggles() {
@@ -124,6 +134,71 @@ public class ConfigLoader {
            log("Could not save whitelist.");
            ex.printStackTrace();
        }
+    }
+
+    public void loadCustomToggles() {
+        if (!this.flagged || this.customToggleDir == null) {
+            return;
+        }
+
+        if (!exists(this.customToggleDir)) {
+            this.customToggleDir.mkdirs();
+
+            try {
+                File file = new File(this.customToggleDir, "default.txt");
+                FileWriter writer = new FileWriter(file);
+                writer.append("// Format").append(System.lineSeparator());
+                writer.append("// ToggleName : <Condition>").append(System.lineSeparator());
+                writer.append("//").append(System.lineSeparator());
+                writer.append("// Possible conditions").append(System.lineSeparator());
+                writer.append("// startsWith(string)          Starts with \"string\"").append(System.lineSeparator());
+                writer.append("// contains(string)            Contains \"string\"").append(System.lineSeparator());
+                writer.append("// contains(string,4)          Contains \"string\" 4 times").append(System.lineSeparator());
+                writer.append("// endsWith(string)            Ends with \"string\"").append(System.lineSeparator());
+                writer.append("// equals(string)              Equals \"string\" case-sensitive").append(System.lineSeparator());
+                writer.append("// equalsIgnoreCase(string)    Equals \"string\" not case-sensitive").append(System.lineSeparator());
+                writer.append("").append(System.lineSeparator());
+                writer.append("MyToggle : startsWith([YT] Sk1er)").append(System.lineSeparator());
+                writer.close();
+            } catch (Exception ex) {
+            }
+            return;
+        }
+
+        try {
+            // noinspection ConstantConditions
+            for (File file : this.customToggleDir.listFiles()) {
+                if (file.getName().endsWith(".nn") && !file.isDirectory()) {
+                    try {
+                        FileReader fileReader = new FileReader(file);
+                        BufferedReader reader = new BufferedReader(fileReader);
+                        LinkedList<String> lines = new LinkedList<>();
+
+                        for (String s : reader.lines().collect(Collectors.toList())) {
+                            if (!s.isEmpty() && !s.startsWith("//")) {
+                                lines.add(s);
+                            }
+                        }
+
+                        if (lines.size() == 0) {
+                            // We don't need to worry about an empty file.
+                            continue;
+                        }
+
+                        for (String line : lines) {
+                            if (ToggleCondition.isValidFormat(line)) {
+
+                            }
+                        }
+                    } catch (Exception ex) {
+                        log("Failed to load \"" + file.getName() + "\". Ignoring.");
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            log("Failed to load your custom toggles!");
+            ex.printStackTrace();
+        }
     }
 
     public boolean exists(File file) {

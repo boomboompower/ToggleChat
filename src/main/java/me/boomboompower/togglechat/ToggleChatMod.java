@@ -78,6 +78,10 @@ public class ToggleChatMod {
     public void postInit(FMLPostInitializationEvent event) {
         this.configLoader.loadToggles();
         this.configLoader.loadWhitelist();
+
+        if (this.websiteUtils.isFlagged()) {
+            this.configLoader.loadCustomToggles();
+        }
     }
 
     public LinkedList<String> getWhitelist() {
