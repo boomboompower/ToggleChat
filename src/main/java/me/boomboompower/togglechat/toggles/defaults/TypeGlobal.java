@@ -17,18 +17,30 @@
 
 package me.boomboompower.togglechat.toggles.defaults;
 
+import com.google.gson.JsonObject;
+
 import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.modern.ModernGui;
+import me.boomboompower.togglechat.gui.togglechat.GlobalToggleGui;
+import me.boomboompower.togglechat.toggles.ICustomSaver;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import net.minecraft.client.Minecraft;
+
 import java.util.LinkedList;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TypeGlobal extends ToggleBase {
+public class TypeGlobal extends ToggleBase implements ICustomSaver {
 
     private Pattern chatPattern = Pattern.compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
 
-    public boolean showGlobal = true;
+    public boolean showNon = true;
+    public boolean showVip = true;
+    public boolean showVipPlus = true;
+    public boolean showMvp = true;
+    public boolean showMvpPlus = true;
+    public boolean showMvpPlusPlus = true;
+    public boolean showYoutube = true;
 
     @Override
     public String getName() {
@@ -37,7 +49,7 @@ public class TypeGlobal extends ToggleBase {
 
     @Override
     public String getDisplayName() {
-        return "Global Chat: %s";
+        return "Global Chat";
     }
 
     @Override
@@ -50,23 +62,43 @@ public class TypeGlobal extends ToggleBase {
             return false;
         }
 
-        return this.chatPattern.matcher(message).matches() && isNotOtherChat(message);
+        Matcher matcher = this.chatPattern.matcher(message);
+
+        return matcher.matches() && isRankToggled(matcher.group("rank")) && isNotOtherChat(message);
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showGlobal;
+        return false;
     }
 
     @Override
     public void setToggled(boolean enabled) {
-        this.showGlobal = enabled;
     }
 
     @Override
     public void onClick(ModernButton button) {
-        this.showGlobal = !this.showGlobal;
-        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
+        Minecraft.getMinecraft().displayGuiScreen(new GlobalToggleGui(this));
+    }
+
+    @Override
+    public boolean useDefaultSave() {
+        return false;
+    }
+
+    @Override
+    public void onSave(JsonObject config) {
+
+    }
+
+    @Override
+    public boolean useDefaultLoad() {
+        return false;
+    }
+
+    @Override
+    public void onLoad(JsonObject config) {
+
     }
 
     @Override
@@ -90,5 +122,30 @@ public class TypeGlobal extends ToggleBase {
 
     private boolean isNotOtherChat(String input) {
         return !input.startsWith("[TEAM] ") && !input.startsWith("[SHOUT] ") && !input.startsWith("[SPECTATOR] ");
+    }
+
+    private boolean isRankToggled(String rankInput) {
+        if (rankInput == null) {
+            return false;
+        }
+
+        switch (rankInput) {
+            case "":
+                return !this.showNon;
+            case "[VIP] ":
+                return !this.showVip;
+            case "[VIP+] ":
+                return !this.showVipPlus;
+            case "[MVP] ":
+                return !this.showMvp;
+            case "[MVP+] ":
+                return !this.showMvpPlus;
+            case "[MVP++]":
+                return !this.showMvpPlusPlus;
+            case "[YOUTUBER] ":
+                return !this.showYoutube;
+        }
+
+        return false;
     }
 }
