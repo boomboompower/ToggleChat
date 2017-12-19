@@ -21,6 +21,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import me.boomboompower.togglechat.ToggleChatMod;
+import me.boomboompower.togglechat.toggles.ICustomSaver;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 import me.boomboompower.togglechat.toggles.custom.ToggleCondition;
 
@@ -75,6 +76,13 @@ public class ConfigLoader {
             }
 
             for (ToggleBase base : ToggleBase.getToggles().values()) {
+                if (base instanceof ICustomSaver) {
+                    ICustomSaver saver = (ICustomSaver) base;
+                    if (!saver.useDefaultLoad()) {
+                        saver.onLoad(this.configJson);
+                        continue;
+                    }
+                }
                 base.setToggled(this.configJson.has("show" + base.getName().replace(" ", "_")) && this.configJson.get("show" + base.getName().replace(" ", "_")).getAsBoolean());
             }
 
@@ -90,8 +98,15 @@ public class ConfigLoader {
             FileWriter writer = new FileWriter(this.toggleFile);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
 
-            for (ToggleBase type : ToggleBase.getToggles().values()) {
-                this.configJson.addProperty("show" + type.getName().replace(" ", "_"), type.isEnabled());
+            for (ToggleBase base : ToggleBase.getToggles().values()) {
+                if (base instanceof ICustomSaver) {
+                    ICustomSaver saver = (ICustomSaver) base;
+                    if (!saver.useDefaultSave()) {
+                        saver.onSave(this.configJson);
+                        continue;
+                    }
+                }
+                this.configJson.addProperty("show" + base.getName().replace(" ", "_"), base.isEnabled());
             }
 
             this.configJson.addProperty("classic", this.classicTheme);

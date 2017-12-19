@@ -34,7 +34,7 @@ public class TypeMessageSeparator extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        return message.contains("---------------------------");
+        return message.contains("---------------------");
     }
 
     @Override

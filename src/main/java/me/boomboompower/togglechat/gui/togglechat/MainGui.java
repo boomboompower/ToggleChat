@@ -49,10 +49,6 @@ public class MainGui extends ModernGui {
 
     @Override
     public void initGui() {
-        createDefaultButtons();
-    }
-
-    private void createDefaultButtons() {
         this.buttonList.clear();
 
         setupPage();
@@ -102,9 +98,10 @@ public class MainGui extends ModernGui {
         drawDefaultBackground();
 
         if (this.nobuttons) {
-            drawCenteredString(this.fontRendererObj, "There are no buttons loaded!", this.width / 2, this.height / 2 - 50, Color.WHITE.getRGB());
+            drawCenteredString(this.fontRendererObj, "An issue occured whilst loading ToggleChat!", this.width / 2, this.height / 2 - 50, Color.WHITE.getRGB());
             drawCenteredString(this.fontRendererObj, "Buttons have not loaded correctly", this.width / 2, this.height / 2 - 30, Color.WHITE.getRGB());
-            drawCenteredString(this.fontRendererObj, "Please contact boomboompower!", this.width / 2, this.height / 2, Color.WHITE.getRGB());
+            drawCenteredString(this.fontRendererObj, "Please reinstall the mod!", this.width / 2, this.height / 2, Color.WHITE.getRGB());
+            return;
         } else {
             drawCenteredString(this.fontRendererObj, String.format("Page %s/%s", (this.pageNumber), (int) Math.ceil((double) ToggleBase.getToggles().size() / 7D)), this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
         }

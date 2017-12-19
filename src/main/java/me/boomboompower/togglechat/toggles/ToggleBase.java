@@ -101,6 +101,7 @@ public abstract class ToggleBase {
         toggles.put("special", new TypeSpecial());
         toggles.put("colored_team", new TypeColored());
         toggles.put("party_invites", new TypePartyInvites());
+        toggles.put("build_battle", new TypeBuildBattle());
         toggles.put("mystery_box", new TypeMysteryBox());
         toggles.put("spectator", new TypeSpectator());
         toggles.put("lobby_join", new TypeLobbyJoin());
