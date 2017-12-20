@@ -268,7 +268,7 @@ public class WebsiteUtils {
     }
 
     public boolean isFlagged() {
-        return true;
+        return this.flag;
     }
 
     private void sendMessage(String message, Object... replacements) {
