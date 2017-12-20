@@ -26,8 +26,8 @@ import java.util.regex.Pattern;
 
 public class TypeGuild extends ToggleBase {
 
-    public Pattern guildPattern = Pattern.compile("Guild > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    public Pattern shortGuildPattern = Pattern.compile("G > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private Pattern guildPattern = Pattern.compile("Guild > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private Pattern shortGuildPattern = Pattern.compile("G > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
 
     private boolean showGuild = true;
 
@@ -63,12 +63,15 @@ public class TypeGuild extends ToggleBase {
                 "Toggles all guild",
                 "chat messages",
                 "",
-                "This is a feature hypixel",
-                "should offer, but doesn\'t",
+                "&2Guild > &7Player&r: Hi",
                 "",
-                "This works regardless of if",
-                "the player has or hasn\'t",
-                "got a rank"
+                "This is a feature",
+                "which should be",
+                "offered, but isn\'t",
+                "",
+                "This toggle works",
+                "regardless of the",
+                "rank a player has"
         );
     }
 }

@@ -45,7 +45,7 @@ public class ToggleEvents {
                     // If the toggle should toggle the specified message and
                     // the toggle is not enabled (this message is turned off)
                     // don't send the message to the player & stop looping
-                    if (type.shouldToggle(unformattedText) && !type.isEnabled()) {
+                    if (!type.isEnabled() && type.shouldToggle(unformattedText)) {
                         event.setCanceled(true);
                         break;
                     }

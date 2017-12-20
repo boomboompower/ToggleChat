@@ -62,7 +62,12 @@ public class TypeHousing extends ToggleBase {
                 "",
                 "&6[OWNER]",
                 "&6[CO-OWNER]",
-                "&6[RES]"
+                "&6[RES]",
+                "",
+                "Build peacefully and",
+                "without hassle,",
+                "as if you were in a",
+                "zen garden"
         );
     }
 }

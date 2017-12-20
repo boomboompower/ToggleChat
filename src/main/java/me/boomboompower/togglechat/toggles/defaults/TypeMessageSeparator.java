@@ -34,6 +34,14 @@ public class TypeMessageSeparator extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
+        // Don't toggle it if its a chat message
+        if (ToggleBase.hasToggle("global")) {
+            ToggleBase globalToggle = ToggleBase.getToggle("global");
+            if (globalToggle.isEnabled() && globalToggle.shouldToggle(message)) {
+                return false;
+            }
+        }
+
         return message.contains("---------------------");
     }
 
@@ -56,14 +64,16 @@ public class TypeMessageSeparator extends ToggleBase {
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-                "Toggles all messages that",
-                "are the same length as",
-                "Hypixels\' message",
-                "separators",
+                "Toggles all messages",
+                "that contain a lot",
+                "of separators",
                 "",
-                "Checks for separators",
-                "that look like this",
-                "---------------------"
+                "Checks for message",
+                "separators that look",
+                "like this",
+                "-----------------",
+                "",
+                "Less lines = more fun"
         );
     }
 }

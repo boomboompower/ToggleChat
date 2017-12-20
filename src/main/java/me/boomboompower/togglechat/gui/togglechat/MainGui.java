@@ -18,6 +18,7 @@
 package me.boomboompower.togglechat.gui.togglechat;
 
 import me.boomboompower.togglechat.ToggleChatMod;
+import me.boomboompower.togglechat.gui.custom.CustomToggleMain;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.gui.whitelist.WhitelistMainGui;
@@ -25,6 +26,7 @@ import me.boomboompower.togglechat.toggles.ToggleBase;
 import me.boomboompower.togglechat.toggles.custom.ICustomToggle;
 import me.boomboompower.togglechat.toggles.dummy.ToggleDummyMessage;
 import net.minecraft.client.gui.GuiButton;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.awt.*;
 
@@ -75,20 +77,30 @@ public class MainGui extends ModernGui {
                 position[0] += 24;
             });
 
-            ModernButton back;
-            ModernButton next;
-
             this.buttonList.add(new ModernButton(1, "inbuilt_whitelist", 5, this.height - 25, 90, 20, "Whitelist"));
-            this.buttonList.add(back = new ModernButton(2, "inbuilt_back", this.width - 140, this.height - 25, 65, 20, "Back"));
-            this.buttonList.add(next = new ModernButton(3, "inbuilt_next", this.width - 70, this.height - 25, 65, 20, "Next"));
+            this.buttonList.add(new ModernButton(2, "inbuilt_back", this.width - 140, this.height - 25, 65, 20, "Back").setEnabled(this.pageNumber > 1));
+            this.buttonList.add(new ModernButton(3, "inbuilt_next", this.width - 70, this.height - 25, 65, 20, "Next").setEnabled(this.pageNumber != pages));
             this.buttonList.add(new ModernButton(4, "inbuilt_theme", 5, this.height - 49, 90, 20, "Classic: " + getStatus(isClassic())).setButtonData(
                     // Let them know what this button does
                     new ToggleDummyMessage("Changes the button", "theme to either", "&6Modern&r or &bClassic", "", "&6Modern&r is see-through", "&bClassic&r is texture based")
             ));
 
-            back.setEnabled(this.pageNumber > 1); // Back
-            next.setEnabled(this.pageNumber != pages); // Next
-
+            if (ToggleChatMod.getInstance().getWebsiteUtils().isFlagged()) {
+                this.buttonList.add(new ModernButton(5, this.width - 135, this.height - 49, 125, 20, "Custom Toggles").setEnabledColor(new Color(100, 88, 192, 75)).setDisabledColor(new Color(67, 67, 133, 75)).setButtonData(
+                        new ToggleDummyMessage(
+                                "Allows you to add",
+                                "your own custom",
+                                "toggles to the mod",
+                                "",
+                                "This feature is still",
+                                "in &cbeta&r and may be",
+                                "changed at any time",
+                                "",
+                                "Brought to you by",
+                                "&6OrangeMarshall"
+                        )
+                ));
+            }
             return;
         }
         this.nobuttons = true;
@@ -129,10 +141,13 @@ public class MainGui extends ModernGui {
                 for (GuiButton buttons : this.buttonList) {
                     if (buttons instanceof ModernButton && (((ModernButton) buttons).hasButtonData())) {
                         ModernButton modern = (ModernButton) buttons;
-                        modern.setText(String.format(modern.getButtonData().getDisplayName(), ModernGui.getStatus(modern.getButtonData().isEnabled())));
+                        modern.setText(String.format(nameFormat(modern.getButtonData()), ModernGui.getStatus(modern.getButtonData().isEnabled())));
                     }
                 }
                 button.setText("Classic: " + getStatus(isClassic()));
+                return;
+            case 5:
+                this.mc.displayGuiScreen(new CustomToggleMain(this));
                 return;
         }
         for (ToggleBase base : ToggleBase.getToggles().values()) {
@@ -146,5 +161,9 @@ public class MainGui extends ModernGui {
     @Override
     public void onGuiClosed() {
         ToggleChatMod.getInstance().getConfigLoader().saveToggles();
+    }
+
+    private String nameFormat(ToggleBase base) {
+        return base.capitalizeName() ? WordUtils.capitalizeFully(base.getDisplayName().toLowerCase()) : base.getDisplayName();
     }
 }

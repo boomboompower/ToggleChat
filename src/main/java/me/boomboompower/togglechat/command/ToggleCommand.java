@@ -26,7 +26,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

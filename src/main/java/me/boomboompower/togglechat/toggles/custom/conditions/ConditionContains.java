@@ -2,12 +2,25 @@ package me.boomboompower.togglechat.toggles.custom.conditions;
 
 import me.boomboompower.togglechat.toggles.custom.ToggleCondition;
 
+/**
+ * This code was created by OrangeMarshall and used
+ *          with permission by boomboompower.
+ *
+ * Full credit to OrangeMarshall
+ *
+ * @author OrangeMarshall
+ */
 public class ConditionContains extends ToggleCondition {
 
     private int matchCount = 1;
 
     public ConditionContains(String input) {
         super(input);
+    }
+
+    @Override
+    public String getSaveIdentifier() {
+        return "contains";
     }
 
     public ConditionContains(String input, int matchCount) {

@@ -17,13 +17,18 @@
 
 package me.boomboompower.togglechat.utils;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import me.boomboompower.togglechat.ToggleChatMod;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -33,6 +38,7 @@ import org.apache.commons.io.IOUtils;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -48,7 +54,9 @@ public class WebsiteUtils {
     private boolean isDisabled = false;
     private boolean flag = false;
 
+    private LinkedList<String> updateMessage = new LinkedList<>();
     private boolean hasSeenHigherMessage = false;
+    private boolean showUpdateHeader = false;
     private boolean higherVersion = false;
     private boolean needsUpdate = false;
     private String updateVersion = "0";
@@ -80,6 +88,15 @@ public class WebsiteUtils {
                 if (!statusObject.has("enabled") || !statusObject.get("enabled").getAsBoolean()) {
                     disableMod();
                 }
+
+                if (statusObject.has("forceflag")) {
+                    this.flag = statusObject.get("forceflag").getAsBoolean();
+                }
+
+                if (statusObject.has("updateheader")) {
+                    this.showUpdateHeader = statusObject.get("updateheader").getAsBoolean();
+                }
+
             }, 0, 5, TimeUnit.MINUTES);
 
             this.modVersionChecker = schedule(() -> {
@@ -90,6 +107,19 @@ public class WebsiteUtils {
                     if (currentVersion < latestVersion && latestVersion > 0) {
                         this.needsUpdate = true;
                         this.updateVersion = object.has("latest-version") ? object.get("latest-version").getAsString() : "-1";
+
+                        if (object.has("update-message") && object.get("update-message").isJsonArray()) {
+                            LinkedList<String> update = new LinkedList<>();
+                            JsonArray array = object.get("update-message").getAsJsonArray();
+
+                            for (JsonElement element : array) {
+                                update.add(element.getAsString());
+                            }
+
+                            if (!update.isEmpty()) {
+                                this.updateMessage = update;
+                            }
+                        }
                     } else if (currentVersion > latestVersion && latestVersion > 0) {
                         this.higherVersion = true;
                     } else {
@@ -198,8 +228,16 @@ public class WebsiteUtils {
                 }
                 sendMessage("&9&m---------------------------------------------");
                 sendMessage(" ");
-                sendMessage(" &b\u26AB &e" + this.modName + " is out of date!");
-                sendMessage(" &b\u26AB &eDownload %s from the forum page!", "&6v" + utils.getUpdateVersion() + "&e");
+                if (this.showUpdateHeader) {
+                    sendMessage(" &b\u21E8 &e" + this.modName + " is out of date!");
+                    sendLinkText();
+                }
+                if (this.updateMessage != null && !this.updateMessage.isEmpty()) {
+                    sendMessage(" ");
+                    for (String s : this.updateMessage) {
+                        sendMessage(" &b\u21E8 &e" + s);
+                    }
+                }
                 sendMessage(" ");
                 sendMessage("&9&m---------------------------------------------");
             });
@@ -230,7 +268,7 @@ public class WebsiteUtils {
     }
 
     public boolean isFlagged() {
-        return this.flag;
+        return true;
     }
 
     private void sendMessage(String message, Object... replacements) {
@@ -240,5 +278,23 @@ public class WebsiteUtils {
             message = String.format(message, replacements);
         } catch (Exception ex) { }
         Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(ChatColor.translateAlternateColorCodes('&', message)));
+    }
+
+    private void sendLinkText() {
+        if (Minecraft.getMinecraft().thePlayer == null) return; // Safety first! :)
+
+        try {
+            ChatComponentText text = new ChatComponentText(String.format(ChatColor.translateAlternateColorCodes(" &b\u21E8 &eYou can download v%s by "), this.updateVersion));
+            ChatComponentText url = new ChatComponentText(ChatColor.GREEN + "clicking here");
+
+            ChatStyle chatStyle = new ChatStyle();
+            chatStyle.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(ChatColor.AQUA + "Click here to open\n" + ChatColor.AQUA + "The forum thread!")));
+            chatStyle.setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://hypixel.net/threads/997547"));
+            url.setChatStyle(chatStyle);
+            text.appendSibling(url).appendText(ChatColor.YELLOW + "!");
+
+            Minecraft.getMinecraft().thePlayer.addChatComponentMessage(text);
+        } catch (Exception ex) {
+        }
     }
 }

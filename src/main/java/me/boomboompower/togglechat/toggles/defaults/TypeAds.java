@@ -20,75 +20,63 @@ package me.boomboompower.togglechat.toggles.defaults;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
+import me.boomboompower.togglechat.utils.ChatColor;
 
 import java.util.LinkedList;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TypeGlobal extends ToggleBase {
+public class TypeAds extends ToggleBase {
 
-    private Pattern chatPattern = Pattern.compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private Pattern networkBoosterPattern = Pattern.compile("\nBuying a (?<game>.*) Network Booster activates (?<coinboost>.*) for (?<count>.*) players & supports the server!\nClick to browse Network Boosters! (?<thing>.) (?<site>.*)\n");
+    private Pattern mysteryPattern = Pattern.compile("\nMystery Boxes contain tons of awesome collectibles! Unlock Housing items, find legendary Pets and more!\nClick to browse Mystery Boxes! (?<symbol>.) (?<site>.*)\n");
+    private Pattern mediaPattern = Pattern.compile("\nSee all the posts shared by Hypixel on (?<name>.*)!\nLike the Hypixel page! (?<special>.) (?<link>.*)\n");
 
-    private boolean showGlobal = true;
+    public boolean showAds = true;
 
     @Override
     public String getName() {
-        return "Global";
+        return "Ads";
     }
 
     @Override
     public String getDisplayName() {
-        return "Global Chat: %s";
+        return "Ads: %s";
     }
 
     @Override
     public boolean shouldToggle(String message) {
-        if (message.contains(":") && message.contains("distance") && message.endsWith("}")) {
-            return false; // Fix skywars debug being toggled
-        }
-
-        if (ToggleBase.hasToggle("team") && ToggleBase.getToggle("team").isEnabled() && message.startsWith("[TEAM]")) {
-            return false;
-        }
-
-        return this.chatPattern.matcher(message).matches() && isNotOtherChat(message);
+        return this.networkBoosterPattern.matcher(message).matches() || this.mysteryPattern.matcher(message).matches();
     }
 
     @Override
     public boolean isEnabled() {
-        return this.showGlobal;
+        return this.showAds;
     }
 
     @Override
     public void setToggled(boolean enabled) {
-        this.showGlobal = enabled;
+        this.showAds = enabled;
     }
 
     @Override
     public void onClick(ModernButton button) {
-        this.showGlobal = !this.showGlobal;
+        this.showAds = !this.showAds;
         button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-                "Turns all general player",
-                "chat on or off",
+                "Toggles all server chat",
+                "advertisements such as",
+                "things prompting the",
+                "store page",
                 "",
-                "These are the formats",
-                "&7Player: Hi",
-                "&a[VIP] Player&r: Hi",
-                "&a[VIP&6+&a] Player&r: Hi",
-                "&b[MVP] Player&r: Hi",
-                "&b[MVP&c+&b] Player&r: Hi",
-                "",
-                "Useful to prevent spam",
-                "or any unwanted chat",
-                "messages"
+                "This cleans up the chat",
+                "whilst you are afk",
+                "so you don\'t miss",
+                "important messages"
         );
-    }
-
-    private boolean isNotOtherChat(String input) {
-        return !input.startsWith("[TEAM] ") && !input.startsWith("[SHOUT] ") && !input.startsWith("[SPECTATOR] ");
     }
 }

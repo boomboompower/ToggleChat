@@ -24,11 +24,15 @@ import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.toggles.ICustomSaver;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 import me.boomboompower.togglechat.toggles.custom.ToggleCondition;
+import me.boomboompower.togglechat.toggles.custom.TypeCustom;
+import me.boomboompower.togglechat.toggles.custom.conditions.ConditionEmpty;
+import me.boomboompower.togglechat.toggles.custom.conditions.ConditionStartsWith;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ConfigLoader {
@@ -165,6 +169,9 @@ public class ConfigLoader {
                 writer.append("// Format").append(System.lineSeparator());
                 writer.append("// ToggleName : <Condition>").append(System.lineSeparator());
                 writer.append("//").append(System.lineSeparator());
+                writer.append("// This feature was created").append(System.lineSeparator());
+                writer.append("// by OrangeMarshall!").append(System.lineSeparator());
+                writer.append("//").append(System.lineSeparator());
                 writer.append("// Possible conditions").append(System.lineSeparator());
                 writer.append("// startsWith(string)          Starts with \"string\"").append(System.lineSeparator());
                 writer.append("// contains(string)            Contains \"string\"").append(System.lineSeparator());
@@ -172,18 +179,23 @@ public class ConfigLoader {
                 writer.append("// endsWith(string)            Ends with \"string\"").append(System.lineSeparator());
                 writer.append("// equals(string)              Equals \"string\" case-sensitive").append(System.lineSeparator());
                 writer.append("// equalsIgnoreCase(string)    Equals \"string\" not case-sensitive").append(System.lineSeparator());
+                writer.append("// regex(regex)                Regex matches the input").append(System.lineSeparator());
                 writer.append("").append(System.lineSeparator());
-                writer.append("MyToggle : startsWith([YT] Sk1er)").append(System.lineSeparator());
+                writer.append("MyToggle : startsWith([YOUTUBE] Sk1er)").append(System.lineSeparator());
                 writer.close();
+
+                ToggleBase.addToggle(new TypeCustom("MyToggle", new ConditionStartsWith("[YOUTUBE] Sk1er")));
             } catch (Exception ex) {
             }
             return;
         }
 
         try {
+            LinkedList<TypeCustom> customs = new LinkedList<>();
+
             // noinspection ConstantConditions
             for (File file : this.customToggleDir.listFiles()) {
-                if (file.getName().endsWith(".nn") && !file.isDirectory()) {
+                if (!file.isDirectory()) {
                     try {
                         FileReader fileReader = new FileReader(file);
                         BufferedReader reader = new BufferedReader(fileReader);
@@ -195,24 +207,102 @@ public class ConfigLoader {
                             }
                         }
 
-                        if (lines.size() == 0) {
+                        if (lines.isEmpty()) {
                             // We don't need to worry about an empty file.
                             continue;
                         }
 
                         for (String line : lines) {
                             if (ToggleCondition.isValidFormat(line)) {
+                                ToggleCondition condition = ToggleCondition.get(line.split(" : ")[1]);
+                                String name = ToggleCondition.getFormatName(line);
 
+                                if (name == null || name.isEmpty()) {
+                                    continue;
+                                }
+
+                                boolean added = false;
+
+                                for (TypeCustom customer : customs) {
+                                    if (name.equalsIgnoreCase(customer.getName())) {
+                                        customer._addCondition(condition);
+                                        added = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!added) {
+                                    customs.add(new TypeCustom(name, condition));
+                                }
                             }
                         }
+
                     } catch (Exception ex) {
-                        log("Failed to load \"" + file.getName() + "\". Ignoring.");
+                        ex.printStackTrace();
+                        log("An issue occured while loading \"" + file.getName() + "\". Make sure it isn't corruputed!");
                     }
                 }
+            }
+
+            if (customs.isEmpty()) {
+                // Custom toggles is empty, lets move on...
+                return;
+            }
+
+            for (TypeCustom custom : customs) {
+                ToggleBase.addToggle(custom);
             }
         } catch (Exception ex) {
             log("Failed to load your custom toggles!");
             ex.printStackTrace();
+        }
+    }
+
+    public void saveCustomToggles() {
+        if (!this.flagged || this.customToggleDir == null) {
+            return;
+        }
+
+        if (!exists(this.customToggleDir)) {
+            this.customToggleDir.mkdirs();
+        }
+
+        for (Map.Entry<String, ToggleBase> entry : ToggleBase.getToggles().entrySet()) {
+            if (entry.getValue() instanceof TypeCustom) {
+                TypeCustom base = (TypeCustom) entry.getValue();
+
+                if (base._getConditions().isEmpty()) {
+                    continue;
+                }
+
+                try {
+                    File file = new File(this.customToggleDir, base.getName().toLowerCase() + ".txt");
+                    FileWriter writer = new FileWriter(file);
+                    writer.append("// Format").append(System.lineSeparator());
+                    writer.append("// ToggleName : <Condition>").append(System.lineSeparator());
+                    writer.append("//").append(System.lineSeparator());
+                    writer.append("// This feature was created").append(System.lineSeparator());
+                    writer.append("// by OrangeMarshall!").append(System.lineSeparator());
+                    writer.append("//").append(System.lineSeparator());
+                    writer.append("// Possible conditions").append(System.lineSeparator());
+                    writer.append("// startsWith(string)          Starts with \"string\"").append(System.lineSeparator());
+                    writer.append("// contains(string)            Contains \"string\"").append(System.lineSeparator());
+                    writer.append("// contains(string,4)          Contains \"string\" 4 times").append(System.lineSeparator());
+                    writer.append("// endsWith(string)            Ends with \"string\"").append(System.lineSeparator());
+                    writer.append("// equals(string)              Equals \"string\" case-sensitive").append(System.lineSeparator());
+                    writer.append("// equalsIgnoreCase(string)    Equals \"string\" not case-sensitive").append(System.lineSeparator());
+                    writer.append("// regex(regex)                Regex matches the input").append(System.lineSeparator());
+                    writer.append("").append(System.lineSeparator());
+                    for (ToggleCondition condition : base._getConditions()) {
+                        if (!(condition instanceof ConditionEmpty)) {
+                            writer.append(base.getName()).append(" : ").append(condition.getSaveIdentifier()).append("(").append(condition.getText()).append(")").append(System.lineSeparator());
+                        }
+                    }
+                    writer.close();
+                } catch (Exception ex) {
+                    log("Failed to save custom toggle: \"%s\"!", base.getName());
+                }
+            }
         }
     }
 

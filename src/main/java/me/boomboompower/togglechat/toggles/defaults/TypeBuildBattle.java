@@ -48,8 +48,6 @@ public class TypeBuildBattle extends ToggleBase {
     public boolean shouldToggle(String message) {
         Matcher matcher = this.battlePattern.matcher(ChatColor.stripColor(message));
 
-        System.out.println(matcher.toMatchResult());
-
         return matcher.matches() && validBattleRank(matcher.group("battle"));
     }
 

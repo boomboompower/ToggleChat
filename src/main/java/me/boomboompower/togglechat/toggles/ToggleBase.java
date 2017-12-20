@@ -88,6 +88,7 @@ public abstract class ToggleBase {
      */
     public static void remake() {
         toggles.clear();
+        toggles.put("ads", new TypeAds());
         toggles.put("team", new TypeTeam());
         toggles.put("join", new TypeJoin());
         toggles.put("leave", new TypeLeave());
@@ -98,6 +99,7 @@ public abstract class ToggleBase {
         toggles.put("housing", new TypeHousing());
         toggles.put("messages", new TypeMessages());
         toggles.put("global", new TypeGlobal());
+        toggles.put("ez_messages", new TypeEasy());
         toggles.put("special", new TypeSpecial());
         toggles.put("colored_team", new TypeColored());
         toggles.put("party_invites", new TypePartyInvites());
@@ -182,7 +184,7 @@ public abstract class ToggleBase {
      *
      * @return true if the description is valid
      */
-    public boolean hasDescription() {
+    public final boolean hasDescription() {
         return getDescription() != null && !getDescription().isEmpty();
     }
 
@@ -196,9 +198,19 @@ public abstract class ToggleBase {
         return getName() + ": %s";
     }
 
+    /**
+     * Should the display format be forcefully
+     *      capitalized?
+     *
+     * @return true if it should be capitalized
+     */
+    public boolean capitalizeName() {
+        return true;
+    }
+
     @Override
     public String toString() {
-        String message = "MessageBase{parsers = ";
+        String message = "ToggleBase{parsers = ";
 
         if (toggles.isEmpty()) {
             message += "[]";

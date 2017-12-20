@@ -191,8 +191,10 @@ public class ModernButton extends GuiButton {
         return this.enabled;
     }
 
-    public void setEnabled(boolean isEnabled) {
+    public ModernButton setEnabled(boolean isEnabled) {
         this.enabled = isEnabled;
+
+        return this;
     }
 
     public boolean hasButtonData() {
