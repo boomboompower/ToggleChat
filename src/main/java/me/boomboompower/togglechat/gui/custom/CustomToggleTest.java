@@ -2,6 +2,7 @@ package me.boomboompower.togglechat.gui.custom;
 
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
+import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.awt.*;
@@ -9,9 +10,12 @@ import java.awt.*;
 public class CustomToggleTest extends ModernGui {
 
     private GuiScreen previous;
+    private TypeCustom custom;
 
-    public CustomToggleTest(GuiScreen previous) {
+    public CustomToggleTest(GuiScreen previous, TypeCustom customIn) {
         this.previous = previous;
+
+        this.custom = customIn;
     }
 
     @Override

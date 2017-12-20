@@ -33,13 +33,14 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 @Mod(modid = ToggleChatMod.MODID, version = ToggleChatMod.VERSION, acceptedMinecraftVersions="*")
 public class ToggleChatMod {
 
     public static final String MODID = "publictogglechat";
-    public static final String VERSION = "2.1.0";
+    public static final String VERSION = "3.0.0";
 
     private LinkedList<String> whitelist = new LinkedList<>();
 
@@ -54,7 +55,7 @@ public class ToggleChatMod {
         ModMetadata data = event.getModMetadata();
         data.version = VERSION;
         data.name = ChatColor.GOLD + "Hypixel " + ChatColor.GRAY + "-" + ChatColor.GREEN + " ToggleChat";
-        data.authorList.add("boomboompower");
+        data.authorList.addAll(Arrays.asList("boomboompower", "OrangeMarshall"));
         data.description = "Use " + ChatColor.BLUE + "/tc" + ChatColor.RESET + " to get started! " + ChatColor.GRAY + "|" + ChatColor.RESET + " Made with " + ChatColor.LIGHT_PURPLE + "<3" + ChatColor.RESET + " by boomboompower";
         data.url = "https://hypixel.net/threads/997547";
 
@@ -76,12 +77,12 @@ public class ToggleChatMod {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        this.configLoader.loadToggles();
-        this.configLoader.loadWhitelist();
-
         if (this.websiteUtils.isFlagged()) {
             this.configLoader.loadCustomToggles();
         }
+
+        this.configLoader.loadToggles();
+        this.configLoader.loadWhitelist();
     }
 
     public LinkedList<String> getWhitelist() {

@@ -19,11 +19,13 @@ package me.boomboompower.togglechat.gui.togglechat;
 
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.gui.custom.CustomToggleMain;
+import me.boomboompower.togglechat.gui.custom.CustomToggleModify;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.gui.whitelist.WhitelistMainGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 import me.boomboompower.togglechat.toggles.custom.ICustomToggle;
+import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 import me.boomboompower.togglechat.toggles.dummy.ToggleDummyMessage;
 import net.minecraft.client.gui.GuiButton;
 import org.apache.commons.lang3.text.WordUtils;
@@ -154,6 +156,18 @@ public class MainGui extends ModernGui {
             if (base.getName().toLowerCase().replace(" ", "_").equals(button.getButtonId())) {
                 base.onClick(button);
                 break;
+            }
+        }
+    }
+
+    @Override
+    public void rightClicked(ModernButton button) {
+        for (ToggleBase base : ToggleBase.getToggles().values()) {
+            if (base instanceof TypeCustom) {
+                if (base.getName().toLowerCase().replace(" ", "_").equals(button.getButtonId())) {
+                    this.mc.displayGuiScreen(new CustomToggleModify(this, (TypeCustom) base));
+                    break;
+                }
             }
         }
     }

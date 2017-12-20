@@ -1,8 +1,10 @@
 package me.boomboompower.togglechat.gui.custom;
 
 import me.boomboompower.togglechat.ToggleChatMod;
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 
+import me.boomboompower.togglechat.toggles.ToggleBase;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.awt.*;

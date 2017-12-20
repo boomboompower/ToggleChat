@@ -90,6 +90,19 @@ public abstract class ModernGui extends GuiScreen {
                 }
             }
         }
+
+        if (mouseButton == 1) {
+            for (GuiButton button : this.buttonList) {
+                if (button instanceof ModernButton) {
+                    ModernButton modernButton = (ModernButton) button;
+
+                    if (modernButton.mousePressed(this.mc, mouseX, mouseY)) {
+                        this.rightClicked(modernButton);
+                    }
+                }
+            }
+        }
+
         for (ModernTextBox text : this.textList) {
             text.mouseClicked(mouseX, mouseY, mouseButton);
         }
@@ -150,15 +163,19 @@ public abstract class ModernGui extends GuiScreen {
     public void buttonPressed(ModernButton button) {
     }
 
+    public void rightClicked(ModernButton button) {
+
+    }
+
     public final void checkHover(int firstPosition) {
         for (GuiButton old : this.buttonList) {
-            if (!(old instanceof ModernButton)) return;
+            if (!(old instanceof ModernButton)) continue;
             ModernButton button = (ModernButton) old;
 
             if (button.isMouseOver() && button.hasButtonData()) {
                 ToggleBase toggleBase = button.getButtonData();
 
-                if (!toggleBase.hasDescription()) return;
+                if (!toggleBase.hasDescription()) continue;
 
                 final int[] position = {firstPosition};
                 toggleBase.getDescription().forEach(text -> {

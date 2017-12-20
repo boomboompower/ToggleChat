@@ -56,7 +56,8 @@ public class WebsiteUtils {
 
     private LinkedList<String> updateMessage = new LinkedList<>();
     private boolean hasSeenHigherMessage = false;
-    private boolean showUpdateHeader = false;
+    private boolean showUpdateSymbol = true;
+    private boolean showUpdateHeader = true;
     private boolean higherVersion = false;
     private boolean needsUpdate = false;
     private String updateVersion = "0";
@@ -95,6 +96,10 @@ public class WebsiteUtils {
 
                 if (statusObject.has("updateheader")) {
                     this.showUpdateHeader = statusObject.get("updateheader").getAsBoolean();
+                }
+
+                if (statusObject.has("updatesymbol")) {
+                    this.showUpdateSymbol = statusObject.get("updatesymbol").getAsBoolean();
                 }
 
             }, 0, 5, TimeUnit.MINUTES);
@@ -229,13 +234,15 @@ public class WebsiteUtils {
                 sendMessage("&9&m---------------------------------------------");
                 sendMessage(" ");
                 if (this.showUpdateHeader) {
-                    sendMessage(" &b\u21E8 &e" + this.modName + " is out of date!");
+                    sendMessage(" %s&eYour version of " + this.modName + " is out of date!", (this.showUpdateSymbol ? "&b\u21E8 " : ""));
                     sendLinkText();
                 }
                 if (this.updateMessage != null && !this.updateMessage.isEmpty()) {
-                    sendMessage(" ");
+                    if (this.showUpdateHeader) {
+                        sendMessage(" %s", (this.showUpdateSymbol ? "&b\u21E8 " : ""));
+                    }
                     for (String s : this.updateMessage) {
-                        sendMessage(" &b\u21E8 &e" + s);
+                        sendMessage(" %s&e" + s, (this.showUpdateSymbol ? "&b\u21E8 " : ""));
                     }
                 }
                 sendMessage(" ");
@@ -260,7 +267,7 @@ public class WebsiteUtils {
                 }
                 sendMessage("&9&m-----------------------------------------------");
                 sendMessage(" ");
-                sendMessage(" &b\u26AB &aYou are running a newer version of " + this.modName +"!");
+                sendMessage(" &b\u21E8 &aYou are running a newer version of " + this.modName +"!");
                 sendMessage(" ");
                 sendMessage("&9&m-----------------------------------------------");
             });
@@ -284,11 +291,11 @@ public class WebsiteUtils {
         if (Minecraft.getMinecraft().thePlayer == null) return; // Safety first! :)
 
         try {
-            ChatComponentText text = new ChatComponentText(String.format(ChatColor.translateAlternateColorCodes(" &b\u21E8 &eYou can download v%s by "), this.updateVersion));
+            ChatComponentText text = new ChatComponentText(ChatColor.translateAlternateColorCodes(String.format(" %s&eYou can download v&6%s&e by ", (this.showUpdateSymbol ? "&b\u21E8 " : ""), this.updateVersion)));
             ChatComponentText url = new ChatComponentText(ChatColor.GREEN + "clicking here");
 
             ChatStyle chatStyle = new ChatStyle();
-            chatStyle.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(ChatColor.AQUA + "Click here to open\n" + ChatColor.AQUA + "The forum thread!")));
+            chatStyle.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(ChatColor.AQUA + "Click here to open the forum thread!")));
             chatStyle.setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://hypixel.net/threads/997547"));
             url.setChatStyle(chatStyle);
             text.appendSibling(url).appendText(ChatColor.YELLOW + "!");

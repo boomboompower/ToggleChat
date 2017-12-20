@@ -76,7 +76,7 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
         );
     }
 
-    private String _getName() {
+    public String _getName() {
         return this.togglename != null ? this.togglename : "Unknown";
     }
 

@@ -199,8 +199,8 @@ public abstract class ToggleBase {
     }
 
     /**
-     * Should the display format be forcefully
-     *      capitalized?
+     * Should each word in the display name
+     *      be forcefully capitalized?
      *
      * @return true if it should be capitalized
      */
