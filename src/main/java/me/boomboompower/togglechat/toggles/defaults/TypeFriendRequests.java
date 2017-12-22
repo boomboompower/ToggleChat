@@ -26,6 +26,15 @@ import java.util.regex.Pattern;
 
 public class TypeFriendRequests extends ToggleBase {
 
+    private Pattern friendPattern = Pattern.compile(
+            "----------------------------------------------------\n" +
+            "Friend request from (?<rank>\\[.+] )?(?<player>\\S{1,16})\n" +
+            "\\[ACCEPT] - \\[DENY] - \\[IGNORE]\n" +
+            "----------------------------------------------------");
+
+    // This is used for expiry messages
+    private Pattern oldPattern = Pattern.compile(Pattern.quote("Friend request from "), Pattern.CASE_INSENSITIVE);
+
     private boolean showFriendRequests = true;
 
     @Override
@@ -35,7 +44,7 @@ public class TypeFriendRequests extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        return Pattern.compile(Pattern.quote("Friend request from "), Pattern.CASE_INSENSITIVE).matcher(message).find() || (message.contains("Click one") && message.contains("[ACCEPT]") && message.contains("[DENY]"));
+        return this.oldPattern.matcher(message).find() || this.friendPattern.matcher(message).matches();
     }
 
     @Override

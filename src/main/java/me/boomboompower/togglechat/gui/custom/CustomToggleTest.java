@@ -3,7 +3,9 @@ package me.boomboompower.togglechat.gui.custom;
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.custom.TypeCustom;
+import me.boomboompower.togglechat.utils.ChatColor;
 import net.minecraft.client.gui.GuiScreen;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.awt.*;
 
@@ -27,7 +29,7 @@ public class CustomToggleTest extends ModernGui {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
 
-        drawCenteredString("This page is still in progress!", this.width / 2, this.height / 2 - 4, Color.WHITE.getRGB());
+        drawCenteredString(this.fontRendererObj, String.format("Testing %s", ChatColor.GOLD + this.custom._getName()), this.width / 2, this.height / 2 - 115, Color.WHITE.getRGB());
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

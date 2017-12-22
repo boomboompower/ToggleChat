@@ -164,7 +164,7 @@ public class ConfigLoader {
             this.customToggleDir.mkdirs();
 
             try {
-                File file = new File(this.customToggleDir, "default.txt");
+                File file = new File(this.customToggleDir, "mytoggle.txt");
                 FileWriter writer = new FileWriter(file);
                 writer.append("// Format").append(System.lineSeparator());
                 writer.append("// ToggleName : <Condition>").append(System.lineSeparator());

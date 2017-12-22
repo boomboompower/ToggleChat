@@ -22,8 +22,22 @@ import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
+import java.util.regex.Pattern;
 
 public class TypeMessageSeparator extends ToggleBase {
+
+    private Pattern friendPattern = Pattern.compile("" +
+            "-{53}\n" +
+            " {27}Friends \\(Page (?<current>.) of (?<max>.)\\) >>\n" +
+            "(?<line1>.*)\n" +
+            "(?<line2>.*)\n" +
+            "(?<line3>.*)\n" +
+            "(?<line4>.*)\n" +
+            "(?<line5>.*)\n" +
+            "(?<line6>.*)\n" +
+            "(?<line7>.*)\n" +
+            "(?<line8>.*)\n" +
+            "-{53}");
 
     private boolean showSeparators = true;
 
@@ -34,6 +48,18 @@ public class TypeMessageSeparator extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
+        if (this.friendPattern.matcher(message).matches()) {
+            return false;
+        }
+
+        // Don't toggle if its a friend message
+        if (ToggleBase.hasToggle("friend_requests")) {
+            ToggleBase friendRequestToggle = ToggleBase.getToggle("friend_requests");
+            if (friendRequestToggle.isEnabled() && friendRequestToggle.shouldToggle(message)) {
+                return false;
+            }
+        }
+
         // Don't toggle it if its a chat message
         if (ToggleBase.hasToggle("global")) {
             ToggleBase globalToggle = ToggleBase.getToggle("global");
@@ -42,7 +68,7 @@ public class TypeMessageSeparator extends ToggleBase {
             }
         }
 
-        return message.contains("---------------------");
+        return message.contains("-----------");
     }
 
     @Override

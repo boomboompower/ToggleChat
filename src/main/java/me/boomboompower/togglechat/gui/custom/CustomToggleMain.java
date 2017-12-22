@@ -37,7 +37,7 @@ public class CustomToggleMain extends ModernGui {
     public void buttonPressed(ModernButton button) {
         switch (button.getId()) {
             case 0:
-                this.mc.displayGuiScreen(new CustomToggleSelect(this, SelectType.CREATE));
+                this.mc.displayGuiScreen(new CustomToggleCreate(this));
                 break;
             case 1:
                 this.mc.displayGuiScreen(new CustomToggleSelect(this, SelectType.MODIFY));

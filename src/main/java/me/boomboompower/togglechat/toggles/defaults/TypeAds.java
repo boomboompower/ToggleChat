@@ -47,8 +47,8 @@ public class TypeAds extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        return this.networkBoosterPattern.matcher(message).matches() ||
-                this.mysteryPattern.matcher(message).matches() ||
+        return this.networkBoosterPattern.matcher(message).find() ||
+                this.mysteryPattern.matcher(message).find() ||
                 this.mediaPattern1.matcher(message).matches() ||
                 this.mediaPattern2.matcher(message).matches();
     }
