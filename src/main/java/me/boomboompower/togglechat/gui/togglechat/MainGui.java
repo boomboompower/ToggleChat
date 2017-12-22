@@ -71,7 +71,7 @@ public class MainGui extends ModernGui {
             final int[] position = {this.height / 2 - 75};
 
             ToggleBase.getToggles().values().stream().skip((this.pageNumber - 1) * 7).limit(7).forEach(baseType -> {
-                ModernButton button = new ModernButton(0, baseType.getName().toLowerCase().replace(" ", "_"), this.width / 2 - 75, position[0], 150, 20, String.format(baseType.getDisplayName(), getStatus(baseType.isEnabled()))).setButtonData(baseType);
+                ModernButton button = new ModernButton(0, baseType.getName().toLowerCase().replace(" ", "_"), this.width / 2 - 75, position[0], 150, 20, String.format(nameFormat(baseType), getStatus(baseType.isEnabled()))).setButtonData(baseType);
                 if (baseType instanceof ICustomToggle) {
                     button = button.setEnabledColor(new Color(100, 88, 192, 75)).setDisabledColor(new Color(67, 67, 133, 75));
                 }
