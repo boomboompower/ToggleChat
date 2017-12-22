@@ -74,6 +74,11 @@ public class ModernTextBox extends Gui {
     private String noTextMessage = "Write here!";
 
     private boolean running = false;
+    private boolean forceOldTheme = false;
+
+    public ModernTextBox(int x, int y) {
+        this(x, y, 150, 20, false);
+    }
 
     public ModernTextBox(int x, int y, int width, int height) {
         this(x, y, width, height, false);
@@ -411,7 +416,7 @@ public class ModernTextBox extends Gui {
     public void drawTextBox() {
         if (this.getVisible()) {
 
-            if (ModernGui.isClassic()) {
+            if (ModernGui.isClassic() || this.forceOldTheme) {
                 drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width + 1, this.yPosition + this.height + 1, -6250336);
                 drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + this.height, -16777216);
             } else {
@@ -673,5 +678,9 @@ public class ModernTextBox extends Gui {
             }
         }
         return builder.toString().trim();
+    }
+
+    public void setForceOldTheme(boolean forceOldTheme) {
+        this.forceOldTheme = forceOldTheme;
     }
 }

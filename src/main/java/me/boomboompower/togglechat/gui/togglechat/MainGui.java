@@ -80,15 +80,15 @@ public class MainGui extends ModernGui {
             });
 
             this.buttonList.add(new ModernButton(1, "inbuilt_whitelist", 5, this.height - 25, 90, 20, "Whitelist"));
-            this.buttonList.add(new ModernButton(2, "inbuilt_back", this.width - 140, this.height - 25, 65, 20, "Back").setEnabled(this.pageNumber > 1));
-            this.buttonList.add(new ModernButton(3, "inbuilt_next", this.width - 70, this.height - 25, 65, 20, "Next").setEnabled(this.pageNumber != pages));
+            this.buttonList.add(new ModernButton(2, "inbuilt_back", this.width - 114, this.height - 25, 50, 20, "\u21E6").setEnabled(this.pageNumber > 1));
+            this.buttonList.add(new ModernButton(3, "inbuilt_next", this.width - 60, this.height - 25, 50, 20, "\u21E8").setEnabled(this.pageNumber != pages));
             this.buttonList.add(new ModernButton(4, "inbuilt_theme", 5, this.height - 49, 90, 20, "Classic: " + getStatus(isClassic())).setButtonData(
                     // Let them know what this button does
                     new ToggleDummyMessage("Changes the button", "theme to either", "&6Modern&r or &bClassic", "", "&6Modern&r is see-through", "&bClassic&r is texture based")
             ));
 
             if (ToggleChatMod.getInstance().getWebsiteUtils().isFlagged()) {
-                this.buttonList.add(new ModernButton(5, this.width - 135, this.height - 49, 125, 20, "Custom Toggles").setEnabledColor(new Color(100, 88, 192, 75)).setDisabledColor(new Color(67, 67, 133, 75)).setButtonData(
+                this.buttonList.add(new ModernButton(5, this.width - 114, this.height - 49, 104, 20, "Custom Toggles").setEnabledColor(new Color(100, 88, 192, 75)).setDisabledColor(new Color(67, 67, 133, 75)).setButtonData(
                         new ToggleDummyMessage(
                                 "Allows you to add",
                                 "your own custom",

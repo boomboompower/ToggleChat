@@ -130,7 +130,6 @@ public class WhitelistMainGui extends ModernGui {
 
     @Override
     public void updateScreen() {
-        super.updateScreen();
         this.text.updateCursorCounter();
     }
 

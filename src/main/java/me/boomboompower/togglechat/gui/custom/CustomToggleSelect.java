@@ -60,7 +60,7 @@ public class CustomToggleSelect extends ModernGui {
     public void drawScreen(int mouseX, int mouseY, float ticks) {
         drawDefaultBackground();
 
-        drawCenteredString(this.fontRendererObj, String.format("Selecting a custom toggle to %s", ChatColor.GOLD + WordUtils.capitalizeFully(this.selectType.name().toLowerCase())), this.width / 2, this.height / 2 - 115, Color.WHITE.getRGB());
+        drawCenteredString(this.fontRendererObj, String.format("Selecting a custom toggle to %s", ChatColor.GOLD + WordUtils.capitalizeFully(this.selectType.name().toLowerCase())), this.width / 2, this.height / 2 - 110, Color.WHITE.getRGB());
 
         super.drawScreen(mouseX, mouseY, ticks);
 
