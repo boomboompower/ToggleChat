@@ -152,10 +152,14 @@ public class MainGui extends ModernGui {
                 this.mc.displayGuiScreen(new CustomToggleMain(this));
                 return;
         }
-        for (ToggleBase base : ToggleBase.getToggles().values()) {
-            if (base.getName().toLowerCase().replace(" ", "_").equals(button.getButtonId())) {
-                base.onClick(button);
-                break;
+
+        // Make sure the id is 0 to prevent other buttons being pressed
+        if (button.getId() == 0) {
+            for (ToggleBase base : ToggleBase.getToggles().values()) {
+                if (base.getName().toLowerCase().replace(" ", "_").equals(button.getButtonId())) {
+                    base.onClick(button);
+                    break;
+                }
             }
         }
     }
