@@ -166,11 +166,13 @@ public class MainGui extends ModernGui {
 
     @Override
     public void rightClicked(ModernButton button) {
-        for (ToggleBase base : ToggleBase.getToggles().values()) {
-            if (base instanceof TypeCustom) {
-                if (base.getName().toLowerCase().replace(" ", "_").equals(button.getButtonId())) {
-                    this.mc.displayGuiScreen(new CustomToggleModify(this, (TypeCustom) base));
-                    break;
+        if (ToggleChatMod.getInstance().getWebsiteUtils().isFlagged()) {
+            for (ToggleBase base : ToggleBase.getToggles().values()) {
+                if (base instanceof TypeCustom) {
+                    if (base.getName().toLowerCase().replace(" ", "_").equals(button.getButtonId())) {
+                        this.mc.displayGuiScreen(new CustomToggleModify(this, (TypeCustom) base));
+                        break;
+                    }
                 }
             }
         }
