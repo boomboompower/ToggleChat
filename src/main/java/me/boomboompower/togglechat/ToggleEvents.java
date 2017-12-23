@@ -34,6 +34,9 @@ public class ToggleEvents {
         // Strip the message of any colors for improved detectability
         String unformattedText = ChatColor.stripColor(event.message.getUnformattedText());
 
+        // The formatted message for a few of the custom toggles
+        String formattedText = event.message.getFormattedText();
+
         try {
             // Check if the message contains something from
             // The whitelist, if it doesn't, continue!
@@ -42,10 +45,13 @@ public class ToggleEvents {
                 // Loop through all the toggles
                 for (ToggleBase type : ToggleBase.getToggles().values()) {
 
+                    // The text we want to input into the shouldToggle method.
+                    String input = type.useFormattedMessage() ? formattedText : unformattedText;
+
                     // If the toggle should toggle the specified message and
                     // the toggle is not enabled (this message is turned off)
                     // don't send the message to the player & stop looping
-                    if (!type.isEnabled() && type.shouldToggle(unformattedText)) {
+                    if (!type.isEnabled() && type.shouldToggle(input)) {
                         event.setCanceled(true);
                         break;
                     }

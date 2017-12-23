@@ -22,8 +22,11 @@ import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
+import java.util.regex.Pattern;
 
 public class TypeHousing extends ToggleBase {
+
+    private Pattern worldJoinPattern = Pattern.compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}) (?<action>.*) the world\\.");
 
     private boolean showHousing = true;
 
@@ -34,7 +37,7 @@ public class TypeHousing extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        return message.startsWith("[OWNER] ") || message.startsWith("[CO-OWNER] ") || message.startsWith("[RES] ");
+        return this.worldJoinPattern.matcher(message).matches() || (message.startsWith("[OWNER] ") || message.startsWith("[CO-OWNER] ") || message.startsWith("[RES] "));
     }
 
     @Override
@@ -63,6 +66,9 @@ public class TypeHousing extends ToggleBase {
                 "&6[OWNER]",
                 "&6[CO-OWNER]",
                 "&6[RES]",
+                "",
+                "Also toggles housing join",
+                "and leave messages",
                 "",
                 "Build peacefully and",
                 "without hassle,",

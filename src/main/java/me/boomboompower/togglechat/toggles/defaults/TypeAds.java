@@ -32,6 +32,7 @@ public class TypeAds extends ToggleBase {
     private Pattern mysteryPattern = Pattern.compile("\nMystery Boxes contain tons of awesome collectibles! Unlock Housing items, find legendary Pets and more!\nClick to browse Mystery Boxes! (?<symbol>.) (?<site>.*)\n");
     private Pattern mediaPattern1 = Pattern.compile("\nSee all the posts shared by Hypixel on (?<name>.*)!\nLike the Hypixel page! (?<special>.) (?<link>.*)\n");
     private Pattern mediaPattern2 = Pattern.compile("\nKeep up with the latest from Hypixel on (?<name>.*)!\nFollow @HypixelNetwork! (?<special>.) (?<link>.+)\n");
+    private Pattern mediaPattern3 = Pattern.compile("\nBe the first to watch Hypixel (?<media>.+) videos!\nSubscribe to Hypixel! (?<special>.) (?<link>.+)\n");
 
     public boolean showAds = true;
 
@@ -50,7 +51,8 @@ public class TypeAds extends ToggleBase {
         return this.networkBoosterPattern.matcher(message).find() ||
                 this.mysteryPattern.matcher(message).find() ||
                 this.mediaPattern1.matcher(message).matches() ||
-                this.mediaPattern2.matcher(message).matches();
+                this.mediaPattern2.matcher(message).matches() ||
+                this.mediaPattern3.matcher(message).matches();
     }
 
     @Override

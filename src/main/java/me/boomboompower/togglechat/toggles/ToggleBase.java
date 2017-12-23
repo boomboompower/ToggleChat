@@ -205,7 +205,18 @@ public abstract class ToggleBase {
      * @return true if it should be capitalized
      */
     public boolean capitalizeName() {
-        return true;
+        return false;
+    }
+
+    /**
+     * Should the shouldToggle method use the
+     *      formatted chat for the regular check?
+     *
+     * @return true if the formatted message should
+     *      be used
+     */
+    public boolean useFormattedMessage() {
+        return false;
     }
 
     @Override
