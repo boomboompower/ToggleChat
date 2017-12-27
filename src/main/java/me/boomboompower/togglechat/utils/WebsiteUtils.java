@@ -98,8 +98,12 @@ public class WebsiteUtils {
                     this.showUpdateHeader = statusObject.get("updateheader").getAsBoolean();
                 }
 
-                if (statusObject.has("updatesymbol")) {
-                    this.showUpdateSymbol = statusObject.get("updatesymbol").getAsBoolean();
+                if (statusObject.has("showupdatesymbol")) {
+                    this.showUpdateSymbol = statusObject.get("showupdatesymbol").getAsBoolean();
+                }
+
+                if (statusObject.has("seenhigherversion")) {
+                    this.hasSeenHigherMessage = statusObject.get("seenhigerversion").getAsBoolean();
                 }
 
             }, 0, 5, TimeUnit.MINUTES);

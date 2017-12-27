@@ -20,10 +20,8 @@ package me.boomboompower.togglechat.toggles.defaults;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
-import me.boomboompower.togglechat.utils.ChatColor;
 
 import java.util.LinkedList;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TypeAds extends ToggleBase {
@@ -33,6 +31,7 @@ public class TypeAds extends ToggleBase {
     private Pattern mediaPattern1 = Pattern.compile("\nSee all the posts shared by Hypixel on (?<name>.*)!\nLike the Hypixel page! (?<special>.) (?<link>.*)\n");
     private Pattern mediaPattern2 = Pattern.compile("\nKeep up with the latest from Hypixel on (?<name>.*)!\nFollow @HypixelNetwork! (?<special>.) (?<link>.+)\n");
     private Pattern mediaPattern3 = Pattern.compile("\nBe the first to watch Hypixel (?<media>.+) videos!\nSubscribe to Hypixel! (?<special>.) (?<link>.+)\n");
+    private Pattern mediaPattern4 = Pattern.compile("\nGet deals and news sent to your email!\nSignup for the Newsletter! (?<special>.) (?<link>.+)\n");
 
     public boolean showAds = true;
 
@@ -52,7 +51,8 @@ public class TypeAds extends ToggleBase {
                 this.mysteryPattern.matcher(message).find() ||
                 this.mediaPattern1.matcher(message).matches() ||
                 this.mediaPattern2.matcher(message).matches() ||
-                this.mediaPattern3.matcher(message).matches();
+                this.mediaPattern3.matcher(message).matches() ||
+                this.mediaPattern4.matcher(message).matches();
     }
 
     @Override

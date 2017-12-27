@@ -18,6 +18,7 @@
 package me.boomboompower.togglechat;
 
 import me.boomboompower.togglechat.toggles.ToggleBase;
+import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -44,21 +45,26 @@ public class ToggleEvents {
 
                 // Loop through all the toggles
                 for (ToggleBase type : ToggleBase.getToggles().values()) {
+                    // We don't want an issue with one toggle bringing
+                    // the whole toggle system crashing down in flames.
+                    try {
+                        // The text we want to input into the shouldToggle method.
+                        String input = type.useFormattedMessage() ? formattedText : unformattedText;
 
-                    // The text we want to input into the shouldToggle method.
-                    String input = type.useFormattedMessage() ? formattedText : unformattedText;
-
-                    // If the toggle should toggle the specified message and
-                    // the toggle is not enabled (this message is turned off)
-                    // don't send the message to the player & stop looping
-                    if (!type.isEnabled() && type.shouldToggle(input)) {
-                        event.setCanceled(true);
-                        break;
+                        // If the toggle should toggle the specified message and
+                        // the toggle is not enabled (this message is turned off)
+                        // don't send the message to the player & stop looping
+                        if (!type.isEnabled() && type.shouldToggle(input)) {
+                            event.setCanceled(true);
+                            break;
+                        }
+                    } catch (Exception ex) {
+                        printSmartEx(type, ex);
                     }
                 }
             }
         } catch (Exception e1) {
-            System.out.println("Issue has been encountered: " + (e1.getMessage() != null ? e1.getClass().getSimpleName() + ": " + e1.getMessage() : e1.getClass().getSimpleName() + ": " + e1.getCause()));
+            printSmartEx(null, e1);
         }
     }
 
@@ -74,5 +80,34 @@ public class ToggleEvents {
 
     private boolean containsIgnoreCase(String message, String contains) {
         return Pattern.compile(Pattern.quote(contains), Pattern.CASE_INSENSITIVE).matcher(message).find();
+    }
+
+    private void printSmartEx(ToggleBase baseIn, Exception ex) {
+        String message = "";
+
+        if (baseIn != null) {
+            if (baseIn instanceof TypeCustom) {
+                message = "[" + ((TypeCustom) baseIn)._getName() + ":" + ((TypeCustom) baseIn)._getConditions().size() + " ] ";
+            } else {
+                message = "[" + baseIn.getName() + " ] ";
+            }
+        } else {
+            message += "[Unknown] ";
+        }
+
+        if (baseIn != null && ex != null) {
+            message += "An issue was encountered \"" + ex.getClass().getSimpleName() + "\" ";
+
+            if (ex.getMessage() != null) {
+                message += ex.getMessage() + ", ";
+            }
+            if (ex.getCause() != null) {
+                message += ex.getCause();
+            }
+        } else {
+            message += "An unknown issue was encountered, please remove all other mods interacting with this one";
+        }
+
+        System.out.print(message);
     }
 }

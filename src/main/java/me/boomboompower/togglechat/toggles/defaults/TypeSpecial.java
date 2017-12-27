@@ -60,8 +60,8 @@ public class TypeSpecial extends ToggleBase {
 
             // If the following character is defined in unicode,
             // the character following this character is "]" and
-            // the message number flag has been trigger,
-            // assume it's special and return true.
+            // the message number flag has been triggered,
+            // we'll assume it's special and toggle it.
             if (Character.isDefined(chars[i]) && hasNum) {
                 try {
                     if (chars[i + 1] == ']') {
