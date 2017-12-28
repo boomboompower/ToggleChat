@@ -40,7 +40,7 @@ import java.util.LinkedList;
 public class ToggleChatMod {
 
     public static final String MODID = "publictogglechat";
-    public static final String VERSION = "3.0.0";
+    public static final String VERSION = "2.5.5";
 
     private LinkedList<String> whitelist = new LinkedList<>();
 

@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 public class TypeMessageSeparator extends ToggleBase {
 
-    private Pattern friendPattern = Pattern.compile("-{53}\n( {24}| {27})(?<back>(<<| {2}))? Friends \\(Page (?<current>.+) of (?<max>.+)\\) (?<next>>>)?\n(?<line1>.*)\n(?<line2>.*)\n(?<line3>.*)\n(?<line4>.*)\n(?<line5>.*)\n(?<line6>.*)\n(?<line7>.*)\n(?<line8>.*)\n-{53}");
+    private Pattern friendPattern = Pattern.compile("-{53}\n( {24}| {27})(?<back>(<<| {2}))? Friends \\(Page (?<current>.+) of (?<max>.+)\\) (?<next>>>| {2}| )?\n(?<line1>.*)\n(?<line2>.*)\n(?<line3>.*)\n(?<line4>.*)\n(?<line5>.*)\n(?<line6>.*)\n(?<line7>.*)\n(?<line8>.*)\n-{53}");
 
     private boolean showSeparators = true;
 
