@@ -62,7 +62,7 @@ public class ToggleChatMod {
         data.credits = "2Pi for the initial idea behind the mod!";
 
         this.websiteUtils = new WebsiteUtils("ToggleChat");
-        this.configLoader = new ConfigLoader("mods" + File.separator + "togglechat" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId() + File.separator);
+        this.configLoader = new ConfigLoader("mods" + File.separator + "togglechat" + File.separator + "mc" + File.separator); // Minecraft.getMinecraft().getSession().getProfile().getId()
     }
 
     @Mod.EventHandler

@@ -1,13 +1,12 @@
 package me.boomboompower.togglechat.gui.custom;
 
-import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.gui.modern.ModernTextBox;
 import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 import me.boomboompower.togglechat.utils.ChatColor;
-import net.minecraft.client.gui.GuiScreen;
+
 import net.minecraft.client.renderer.GlStateManager;
-import org.apache.commons.lang3.text.WordUtils;
+
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -16,11 +15,9 @@ public class CustomToggleTest extends ModernGui {
 
     private ModernTextBox text;
 
-    private GuiScreen previous;
     private TypeCustom custom;
 
-    public CustomToggleTest(GuiScreen previous, TypeCustom customIn) {
-        this.previous = previous;
+    public CustomToggleTest(TypeCustom customIn) {
 
         this.custom = customIn;
     }
@@ -66,17 +63,7 @@ public class CustomToggleTest extends ModernGui {
     }
 
     @Override
-    protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == 1) {
-            this.mc.displayGuiScreen(this.previous);
-        } else {
-            super.keyTyped(typedChar, keyCode);
-        }
-    }
-
-    @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
-        ToggleChatMod.getInstance().getConfigLoader().saveCustomToggles();
     }
 }

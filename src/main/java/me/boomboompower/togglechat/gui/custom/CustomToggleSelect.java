@@ -20,25 +20,23 @@ public class CustomToggleSelect extends ModernGui {
 
     private ModernButton next;
 
-    private GuiScreen previous;
     private CustomToggleMain.SelectType selectType;
     private TypeCustom hovered;
 
     private boolean pageInvalid;
     private int pageNumber;
 
-    public CustomToggleSelect(GuiScreen previous, CustomToggleMain.SelectType type) {
-        this(previous, type, 1);
+    public CustomToggleSelect(CustomToggleMain.SelectType type) {
+        this(type, 1);
     }
 
-    public CustomToggleSelect(GuiScreen previous, CustomToggleMain.SelectType type, int pageNumber) {
-        this.previous = previous;
+    public CustomToggleSelect(CustomToggleMain.SelectType type, int pageNumber) {
         this.selectType = type;
 
         this.pageNumber = pageNumber;
 
         if (type == CustomToggleMain.SelectType.CREATE) {
-            this.mc.displayGuiScreen(previous);
+            this.mc.displayGuiScreen(null);
         }
     }
 
@@ -128,13 +126,13 @@ public class CustomToggleSelect extends ModernGui {
         switch (button.getId()) {
             case 0:
                 if (this.pageNumber > 1) {
-                    new CustomToggleSelect(this.previous, this.selectType, this.pageNumber--);
+                    new CustomToggleSelect(this.selectType, this.pageNumber--);
                 } else {
-                    this.mc.displayGuiScreen(this.previous);
+                    this.mc.displayGuiScreen(null);
                 }
                 break;
             case 1:
-                new CustomToggleSelect(this.previous, this.selectType, this.pageNumber++);
+                new CustomToggleSelect(this.selectType, this.pageNumber++);
                 break;
         }
     }
@@ -145,27 +143,13 @@ public class CustomToggleSelect extends ModernGui {
             this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
             switch (this.selectType) {
                 case TEST:
-                    this.mc.displayGuiScreen(new CustomToggleTest(this.previous, this.hovered));
+                    this.mc.displayGuiScreen(new CustomToggleTest(this.hovered));
                     return;
                 case MODIFY:
-                    this.mc.displayGuiScreen(new CustomToggleModify(this.previous, this.hovered));
+                    this.mc.displayGuiScreen(new CustomToggleModify(this.hovered));
                     return;
             }
         }
         super.mouseClicked(mouseX, mouseY, mouseButton);
-    }
-
-    @Override
-    protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == 1) {
-            this.mc.displayGuiScreen(this.previous);
-        } else {
-            super.keyTyped(typedChar, keyCode);
-        }
-    }
-
-    @Override
-    public void onGuiClosed() {
-        ToggleChatMod.getInstance().getConfigLoader().saveCustomToggles();
     }
 }

@@ -80,4 +80,9 @@ public abstract class ToggleCondition implements Function<String, Boolean> {
     public static TypeCustom createCustomToggle(String name, List<ToggleCondition> condition) {
         return new TypeCustom(name, condition);
     }
+
+    @Override
+    public String toString() {
+        return getText();
+    }
 }

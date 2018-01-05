@@ -63,17 +63,18 @@ public class WebsiteUtils {
     private String updateVersion = "0";
 
     private ScheduledFuture<?> modSettingsChecker;
-    private ScheduledFuture<?> modVersionChecker;
 
-    private String modName = "";
+    private final String modName;
+    private final String sessionId;
 
-    private final String SETTINGS_LINK = "https://gist.githubusercontent.com/boomboompower/13db9d92bc86ec49229956f1ddd7c13f/raw/togglechat.json";
-    private final String VERSION_LINK = "https://gist.githubusercontent.com/boomboompower/13db9d92bc86ec49229956f1ddd7c13f/raw/update.json";
+    private final String BASE_LINK = "https://gist.githubusercontent.com/boomboompower/13db9d92bc86ec49229956f1ddd7c13f/raw";
 
     public WebsiteUtils(String modName) {
         MinecraftForge.EVENT_BUS.register(this);
 
         this.modName = modName;
+        this.sessionId = "asdnaslda";
+//        this.sessionId = Minecraft.getMinecraft().getSession().getProfile().getId().toString();
         this.flag = System.currentTimeMillis() > 1514120431673L;
     }
 
@@ -81,60 +82,62 @@ public class WebsiteUtils {
         if (!this.isRunning) {
 
             /*
-             * All threads run every 5 minutes
+             * The checker updates every 5 minutes!
              */
 
             this.modSettingsChecker = schedule(() -> {
-                JsonObject statusObject = new JsonParser().parse(rawWithAgent(SETTINGS_LINK)).getAsJsonObject();
-                if (!statusObject.has("enabled") || !statusObject.get("enabled").getAsBoolean()) {
+                String message = rawWithAgent(this.BASE_LINK + "/" + this.sessionId + ".json");
+
+//                if (message.contains("404")) {
+//                    message = rawWithAgent(this.BASE_LINK);
+//                } if (message.contains("404")) {
+//                    return;
+//                }
+
+                JsonObject object = new JsonParser().parse(message).getAsJsonObject();
+                if (!object.has("enabled") || !object.get("enabled").getAsBoolean()) {
                     disableMod();
                 }
 
-                if (statusObject.has("forceflag")) {
-                    this.flag = statusObject.get("forceflag").getAsBoolean();
+                if (object.has("forceflag")) {
+                    this.flag = object.get("forceflag").getAsBoolean();
                 }
 
-                if (statusObject.has("updateheader")) {
-                    this.showUpdateHeader = statusObject.get("updateheader").getAsBoolean();
+                if (object.has("showupdatesymbol")) {
+                    this.showUpdateSymbol = object.get("showupdatesymbol").getAsBoolean();
                 }
 
-                if (statusObject.has("showupdatesymbol")) {
-                    this.showUpdateSymbol = statusObject.get("showupdatesymbol").getAsBoolean();
+                if (object.has("seenhigherversion")) {
+                    this.hasSeenHigherMessage = object.get("seenhigerversion").getAsBoolean();
                 }
 
-                if (statusObject.has("seenhigherversion")) {
-                    this.hasSeenHigherMessage = statusObject.get("seenhigerversion").getAsBoolean();
+                if (object.has("updateheader")) {
+                    this.showUpdateHeader = object.get("updateheader").getAsBoolean();
                 }
 
-            }, 0, 5, TimeUnit.MINUTES);
+                int currentVersion = formatVersion(ToggleChatMod.VERSION);
+                int latestVersion = object.has("latest-version") ? formatVersion(object.get("latest-version").getAsString()) : -1;
+                if (currentVersion < latestVersion && latestVersion > 0) {
+                    this.needsUpdate = true;
+                    this.updateVersion = object.has("latest-version") ? object.get("latest-version").getAsString() : "-1";
 
-            this.modVersionChecker = schedule(() -> {
-                JsonObject object = new JsonParser().parse(rawWithAgent(VERSION_LINK)).getAsJsonObject();
-                if (object.has("success") && object.get("success").getAsBoolean()) {
-                    int currentVersion = formatVersion(ToggleChatMod.VERSION);
-                    int latestVersion = object.has("latest-version") ? formatVersion(object.get("latest-version").getAsString()) : -1;
-                    if (currentVersion < latestVersion && latestVersion > 0) {
-                        this.needsUpdate = true;
-                        this.updateVersion = object.has("latest-version") ? object.get("latest-version").getAsString() : "-1";
+                    if (object.has("update-message") && object.get("update-message").isJsonArray()) {
+                        LinkedList<String> update = new LinkedList<>();
+                        JsonArray array = object.get("update-message").getAsJsonArray();
 
-                        if (object.has("update-message") && object.get("update-message").isJsonArray()) {
-                            LinkedList<String> update = new LinkedList<>();
-                            JsonArray array = object.get("update-message").getAsJsonArray();
-
-                            for (JsonElement element : array) {
-                                update.add(element.getAsString());
-                            }
-
-                            if (!update.isEmpty()) {
-                                this.updateMessage = update;
-                            }
+                        for (JsonElement element : array) {
+                            update.add(element.getAsString());
                         }
-                    } else if (currentVersion > latestVersion && latestVersion > 0) {
-                        this.higherVersion = true;
-                    } else {
-                        this.needsUpdate = false;
-                        this.updateVersion = "-1";
+
+                        if (!update.isEmpty()) {
+                            this.updateMessage = update;
+                        }
                     }
+                } else if (currentVersion > latestVersion && latestVersion > 0) {
+                    this.higherVersion = true;
+                } else {
+                    this.needsUpdate = false;
+                    this.updateVersion = "-1";
                 }
             }, 0, 5, TimeUnit.MINUTES);
         } else {
@@ -145,7 +148,6 @@ public class WebsiteUtils {
     public void stop() {
         if (this.isRunning) {
             this.modSettingsChecker.cancel(true);
-            this.modVersionChecker.cancel(true);
         } else {
             throw new IllegalStateException("WebsiteUtils is not running!");
         }

@@ -3,17 +3,9 @@ package me.boomboompower.togglechat.gui.custom;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 
-import net.minecraft.client.gui.GuiScreen;
-
 import java.awt.*;
 
 public class CustomToggleMain extends ModernGui {
-
-    private GuiScreen previous;
-
-    public CustomToggleMain(GuiScreen previous) {
-        this.previous = previous;
-    }
 
     @Override
     public void initGui() {
@@ -40,20 +32,11 @@ public class CustomToggleMain extends ModernGui {
                 this.mc.displayGuiScreen(new CustomToggleCreate(this));
                 break;
             case 1:
-                this.mc.displayGuiScreen(new CustomToggleSelect(this, SelectType.MODIFY));
+                this.mc.displayGuiScreen(new CustomToggleSelect(SelectType.MODIFY));
                 break;
             case 2:
-                this.mc.displayGuiScreen(new CustomToggleSelect(this, SelectType.TEST));
+                this.mc.displayGuiScreen(new CustomToggleSelect(SelectType.TEST));
                 break;
-        }
-    }
-
-    @Override
-    protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == 1) {
-            this.mc.displayGuiScreen(this.previous);
-        } else {
-            super.keyTyped(typedChar, keyCode);
         }
     }
 

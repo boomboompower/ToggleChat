@@ -149,7 +149,7 @@ public class MainGui extends ModernGui {
                 button.setText("Classic: " + getStatus(isClassic()));
                 return;
             case 5:
-                this.mc.displayGuiScreen(new CustomToggleMain(this));
+                this.mc.displayGuiScreen(new CustomToggleMain());
                 return;
         }
 
@@ -169,8 +169,9 @@ public class MainGui extends ModernGui {
         if (ToggleChatMod.getInstance().getWebsiteUtils().isFlagged()) {
             for (ToggleBase base : ToggleBase.getToggles().values()) {
                 if (base instanceof TypeCustom) {
-                    if (base.getName().toLowerCase().replace(" ", "_").equals(button.getButtonId())) {
-                        this.mc.displayGuiScreen(new CustomToggleModify(this, (TypeCustom) base));
+                    TypeCustom custom = (TypeCustom) base;
+                    if (custom.getName().toLowerCase().replace(" ", "_").equals(button.getButtonId())) {
+                        this.mc.displayGuiScreen(new CustomToggleModify(custom));
                         break;
                     }
                 }
