@@ -18,8 +18,6 @@ import java.util.List;
 
 public class ModernGuiToggleList extends GuiListExtended {
 
-    private final Minecraft mc = Minecraft.getMinecraft();
-
     private final IHaveScrollableData scrollableData;
     private final List<IGuiListEntry> listEntries;
     private int maxLabelWidth;
@@ -45,13 +43,13 @@ public class ModernGuiToggleList extends GuiListExtended {
                 maxListLabelWidth = width;
             }
 
-            this.listEntries.add(new ModernGuiToggleList.CustomToggleEntry(text));
+            this.listEntries.add(new CustomToggleEntry(text));
         }
         this.maxLabelWidth = maxListLabelWidth;
     }
 
     @Override
-    public void drawScreen(int mouseXIn, int mouseYIn, float p_148128_3_) {
+    public void drawScreen(int mouseXIn, int mouseYIn, float partialTicks) {
         this.mouseX = mouseXIn;
         this.mouseY = mouseYIn;
         int i = this.getScrollBarX();
@@ -96,16 +94,16 @@ public class ModernGuiToggleList extends GuiListExtended {
         GlStateManager.shadeModel(7425);
         GlStateManager.disableTexture2D();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        worldrenderer.pos((double)this.left, (double)(this.top + i1), 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 0).endVertex();
-        worldrenderer.pos((double)this.right, (double)(this.top + i1), 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 0).endVertex();
-        worldrenderer.pos((double)this.right, (double)this.top, 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 255).endVertex();
-        worldrenderer.pos((double)this.left, (double)this.top, 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 255).endVertex();
+        worldrenderer.pos(this.left, this.top + i1, 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 0).endVertex();
+        worldrenderer.pos(this.right, this.top + i1, 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 0).endVertex();
+        worldrenderer.pos(this.right, this.top, 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 255).endVertex();
+        worldrenderer.pos(this.left, this.top, 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 255).endVertex();
         tessellator.draw();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        worldrenderer.pos((double)this.left, (double)this.bottom, 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-        worldrenderer.pos((double)this.right, (double)this.bottom, 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-        worldrenderer.pos((double)this.right, (double)(this.bottom - i1), 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 0).endVertex();
-        worldrenderer.pos((double)this.left, (double)(this.bottom - i1), 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 0).endVertex();
+        worldrenderer.pos(this.left, this.bottom, 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+        worldrenderer.pos(this.right, this.bottom, 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+        worldrenderer.pos(this.right, this.bottom - i1, 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 0).endVertex();
+        worldrenderer.pos(this.left, this.bottom - i1, 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 0).endVertex();
         tessellator.draw();
 
         GlStateManager.enableTexture2D();
@@ -154,36 +152,5 @@ public class ModernGuiToggleList extends GuiListExtended {
         return super.getListWidth() + 32;
     }
 
-    public class CustomToggleEntry implements IGuiListEntry {
 
-        private final String labelText;
-        private final int labelWidth;
-
-        public CustomToggleEntry(String string) {
-            this.labelText = string;
-            this.labelWidth = mc.fontRendererObj.getStringWidth(this.labelText);
-        }
-
-        public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected) {
-            if (slotIndex == getSize()) {
-            }
-            mc.fontRendererObj.drawString(this.labelText, ModernGuiToggleList.this.mc.currentScreen.width / 2 - this.labelWidth / 2, y + slotHeight - ModernGuiToggleList.this.mc.fontRendererObj.FONT_HEIGHT - 1, Color.WHITE.getRGB());
-        }
-
-        /**
-         * Returns true if the mouse has been pressed on this control.
-         */
-        public boolean mousePressed(int slotIndex, int p_148278_2_, int p_148278_3_, int p_148278_4_, int p_148278_5_, int p_148278_6_) {
-            return false;
-        }
-
-        /**
-         * Fired when the mouse button is released. Arguments: index, x, y, mouseEvent, relativeX, relativeY
-         */
-        public void mouseReleased(int slotIndex, int x, int y, int mouseEvent, int relativeX, int relativeY) {
-        }
-
-        public void setSelected(int p_178011_1_, int p_178011_2_, int p_178011_3_) {
-        }
-    }
 }

@@ -86,11 +86,11 @@ public class TypeEasy extends ToggleBase {
 
     private boolean containsEasyMessage(String input) {
         switch (input) {
-            case "Hello everyone! I'm an innocent who loves everything Hypixel.":
+            case "Hello everyone! I'm an innocent player who loves everything Hypixel.":
             case "Your personality shines brighter than the sun.":
             case "I had something to say, then I forgot it.":
             case "Your Clicks per second are godly. :eek:":
-            case "Why can't Ender Dragon read a book? Because he always starts at the End.":
+            case "Why can't the Ender Dragon read a book? Because he always starts at the End.":
             case "In my free time I like to watch cat videos on youtube":
             case "Wait... This isn't what I typed!":
             case "I like Minecraft pvp but you are truly better than me!":

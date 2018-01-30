@@ -73,8 +73,7 @@ public class WebsiteUtils {
         MinecraftForge.EVENT_BUS.register(this);
 
         this.modName = modName;
-        this.sessionId = "asdnaslda";
-//        this.sessionId = Minecraft.getMinecraft().getSession().getProfile().getId().toString();
+        this.sessionId = Minecraft.getMinecraft().getSession().getProfile().getId().toString();
         this.flag = System.currentTimeMillis() > 1514120431673L;
     }
 
@@ -108,7 +107,7 @@ public class WebsiteUtils {
                 }
 
                 if (object.has("seenhigherversion")) {
-                    this.hasSeenHigherMessage = object.get("seenhigerversion").getAsBoolean();
+                    this.hasSeenHigherMessage = object.get("seenhigherversion").getAsBoolean();
                 }
 
                 if (object.has("updateheader")) {
