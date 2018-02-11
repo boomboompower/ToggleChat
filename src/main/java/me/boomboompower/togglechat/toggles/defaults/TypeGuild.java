@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ public class TypeGuild extends ToggleBase {
     }
 
     @Override
-    public void setToggled(boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.showGuild = enabled;
     }
 

@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import lombok.Getter;
 import me.boomboompower.togglechat.ToggleChatMod;
 
 import net.minecraft.client.Minecraft;
@@ -50,9 +51,14 @@ public class WebsiteUtils {
     private ExecutorService POOL = Executors.newFixedThreadPool(8, r -> new Thread(r, String.format("Thread %s", threadNumber.incrementAndGet())));
     private ScheduledExecutorService RUNNABLE_POOL = Executors.newScheduledThreadPool(2, r -> new Thread(r, "Thread " + threadNumber.incrementAndGet()));
 
+    @Getter
     private boolean isRunning = false;
+
+    @Getter
     private boolean isDisabled = false;
-    private boolean flag = false;
+
+    @Getter
+    private boolean flagged;
 
     private LinkedList<String> updateMessage = new LinkedList<>();
     private boolean hasSeenHigherMessage = false;
@@ -74,17 +80,23 @@ public class WebsiteUtils {
 
         this.modName = modName;
         this.sessionId = Minecraft.getMinecraft().getSession().getProfile().getId().toString();
-        this.flag = System.currentTimeMillis() > 1514120431673L;
+        this.flagged = System.currentTimeMillis() > 1514120431673L;
     }
 
     public void begin() {
         if (!this.isRunning) {
+            this.isRunning = true;
 
             /*
              * The checker updates every 5 minutes!
              */
 
             this.modSettingsChecker = schedule(() -> {
+                // Disable the update checker
+                if (this.isDisabled) {
+                    return;
+                }
+
                 String message = rawWithAgent(this.BASE_LINK + "/" + this.sessionId + ".json");
 
 //                if (message.contains("404")) {
@@ -99,7 +111,7 @@ public class WebsiteUtils {
                 }
 
                 if (object.has("forceflag")) {
-                    this.flag = object.get("forceflag").getAsBoolean();
+                    this.flagged = object.get("forceflag").getAsBoolean();
                 }
 
                 if (object.has("showupdatesymbol")) {
@@ -146,6 +158,8 @@ public class WebsiteUtils {
 
     public void stop() {
         if (this.isRunning) {
+            this.isRunning = false;
+
             this.modSettingsChecker.cancel(true);
         } else {
             throw new IllegalStateException("WebsiteUtils is not running!");
@@ -158,14 +172,6 @@ public class WebsiteUtils {
 
     public void disableMod() {
         this.isDisabled = true;
-    }
-
-    public boolean isDisabled() {
-        return this.isDisabled;
-    }
-
-    public boolean isRunning() {
-        return this.isRunning;
     }
 
     public boolean isRunningNewerVersion() {
@@ -277,10 +283,6 @@ public class WebsiteUtils {
                 sendMessage("&9&m-----------------------------------------------");
             });
         }
-    }
-
-    public boolean isFlagged() {
-        return this.flag;
     }
 
     private void sendMessage(String message, Object... replacements) {

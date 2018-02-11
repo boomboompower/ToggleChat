@@ -1,6 +1,6 @@
 package me.boomboompower.togglechat.toggles;
 
-import com.google.gson.JsonObject;
+import me.boomboompower.togglechat.utils.BetterJsonObject;
 
 /**
  * Extend this if you do not wish to use default saving and loading
@@ -15,9 +15,9 @@ public interface ICustomSaver {
         return true;
     }
 
-    public default void onSave(JsonObject config) {
+    public default void onSave(BetterJsonObject config) {
     }
 
-    public default void onLoad(JsonObject config) {
+    public default void onLoad(BetterJsonObject config) {
     }
 }

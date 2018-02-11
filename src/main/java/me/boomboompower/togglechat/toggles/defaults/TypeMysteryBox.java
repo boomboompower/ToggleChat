@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,6 +17,9 @@
 
 package me.boomboompower.togglechat.toggles.defaults;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
@@ -29,7 +32,9 @@ public class TypeMysteryBox extends ToggleBase {
     private Pattern mysteryPattern = Pattern.compile("(?<player>\\S{1,16}) found a (?<star>\\S{1,5}) Mystery Box!");
     private Pattern mysteryFoundPattern = Pattern.compile("\\[Mystery Box] (?<player>\\S{1,16}) found a (?<thing>.*)!");
 
-    public boolean showBox = true;
+    @Setter
+    @Getter
+    private boolean enabled = true;
 
     @Override
     public String getName() {
@@ -47,18 +52,8 @@ public class TypeMysteryBox extends ToggleBase {
     }
 
     @Override
-    public boolean isEnabled() {
-        return this.showBox;
-    }
-
-    @Override
-    public void setToggled(boolean enabled) {
-        this.showBox = enabled;
-    }
-
-    @Override
     public void onClick(ModernButton button) {
-        this.showBox = !this.showBox;
+        this.enabled = !this.enabled;
         button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 

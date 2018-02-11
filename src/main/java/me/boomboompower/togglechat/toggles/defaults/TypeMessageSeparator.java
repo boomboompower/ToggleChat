@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,18 +17,20 @@
 
 package me.boomboompower.togglechat.toggles.defaults;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
-import java.util.regex.Pattern;
 
 public class TypeMessageSeparator extends ToggleBase {
 
-    private Pattern friendPattern = Pattern.compile("-{53}\n( {24}| {27})(?<back>(<<| {2}))? Friends \\(Page (?<current>.+) of (?<max>.+)\\) (?<next>>>| {2}| )?\n(?<line1>.*)\n(?<line2>.*)\n(?<line3>.*)\n(?<line4>.*)\n(?<line5>.*)\n(?<line6>.*)\n(?<line7>.*)\n(?<line8>.*)\n-{53}");
-
-    private boolean showSeparators = true;
+    @Setter
+    @Getter
+    private boolean enabled = true;
 
     @Override
     public String getName() {
@@ -37,42 +39,20 @@ public class TypeMessageSeparator extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        if (this.friendPattern.matcher(message).matches()) {
-            return false;
-        }
-
-        // Don't toggle if its a friend message
-        if (ToggleBase.hasToggle("friend_requests")) {
-            ToggleBase friendRequestToggle = ToggleBase.getToggle("friend_requests");
-            if (friendRequestToggle.isEnabled() && friendRequestToggle.shouldToggle(message)) {
-                return false;
-            }
-        }
-
-        // Don't toggle it if its a chat message
-        if (ToggleBase.hasToggle("global")) {
-            ToggleBase globalToggle = ToggleBase.getToggle("global");
-            if (globalToggle.isEnabled() && globalToggle.shouldToggle(message)) {
-                return false;
-            }
-        }
-
         return message.contains("-----------");
     }
 
-    @Override
-    public boolean isEnabled() {
-        return this.showSeparators;
-    }
-
-    @Override
-    public void setToggled(boolean enabled) {
-        this.showSeparators = enabled;
+    public String editMessage(String formattedText) {
+        if (formattedText.contains("--")) {
+            formattedText = formattedText.replace("----------------------------------------------------\n", "");
+            return formattedText.replace("--", "");
+        }
+        return formattedText;
     }
 
     @Override
     public void onClick(ModernButton button) {
-        this.showSeparators = !this.showSeparators;
+        this.enabled = !this.enabled;
         button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 

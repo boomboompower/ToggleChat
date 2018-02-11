@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,6 +17,9 @@
 
 package me.boomboompower.togglechat.toggles.defaults;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
@@ -30,9 +33,11 @@ public class TypePartyInvites extends ToggleBase {
     private Pattern invitePattern = Pattern.compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}) has invited you to join (?<meme>\\[.+] )?(?<meme2>\\S{1,16}) party!");
     private Pattern otherInvitePattern = Pattern.compile("(?<inviteerank>\\[.+] )?(?<invitee>\\S{1,16}) invited (?<rank>\\[.+] )?(?<player>\\S{1,16}) to the party! They have 60 seconds to accept.");
 
-    private boolean showPartyInvites = true;
+    @Setter
+    @Getter
+    private boolean enabled = true;
 
-    private boolean lastWasToggled;
+    private boolean wasLastMessageToggled;
 
     @Override
     public String getName() {
@@ -41,26 +46,16 @@ public class TypePartyInvites extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        if (this.lastWasToggled && containsIgnoreCase(message, "Click here to join! You have 60 seconds to accept.")) {
+        if (this.wasLastMessageToggled && containsIgnoreCase(message, "Click here to join! You have 60 seconds to accept.")) {
             return true;
         }
 
-        return this.lastWasToggled = this.expiredPattern.matcher(message).matches() || this.invitePattern.matcher(message).matches() || this.otherInvitePattern.matcher(message).matches();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.showPartyInvites;
-    }
-
-    @Override
-    public void setToggled(boolean enabled) {
-        this.showPartyInvites = enabled;
+        return this.wasLastMessageToggled = this.expiredPattern.matcher(message).matches() || this.invitePattern.matcher(message).matches() || this.otherInvitePattern.matcher(message).matches();
     }
 
     @Override
     public void onClick(ModernButton button) {
-        this.showPartyInvites = !this.showPartyInvites;
+        this.enabled = !this.enabled;
         button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 

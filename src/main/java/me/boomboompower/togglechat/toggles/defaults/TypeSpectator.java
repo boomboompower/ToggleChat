@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,6 +17,9 @@
 
 package me.boomboompower.togglechat.toggles.defaults;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
@@ -24,11 +27,16 @@ import me.boomboompower.togglechat.toggles.ToggleBase;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
+/**
+ * #BringBackSpecChat
+ */
 public class TypeSpectator extends ToggleBase {
 
     private Pattern spectatorPattern = Pattern.compile("\\[SPECTATOR] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
 
-    private boolean showSpecChat = true;
+    @Setter
+    @Getter
+    private boolean enabled = true;
 
     @Override
     public String getName() {
@@ -41,18 +49,8 @@ public class TypeSpectator extends ToggleBase {
     }
 
     @Override
-    public boolean isEnabled() {
-        return this.showSpecChat;
-    }
-
-    @Override
-    public void setToggled(boolean enabled) {
-        this.showSpecChat = enabled;
-    }
-
-    @Override
     public void onClick(ModernButton button) {
-        this.showSpecChat = !this.showSpecChat;
+        this.enabled = !this.enabled;
         button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 

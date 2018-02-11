@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -158,9 +158,9 @@ public abstract class ToggleBase {
      * Sets the message to be toggled or not. Is used in
      *      toggle loading
      *
-     * @param isToggled used in loading to set the toggled enabled/disabled
+     * @param enabled used in loading to set the toggled enabled/disabled
      */
-    public abstract void setToggled(boolean isToggled);
+    public abstract void setEnabled(boolean enabled);
 
     /**
      * Called when the button is first clicked. Toggle logic should

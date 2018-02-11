@@ -49,8 +49,8 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
     }
 
     @Override
-    public void setToggled(boolean isToggled) {
-        this.showCustom = isToggled;
+    public void setEnabled(boolean enabled) {
+        this.showCustom = enabled;
     }
 
     @Override

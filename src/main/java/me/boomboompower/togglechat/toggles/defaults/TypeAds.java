@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,6 +17,9 @@
 
 package me.boomboompower.togglechat.toggles.defaults;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
@@ -33,7 +36,9 @@ public class TypeAds extends ToggleBase {
     private Pattern mediaPattern3 = Pattern.compile("\nBe the first to watch Hypixel (?<media>.+) videos!\nSubscribe to Hypixel! (?<special>.) (?<link>.+)\n");
     private Pattern mediaPattern4 = Pattern.compile("\nGet deals and news sent to your email!\nSignup for the Newsletter! (?<special>.) (?<link>.+)\n");
 
-    public boolean showAds = true;
+    @Setter
+    @Getter
+    private boolean enabled = true;
 
     @Override
     public String getName() {
@@ -56,18 +61,8 @@ public class TypeAds extends ToggleBase {
     }
 
     @Override
-    public boolean isEnabled() {
-        return this.showAds;
-    }
-
-    @Override
-    public void setToggled(boolean enabled) {
-        this.showAds = enabled;
-    }
-
-    @Override
     public void onClick(ModernButton button) {
-        this.showAds = !this.showAds;
+        this.enabled = !this.enabled;
         button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 

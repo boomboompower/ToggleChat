@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,6 +17,9 @@
 
 package me.boomboompower.togglechat.gui.modern;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
@@ -24,29 +27,45 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 
-public class ModernButton extends GuiButton {
+public class ModernButton extends Gui {
 
+    protected static final ResourceLocation buttonTextures = new ResourceLocation("textures/gui/widgets.png");
+
+    @Getter
     private int id;
+
+    @Setter
+    @Getter
     private int width;
+
     private int height;
     private int xPosition;
     private int yPosition;
-    private boolean isNew;
+
+    @Getter
     private boolean enabled;
+
+    @Setter
+    @Getter
     private boolean visible;
+
+    @Getter
     private boolean hovered;
-    private String buttonIdName;
+
+    @Getter
+    private String buttonId;
     private String displayString;
 
-    private Color enabledOverrideColor = null;
-    private Color disabledOverrideColor = null;
+    private Color enabledColor = null;
+    private Color disabledColor = null;
 
+    @Getter
     private ToggleBase buttonData;
 
     public ModernButton(int buttonId, int x, int y, String buttonText) {
@@ -62,7 +81,6 @@ public class ModernButton extends GuiButton {
     }
 
     public ModernButton(int buttonId, String idName, int x, int y, int widthIn, int heightIn, String buttonText) {
-        super(buttonId, x, y, widthIn, heightIn, buttonText);
         this.width = 200;
         this.height = 20;
         this.enabled = true;
@@ -72,7 +90,7 @@ public class ModernButton extends GuiButton {
         this.yPosition = y;
         this.width = widthIn;
         this.height = heightIn;
-        this.buttonIdName = idName;
+        this.buttonId = idName;
         this.displayString = buttonText;
     }
 
@@ -101,7 +119,11 @@ public class ModernButton extends GuiButton {
             this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
             int i = this.getHoverState(this.hovered);
 
-            if (ToggleChatMod.getInstance().getConfigLoader().isClassicTheme()) {
+            int j = 14737632;
+
+            boolean modern;
+
+            if (modern = ToggleChatMod.getInstance().getConfigLoader().isModernButton()) {
                 mc.getTextureManager().bindTexture(buttonTextures);
                 GlStateManager.enableBlend();
                 GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -116,67 +138,44 @@ public class ModernButton extends GuiButton {
                 }
             }
 
-            this.mouseDragged(mc, mouseX, mouseY);
-            int j = 14737632;
-
             if (!this.enabled) {
-                j = ModernGui.isClassic() ? 10526880 : Color.WHITE.getRGB();
+                j = 10526880;
             } else if (this.hovered) {
                 j = 16777120;
             }
-            fontrenderer.drawString(this.displayString, (this.xPosition + this.width / 2 - fontrenderer.getStringWidth(this.displayString) / 2), this.yPosition + (this.height - 8) / 2, j, ModernGui.isClassic());
+            fontrenderer.drawString(this.displayString, (this.xPosition + this.width / 2 - fontrenderer.getStringWidth(this.displayString) / 2), this.yPosition + (this.height - 8) / 2, j, modern);
         }
     }
 
-    @Override
     public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
         return this.enabled && this.visible && mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
     }
 
-    @Override
-    public boolean isMouseOver() {
-        return this.hovered;
+    public void mouseReleased(int mouseX, int mouseY) {
     }
 
-    @Override
     public void playPressSound(SoundHandler soundHandlerIn) {
         soundHandlerIn.playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
     }
 
-    @Override
-    public int getButtonWidth()
-    {
-        return this.width;
-    }
-
-    @Override
-    public void setWidth(int width)
-    {
-        this.width = width;
-    }
-
     public Color getEnabledColor() {
-        return this.enabledOverrideColor == null ? new Color(255, 255, 255, 75) : this.enabledOverrideColor;
+        return this.enabledColor == null ? new Color(255, 255, 255, 75) : this.enabledColor;
     }
 
     public ModernButton setEnabledColor(Color colorIn) {
-        this.enabledOverrideColor = colorIn;
+        this.enabledColor = colorIn;
 
         return this;
     }
 
     public Color getDisabledColor() {
-        return this.disabledOverrideColor == null ? new Color(100, 100, 100, 75) : this.disabledOverrideColor;
+        return this.disabledColor == null ? new Color(100, 100, 100, 75) : this.disabledColor;
     }
 
     public ModernButton setDisabledColor(Color colorIn) {
-        this.disabledOverrideColor = colorIn;
+        this.disabledColor = colorIn;
 
         return this;
-    }
-
-    public String getButtonId() {
-        return this.buttonIdName;
     }
 
     public String getText() {
@@ -185,10 +184,6 @@ public class ModernButton extends GuiButton {
 
     public void setText(String text) {
         this.displayString = text != null ? text : "";
-    }
-
-    public boolean isEnabled() {
-        return this.enabled;
     }
 
     public ModernButton setEnabled(boolean isEnabled) {
@@ -205,13 +200,5 @@ public class ModernButton extends GuiButton {
         this.buttonData = buttonData;
 
         return this;
-    }
-
-    public ToggleBase getButtonData() {
-        return this.buttonData;
-    }
-
-    public int getId() {
-        return this.id;
     }
 }

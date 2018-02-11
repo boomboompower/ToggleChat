@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,9 +17,9 @@
 
 package me.boomboompower.togglechat.config;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import lombok.Getter;
 
+import lombok.Setter;
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.toggles.ICustomSaver;
 import me.boomboompower.togglechat.toggles.ToggleBase;
@@ -27,6 +27,7 @@ import me.boomboompower.togglechat.toggles.custom.ToggleCondition;
 import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 import me.boomboompower.togglechat.toggles.custom.conditions.ConditionEmpty;
 import me.boomboompower.togglechat.toggles.custom.conditions.ConditionStartsWith;
+import me.boomboompower.togglechat.utils.BetterJsonObject;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -37,14 +38,35 @@ import java.util.stream.Collectors;
 
 public class ConfigLoader {
 
+    @Getter
     private File toggleFile;
+
+    @Getter
     private File whitelistFile;
+
+    @Getter
+    private File modernGuiFile;
+
+    @Getter
     private File customToggleDir;
 
-    private JsonObject configJson;
+    private BetterJsonObject toggleJson = new BetterJsonObject();
+    private BetterJsonObject modernJson = new BetterJsonObject();
 
-    private boolean classicTheme = false;
-    private boolean flagged = false;
+    @Getter
+    private boolean flagged;
+
+    @Setter
+    @Getter
+    private boolean modernBlur = false;
+
+    @Setter
+    @Getter
+    private boolean modernButton = false;
+
+    @Setter
+    @Getter
+    private boolean modernTextbox = false;
 
     public ConfigLoader(String directory) {
         File e = new File(directory);
@@ -55,6 +77,7 @@ public class ConfigLoader {
 
         this.toggleFile = new File(directory + "options.nn");
         this.whitelistFile = new File(directory + "whitelist.nn");
+        this.modernGuiFile = new File(directory + "modern.nn");
         this.flagged = ToggleChatMod.getInstance().getWebsiteUtils().isFlagged();
 
         if (this.flagged) {
@@ -73,7 +96,7 @@ public class ConfigLoader {
                 while ((current = reader.readLine()) != null) {
                     builder.append(current);
                 }
-                this.configJson = new JsonParser().parse(builder.toString()).getAsJsonObject();
+                this.toggleJson = new BetterJsonObject(builder.toString());
             } catch (Exception ex) {
                 log("Could not read toggles properly, saving.");
                 saveToggles();
@@ -83,11 +106,11 @@ public class ConfigLoader {
                 if (base instanceof ICustomSaver) {
                     ICustomSaver saver = (ICustomSaver) base;
                     if (!saver.useDefaultLoad()) {
-                        saver.onLoad(this.configJson);
+                        saver.onLoad(this.toggleJson);
                         continue;
                     }
                 }
-                base.setToggled(this.configJson.has("show" + base.getName().replace(" ", "_")) && this.configJson.get("show" + base.getName().replace(" ", "_")).getAsBoolean());
+                base.setEnabled(this.toggleJson.has("show" + base.getName().replace(" ", "_")) && this.toggleJson.get("show" + base.getName().replace(" ", "_")).getAsBoolean());
             }
 
         } else {
@@ -96,8 +119,11 @@ public class ConfigLoader {
     }
 
     public void saveToggles() {
-        this.configJson = new JsonObject();
         try {
+            if (!this.toggleFile.getParentFile().exists()) {
+                this.toggleFile.getParentFile().mkdirs();
+            }
+
             this.toggleFile.createNewFile();
             FileWriter writer = new FileWriter(this.toggleFile);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
@@ -106,18 +132,14 @@ public class ConfigLoader {
                 if (base instanceof ICustomSaver) {
                     ICustomSaver saver = (ICustomSaver) base;
                     if (!saver.useDefaultSave()) {
-                        saver.onSave(this.configJson);
+                        saver.onSave(this.toggleJson);
                         continue;
                     }
                 }
-                this.configJson.addProperty("show" + base.getName().replace(" ", "_"), base.isEnabled());
+                this.toggleJson.addProperty("show" + base.getName().replace(" ", "_"), base.isEnabled());
             }
 
-            this.configJson.addProperty("classic", this.classicTheme);
-
-            bufferedWriter.write(this.configJson.toString());
-            bufferedWriter.close();
-            writer.close();
+            this.toggleJson.writeToFile(this.toggleFile);
         } catch (Exception ex) {
             log("Could not save toggles.");
             ex.printStackTrace();
@@ -306,24 +328,52 @@ public class ConfigLoader {
         }
     }
 
+    public void loadModernUtils() {
+        if (exists(this.modernGuiFile)) {
+            try {
+                FileReader fileReader = new FileReader(this.modernGuiFile);
+                BufferedReader reader = new BufferedReader(fileReader);
+                StringBuilder builder = new StringBuilder();
+
+                String current;
+                while ((current = reader.readLine()) != null) {
+                    builder.append(current);
+                }
+                this.modernJson = new BetterJsonObject(builder.toString());
+            } catch (Exception ex) {
+                log("Could not load ModernUtils, saving.");
+                saveModernUtils();
+            }
+
+            this.modernBlur = this.modernJson.optBoolean("blur", true);
+            this.modernButton = this.modernJson.optBoolean("button", true);
+            this.modernTextbox = this.modernJson.optBoolean("textbox", true);
+
+        } else {
+            saveModernUtils();
+        }
+    }
+
+    public void saveModernUtils() {
+        try {
+            if (!this.modernGuiFile.getParentFile().exists()) {
+                this.modernGuiFile.getParentFile().mkdirs();
+            }
+            this.modernGuiFile.createNewFile();
+
+            this.toggleJson.addProperty("blur", this.modernBlur);
+            this.toggleJson.addProperty("button", this.modernButton);
+            this.toggleJson.addProperty("textbox", this.modernTextbox);
+
+            this.toggleJson.writeToFile(this.modernGuiFile);
+        } catch (Exception ex) {
+            log("Could not save ModernUtils.");
+            ex.printStackTrace();
+        }
+    }
+
     public boolean exists(File file) {
         return Files.exists(Paths.get(file.getPath()));
-    }
-
-    public File getToggleFile() {
-        return this.toggleFile;
-    }
-
-    public File getWhitelistFile() {
-        return this.whitelistFile;
-    }
-
-    public boolean isClassicTheme() {
-        return this.classicTheme;
-    }
-
-    public void setClassicTheme(boolean classicTheme) {
-        this.classicTheme = classicTheme;
     }
 
     protected void log(String message, Object... replace) {

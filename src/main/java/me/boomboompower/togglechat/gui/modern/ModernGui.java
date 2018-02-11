@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package me.boomboompower.togglechat.gui.modern;
 import com.google.common.collect.Lists;
 
 import me.boomboompower.togglechat.ToggleChatMod;
+import me.boomboompower.togglechat.config.ConfigLoader;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 import me.boomboompower.togglechat.utils.ChatColor;
 
@@ -35,25 +36,34 @@ import java.util.List;
 
 public abstract class ModernGui extends GuiScreen {
 
+    private final ConfigLoader configLoader = ToggleChatMod.getInstance().getConfigLoader();
+
     protected final Minecraft mc = Minecraft.getMinecraft();
     protected final FontRenderer fontRendererObj = this.mc.fontRendererObj;
 
+    protected List<ModernButton> buttonList = Lists.newArrayList();
     protected List<ModernTextBox> textList = Lists.newArrayList();
 
-    private GuiButton selectedButton;
+    private ModernButton selectedButton;
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        for (GuiButton button : this.buttonList) {
-            button.drawButton(this.mc, mouseX, mouseY);
+        if (!this.buttonList.isEmpty()) {
+            for (ModernButton button : this.buttonList) {
+                button.drawButton(this.mc, mouseX, mouseY);
+            }
         }
 
-        for (GuiLabel label : this.labelList) {
-            label.drawLabel(this.mc, mouseX, mouseY);
+        if (!this.labelList.isEmpty()) {
+            for (GuiLabel label : this.labelList) {
+                label.drawLabel(this.mc, mouseX, mouseY);
+            }
         }
 
-        for (ModernTextBox text : this.textList) {
-            text.drawTextBox();
+        if (!this.textList.isEmpty()) {
+            for (ModernTextBox text : this.textList) {
+                text.drawTextBox();
+            }
         }
     }
 
@@ -75,29 +85,20 @@ public abstract class ModernGui extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (mouseButton == 0) {
-            for (int i = 0; i < this.buttonList.size(); ++i) {
-                GuiButton guibutton = this.buttonList.get(i);
-
-                if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
-                    net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre event = new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, this.buttonList);
-                    if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) break;
-                    guibutton = event.button;
-                    this.selectedButton = guibutton;
-                    guibutton.playPressSound(this.mc.getSoundHandler());
-                    this.actionPerformed(guibutton);
-                    if (this.equals(this.mc.currentScreen))
-                        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent.Post(this, event.button, this.buttonList));
+            for (ModernButton button : this.buttonList) {
+                if (button.mousePressed(this.mc, mouseX, mouseY)) {
+                    this.selectedButton = button;
+                    button.playPressSound(this.mc.getSoundHandler());
+                    this.buttonPressed(button);
                 }
             }
         }
 
         if (mouseButton == 1) {
-            for (GuiButton button : this.buttonList) {
-                if (button instanceof ModernButton) {
-                    ModernButton modernButton = (ModernButton) button;
-
-                    if (modernButton.mousePressed(this.mc, mouseX, mouseY)) {
-                        this.rightClicked(modernButton);
+            for (ModernButton button : this.buttonList) {
+                if (button != null) {
+                    if (button.mousePressed(this.mc, mouseX, mouseY)) {
+                        this.rightClicked(button);
                     }
                 }
             }
@@ -149,13 +150,6 @@ public abstract class ModernGui extends GuiScreen {
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) {
-        if (button instanceof ModernButton) {
-            buttonPressed((ModernButton) button);
-        }
-    }
-
-    @Override
     public final void sendChatMessage(String msg) {
         Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(ChatColor.AQUA + "T" + ChatColor.BLUE + "C" + ChatColor.DARK_GRAY + " > " + ChatColor.GRAY + ChatColor.translateAlternateColorCodes('&', msg)));
     }
@@ -168,11 +162,14 @@ public abstract class ModernGui extends GuiScreen {
     }
 
     public final void checkHover(int firstPosition) {
-        for (GuiButton old : this.buttonList) {
-            if (!(old instanceof ModernButton)) continue;
-            ModernButton button = (ModernButton) old;
+        if (this.buttonList.isEmpty()) {
+            return;
+        }
 
-            if (button.isMouseOver() && button.hasButtonData()) {
+        for (ModernButton button : this.buttonList) {
+            if (button == null) continue;
+
+            if (button.isHovered() && button.hasButtonData()) {
                 ToggleBase toggleBase = button.getButtonData();
 
                 if (!toggleBase.hasDescription()) continue;
@@ -204,10 +201,6 @@ public abstract class ModernGui extends GuiScreen {
     }
 
     public static String getStatus(boolean in) {
-        return in ? ChatColor.GREEN + "Enabled" : (isClassic() ? ChatColor.RED : ChatColor.GRAY) + "Disabled";
-    }
-
-    public static boolean isClassic() {
-        return ToggleChatMod.getInstance().getConfigLoader().isClassicTheme();
+        return in ? ChatColor.GREEN + "Enabled" : (ToggleChatMod.getInstance().getConfigLoader().isModernButton() ? ChatColor.RED : ChatColor.GRAY) + "Disabled";
     }
 }

@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -22,12 +22,13 @@ import me.boomboompower.togglechat.gui.custom.CustomToggleMain;
 import me.boomboompower.togglechat.gui.custom.CustomToggleModify;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
+import me.boomboompower.togglechat.gui.modern.gui.ModernConfigGui;
 import me.boomboompower.togglechat.gui.whitelist.WhitelistMainGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 import me.boomboompower.togglechat.toggles.custom.ICustomToggle;
 import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 import me.boomboompower.togglechat.toggles.dummy.ToggleDummyMessage;
-import net.minecraft.client.gui.GuiButton;
+
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.awt.*;
@@ -80,15 +81,21 @@ public class MainGui extends ModernGui {
             });
 
             this.buttonList.add(new ModernButton(1, "inbuilt_whitelist", 5, this.height - 25, 90, 20, "Whitelist"));
-            this.buttonList.add(new ModernButton(2, "inbuilt_back", this.width - 114, this.height - 25, 50, 20, "\u21E6").setEnabled(this.pageNumber > 1));
+            this.buttonList.add(new ModernButton(2, "inbuilt_back", this.width - 112, this.height - 25, 50, 20, "\u21E6").setEnabled(this.pageNumber > 1));
             this.buttonList.add(new ModernButton(3, "inbuilt_next", this.width - 60, this.height - 25, 50, 20, "\u21E8").setEnabled(this.pageNumber != pages));
-            this.buttonList.add(new ModernButton(4, "inbuilt_theme", 5, this.height - 49, 90, 20, "Classic: " + getStatus(isClassic())).setButtonData(
+            this.buttonList.add(new ModernButton(4, "inbuilt_theme", 5, this.height - 47, 90, 20, "Theme Modifier").setButtonData(
                     // Let them know what this button does
-                    new ToggleDummyMessage("Changes the button", "theme to either", "&6Modern&r or &bClassic", "", "&6Modern&r is see-through", "&bClassic&r is texture based")
+                    new ToggleDummyMessage(
+                            "Opens the glorious",
+                            "&bTheme Modifier&r,",
+                            "allowing nearly full",
+                            "customization for the",
+                            "look of the mod"
+                    )
             ));
 
             if (ToggleChatMod.getInstance().getWebsiteUtils().isFlagged()) {
-                this.buttonList.add(new ModernButton(5, this.width - 114, this.height - 49, 104, 20, "Custom Toggles").setEnabledColor(new Color(100, 88, 192, 75)).setDisabledColor(new Color(67, 67, 133, 75)).setButtonData(
+                this.buttonList.add(new ModernButton(5, this.width - 105, this.height - 47, 100, 20, "Custom Toggles").setEnabledColor(new Color(100, 88, 192, 75)).setDisabledColor(new Color(67, 67, 133, 75)).setButtonData(
                         new ToggleDummyMessage(
                                 "Allows you to add",
                                 "your own custom",
@@ -138,15 +145,7 @@ public class MainGui extends ModernGui {
                 this.mc.displayGuiScreen(new MainGui(this.pageNumber + 1));
                 return;
             case 4:
-                ToggleChatMod.getInstance().getConfigLoader().setClassicTheme(!isClassic());
-
-                for (GuiButton buttons : this.buttonList) {
-                    if (buttons instanceof ModernButton && (((ModernButton) buttons).hasButtonData())) {
-                        ModernButton modern = (ModernButton) buttons;
-                        modern.setText(String.format(nameFormat(modern.getButtonData()), ModernGui.getStatus(modern.getButtonData().isEnabled())));
-                    }
-                }
-                button.setText("Classic: " + getStatus(isClassic()));
+                this.mc.displayGuiScreen(new ModernConfigGui());
                 return;
             case 5:
                 this.mc.displayGuiScreen(new CustomToggleMain());

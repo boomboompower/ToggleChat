@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ package me.boomboompower.togglechat;
 
 import me.boomboompower.togglechat.command.ToggleCommand;
 import me.boomboompower.togglechat.config.ConfigLoader;
+import me.boomboompower.togglechat.gui.modern.blur.BlurModHandler;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 import me.boomboompower.togglechat.utils.ChatColor;
 import me.boomboompower.togglechat.utils.WebsiteUtils;
@@ -39,13 +40,14 @@ import java.util.LinkedList;
 @Mod(modid = ToggleChatMod.MODID, version = ToggleChatMod.VERSION, acceptedMinecraftVersions="*")
 public class ToggleChatMod {
 
-    public static final String MODID = "publictogglechat";
+    public static final String MODID = "togglechatmod";
     public static final String VERSION = "2.5.5";
 
     private LinkedList<String> whitelist = new LinkedList<>();
 
     private WebsiteUtils websiteUtils;
     private ConfigLoader configLoader;
+    private BlurModHandler blurModHandler;
 
     @Mod.Instance
     private static ToggleChatMod instance;
@@ -55,14 +57,16 @@ public class ToggleChatMod {
         ModMetadata data = event.getModMetadata();
         data.version = VERSION;
         data.name = ChatColor.GOLD + "Hypixel " + ChatColor.GRAY + "-" + ChatColor.GREEN + " ToggleChat";
-        data.authorList.addAll(Arrays.asList("boomboompower", "OrangeMarshall"));
+        data.authorList.addAll(Arrays.asList("boomboompower", "OrangeMarshall", "tterrag1098"));
         data.description = "Use " + ChatColor.BLUE + "/tc" + ChatColor.RESET + " to get started! " + ChatColor.GRAY + "|" + ChatColor.RESET + " Made with " + ChatColor.LIGHT_PURPLE + "<3" + ChatColor.RESET + " by boomboompower";
         data.url = "https://hypixel.net/threads/997547";
 
-        data.credits = "2Pi for the initial idea behind the mod!";
+        // These are the greatest people, shower them with praise and good fortune!
+        data.credits = "2Pi for the idea, OrangeMarshall for help with CustomToggles and tterrag1098 for the gui blur code";
 
         this.websiteUtils = new WebsiteUtils("ToggleChat");
-        this.configLoader = new ConfigLoader("mods" + File.separator + "togglechat" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId() + File.separator); // Minecraft.getMinecraft().getSession().getProfile().getId()
+        this.configLoader = new ConfigLoader("mods" + File.separator + "togglechat" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId() + File.separator);
+        this.blurModHandler = new BlurModHandler(this).preInit(event);
     }
 
     @Mod.EventHandler
@@ -83,6 +87,7 @@ public class ToggleChatMod {
 
         this.configLoader.loadToggles();
         this.configLoader.loadWhitelist();
+        this.configLoader.loadModernUtils();
     }
 
     public LinkedList<String> getWhitelist() {
@@ -95,6 +100,10 @@ public class ToggleChatMod {
 
     public WebsiteUtils getWebsiteUtils() {
         return this.websiteUtils;
+    }
+
+    public BlurModHandler getBlurModHandler() {
+        return this.blurModHandler;
     }
 
     public static ToggleChatMod getInstance() {

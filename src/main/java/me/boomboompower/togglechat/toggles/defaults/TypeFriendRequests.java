@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,9 @@
  */
 
 package me.boomboompower.togglechat.toggles.defaults;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
@@ -35,7 +38,9 @@ public class TypeFriendRequests extends ToggleBase {
     // This is used for expiry messages
     private Pattern oldPattern = Pattern.compile(Pattern.quote("Friend request from "), Pattern.CASE_INSENSITIVE);
 
-    private boolean showFriendRequests = true;
+    @Setter
+    @Getter
+    private boolean enabled = true;
 
     @Override
     public String getName() {
@@ -48,18 +53,8 @@ public class TypeFriendRequests extends ToggleBase {
     }
 
     @Override
-    public boolean isEnabled() {
-        return this.showFriendRequests;
-    }
-
-    @Override
-    public void setToggled(boolean enabled) {
-        this.showFriendRequests = enabled;
-    }
-
-    @Override
     public void onClick(ModernButton button) {
-        this.showFriendRequests = !this.showFriendRequests;
+        this.enabled = !this.enabled;
         button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 

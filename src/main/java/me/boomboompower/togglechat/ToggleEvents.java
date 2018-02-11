@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -19,8 +19,10 @@ package me.boomboompower.togglechat;
 
 import me.boomboompower.togglechat.toggles.ToggleBase;
 import me.boomboompower.togglechat.toggles.custom.TypeCustom;
+import me.boomboompower.togglechat.toggles.defaults.TypeMessageSeparator;
 import me.boomboompower.togglechat.utils.ChatColor;
 
+import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -55,7 +57,11 @@ public class ToggleEvents {
                         // the toggle is not enabled (this message is turned off)
                         // don't send the message to the player & stop looping
                         if (!type.isEnabled() && type.shouldToggle(input)) {
-                            event.setCanceled(true);
+                            if (type instanceof TypeMessageSeparator) {
+                                event.message = new ChatComponentText(((TypeMessageSeparator) type).editMessage(formattedText));
+                            } else {
+                                event.setCanceled(true);
+                            }
                             break;
                         }
                     } catch (Exception ex) {
@@ -105,9 +111,9 @@ public class ToggleEvents {
                 message += ex.getCause();
             }
         } else {
-            message += "An unknown issue was encountered, please remove all other mods interacting with this one";
+            message += "An unknown issue was encountered, please remove all other ToggleChat addons before reporting this issue!";
         }
 
-        System.out.print(message);
+        System.err.print(message);
     }
 }

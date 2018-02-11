@@ -5,6 +5,12 @@ import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
 
+/**
+ * A dummy ToggleBase instance used as a hack to display
+ *      messages on the ModernGui screens.
+ *
+ * DO NOT REGISTER THIS IN THE {@link ToggleBase} CLASS!
+ */
 public class ToggleDummyMessage extends ToggleBase {
 
     private LinkedList<String> message;
@@ -29,7 +35,7 @@ public class ToggleDummyMessage extends ToggleBase {
     }
 
     @Override
-    public void setToggled(boolean isToggled) {
+    public void setEnabled(boolean enabled) {
     }
 
     @Override

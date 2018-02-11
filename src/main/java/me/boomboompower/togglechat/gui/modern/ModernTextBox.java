@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 
 package me.boomboompower.togglechat.gui.modern;
 
+import me.boomboompower.togglechat.ToggleChatMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -416,7 +417,9 @@ public class ModernTextBox extends Gui {
     public void drawTextBox() {
         if (this.getVisible()) {
 
-            if (ModernGui.isClassic() || this.forceOldTheme) {
+            boolean modern;
+
+            if (modern = ToggleChatMod.getInstance().getConfigLoader().isModernTextbox() || this.forceOldTheme) {
                 drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width + 1, this.yPosition + this.height + 1, -6250336);
                 drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + this.height, -16777216);
             } else {
@@ -446,7 +449,7 @@ public class ModernTextBox extends Gui {
                 return;
             }
 
-            if (s.isEmpty() && !isFocused && isEnabled && !ModernGui.isClassic()) {
+            if (s.isEmpty() && !isFocused && isEnabled && modern) {
                 this.fontRendererInstance.drawString(noTextMessage, ((this.xPosition + this.width / 2) - fontRendererInstance.getStringWidth(noTextMessage) / 2), this.yPosition + this.height / 2 - 4, i, false);
                 return;
             }

@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,18 +17,24 @@
 
 package me.boomboompower.togglechat.toggles.defaults;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TypeGlobal extends ToggleBase {
 
     private Pattern chatPattern = Pattern.compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
 
-    private boolean showGlobal = true;
+    @Setter
+    @Getter
+    private boolean enabled = true;
 
     @Override
     public String getName() {
@@ -42,30 +48,23 @@ public class TypeGlobal extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        if (message.contains(":") && message.contains("distance") && message.endsWith("}")) {
-            return false; // Fix skywars debug being toggled
+        // A system to prevent accidently toggling UHC or bedwars chat
+        if (getToggle("special") != null) {
+            ToggleBase base = getToggle("special");
+
+            if (base.isEnabled() && base.shouldToggle(message)) {
+                return false;
+            }
         }
 
-        if (ToggleBase.hasToggle("team") && ToggleBase.getToggle("team").isEnabled() && message.startsWith("[TEAM]")) {
-            return false;
-        }
+        Matcher matcher = this.chatPattern.matcher(message);
 
-        return this.chatPattern.matcher(message).matches() && isNotOtherChat(message);
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.showGlobal;
-    }
-
-    @Override
-    public void setToggled(boolean enabled) {
-        this.showGlobal = enabled;
+        return matcher.matches() && isNotOtherChat(matcher);
     }
 
     @Override
     public void onClick(ModernButton button) {
-        this.showGlobal = !this.showGlobal;
+        this.enabled = !this.enabled;
         button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 
@@ -88,7 +87,21 @@ public class TypeGlobal extends ToggleBase {
         );
     }
 
-    private boolean isNotOtherChat(String input) {
-        return !input.startsWith("[TEAM] ") && !input.startsWith("[SHOUT] ") && !input.startsWith("[SPECTATOR] ");
+    private boolean isNotOtherChat(Matcher input) {
+        String rank;
+
+        try {
+            rank = input.group("rank");
+        } catch (Exception ex) {
+            return true;
+        }
+
+        switch (rank) {
+            case "[TEAM] ":
+            case "[SHOUT] ":
+            case "[SPECTATOR] ":
+                return false;
+        }
+        return true;
     }
 }

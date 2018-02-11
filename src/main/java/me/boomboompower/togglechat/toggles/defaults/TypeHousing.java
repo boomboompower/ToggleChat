@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2017 boomboompower
+ *     Copyright (C) 2018 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,6 +17,9 @@
 
 package me.boomboompower.togglechat.toggles.defaults;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
@@ -28,7 +31,9 @@ public class TypeHousing extends ToggleBase {
 
     private Pattern worldJoinPattern = Pattern.compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}) (?<action>.*) the world\\.");
 
-    private boolean showHousing = true;
+    @Setter
+    @Getter
+    private boolean enabled = true;
 
     @Override
     public String getName() {
@@ -41,18 +46,8 @@ public class TypeHousing extends ToggleBase {
     }
 
     @Override
-    public boolean isEnabled() {
-        return this.showHousing;
-    }
-
-    @Override
-    public void setToggled(boolean enabled) {
-        this.showHousing = enabled;
-    }
-
-    @Override
     public void onClick(ModernButton button) {
-        this.showHousing = !this.showHousing;
+        this.enabled = !this.enabled;
         button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
     }
 
