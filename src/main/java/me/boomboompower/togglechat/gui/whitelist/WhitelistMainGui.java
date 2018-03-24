@@ -17,7 +17,6 @@
 
 package me.boomboompower.togglechat.gui.whitelist;
 
-import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.gui.modern.ModernTextBox;
@@ -101,7 +100,7 @@ public class WhitelistMainGui extends ModernGui {
 
         this.add.setEnabled(!this.text.getText().isEmpty() && !whitelistContains(this.text.getText()));
         this.remove.setEnabled(!this.text.getText().isEmpty() && whitelistContains(this.text.getText()));
-        this.clear.setEnabled(!ToggleChatMod.getInstance().getWhitelist().isEmpty());
+        this.clear.setEnabled(!this.mod.getConfigLoader().getWhitelist().isEmpty());
 
         super.drawScreen(x, y, ticks);
 
@@ -118,10 +117,10 @@ public class WhitelistMainGui extends ModernGui {
             } else if (whitelistContains(this.text.getText())) {
                 sendChatMessage("The whitelist already contained &6" + this.text.getText() + "&7!");
             } else {
-                ToggleChatMod.getInstance().getWhitelist().add(this.text.getText());
+                this.mod.getConfigLoader().getWhitelist().add(this.text.getText());
                 sendChatMessage("Added &6" + this.text.getText() + "&7 to the whitelist!");
                 this.text.setText("");
-                ToggleChatMod.getInstance().getWhitelist().sort(Collator.getInstance());
+                this.mod.getConfigLoader().getWhitelist().sort(Collator.getInstance());
             }
         } else if (Character.isLetterOrDigit(c) || c == '_' || key == 14 || isCool(key) || isCooler(c)) { // Sorry to anyone who originally used other things
             this.text.textboxKeyTyped(c, key);
@@ -142,10 +141,10 @@ public class WhitelistMainGui extends ModernGui {
                 } else if (whitelistContains(this.text.getText())) {
                     sendChatMessage("The whitelist already contained &6" + this.text.getText() + "&7!");
                 } else {
-                    ToggleChatMod.getInstance().getWhitelist().add(this.text.getText());
+                    this.mod.getConfigLoader().getWhitelist().add(this.text.getText());
                     sendChatMessage("Added &6" + this.text.getText() + "&7 to the whitelist!");
                     this.text.setText("");
-                    ToggleChatMod.getInstance().getWhitelist().sort(Collator.getInstance());
+                    this.mod.getConfigLoader().getWhitelist().sort(Collator.getInstance());
                 }
                 break;
             case 2:
@@ -157,11 +156,11 @@ public class WhitelistMainGui extends ModernGui {
                     removeFromWhitelist(this.text.getText());
                     sendChatMessage("Removed &6" + this.text.getText() + "&7 from the whitelist!");
                     this.text.setText("");
-                    ToggleChatMod.getInstance().getWhitelist().sort(Collator.getInstance());
+                    this.mod.getConfigLoader().getWhitelist().sort(Collator.getInstance());
                 }
                 break;
             case 3:
-                if (!ToggleChatMod.getInstance().getWhitelist().isEmpty()) {
+                if (!this.mod.getConfigLoader().getWhitelist().isEmpty()) {
                     new WhitelistClearConfirmationGui(this).display();
                 } else {
                     sendChatMessage("The whitelist is already empty!");
@@ -178,12 +177,12 @@ public class WhitelistMainGui extends ModernGui {
 
     @Override
     public void onGuiClosed() {
-        ToggleChatMod.getInstance().getConfigLoader().saveWhitelist();
+        this.mod.getConfigLoader().saveWhitelist();
         Keyboard.enableRepeatEvents(false);
     }
     
     private boolean whitelistContains(String word) {
-        for (String whitelistWord : ToggleChatMod.getInstance().getWhitelist()) {
+        for (String whitelistWord : this.mod.getConfigLoader().getWhitelist()) {
             if (whitelistWord.equalsIgnoreCase(word)) {
                 return true;
             }
@@ -192,9 +191,9 @@ public class WhitelistMainGui extends ModernGui {
     }
 
     private void removeFromWhitelist(String word) {
-        for (String whitelistWord : ToggleChatMod.getInstance().getWhitelist()) {
+        for (String whitelistWord : this.mod.getConfigLoader().getWhitelist()) {
             if (whitelistWord.equalsIgnoreCase(word)) {
-                ToggleChatMod.getInstance().getWhitelist().remove(whitelistWord);
+                this.mod.getConfigLoader().getWhitelist().remove(whitelistWord);
                 break;
             }
         }

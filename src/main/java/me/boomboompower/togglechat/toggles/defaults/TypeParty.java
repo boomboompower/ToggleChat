@@ -20,49 +20,44 @@ package me.boomboompower.togglechat.toggles.defaults;
 import lombok.Getter;
 import lombok.Setter;
 
-import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeParty extends ToggleBase {
-
-    private Pattern partyPattern = Pattern.compile("Party > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    private Pattern shortPartyPattern = Pattern.compile("P > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-
+    
+    private Pattern partyPattern = Pattern
+        .compile("Party > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private Pattern shortPartyPattern = Pattern
+        .compile("P > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    
     @Setter
     @Getter
     private boolean enabled = true;
-
+    
     @Override
     public String getName() {
         return "Party";
     }
-
+    
     @Override
     public boolean shouldToggle(String message) {
-        return this.partyPattern.matcher(message).matches() || this.shortPartyPattern.matcher(message).matches();
+        return this.partyPattern.matcher(message).matches() || this.shortPartyPattern
+            .matcher(message).matches();
     }
-
-    @Override
-    public void onClick(ModernButton button) {
-        this.enabled = !this.enabled;
-        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
-    }
-
+    
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-                "Toggles all party",
-                "chat messages",
-                "",
-                "Toggle format",
-                "&9Party > &7Player&r: Hello",
-                "",
-                "Fairly useful when",
-                "You\'re in a large party"
+            "Toggles all party",
+            "chat messages",
+            "",
+            "Toggle format",
+            "&9Party > &7Player&r: Hello",
+            "",
+            "Fairly useful when",
+            "You\'re in a large party"
         );
     }
 }

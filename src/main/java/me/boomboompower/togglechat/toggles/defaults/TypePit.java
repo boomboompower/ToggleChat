@@ -17,18 +17,18 @@
 
 package me.boomboompower.togglechat.toggles.defaults;
 
+import java.util.LinkedList;
+import java.util.regex.Pattern;
+
 import lombok.Getter;
 import lombok.Setter;
 
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
-import java.util.LinkedList;
-import java.util.regex.Pattern;
-
-public class TypeSoulWell extends ToggleBase {
+public class TypePit extends ToggleBase {
     
-    private Pattern soulPattern = Pattern
-        .compile("(?<player>\\S{1,16}) has found (?<message>.*) in the Soul Well!");
+    private final Pattern pitPattern = Pattern
+        .compile("(?<number>\\[\\d+]) (?<rank>\\[.+?] )?(?<player>\\S{1,16}): (?<message>.*)");
     
     @Setter
     @Getter
@@ -36,30 +36,30 @@ public class TypeSoulWell extends ToggleBase {
     
     @Override
     public String getName() {
-        return "Soul";
+        return "The_Pit";
     }
     
     @Override
     public String getDisplayName() {
-        return "Soul Well: %s";
+        return "The Pit: %s";
     }
     
     @Override
     public boolean shouldToggle(String message) {
-        return this.soulPattern.matcher(message).matches();
+        return this.pitPattern.matcher(message).matches();
     }
     
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-            "Turns off perk and kit",
-            "messages for skywars",
+            "Toggles all pit",
+            "chat from players, regardless of",
+            "their rank. (Supports numbers over 120)",
             "",
-            "&bSk1er &7has found &6Slime",
-            "&6Cage &7in the &bSoul Well&r!",
-            "",
-            "Good for recording",
-            "in a skywars lobby"
+            "Message format",
+            "&7[1] Player&r: Hi",
+            "&7[&5&b90&7] &a[VIP] Player&r: Hi",
+            "&7[&b&l120&7] &b[MVP] Player&r: Hi"
         );
     }
 }

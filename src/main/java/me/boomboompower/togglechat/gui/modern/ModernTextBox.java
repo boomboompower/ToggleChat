@@ -33,6 +33,12 @@ import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * ModernTextBox, a nicer looking TextBox
+ *
+ * @author boomboompower
+ * @version 1.3
+ */
 public class ModernTextBox extends Gui {
 
     private String alertMessage = "";

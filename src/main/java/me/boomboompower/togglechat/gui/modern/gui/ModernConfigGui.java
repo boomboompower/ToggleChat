@@ -1,22 +1,33 @@
+/*
+ *     Copyright (C) 2018 boomboompower
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package me.boomboompower.togglechat.gui.modern.gui;
 
-import me.boomboompower.togglechat.ToggleChatMod;
-import me.boomboompower.togglechat.config.ConfigLoader;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
-import me.boomboompower.togglechat.toggles.ToggleBase;
+import me.boomboompower.togglechat.gui.togglechat.MainGui;
 import me.boomboompower.togglechat.toggles.dummy.ToggleDummyMessage;
 import me.boomboompower.togglechat.utils.ChatColor;
 
-import org.apache.commons.lang3.text.WordUtils;
-
 public class ModernConfigGui extends ModernGui {
-
-    private static final ConfigLoader configLoader = ToggleChatMod.getInstance().getConfigLoader();
 
     @Override
     public void initGui() {
-        this.buttonList.add(new ModernButton(1, "blur", this.width / 2 - 75, this.height / 2 - 32, 150, 20, "Blur: " + getStatus(configLoader.isModernBlur())).setButtonData(
+        this.buttonList.add(new ModernButton(1, "blur", this.width / 2 - 75, this.height / 2 - 34, 150, 20, "Blur: " + getStatus(configLoader.isModernBlur())).setButtonData(
                 // Blur settings
                 new ToggleDummyMessage("Toggles Gaussian bluring", "&aOn&r or &cOff&r", "on all our menus", "", "Created by &6tterrag1098", "for the BlurMC mod")
         ));
@@ -24,10 +35,11 @@ public class ModernConfigGui extends ModernGui {
                 // Button editing
                 new ToggleDummyMessage("Changes the button", "theme to either", "&6Modern&r or &bClassic", "", "&6Modern&r is see-through", "&bClassic&r is texture based")
         ));
-        this.buttonList.add(new ModernButton(3, "button", this.width / 2 - 75, this.height / 2 + 12, 150, 20, "Textbox: " + getClassic(configLoader.isModernButton())).setButtonData(
+        this.buttonList.add(new ModernButton(3, "button", this.width / 2 - 75, this.height / 2 + 14, 150, 20, "Textbox: " + getClassic(configLoader.isModernTextbox())).setButtonData(
                 // Textbox editing
                 new ToggleDummyMessage("Changes the textbox", "theme to either", "&6Modern&r or &bClassic")
         ));
+        this.buttonList.add(new ModernButton(4, 5, this.height - 25, 90, 20, "Back"));
     }
 
     @Override
@@ -49,27 +61,24 @@ public class ModernConfigGui extends ModernGui {
 
     @Override
     public void buttonPressed(ModernButton button) {
-
-
         switch (button.getId()) {
             case 1:
-                configLoader.setModernBlur(!configLoader.isModernBlur());
-                button.setText("Blur: " + getStatus(configLoader.isModernBlur()));
-                ToggleChatMod.getInstance().getBlurModHandler().reload();
+                this.configLoader.setModernBlur(!this.configLoader.isModernBlur());
+                button.setText("Blur: " + getStatus(this.configLoader.isModernBlur()));
+                this.mod.getBlurModHandler().reload();
                 break;
             case 2:
-                configLoader.setModernButton(!configLoader.isModernButton());
-                button.setText("Buttons: " + getClassic(configLoader.isModernButton()));
+                this.configLoader.setModernButton(!this.configLoader.isModernButton());
+                button.setText("Buttons: " + getClassic(this.configLoader.isModernButton()));
                 break;
             case 3:
-                configLoader.setModernTextbox(!configLoader.isModernTextbox());
-                button.setText("Textbox: " + getClassic(configLoader.isModernTextbox()));
+                this.configLoader.setModernTextbox(!this.configLoader.isModernTextbox());
+                button.setText("Textbox: " + getClassic(this.configLoader.isModernTextbox()));
+                break;
+            case 4:
+                new MainGui(1).display();
                 break;
         }
-    }
-
-    private String nameFormat(ToggleBase base) {
-        return base.capitalizeName() ? WordUtils.capitalizeFully(base.getDisplayName().toLowerCase()) : base.getDisplayName();
     }
 
     private String getClassic(boolean config) {

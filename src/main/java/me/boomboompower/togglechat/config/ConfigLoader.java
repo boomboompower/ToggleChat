@@ -18,8 +18,8 @@
 package me.boomboompower.togglechat.config;
 
 import lombok.Getter;
-
 import lombok.Setter;
+
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.toggles.ICustomSaver;
 import me.boomboompower.togglechat.toggles.ToggleBase;
@@ -67,8 +67,11 @@ public class ConfigLoader {
     @Setter
     @Getter
     private boolean modernTextbox = false;
+    
+    @Getter
+    private LinkedList<String> whitelist = new LinkedList<>();
 
-    public ConfigLoader(String directory) {
+    public ConfigLoader(ToggleChatMod mod, String directory) {
         File e = new File(directory);
 
         if (!e.exists()) {
@@ -78,7 +81,7 @@ public class ConfigLoader {
         this.toggleFile = new File(directory + "options.nn");
         this.whitelistFile = new File(directory + "whitelist.nn");
         this.modernGuiFile = new File(directory + "modern.nn");
-        this.flagged = ToggleChatMod.getInstance().getWebsiteUtils().isFlagged();
+        this.flagged = mod.getWebsiteUtils().isFlagged();
 
         if (this.flagged) {
             this.customToggleDir = new File(directory, "custom");
@@ -110,7 +113,7 @@ public class ConfigLoader {
                         continue;
                     }
                 }
-                base.setEnabled(this.toggleJson.has("show" + base.getName().replace(" ", "_")) && this.toggleJson.get("show" + base.getName().replace(" ", "_")).getAsBoolean());
+                base.setEnabled(this.toggleJson.has("show" + base.getIdString()) && this.toggleJson.get("show" + base.getIdString()).getAsBoolean());
             }
 
         } else {
@@ -136,7 +139,7 @@ public class ConfigLoader {
                         continue;
                     }
                 }
-                this.toggleJson.addProperty("show" + base.getName().replace(" ", "_"), base.isEnabled());
+                this.toggleJson.addProperty("show" + base.getIdString(), base.isEnabled());
             }
 
             this.toggleJson.writeToFile(this.toggleFile);
@@ -153,7 +156,7 @@ public class ConfigLoader {
 
                 for (String s : reader.lines().collect(Collectors.toList())) {
                     if (s != null && s.toCharArray().length <= 16 && !s.contains(" ")) { // We don't want to load something that is over 16 characters, or has spaces in it!
-                        ToggleChatMod.getInstance().getWhitelist().add(s);
+                        this.whitelist.add(s);
                     }
                 }
             }
@@ -166,7 +169,7 @@ public class ConfigLoader {
        try {
            FileWriter e = new FileWriter(this.whitelistFile);
 
-           for (String s : ToggleChatMod.getInstance().getWhitelist()) {
+           for (String s : this.whitelist) {
                e.write(s + System.lineSeparator());
            }
 
@@ -297,33 +300,7 @@ public class ConfigLoader {
                     continue;
                 }
 
-                try {
-                    File file = new File(this.customToggleDir, base.getName().toLowerCase() + ".txt");
-                    FileWriter writer = new FileWriter(file);
-                    writer.append("// Format").append(System.lineSeparator());
-                    writer.append("// ToggleName : <Condition>").append(System.lineSeparator());
-                    writer.append("//").append(System.lineSeparator());
-                    writer.append("// This feature was created").append(System.lineSeparator());
-                    writer.append("// by OrangeMarshall!").append(System.lineSeparator());
-                    writer.append("//").append(System.lineSeparator());
-                    writer.append("// Possible conditions").append(System.lineSeparator());
-                    writer.append("// startsWith(string)          Starts with \"string\"").append(System.lineSeparator());
-                    writer.append("// contains(string)            Contains \"string\"").append(System.lineSeparator());
-                    writer.append("// contains(string,4)          Contains \"string\" 4 times").append(System.lineSeparator());
-                    writer.append("// endsWith(string)            Ends with \"string\"").append(System.lineSeparator());
-                    writer.append("// equals(string)              Equals \"string\" case-sensitive").append(System.lineSeparator());
-                    writer.append("// equalsIgnoreCase(string)    Equals \"string\" not case-sensitive").append(System.lineSeparator());
-                    writer.append("// regex(regex)                Regex matches the input").append(System.lineSeparator());
-                    writer.append("").append(System.lineSeparator());
-                    for (ToggleCondition condition : base._getConditions()) {
-                        if (!(condition instanceof ConditionEmpty)) {
-                            writer.append(base.getName()).append(" : ").append(condition.getSaveIdentifier()).append("(").append(condition.getText()).append(")").append(System.lineSeparator());
-                        }
-                    }
-                    writer.close();
-                } catch (Exception ex) {
-                    log("Failed to save custom toggle: \"%s\"!", base.getName());
-                }
+                saveSingle(base);
             }
         }
     }
@@ -361,14 +338,45 @@ public class ConfigLoader {
             }
             this.modernGuiFile.createNewFile();
 
-            this.toggleJson.addProperty("blur", this.modernBlur);
-            this.toggleJson.addProperty("button", this.modernButton);
-            this.toggleJson.addProperty("textbox", this.modernTextbox);
+            this.modernJson.addProperty("blur", this.modernBlur);
+            this.modernJson.addProperty("button", this.modernButton);
+            this.modernJson.addProperty("textbox", this.modernTextbox);
 
-            this.toggleJson.writeToFile(this.modernGuiFile);
+            this.modernJson.writeToFile(this.modernGuiFile);
         } catch (Exception ex) {
             log("Could not save ModernUtils.");
             ex.printStackTrace();
+        }
+    }
+
+    public void saveSingle(TypeCustom base) {
+        try {
+            File file = new File(this.customToggleDir, base.getName().toLowerCase() + ".txt");
+            FileWriter writer = new FileWriter(file);
+            writer.append("// Format").append(System.lineSeparator());
+            writer.append("// ToggleName : <Condition>").append(System.lineSeparator());
+            writer.append("//").append(System.lineSeparator());
+            writer.append("// This feature was created").append(System.lineSeparator());
+            writer.append("// by OrangeMarshall!").append(System.lineSeparator());
+            writer.append("//").append(System.lineSeparator());
+            writer.append("// Possible conditions").append(System.lineSeparator());
+            writer.append("// startsWith(string)          Starts with \"string\"").append(System.lineSeparator());
+            writer.append("// contains(string)            Contains \"string\"").append(System.lineSeparator());
+            writer.append("// contains(string,4)          Contains \"string\" 4 times").append(System.lineSeparator());
+            writer.append("// endsWith(string)            Ends with \"string\"").append(System.lineSeparator());
+            writer.append("// equals(string)              Equals \"string\" case-sensitive").append(System.lineSeparator());
+            writer.append("// equalsIgnoreCase(string)    Equals \"string\" not case-sensitive").append(System.lineSeparator());
+            writer.append("// regex(regex)                Regex matches the input").append(System.lineSeparator());
+            writer.append("").append(System.lineSeparator());
+
+            for (ToggleCondition condition : base._getConditions()) {
+                if (!(condition instanceof ConditionEmpty)) {
+                    writer.append(base.getName()).append(" : ").append(condition.getSaveIdentifier()).append("(").append(condition.getText()).append(")").append(System.lineSeparator());
+                }
+            }
+            writer.close();
+        } catch (Exception ex) {
+            log("Failed to save custom toggle: \"%s\"!", base.getName());
         }
     }
 

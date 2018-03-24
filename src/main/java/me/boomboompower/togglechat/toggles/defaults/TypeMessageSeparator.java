@@ -20,55 +20,54 @@ package me.boomboompower.togglechat.toggles.defaults;
 import lombok.Getter;
 import lombok.Setter;
 
-import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
 
 public class TypeMessageSeparator extends ToggleBase {
-
+    
     @Setter
     @Getter
     private boolean enabled = true;
-
+    
     @Override
     public String getName() {
         return "Separators";
     }
-
+    
     @Override
     public boolean shouldToggle(String message) {
         return message.contains("-----------");
     }
-
+    
+    /**
+     * Custom method for this class only, allows the message to be stripped of all color codes
+     *
+     * @param formattedText the text to strip
+     * @return the final text
+     */
     public String editMessage(String formattedText) {
         if (formattedText.contains("--")) {
-            formattedText = formattedText.replace("----------------------------------------------------\n", "");
-            return formattedText.replace("--", "");
+            formattedText = formattedText
+                .replace("----------------------------------------------------\n", "");
+            return formattedText.replace("--\n", "").replace("\n--", "").replace("--", "");
         }
         return formattedText;
     }
-
-    @Override
-    public void onClick(ModernButton button) {
-        this.enabled = !this.enabled;
-        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
-    }
-
+    
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-                "Toggles all messages",
-                "that contain a lot",
-                "of separators",
-                "",
-                "Checks for message",
-                "separators that look",
-                "like this",
-                "-----------------",
-                "",
-                "Less lines = more fun"
+            "Toggles all messages",
+            "that contain a lot",
+            "of separators",
+            "",
+            "Checks for message",
+            "separators that look",
+            "like this",
+            "-----------------",
+            "",
+            "Less lines = more fun"
         );
     }
 }

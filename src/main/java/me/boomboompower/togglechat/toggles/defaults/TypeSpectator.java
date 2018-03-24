@@ -20,8 +20,6 @@ package me.boomboompower.togglechat.toggles.defaults;
 import lombok.Getter;
 import lombok.Setter;
 
-import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
@@ -31,43 +29,38 @@ import java.util.regex.Pattern;
  * #BringBackSpecChat
  */
 public class TypeSpectator extends ToggleBase {
-
-    private Pattern spectatorPattern = Pattern.compile("\\[SPECTATOR] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-
+    
+    private Pattern spectatorPattern = Pattern
+        .compile("\\[SPECTATOR] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    
     @Setter
     @Getter
     private boolean enabled = true;
-
+    
     @Override
     public String getName() {
         return "Spectator";
     }
-
+    
     @Override
     public boolean shouldToggle(String message) {
         return this.spectatorPattern.matcher(message).matches();
     }
-
-    @Override
-    public void onClick(ModernButton button) {
-        this.enabled = !this.enabled;
-        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
-    }
-
+    
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-                "Toggles all spectator",
-                "chat messages",
-                "",
-                "Message format",
-                "&7[SPECTATOR] &7Player&r: Hi",
-                "&7[SPECTATOR] &a[VIP] Player&r: Hi",
-                "&7[SPECTATOR] &b[MVP] Player&r: Hi",
-                "",
-                "Useful to ignore",
-                "post-game chat",
-                "messages"
+            "Toggles all spectator",
+            "chat messages",
+            "",
+            "Message format",
+            "&7[SPECTATOR] &7Player&r: Hi",
+            "&7[SPECTATOR] &a[VIP] Player&r: Hi",
+            "&7[SPECTATOR] &b[MVP] Player&r: Hi",
+            "",
+            "Useful to ignore",
+            "post-game chat",
+            "messages"
         );
     }
 }

@@ -1,3 +1,20 @@
+/*
+ *     Copyright (C) 2018 boomboompower
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package me.boomboompower.togglechat.utils;
 
 import com.google.gson.*;
@@ -8,33 +25,36 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * The solution to the missing methods in Google's implementation
- *      of json, this class contains many useful methods such as pretty
- *      printing and file writing, as well as optional methods
+ * The solution to the missing methods in Google's implementation of json, this class contains many
+ * useful methods such as pretty printing and file writing, as well as optional methods
  *
  * @author boomboompower
  * @version 1.0
  */
 @SuppressWarnings("WeakerAccess") // Don't care
 public class BetterJsonObject {
-
-    /** Our pretty printer */
+    
+    /**
+     * Our pretty printer
+     */
     private final Gson prettyPrinter = new GsonBuilder().setPrettyPrinting().create();
-
-    /** The data holder for our json */
+    
+    /**
+     * The data holder for our json
+     */
     private JsonObject data;
-
+    
     /**
      * The quickest BetterJsonObject constructor, because why not
      */
     public BetterJsonObject() {
         this.data = new JsonObject();
     }
-
+    
     /**
-     * The default constructor the BetterJsonObject class, uses a json string
-     *      as the parameter and attempts to load it, a new JsonObject will be
-     *      created if the input is null, empty or cannot be loaded into a json format
+     * The default constructor the BetterJsonObject class, uses a json string as the parameter and
+     * attempts to load it, a new JsonObject will be created if the input is null, empty or cannot
+     * be loaded into a json format
      *
      * @param jsonIn the json string to be parsed
      */
@@ -49,23 +69,21 @@ public class BetterJsonObject {
             ex.printStackTrace();
         }
     }
-
+    
     /**
-     * The alternative constructor for the BetterJsonObject class, this uses
-     *      another JsonObject as the data set. A new JsonObject will be created
-     *      if the input is null
+     * The alternative constructor for the BetterJsonObject class, this uses another JsonObject as
+     * the data set. A new JsonObject will be created if the input is null
      *
      * @param objectIn the object to be used
      */
     public BetterJsonObject(JsonObject objectIn) {
         this.data = objectIn != null ? objectIn : new JsonObject();
     }
-
+    
     /**
-     * The optional string method, returns an empty string if
-     *      the key is null, empty or the data does not contain
-     *      the key. This will also return an empty string if the data value
-     *      is not a string
+     * The optional string method, returns an empty string if the key is null, empty or the data
+     * does not contain the key. This will also return an empty string if the data value is not a
+     * string
      *
      * @param key the key the value will be loaded from
      * @return the value in the json data set or empty if the key cannot be found
@@ -73,12 +91,11 @@ public class BetterJsonObject {
     public String optString(String key) {
         return optString(key, "");
     }
-
+    
     /**
-     * The optional string method, returns the default value if
-     *      the key is null, empty or the data does not contain
-     *      the key. This will also return the default value if
-     *      the data value is not a string
+     * The optional string method, returns the default value if the key is null, empty or the data
+     * does not contain the key. This will also return the default value if the data value is not a
+     * string
      *
      * @param key the key the value will be loaded from
      * @return the value in the json data set or the default if the key cannot be found
@@ -87,20 +104,18 @@ public class BetterJsonObject {
         if (key == null || key.isEmpty() || !has(key)) {
             return value;
         }
-
+        
         JsonPrimitive primitive = asPrimitive(get(key));
-
+        
         if (primitive != null && primitive.isString()) {
             return primitive.getAsString();
         }
         return value;
     }
-
+    
     /**
-     * The optional int method, returns 0 if
-     *      the key is null, empty or the data does not contain
-     *      the key. This will also return 0 if the data value
-     *      is not a string
+     * The optional int method, returns 0 if the key is null, empty or the data does not contain the
+     * key. This will also return 0 if the data value is not a string
      *
      * @param key the key the value will be loaded from
      * @return the value in the json data set or empty if the key cannot be found
@@ -108,12 +123,11 @@ public class BetterJsonObject {
     public int optInt(String key) {
         return optInt(key, 0);
     }
-
+    
     /**
-     * The optional int method, returns the default value if
-     *      the key is null, empty or the data does not contain
-     *      the key. This will also return the default value if
-     *      the data value is not a number
+     * The optional int method, returns the default value if the key is null, empty or the data does
+     * not contain the key. This will also return the default value if the data value is not a
+     * number
      *
      * @param key the key the value will be loaded from
      * @return the value in the json data set or the default if the key cannot be found
@@ -122,9 +136,9 @@ public class BetterJsonObject {
         if (key == null || key.isEmpty() || !has(key)) {
             return value;
         }
-
+        
         JsonPrimitive primitive = asPrimitive(get(key));
-
+        
         try {
             if (primitive != null && primitive.isNumber()) {
                 return primitive.getAsInt();
@@ -133,12 +147,10 @@ public class BetterJsonObject {
         }
         return value;
     }
-
+    
     /**
-     * The optional double method, returns 0.0D if
-     *      the key is null, empty or the data does not contain
-     *      the key. This will also return 0.0D if the data value
-     *      is not a string
+     * The optional double method, returns 0.0D if the key is null, empty or the data does not
+     * contain the key. This will also return 0.0D if the data value is not a string
      *
      * @param key the key the value will be loaded from
      * @return the value in the json data set or empty if the key cannot be found
@@ -146,12 +158,11 @@ public class BetterJsonObject {
     public double optDouble(String key) {
         return optDouble(key, 0);
     }
-
+    
     /**
-     * The optional double method, returns the default value if
-     *      the key is null, empty or the data does not contain
-     *      the key. This will also return the default value if
-     *      the data value is not a number
+     * The optional double method, returns the default value if the key is null, empty or the data
+     * does not contain the key. This will also return the default value if the data value is not a
+     * number
      *
      * @param key the key the value will be loaded from
      * @return the value in the json data set or the default if the key cannot be found
@@ -160,9 +171,9 @@ public class BetterJsonObject {
         if (key == null || key.isEmpty() || !has(key)) {
             return value;
         }
-
+        
         JsonPrimitive primitive = asPrimitive(get(key));
-
+        
         try {
             if (primitive != null && primitive.isNumber()) {
                 return primitive.getAsDouble();
@@ -171,12 +182,10 @@ public class BetterJsonObject {
         }
         return value;
     }
-
+    
     /**
-     * The optional boolean method, returns false if
-     *      the key is null, empty or the data does not contain
-     *      the key. This will also return false if the data value
-     *      is not a string
+     * The optional boolean method, returns false if the key is null, empty or the data does not
+     * contain the key. This will also return false if the data value is not a string
      *
      * @param key the key the value will be loaded from
      * @return the value in the json data set or empty if the key cannot be found
@@ -184,12 +193,11 @@ public class BetterJsonObject {
     public boolean optBoolean(String key) {
         return optBoolean(key, false);
     }
-
+    
     /**
-     * The optional boolean method, returns the default value if
-     *      the key is null, empty or the data does not contain
-     *      the key. This will also return the default value if
-     *      the data value is not a boolean
+     * The optional boolean method, returns the default value if the key is null, empty or the data
+     * does not contain the key. This will also return the default value if the data value is not a
+     * boolean
      *
      * @param key the key the value will be loaded from
      * @return the value in the json data set or the default if the key cannot be found
@@ -198,23 +206,23 @@ public class BetterJsonObject {
         if (key == null || key.isEmpty() || !has(key)) {
             return value;
         }
-
+        
         JsonPrimitive primitive = asPrimitive(get(key));
-
+        
         if (primitive != null && primitive.isBoolean()) {
             return primitive.getAsBoolean();
         }
         return value;
     }
-
+    
     public boolean has(String key) {
         return this.data.has(key);
     }
-
+    
     public JsonElement get(String key) {
         return this.data.get(key);
     }
-
+    
     /**
      * Returns the data the information is being loaded from
      *
@@ -223,10 +231,9 @@ public class BetterJsonObject {
     public JsonObject getData() {
         return this.data;
     }
-
+    
     /**
-     * Adds a string to the to the json data file with the
-     *      key that it'll be associated with
+     * Adds a string to the to the json data file with the key that it'll be associated with
      *
      * @param key the key
      * @param value the value
@@ -236,10 +243,9 @@ public class BetterJsonObject {
             this.data.addProperty(key, value);
         }
     }
-
+    
     /**
-     * Adds a number to the to the json data file with the
-     *      key that it'll be associated with
+     * Adds a number to the to the json data file with the key that it'll be associated with
      *
      * @param key the key
      * @param value the value
@@ -249,10 +255,9 @@ public class BetterJsonObject {
             this.data.addProperty(key, value);
         }
     }
-
+    
     /**
-     * Adds a boolean to the to the json data file with the
-     *      key that it'll be associated with
+     * Adds a boolean to the to the json data file with the key that it'll be associated with
      *
      * @param key the key
      * @param value the value
@@ -262,10 +267,10 @@ public class BetterJsonObject {
             this.data.addProperty(key, value);
         }
     }
-
+    
     /**
-     * This feature is a HUGE WIP and may not work, it is safer
-     *      to use the toString method with a BufferedWriter instead
+     * This feature is a HUGE WIP and may not work, it is safer to use the toString method with a
+     * BufferedWriter instead
      *
      * We are not responsible for any overwritten files, please use this carefully
      *
@@ -277,8 +282,16 @@ public class BetterJsonObject {
             // Do nothing if future issues may occur
             return;
         }
-
+        
         try {
+            if (!file.exists()) {
+                File parent = file.getParentFile();
+                if (parent != null && !parent.exists()) {
+                    parent.mkdirs();
+                }
+                file.createNewFile();
+            }
+            
             FileWriter writer = new FileWriter(file);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
             bufferedWriter.write(toPrettyString()); // Use our pretty printer
@@ -288,10 +301,9 @@ public class BetterJsonObject {
             e.printStackTrace();
         }
     }
-
+    
     /**
-     * Converts the JsonElement to the JsonPrimitive class to allow for better
-     *      functionality
+     * Converts the JsonElement to the JsonPrimitive class to allow for better functionality
      *
      * @param element the element to be transferred
      * @return the JsonPrimitive instance or null if is not an instanceof the JsonPrimitive class
@@ -299,7 +311,7 @@ public class BetterJsonObject {
     private JsonPrimitive asPrimitive(JsonElement element) {
         return element != null && element instanceof JsonPrimitive ? (JsonPrimitive) element : null;
     }
-
+    
     /**
      * Returns the data values toString method
      *
@@ -309,10 +321,9 @@ public class BetterJsonObject {
     public String toString() {
         return this.data.toString();
     }
-
+    
     /**
-     * Returns the pretty printed data String with
-     *      indents and other things
+     * Returns the pretty printed data String with indents and other things
      *
      * @return pretty printed data
      */

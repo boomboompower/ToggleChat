@@ -20,8 +20,6 @@ package me.boomboompower.togglechat.toggles.defaults;
 import lombok.Getter;
 import lombok.Setter;
 
-import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
@@ -29,73 +27,68 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TypeGlobal extends ToggleBase {
-
-    private Pattern chatPattern = Pattern.compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-
+    
+    private Pattern chatPattern = Pattern
+        .compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    
     @Setter
     @Getter
     private boolean enabled = true;
-
+    
     @Override
     public String getName() {
         return "Global";
     }
-
+    
     @Override
     public String getDisplayName() {
         return "Global Chat: %s";
     }
-
+    
     @Override
     public boolean shouldToggle(String message) {
-        // A system to prevent accidently toggling UHC or bedwars chat
+        // A system to prevent accidentally toggling UHC or bedwars chat
         if (getToggle("special") != null) {
             ToggleBase base = getToggle("special");
-
+            
             if (base.isEnabled() && base.shouldToggle(message)) {
                 return false;
             }
         }
-
+        
         Matcher matcher = this.chatPattern.matcher(message);
-
+        
         return matcher.matches() && isNotOtherChat(matcher);
     }
-
-    @Override
-    public void onClick(ModernButton button) {
-        this.enabled = !this.enabled;
-        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
-    }
-
+    
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-                "Turns all general player",
-                "chat on or off",
-                "",
-                "These are the formats",
-                "&7Player: Hi",
-                "&a[VIP] Player&r: Hi",
-                "&a[VIP&6+&a] Player&r: Hi",
-                "&b[MVP] Player&r: Hi",
-                "&b[MVP&c+&b] Player&r: Hi",
-                "",
-                "Useful to prevent spam",
-                "or any unwanted chat",
-                "messages"
+            "Turns all general player",
+            "chat on or off",
+            "",
+            "These are the formats",
+            "&7Player: Hi",
+            "&a[VIP] Player&r: Hi",
+            "&a[VIP&6+&a] Player&r: Hi",
+            "&b[MVP] Player&r: Hi",
+            "&b[MVP&c+&b] Player&r: Hi",
+            "",
+            "Useful to prevent spam",
+            "or any unwanted chat",
+            "messages"
         );
     }
-
+    
     private boolean isNotOtherChat(Matcher input) {
         String rank;
-
+        
         try {
             rank = input.group("rank");
         } catch (Exception ex) {
             return true;
         }
-
+        
         switch (rank) {
             case "[TEAM] ":
             case "[SHOUT] ":

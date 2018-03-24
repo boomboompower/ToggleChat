@@ -1,4 +1,6 @@
-[{
-  "modid": "togglechatmod",
-  "name": "Hypixel - ToggleChat"
-}]
+[
+  {
+   "modid": "togglechatmod",
+   "name": "ToggleChatMod"
+  }
+]

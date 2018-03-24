@@ -29,22 +29,33 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.regex.Pattern;
 
+/**
+ * The ToggleChat chat handler, this is the core of all the chat-logic. Actually semi-decent code
+ *
+ * @author boomboompower
+ * @version 4.0
+ */
 public class ToggleEvents {
-
-    @SubscribeEvent(priority = EventPriority.LOW)
+    
+    private final ToggleChatMod mod;
+    
+    public ToggleEvents(ToggleChatMod mod) {
+        this.mod = mod;
+    }
+    
+    @SubscribeEvent(priority = EventPriority.LOW) // We use the low priority to grab things first
     public void onChatReceive(ClientChatReceivedEvent event) {
-
         // Strip the message of any colors for improved detectability
         String unformattedText = ChatColor.stripColor(event.message.getUnformattedText());
-
+        
         // The formatted message for a few of the custom toggles
         String formattedText = event.message.getFormattedText();
-
+        
         try {
             // Check if the message contains something from
             // The whitelist, if it doesn't, continue!
             if (!containsWhitelisted(unformattedText)) {
-
+                
                 // Loop through all the toggles
                 for (ToggleBase type : ToggleBase.getToggles().values()) {
                     // We don't want an issue with one toggle bringing
@@ -52,12 +63,12 @@ public class ToggleEvents {
                     try {
                         // The text we want to input into the shouldToggle method.
                         String input = type.useFormattedMessage() ? formattedText : unformattedText;
-
+                        
                         // If the toggle should toggle the specified message and
                         // the toggle is not enabled (this message is turned off)
                         // don't send the message to the player & stop looping
                         if (!type.isEnabled() && type.shouldToggle(input)) {
-                            if (type instanceof TypeMessageSeparator) {
+                            if (type instanceof TypeMessageSeparator && formattedText.contains("\n")) { // Test for newlines
                                 event.message = new ChatComponentText(((TypeMessageSeparator) type).editMessage(formattedText));
                             } else {
                                 event.setCanceled(true);
@@ -73,37 +84,39 @@ public class ToggleEvents {
             printSmartEx(null, e1);
         }
     }
-
+    
     private boolean containsWhitelisted(String message) {
         final boolean[] contains = {false};
-        ToggleChatMod.getInstance().getWhitelist().forEach(s -> {
+        this.mod.getConfigLoader().getWhitelist().forEach(s -> {
             if (containsIgnoreCase(message, s)) {
                 contains[0] = true;
             }
         });
         return contains[0];
     }
-
+    
     private boolean containsIgnoreCase(String message, String contains) {
-        return Pattern.compile(Pattern.quote(contains), Pattern.CASE_INSENSITIVE).matcher(message).find();
+        return Pattern.compile(Pattern.quote(contains), Pattern.CASE_INSENSITIVE).matcher(message)
+            .find();
     }
-
+    
     private void printSmartEx(ToggleBase baseIn, Exception ex) {
         String message = "";
-
+        
         if (baseIn != null) {
             if (baseIn instanceof TypeCustom) {
-                message = "[" + ((TypeCustom) baseIn)._getName() + ":" + ((TypeCustom) baseIn)._getConditions().size() + " ] ";
+                message = "[" + ((TypeCustom) baseIn)._getName() + ":" + ((TypeCustom) baseIn)
+                    ._getConditions().size() + " ] ";
             } else {
                 message = "[" + baseIn.getName() + " ] ";
             }
         } else {
             message += "[Unknown] ";
         }
-
+        
         if (baseIn != null && ex != null) {
             message += "An issue was encountered \"" + ex.getClass().getSimpleName() + "\" ";
-
+            
             if (ex.getMessage() != null) {
                 message += ex.getMessage() + ", ";
             }
@@ -113,7 +126,7 @@ public class ToggleEvents {
         } else {
             message += "An unknown issue was encountered, please remove all other ToggleChat addons before reporting this issue!";
         }
-
+        
         System.err.print(message);
     }
 }

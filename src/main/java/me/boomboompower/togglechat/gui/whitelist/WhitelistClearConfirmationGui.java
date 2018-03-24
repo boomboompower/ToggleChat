@@ -17,7 +17,6 @@
 
 package me.boomboompower.togglechat.gui.whitelist;
 
-import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 
@@ -45,7 +44,7 @@ public class WhitelistClearConfirmationGui extends ModernGui {
         drawDefaultBackground();
 
         writeInformation(this.width / 2, this.height / 2 - 60, 15,
-                String.format("Are you sure you wish to clear &6%s %s&r from your whitelist?", ToggleChatMod.getInstance().getWhitelist().size(), (ToggleChatMod.getInstance().getWhitelist().size() == 1 ? "entry" : "entries")),
+                String.format("Are you sure you wish to clear &6%s %s&r from your whitelist?", this.mod.getConfigLoader().getWhitelist().size(), (this.mod.getConfigLoader().getWhitelist().size() == 1 ? "entry" : "entries")),
                 "This action cannot be undone, use at your own risk!"
         );
 
@@ -59,7 +58,7 @@ public class WhitelistClearConfirmationGui extends ModernGui {
                 this.mc.displayGuiScreen(this.previousScreen);
                 break;
             case 1:
-                ToggleChatMod.getInstance().getWhitelist().clear();
+                this.mod.getConfigLoader().getWhitelist().clear();
                 sendChatMessage("Cleared the whitelist!");
                 this.mc.displayGuiScreen(null);
                 break;
@@ -68,6 +67,6 @@ public class WhitelistClearConfirmationGui extends ModernGui {
 
     @Override
     public void onGuiClosed() {
-        ToggleChatMod.getInstance().getConfigLoader().saveWhitelist();
+        this.mod.getConfigLoader().saveWhitelist();
     }
 }

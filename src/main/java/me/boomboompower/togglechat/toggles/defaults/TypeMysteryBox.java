@@ -20,54 +20,49 @@ package me.boomboompower.togglechat.toggles.defaults;
 import lombok.Getter;
 import lombok.Setter;
 
-import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeMysteryBox extends ToggleBase {
-
-    private Pattern mysteryPattern = Pattern.compile("(?<player>\\S{1,16}) found a (?<star>\\S{1,5}) Mystery Box!");
-    private Pattern mysteryFoundPattern = Pattern.compile("\\[Mystery Box] (?<player>\\S{1,16}) found a (?<thing>.*)!");
-
+    
+    private Pattern mysteryPattern = Pattern
+        .compile("(?<player>\\S{1,16}) found a (?<star>\\S{1,5}) Mystery Box!");
+    private Pattern mysteryFoundPattern = Pattern
+        .compile("\\[Mystery Box] (?<player>\\S{1,16}) found a (?<thing>.*)!");
+    
     @Setter
     @Getter
     private boolean enabled = true;
-
+    
     @Override
     public String getName() {
         return "Mystery box";
     }
-
+    
     @Override
     public String getDisplayName() {
         return "Mystery Box: %s";
     }
-
+    
     @Override
     public boolean shouldToggle(String message) {
-        return this.mysteryPattern.matcher(message).matches() || this.mysteryFoundPattern.matcher(message).matches();
+        return this.mysteryPattern.matcher(message).matches() || this.mysteryFoundPattern
+            .matcher(message).matches();
     }
-
-    @Override
-    public void onClick(ModernButton button) {
-        this.enabled = !this.enabled;
-        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
-    }
-
+    
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-                "Turns finding mystery box",
-                "messages on or off",
-                "",
-                "&7I &rfound a &e\u2730\u2730 &bMystery Box&r!",
-                "&b[Mystery Box] &7I &rfound a &6Dab&r!",
-                "",
-                "Useful to prevent those",
-                "weird box opening messages"
+            "Turns finding mystery box",
+            "messages on or off",
+            "",
+            "&7I &rfound a &e\u2730\u2730 &bMystery Box&r!",
+            "&b[Mystery Box] &7I &rfound a &6Dab&r!",
+            "",
+            "Useful to prevent those",
+            "weird box opening messages"
         );
     }
 }

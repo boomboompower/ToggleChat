@@ -20,50 +20,43 @@ package me.boomboompower.togglechat.toggles.defaults;
 import lombok.Getter;
 import lombok.Setter;
 
-import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeShout extends ToggleBase {
-
-    private Pattern shoutPattern = Pattern.compile("\\[SHOUT] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-
+    
+    private Pattern shoutPattern = Pattern
+        .compile("\\[SHOUT] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    
     @Setter
     @Getter
     private boolean enabled = true;
-
+    
     @Override
     public String getName() {
         return "Shout";
     }
-
+    
     @Override
     public boolean shouldToggle(String message) {
         return this.shoutPattern.matcher(message).matches();
     }
-
-    @Override
-    public void onClick(ModernButton button) {
-        this.enabled = !this.enabled;
-        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
-    }
-
+    
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-                "Toggles all shout",
-                "chat messages",
-                "",
-                "Message format",
-                "&6[SHOUT] &7Player&r: Hello",
-                "&6[SHOUT] &a[VIP] Player&r: Hello",
-                "&6[SHOUT] &b[MVP] Player&r: Hello",
-                "",
-                "Good for large minigames",
-                "such as Mega Skywars"
+            "Toggles all shout",
+            "chat messages",
+            "",
+            "Message format",
+            "&6[SHOUT] &7Player&r: Hello",
+            "&6[SHOUT] &a[VIP] Player&r: Hello",
+            "&6[SHOUT] &b[MVP] Player&r: Hello",
+            "",
+            "Good for large minigames",
+            "such as Mega Skywars"
         );
     }
 }

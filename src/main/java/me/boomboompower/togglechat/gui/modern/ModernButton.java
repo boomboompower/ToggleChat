@@ -33,6 +33,12 @@ import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 
+/**
+ * ModernButton, a nicer looking button
+ *
+ * @author boomboompower
+ * @version 2.0
+ */
 public class ModernButton extends Gui {
 
     protected static final ResourceLocation buttonTextures = new ResourceLocation("textures/gui/widgets.png");

@@ -17,7 +17,6 @@
 
 package me.boomboompower.togglechat.gui.whitelist;
 
-import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.utils.ChatColor;
@@ -47,7 +46,7 @@ public class WhitelistEntryGui extends ModernGui {
 
     @Override
     public void initGui() {
-        if (ToggleChatMod.getInstance().getWhitelist().size() > 0) {
+        if (this.mod.getConfigLoader().getWhitelist().size() > 0) {
             this.buttonList.add(new ModernButton(0, this.width / 2 - 200, this.height / 2 + 80, 150, 20, "Back"));
             this.buttonList.add(this.next = new ModernButton(1, this.width / 2 + 50, this.height / 2 + 80, 150, 20, "Next"));
         } else {
@@ -63,7 +62,7 @@ public class WhitelistEntryGui extends ModernGui {
 
         super.drawScreen(x, y, ticks);
 
-        if (ToggleChatMod.getInstance().getWhitelist().size() > 0 && !this.pageInvalid) {
+        if (this.mod.getConfigLoader().getWhitelist().size() > 0 && !this.pageInvalid) {
             drawRect(this.width / 2 - 60, this.height / 2 - 80, this.width / 2 + 60, this.height / 2 + 60, new Color(105, 105, 105, 75).getRGB());
 
             drawHorizontalLine(this.width / 2 - 60, width / 2 + 60, this.height / 2 - 80, Color.WHITE.getRGB());
@@ -73,10 +72,10 @@ public class WhitelistEntryGui extends ModernGui {
             drawVerticalLine(this.width / 2 + 60, this.height / 2 - 80, this.height / 2 + 60, Color.WHITE.getRGB());
         }
 
-        if (ToggleChatMod.getInstance().getWhitelist().size() > 0) {
+        if (this.mod.getConfigLoader().getWhitelist().size() > 0) {
 
-            int totalEntries = ToggleChatMod.getInstance().getWhitelist().size();
-            int pages = (int) Math.ceil((double) ToggleChatMod.getInstance().getWhitelist().size() / 10D);
+            int totalEntries = this.mod.getConfigLoader().getWhitelist().size();
+            int pages = (int) Math.ceil((double) this.mod.getConfigLoader().getWhitelist().size() / 10D);
 
             if (this.pageNumber < 1 || this.pageNumber > pages) {
                 writeInformation(this.width / 2, this.height / 2 - 40, 20, String.format(ChatColor.RED + "Invalid page number (%s)", (ChatColor.DARK_RED + String.valueOf(pageNumber) + ChatColor.RED)));
@@ -92,7 +91,7 @@ public class WhitelistEntryGui extends ModernGui {
 
             final int[] position = {this.height / 2 - 73};
 
-            ToggleChatMod.getInstance().getWhitelist().stream().skip((this.pageNumber - 1) * 10).limit(10).forEach(word -> {
+            this.mod.getConfigLoader().getWhitelist().stream().skip((this.pageNumber - 1) * 10).limit(10).forEach(word -> {
                 drawCenteredString(word, this.width / 2, position[0], Color.WHITE.getRGB());
                 position[0] += 13;
             });

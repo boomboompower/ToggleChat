@@ -20,54 +20,46 @@ package me.boomboompower.togglechat.toggles.defaults;
 import lombok.Getter;
 import lombok.Setter;
 
-import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
 
 public class TypeColored extends ToggleBase {
-
+    
     @Setter
     @Getter
     private boolean enabled = true;
-
+    
     @Override
     public String getName() {
         return "Colored team";
     }
-
+    
     @Override
     public boolean shouldToggle(String message) {
         return message.startsWith("[BLUE] ") ||
-                message.startsWith("[YELLOW] ") ||
-                message.startsWith("[GREEN] ") ||
-                message.startsWith("[RED] ") ||
-                message.startsWith("[WHITE] ") ||
-                message.startsWith("[PURPLE] "
-        );
+            message.startsWith("[YELLOW] ") ||
+            message.startsWith("[GREEN] ") ||
+            message.startsWith("[RED] ") ||
+            message.startsWith("[WHITE] ") ||
+            message.startsWith("[PURPLE] "
+            );
     }
-
-    @Override
-    public void onClick(ModernButton button) {
-        this.enabled = !this.enabled;
-        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
-    }
-
+    
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-                "Disables colored chat",
-                "messages in multiple games",
-                "",
-                "Toggles things like these",
-                "&e[YELLOW]",
-                "&d[PURPLE]",
-                "&a[GREEN]",
-                "&c[RED]",
-                "",
-                "This is good for games",
-                "such as paintball"
+            "Disables colored chat",
+            "messages in multiple games",
+            "",
+            "Toggles things like these",
+            "&e[YELLOW]",
+            "&d[PURPLE]",
+            "&a[GREEN]",
+            "&c[RED]",
+            "",
+            "This is good for games",
+            "such as paintball"
         );
     }
 }

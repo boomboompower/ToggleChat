@@ -1,10 +1,25 @@
+/*
+ *     Copyright (C) 2018 boomboompower
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package me.boomboompower.togglechat.toggles.defaults;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
@@ -12,73 +27,75 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TypeEasy extends ToggleBase {
-
-    private Pattern chatPattern = Pattern.compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    private Pattern guildPattern = Pattern.compile("Guild > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    private Pattern shortGuildPattern = Pattern.compile("G > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    private Pattern partyPattern = Pattern.compile("Party > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    private Pattern shortPartyPattern = Pattern.compile("P > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    private Pattern shoutPattern = Pattern.compile("\\[SHOUT] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-
+    
+    private Pattern chatPattern = Pattern
+        .compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private Pattern guildPattern = Pattern
+        .compile("Guild > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private Pattern shortGuildPattern = Pattern
+        .compile("G > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private Pattern partyPattern = Pattern
+        .compile("Party > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private Pattern shortPartyPattern = Pattern
+        .compile("P > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private Pattern shoutPattern = Pattern
+        .compile("\\[SHOUT] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    
     @Setter
     @Getter
     private boolean enabled = true;
-
+    
     @Override
     public String getName() {
         return "Ez messages";
     }
-
+    
     @Override
     public boolean shouldToggle(String message) {
         Matcher chatMatcher = this.chatPattern.matcher(message);
         if (chatMatcher.matches() && containsEasyMessage(chatMatcher.group("message"))) {
             return true;
         }
-
+        
         Matcher guildMatcher = this.guildPattern.matcher(message);
         if (guildMatcher.matches() && containsEasyMessage(guildMatcher.group("message"))) {
             return true;
         }
-
+        
         Matcher partyMatcher = this.partyPattern.matcher(message);
         if (partyMatcher.matches() && containsEasyMessage(partyMatcher.group("message"))) {
             return true;
         }
-
+        
         Matcher shoutMatcher = this.shoutPattern.matcher(message);
         if (shoutMatcher.matches() && containsEasyMessage(shoutMatcher.group("message"))) {
             return true;
         }
-
+        
         Matcher shortGuildMatcher = this.shortGuildPattern.matcher(message);
-        if (shortGuildMatcher.matches() && containsEasyMessage(shortGuildMatcher.group("message"))) {
+        if (shortGuildMatcher.matches() && containsEasyMessage(
+            shortGuildMatcher.group("message"))) {
             return true;
         }
-
+        
         Matcher shortPartyMatcher = this.shortPartyPattern.matcher(message);
-        return shortPartyMatcher.matches() && containsEasyMessage(shortPartyMatcher.group("message"));
-
+        return shortPartyMatcher.matches() && containsEasyMessage(
+            shortPartyMatcher.group("message"));
+        
     }
-
-    @Override
-    public void onClick(ModernButton button) {
-        this.enabled = !this.enabled;
-        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
-    }
-
+    
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-                "Removes all \"ez\"",
-                "messages across every",
-                "channel",
-                "",
-                "Finally, freedom from",
-                "the \"ez\" spam!"
+            "Removes all \"ez\"",
+            "messages across every",
+            "channel",
+            "",
+            "Finally, freedom from",
+            "the \"ez\" spam!"
         );
     }
-
+    
     private boolean containsEasyMessage(String input) {
         switch (input) {
             case "Hello everyone! I'm an innocent player who loves everything Hypixel.":
@@ -119,7 +136,7 @@ public class TypeEasy extends ToggleBase {
                 return true;
             default:
                 return false;
-
+            
         }
     }
 }

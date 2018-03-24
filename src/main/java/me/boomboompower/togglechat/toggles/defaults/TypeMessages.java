@@ -20,44 +20,36 @@ package me.boomboompower.togglechat.toggles.defaults;
 import lombok.Getter;
 import lombok.Setter;
 
-import me.boomboompower.togglechat.gui.modern.ModernButton;
-import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
 
 public class TypeMessages extends ToggleBase {
-
+    
     @Setter
     @Getter
     private boolean enabled = true;
-
+    
     @Override
     public String getName() {
         return "Messages";
     }
-
+    
     @Override
     public boolean shouldToggle(String message) {
         return message.startsWith("To ") || message.startsWith("From ");
     }
-
-    @Override
-    public void onClick(ModernButton button) {
-        this.enabled = !this.enabled;
-        button.setText(String.format(getDisplayName(), ModernGui.getStatus(isEnabled())));
-    }
-
+    
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-                "Toggles all incoming",
-                "private messages",
-                "or any being sent",
-                "",
-                "These are the formats",
-                "&dFrom &7Player&r: Hello",
-                "&dTo &7Player&r: Hello"
+            "Toggles all incoming",
+            "private messages",
+            "or any being sent",
+            "",
+            "These are the formats",
+            "&dFrom &7Player&r: Hello",
+            "&dTo &7Player&r: Hello"
         );
     }
 }

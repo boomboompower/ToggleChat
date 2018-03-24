@@ -34,12 +34,19 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * ModernGui, a nicer looking Gui
+ *
+ * @author boomboompower
+ * @version 3.0
+ */
 public abstract class ModernGui extends GuiScreen {
 
-    private final ConfigLoader configLoader = ToggleChatMod.getInstance().getConfigLoader();
-
+    protected final ConfigLoader configLoader = ToggleChatMod.getInstance().getConfigLoader();
+    
     protected final Minecraft mc = Minecraft.getMinecraft();
     protected final FontRenderer fontRendererObj = this.mc.fontRendererObj;
+    protected final ToggleChatMod mod = ToggleChatMod.getInstance();
 
     protected List<ModernButton> buttonList = Lists.newArrayList();
     protected List<ModernTextBox> textList = Lists.newArrayList();
