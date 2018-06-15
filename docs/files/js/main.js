@@ -21,7 +21,7 @@ function openPage(pageType) {
 }
 
 function downloadPage() {
-    window.location = "downloads";
+    window.location = "https://boomboompower.github.io/ToggleChat/downloads";
 }
 
 function sourcePage() {
