@@ -20,21 +20,24 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
     private boolean enabled = true; /** Enabled/Disabled */
     
     private String togglename; // The name of the toggle
-    private List<ToggleCondition> conditions; // The conditions of the toggle
+    
+    private LinkedList<ToggleCondition> conditions; // The conditions of the toggle
+    private LinkedList<String> comments; // The comments displayed on the top of the file
     
     public TypeCustom(String name) {
-        this.togglename = name;
-        this.conditions = new ArrayList<>();
+        this(name, new LinkedList<>(), new LinkedList<>());
     }
     
     public TypeCustom(String name, ToggleCondition condition) {
         this.togglename = name;
         this.conditions = asList(condition);
+        this.comments = new LinkedList<>();
     }
     
-    public TypeCustom(String name, List<ToggleCondition> condition) {
+    public TypeCustom(String name, LinkedList<ToggleCondition> condition, LinkedList<String> comments) {
         this.togglename = name;
         this.conditions = condition;
+        this.comments = comments;
     }
     
     @Override
@@ -83,7 +86,7 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
      *
      * @return the conditions
      */
-    public List<ToggleCondition> _getConditions() {
+    public LinkedList<ToggleCondition> _getConditions() {
         return this.conditions;
     }
     
@@ -97,12 +100,32 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
     }
     
     /**
+     * Returns the comments that will be displayed on top of the file
+     *
+     * @return the comments on top of the file
+     */
+    public LinkedList<String> _getComments() {
+        return this.comments;
+    }
+    
+    /**
+     * Sets the comments of the file
+     *
+     * @param comments the comments of the file
+     */
+    public TypeCustom _setComments(LinkedList<String> comments) {
+        this.comments = comments;
+        
+        return this;
+    }
+    
+    /**
      * Converts an array of conditions into one list
      *
      * @param conditions the conditions to add
      * @return the list version of the conditions
      */
-    private List<ToggleCondition> asList(ToggleCondition... conditions) {
-        return new ArrayList<>(Arrays.asList(conditions));
+    private LinkedList<ToggleCondition> asList(ToggleCondition... conditions) {
+        return new LinkedList<>(Arrays.asList(conditions));
     }
 }

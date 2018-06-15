@@ -393,7 +393,7 @@ public class WebsiteUtils {
         
         try {
             message = String.format(message, replacements);
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
         }
         Minecraft.getMinecraft().thePlayer.addChatComponentMessage(
             new ChatComponentText(ChatColor.translateAlternateColorCodes('&', message)));
@@ -421,7 +421,7 @@ public class WebsiteUtils {
             text.appendSibling(url).appendText(ChatColor.YELLOW + "!");
             
             Minecraft.getMinecraft().thePlayer.addChatComponentMessage(text);
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
         }
     }
 }

@@ -160,7 +160,18 @@ public abstract class ModernGui extends GuiScreen {
     public final void sendChatMessage(String msg) {
         Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(ChatColor.AQUA + "T" + ChatColor.BLUE + "C" + ChatColor.DARK_GRAY + " > " + ChatColor.GRAY + ChatColor.translateAlternateColorCodes('&', msg)));
     }
-
+    
+    @Override
+    public void setWorldAndResolution(Minecraft mc, int width, int height) {
+        this.itemRender = mc.getRenderItem();
+        this.width = width;
+        this.height = height;
+        
+        this.textList.clear();
+        this.buttonList.clear();
+        this.initGui();
+    }
+    
     public void buttonPressed(ModernButton button) {
     }
 

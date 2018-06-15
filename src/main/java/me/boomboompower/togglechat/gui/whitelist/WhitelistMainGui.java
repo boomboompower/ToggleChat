@@ -49,9 +49,6 @@ public class WhitelistMainGui extends ModernGui {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        this.textList.clear();
-        this.buttonList.clear();
-
         this.textList.add(this.text = new ModernTextBox(this.width / 2 - 75, this.height / 2 - 58, 150, 20));
 
         this.buttonList.add(this.add = new ModernButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add").setButtonData(new ToggleDummyMessage(

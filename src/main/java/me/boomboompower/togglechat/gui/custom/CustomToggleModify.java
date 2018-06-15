@@ -36,8 +36,6 @@ public class CustomToggleModify extends IHaveScrollableData {
     
     @Override
     public void initGui() {
-        this.buttonList.clear();
-        
         this.toggleList = new ModernGuiToggleList(this);
     }
     

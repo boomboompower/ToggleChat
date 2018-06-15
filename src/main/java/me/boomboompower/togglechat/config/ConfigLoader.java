@@ -17,6 +17,10 @@
 
 package me.boomboompower.togglechat.config;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,7 +41,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ConfigLoader {
-
+    
+    // All the places we'll save and load at
+    private final List<Object> locations = new ArrayList<>();
+    
     @Getter
     private File toggleFile;
 
@@ -58,15 +65,18 @@ public class ConfigLoader {
 
     @Setter
     @Getter
-    private boolean modernBlur = false;
+    @Memes(saveId = "blur")
+    private boolean modernBlur = true;
 
     @Setter
     @Getter
-    private boolean modernButton = false;
+    @Memes
+    private boolean modernButton = true;
 
     @Setter
     @Getter
-    private boolean modernTextbox = false;
+    @Memes
+    private boolean modernTextbox = true;
     
     @Getter
     private LinkedList<String> whitelist = new LinkedList<>();
@@ -123,6 +133,10 @@ public class ConfigLoader {
 
     public void saveToggles() {
         try {
+            if (this.locations.isEmpty()) {
+                return;
+            }
+            
             if (!this.toggleFile.getParentFile().exists()) {
                 this.toggleFile.getParentFile().mkdirs();
             }
@@ -210,7 +224,7 @@ public class ConfigLoader {
                 writer.close();
 
                 ToggleBase.addToggle(new TypeCustom("MyToggle", new ConditionStartsWith("[YOUTUBE] Sk1er")));
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
             }
             return;
         }
@@ -224,11 +238,17 @@ public class ConfigLoader {
                     try {
                         FileReader fileReader = new FileReader(file);
                         BufferedReader reader = new BufferedReader(fileReader);
+                        
+                        LinkedList<String> comments = new LinkedList<>();
                         LinkedList<String> lines = new LinkedList<>();
 
                         for (String s : reader.lines().collect(Collectors.toList())) {
-                            if (!s.isEmpty() && !s.startsWith("//")) {
-                                lines.add(s);
+                            if (!s.isEmpty()) {
+                                if (s.startsWith("//")) {
+                                    comments.add(s);
+                                } else {
+                                    lines.add(s);
+                                }
                             }
                         }
 
@@ -257,7 +277,7 @@ public class ConfigLoader {
                                 }
 
                                 if (!added) {
-                                    customs.add(new TypeCustom(name, condition));
+                                    customs.add(new TypeCustom(name, condition)._setComments(comments));
                                 }
                             }
                         }
@@ -306,67 +326,126 @@ public class ConfigLoader {
     }
 
     public void loadModernUtils() {
-        if (exists(this.modernGuiFile)) {
-            try {
-                FileReader fileReader = new FileReader(this.modernGuiFile);
-                BufferedReader reader = new BufferedReader(fileReader);
-                StringBuilder builder = new StringBuilder();
-
-                String current;
-                while ((current = reader.readLine()) != null) {
-                    builder.append(current);
-                }
-                this.modernJson = new BetterJsonObject(builder.toString());
-            } catch (Exception ex) {
-                log("Could not load ModernUtils, saving.");
-                saveModernUtils();
-            }
-
-            this.modernBlur = this.modernJson.optBoolean("blur", true);
-            this.modernButton = this.modernJson.optBoolean("button", true);
-            this.modernTextbox = this.modernJson.optBoolean("textbox", true);
-
-        } else {
+        if (!this.modernGuiFile.exists()) {
             saveModernUtils();
+            return;
+        }
+        
+        // Set to true if an exception occurs whilst loading
+        boolean failed = false;
+        
+        try {
+            FileReader fileReader = new FileReader(this.modernGuiFile);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            StringBuilder builder = new StringBuilder();
+        
+            List<String> lines = bufferedReader.lines().collect(Collectors.toList());
+        
+            if (lines.isEmpty()) {
+                return;
+            }
+        
+            for (String s : lines) {
+                builder.append(s);
+            }
+    
+            this.modernJson = new BetterJsonObject(builder.toString().trim());
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        
+            failed = true;
+        } finally {
+            // Make sure it was read without errors
+            if (!failed) {
+                for (Object o : this.locations) {
+                    Class<?> clazz = o.getClass();
+                
+                    for (Field f : clazz.getDeclaredFields()) {
+                        if (f.isAnnotationPresent(Memes.class)) {
+                            f.setAccessible(true);
+                        
+                            try {
+                                String saveId = f.getAnnotation(Memes.class).saveId();
+                            
+                                if (saveId.trim().isEmpty()) {
+                                    saveId = f.getName();
+                                }
+                            
+                                if (!this.modernJson.has(saveId)) {
+                                    continue;
+                                }
+                                
+                                f.set(o, this.modernJson.getGsonData().fromJson(this.modernJson.get(saveId), f.getType()));
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                System.err.println("Failed to load settings for field " + f.getName() + " in " + clazz.getName());
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
     public void saveModernUtils() {
-        try {
-            if (!this.modernGuiFile.getParentFile().exists()) {
-                this.modernGuiFile.getParentFile().mkdirs();
-            }
-            this.modernGuiFile.createNewFile();
-
-            this.modernJson.addProperty("blur", this.modernBlur);
-            this.modernJson.addProperty("button", this.modernButton);
-            this.modernJson.addProperty("textbox", this.modernTextbox);
-
-            this.modernJson.writeToFile(this.modernGuiFile);
-        } catch (Exception ex) {
-            log("Could not save ModernUtils.");
-            ex.printStackTrace();
+        if (this.locations.isEmpty()) {
+            return;
         }
+    
+        for (Object o : this.locations) {
+            Class<?> clazz = o.getClass();
+        
+            for (Field f : clazz.getDeclaredFields()) {
+                f.setAccessible(true);
+                if (f.isAnnotationPresent(Memes.class)) {
+                    try {
+                        if (f.get(o) == null) {
+                            continue;
+                        }
+                    
+                        String saveId = f.getAnnotation(Memes.class).saveId();
+                    
+                        if (saveId.isEmpty()) {
+                            saveId = f.getName();
+                        }
+    
+                        this.modernJson.getData().add(saveId, this.modernJson.getGsonData().toJsonTree(f.get(o), f.getType()));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        System.err.println("Failed to save settings for field " + f.getName() + " in " + clazz.getName());
+                    }
+                }
+            }
+        }
+        this.modernJson.writeToFile(this.modernGuiFile);
     }
 
     public void saveSingle(TypeCustom base) {
         try {
             File file = new File(this.customToggleDir, base.getName().toLowerCase() + ".txt");
             FileWriter writer = new FileWriter(file);
-            writer.append("// Format").append(System.lineSeparator());
-            writer.append("// ToggleName : <Condition>").append(System.lineSeparator());
-            writer.append("//").append(System.lineSeparator());
-            writer.append("// This feature was created").append(System.lineSeparator());
-            writer.append("// by OrangeMarshall!").append(System.lineSeparator());
-            writer.append("//").append(System.lineSeparator());
-            writer.append("// Possible conditions").append(System.lineSeparator());
-            writer.append("// startsWith(string)          Starts with \"string\"").append(System.lineSeparator());
-            writer.append("// contains(string)            Contains \"string\"").append(System.lineSeparator());
-            writer.append("// contains(string,4)          Contains \"string\" 4 times").append(System.lineSeparator());
-            writer.append("// endsWith(string)            Ends with \"string\"").append(System.lineSeparator());
-            writer.append("// equals(string)              Equals \"string\" case-sensitive").append(System.lineSeparator());
-            writer.append("// equalsIgnoreCase(string)    Equals \"string\" not case-sensitive").append(System.lineSeparator());
-            writer.append("// regex(regex)                Regex matches the input").append(System.lineSeparator());
+    
+            if (!base._getComments().isEmpty()) {
+                for (String s : base._getComments()) {
+                    writer.append(s).append(System.lineSeparator());
+                }
+            } else {
+                writer.append("// Format").append(System.lineSeparator());
+                writer.append("// ToggleName : <Condition>").append(System.lineSeparator());
+                writer.append("//").append(System.lineSeparator());
+                writer.append("// This feature was created").append(System.lineSeparator());
+                writer.append("// by OrangeMarshall!").append(System.lineSeparator());
+                writer.append("//").append(System.lineSeparator());
+                writer.append("// Possible conditions").append(System.lineSeparator());
+                writer.append("// startsWith(string)          Starts with \"string\"").append(System.lineSeparator());
+                writer.append("// contains(string)            Contains \"string\"").append(System.lineSeparator());
+                writer.append("// contains(string,4)          Contains \"string\" 4 times").append(System.lineSeparator());
+                writer.append("// endsWith(string)            Ends with \"string\"").append(System.lineSeparator());
+                writer.append("// equals(string)              Equals \"string\" case-sensitive").append(System.lineSeparator());
+                writer.append("// equalsIgnoreCase(string)    Equals \"string\" not case-sensitive").append(System.lineSeparator());
+                writer.append("// regex(regex)                Regex matches the input").append(System.lineSeparator());
+            }
+    
             writer.append("").append(System.lineSeparator());
 
             for (ToggleCondition condition : base._getConditions()) {
@@ -377,6 +456,26 @@ public class ConfigLoader {
             writer.close();
         } catch (Exception ex) {
             log("Failed to save custom toggle: \"%s\"!", base.getName());
+        }
+    }
+    
+    public void addToSaving(Object o) {
+        if (o == null) {
+            throw new IllegalArgumentException("Save cannot be null");
+        }
+        
+        // Test if the class actually has any fields
+        if (o.getClass().getDeclaredFields().length > 0) {
+            
+            // Loop through all fields
+            for (Field f : o.getClass().getDeclaredFields()) {
+                
+                // Check if a field has a save annotation, if so, add it to our saves
+                if (f.isAnnotationPresent(Memes.class)) {
+                    this.locations.add(o);
+                    break;
+                }
+            }
         }
     }
 

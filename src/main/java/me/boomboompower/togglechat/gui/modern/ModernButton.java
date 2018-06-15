@@ -127,9 +127,9 @@ public class ModernButton extends Gui {
 
             int j = 14737632;
 
-            boolean modern;
+            boolean modern = ToggleChatMod.getInstance().getConfigLoader().isModernButton();
 
-            if (modern = ToggleChatMod.getInstance().getConfigLoader().isModernButton()) {
+            if (modern) {
                 mc.getTextureManager().bindTexture(buttonTextures);
                 GlStateManager.enableBlend();
                 GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);

@@ -67,13 +67,12 @@ public class BlurModHandler {
     @SubscribeEvent
     public void onGuiChange(final GuiOpenEvent event) {
         if (this._listShaders == null) {
-            this._listShaders = ReflectionHelper
-                .findField(ShaderGroup.class, "field_148031_d", "listShaders");
+            this._listShaders = ReflectionHelper.findField(ShaderGroup.class, "field_148031_d", "listShaders");
         }
+        
         if (this.mc.theWorld != null) {
             final EntityRenderer er = this.mc.entityRenderer;
-            if (this.theMod.getConfigLoader().isModernBlur() && !er.isShaderActive()
-                && event.gui != null && event.gui instanceof ModernGui) {
+            if (this.theMod.getConfigLoader().isModernBlur() && !er.isShaderActive() && event.gui instanceof ModernGui) {
                 loadShader(er, new ResourceLocation("shaders/post/fade_in_blur.json"));
                 this.start = System.currentTimeMillis();
             } else if (er.isShaderActive() && event.gui == null) {
@@ -84,13 +83,15 @@ public class BlurModHandler {
     
     @SubscribeEvent
     public void onRenderTick(final TickEvent.RenderTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && this.mc.currentScreen != null
-            && this.mc.entityRenderer.isShaderActive()) {
+        if (event.phase != TickEvent.Phase.END) {
+            return;
+        }
+        
+        if (this.mc.currentScreen != null && this.theMod.getConfigLoader().isModernBlur() && this.mc.entityRenderer.isShaderActive()) {
             final ShaderGroup sg = this.mc.entityRenderer.getShaderGroup();
             try {
                 if (this._listShaders == null) {
-                    this._listShaders = ReflectionHelper
-                        .findField(ShaderGroup.class, "field_148031_d", "listShaders");
+                    this._listShaders = ReflectionHelper.findField(ShaderGroup.class, "field_148031_d", "listShaders");
                 }
                 
                 final List<Shader> shaders = (List<Shader>) this._listShaders.get(sg);
@@ -100,7 +101,7 @@ public class BlurModHandler {
                         su.set(this.getProgress());
                     }
                 }
-            } catch (IllegalArgumentException | IllegalAccessException ex) {
+            } catch (IllegalArgumentException | IllegalAccessException ignored) {
             }
         }
     }
@@ -113,11 +114,10 @@ public class BlurModHandler {
             GuiScreen gui = this.mc.currentScreen;
             
             final EntityRenderer er = this.mc.entityRenderer;
-            if (!er.isShaderActive() && gui != null && gui instanceof ModernGui) {
+            if (!er.isShaderActive() && gui instanceof ModernGui) {
                 loadShader(er, new ResourceLocation("shaders/post/fade_in_blur.json"));
                 this.start = System.currentTimeMillis();
-            } else if (er.isShaderActive() && (gui == null || !this.theMod.getConfigLoader()
-                .isModernBlur())) {
+            } else if (er.isShaderActive() && (gui == null || !this.theMod.getConfigLoader().isModernBlur())) {
                 er.stopUseShader();
             }
         }
@@ -125,11 +125,9 @@ public class BlurModHandler {
     
     /**
      * Gets the progress of the blur
-     *
-     * @return
      */
     private float getProgress() {
-        return Math.min((System.currentTimeMillis() - this.start), 1000.0f);
+        return Math.min((System.currentTimeMillis() - this.start) / 50, 5.0F);
     }
     
     /**
@@ -143,7 +141,7 @@ public class BlurModHandler {
             ReflectionHelper
                 .findMethod(EntityRenderer.class, er, new String[] {"func_175069_a", "loadShader"},
                     ResourceLocation.class).invoke(er, shader);
-        } catch (ReflectionHelper.UnableToFindMethodException | IllegalAccessException | InvocationTargetException ex) {
+        } catch (ReflectionHelper.UnableToFindMethodException | IllegalAccessException | InvocationTargetException ignored) {
         }
     }
 }

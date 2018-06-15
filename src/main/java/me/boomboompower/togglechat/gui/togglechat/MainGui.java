@@ -52,23 +52,17 @@ public class MainGui extends ModernGui {
     
     @Override
     public void initGui() {
-        this.buttonList.clear();
-        
-        setupPage();
-    }
-    
-    private void setupPage() {
         if (ToggleBase.getToggles().values().size() > 0) {
             this.nobuttons = false;
-            
+        
             int pages = (int) Math.ceil((double) ToggleBase.getToggles().size() / 7D);
-            
+        
             if (this.pageNumber < 1 || this.pageNumber > pages) {
                 this.pageNumber = 1;
             }
-            
+        
             final int[] position = {this.height / 2 - 75};
-            
+        
             ToggleBase.getToggles().values().stream().skip((this.pageNumber - 1) * 7).limit(7)
                 .forEach(baseType -> {
                     ModernButton button = new ModernButton(0, baseType.getIdString(),
@@ -81,22 +75,22 @@ public class MainGui extends ModernGui {
                     this.buttonList.add(button);
                     position[0] += 24;
                 });
-            
+        
             this.buttonList.add(new ModernButton(1, "inbuilt_whitelist", 5, this.height - 25, 90, 20, "Whitelist"));
             this.buttonList.add(new ModernButton(2, "inbuilt_back", this.width - 114, this.height - 25, 50, 20, "\u21E6").setEnabled(this.pageNumber > 1));
             this.buttonList.add(new ModernButton(3, "inbuilt_next", this.width - 60, this.height - 25, 50, 20, "\u21E8").setEnabled(this.pageNumber != pages));
             this.buttonList.add(new ModernButton(4, "inbuilt_theme", 5, this.height - 49, 90, 20, "Theme Modifier")
-                    .setButtonData(
-                        // Let them know what this button does
-                        new ToggleDummyMessage(
-                            "Opens the glorious",
-                            "&bTheme Modifier&r,",
-                            "allowing nearly full",
-                            "customization for the",
-                            "look of the mod"
-                        )
-                    ));
-            
+                .setButtonData(
+                    // Let them know what this button does
+                    new ToggleDummyMessage(
+                        "Opens the glorious",
+                        "&bTheme Modifier&r,",
+                        "allowing nearly full",
+                        "customization for the",
+                        "look of the mod"
+                    )
+                ));
+        
             if (this.mod.getWebsiteUtils().isFlagged()) {
                 this.buttonList.add(new ModernButton(5, this.width - 114, this.height - 49, 104, 20,
                     "Custom Toggles").setEnabledColor(new Color(100, 88, 192, 75))

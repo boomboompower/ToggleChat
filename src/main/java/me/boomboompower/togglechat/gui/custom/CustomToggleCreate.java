@@ -37,7 +37,7 @@ public class CustomToggleCreate extends ModernGui {
     
     @Override
     public void initGui() {
-        this.buttonList.clear();
+    
     }
     
     @Override

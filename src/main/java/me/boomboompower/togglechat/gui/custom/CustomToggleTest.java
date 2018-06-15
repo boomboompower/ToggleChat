@@ -41,9 +41,6 @@ public class CustomToggleTest extends ModernGui {
 
     @Override
     public void initGui() {
-        this.buttonList.clear();
-        this.textList.clear();
-
         Keyboard.enableRepeatEvents(true);
 
         this.textList.add(this.text = new ModernTextBox(this.width / 2 - 150, this.height / 2 - 10, 300, 20));

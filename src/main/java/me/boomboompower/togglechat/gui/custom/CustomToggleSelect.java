@@ -57,8 +57,6 @@ public class CustomToggleSelect extends ModernGui {
     
     @Override
     public void initGui() {
-        this.buttonList.clear();
-        
         if (ToggleBase.getToggles().entrySet().stream()
             .anyMatch(e -> e.getValue() instanceof TypeCustom) && !this.pageInvalid) {
             this.buttonList.add(
