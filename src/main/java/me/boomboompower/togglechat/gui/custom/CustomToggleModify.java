@@ -17,6 +17,8 @@
 
 package me.boomboompower.togglechat.gui.custom;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
+import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.gui.modern.scrollable.ModernGuiToggleList;
 import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 import me.boomboompower.togglechat.utils.ChatColor;
@@ -24,18 +26,23 @@ import me.boomboompower.togglechat.utils.ChatColor;
 import java.awt.Color;
 import java.io.IOException;
 
-public class CustomToggleModify extends IHaveScrollableData {
+public class CustomToggleModify extends ICustomToggleGui {
     
     private ModernGuiToggleList toggleList;
     
     private TypeCustom custom;
     
-    public CustomToggleModify(TypeCustom customIn) {
+    private ModernGui previous;
+    
+    public CustomToggleModify(ModernGui previous, TypeCustom customIn) {
+        this.previous = previous;
         this.custom = customIn;
     }
     
     @Override
     public void initGui() {
+        this.buttonList.add(new ModernButton(0, 5, this.height - 25, 75, 20, "Back"));
+        
         this.toggleList = new ModernGuiToggleList(this);
     }
     
@@ -55,6 +62,7 @@ public class CustomToggleModify extends IHaveScrollableData {
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
+        
         this.toggleList.handleMouseInput();
     }
     
@@ -78,7 +86,16 @@ public class CustomToggleModify extends IHaveScrollableData {
     }
     
     @Override
-    public TypeCustom getCustom() {
+    public void buttonPressed(ModernButton button) {
+        switch (button.getId()) {
+            case 0:
+                this.mc.displayGuiScreen(this.previous);
+                break;
+        }
+    }
+    
+    @Override
+    public TypeCustom getCustomToggle() {
         return this.custom;
     }
 }

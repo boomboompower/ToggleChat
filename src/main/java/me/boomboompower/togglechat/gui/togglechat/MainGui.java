@@ -17,6 +17,8 @@
 
 package me.boomboompower.togglechat.gui.togglechat;
 
+import java.io.IOException;
+
 import me.boomboompower.togglechat.gui.custom.CustomToggleMain;
 import me.boomboompower.togglechat.gui.custom.CustomToggleModify;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
@@ -29,6 +31,7 @@ import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 import me.boomboompower.togglechat.toggles.dummy.ToggleDummyMessage;
 
 import java.awt.*;
+import org.lwjgl.input.Mouse;
 
 public class MainGui extends ModernGui {
     
@@ -44,6 +47,7 @@ public class MainGui extends ModernGui {
     private boolean nobuttons = false;
     private boolean changed = false;
     
+    private int pages;
     private int pageNumber;
     
     public MainGui(int pageNumber) {
@@ -55,7 +59,7 @@ public class MainGui extends ModernGui {
         if (ToggleBase.getToggles().values().size() > 0) {
             this.nobuttons = false;
         
-            int pages = (int) Math.ceil((double) ToggleBase.getToggles().size() / 7D);
+            this.pages = (int) Math.ceil((double) ToggleBase.getToggles().size() / 7D);
         
             if (this.pageNumber < 1 || this.pageNumber > pages) {
                 this.pageNumber = 1;
@@ -146,7 +150,7 @@ public class MainGui extends ModernGui {
                 this.mc.displayGuiScreen(new MainGui(this.pageNumber + 1));
                 return;
             case 4:
-                this.mc.displayGuiScreen(new ModernConfigGui());
+                this.mc.displayGuiScreen(new ModernConfigGui(this));
                 return;
             case 5:
                 this.mc.displayGuiScreen(new CustomToggleMain());
@@ -174,7 +178,7 @@ public class MainGui extends ModernGui {
                 if (base instanceof TypeCustom) {
                     TypeCustom custom = (TypeCustom) base;
                     if (custom.getIdString().equals(button.getButtonId())) {
-                        this.mc.displayGuiScreen(new CustomToggleModify(custom));
+                        this.mc.displayGuiScreen(new CustomToggleModify(this, custom));
                         break;
                     }
                 }
@@ -186,6 +190,23 @@ public class MainGui extends ModernGui {
     public void onGuiClosed() {
         if (this.changed) {
             this.mod.getConfigLoader().saveToggles();
+        }
+    }
+    
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        
+        if (this.nobuttons) {
+            return;
+        }
+    
+        int i = Mouse.getEventDWheel();
+    
+        if (i < 0 && this.pageNumber > 1) {
+            this.mc.displayGuiScreen(new MainGui(this.pageNumber - 1));
+        } else if (i > 0 && this.pageNumber != this.pages) {
+            this.mc.displayGuiScreen(new MainGui(this.pageNumber + 1));
         }
     }
 }

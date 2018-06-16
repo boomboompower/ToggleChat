@@ -17,6 +17,7 @@
 
 package me.boomboompower.togglechat.gui.custom;
 
+import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.gui.modern.ModernTextBox;
 import me.boomboompower.togglechat.toggles.custom.TypeCustom;
@@ -28,21 +29,30 @@ import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 
+/**
+ * A menu that allows users to test predefined custom toggles with the given arguments.
+ *
+ * This menu is designed to be simple and not overload the user with information.
+ */
 public class CustomToggleTest extends ModernGui {
 
     private ModernTextBox text;
 
     private TypeCustom custom;
+    
+    private ModernGui previous;
 
-    public CustomToggleTest(TypeCustom customIn) {
-
+    public CustomToggleTest(ModernGui previous, TypeCustom customIn) {
+        this.previous = previous;
         this.custom = customIn;
     }
 
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
-
+        
+        this.buttonList.add(new ModernButton(0, 5, this.height - 25, 75, 20, "Back"));
+        
         this.textList.add(this.text = new ModernTextBox(this.width / 2 - 150, this.height / 2 - 10, 300, 20));
 
         this.text.setForceOldTheme(true);
@@ -70,7 +80,16 @@ public class CustomToggleTest extends ModernGui {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
-
+    
+    @Override
+    public void buttonPressed(ModernButton button) {
+        switch (button.getId()) {
+            case 0:
+                this.mc.displayGuiScreen(this.previous);
+                break;
+        }
+    }
+    
     @Override
     public void updateScreen() {
         this.text.updateCursorCounter();

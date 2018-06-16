@@ -1,6 +1,6 @@
 package me.boomboompower.togglechat.gui.modern.scrollable;
 
-import me.boomboompower.togglechat.gui.custom.IHaveScrollableData;
+import me.boomboompower.togglechat.gui.custom.ICustomToggleGui;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.custom.ToggleCondition;
 
@@ -18,15 +18,15 @@ import java.util.List;
 
 public class ModernGuiToggleList extends GuiListExtended {
     
-    private final IHaveScrollableData scrollableData;
+    private final ICustomToggleGui scrollableData;
     private final List<IGuiListEntry> listEntries;
     private int maxLabelWidth;
     
-    public ModernGuiToggleList(IHaveScrollableData scrollableData) {
+    public ModernGuiToggleList(ICustomToggleGui scrollableData) {
         super(Minecraft.getMinecraft(), scrollableData.width, scrollableData.height, 63,
             scrollableData.height - 32, 20);
         
-        List<ToggleCondition> customs = scrollableData.getCustom()._getConditions();
+        List<ToggleCondition> customs = scrollableData.getCustomToggle()._getConditions();
         
         this.scrollableData = scrollableData;
         this.listEntries = new ArrayList<>();

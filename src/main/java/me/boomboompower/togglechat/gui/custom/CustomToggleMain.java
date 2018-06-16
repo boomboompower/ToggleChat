@@ -22,6 +22,9 @@ import me.boomboompower.togglechat.gui.modern.ModernGui;
 
 import java.awt.*;
 
+/**
+ * A hub for all custom toggles, linking all the "Custom Toggle" guis together in one place.
+ */
 public class CustomToggleMain extends ModernGui {
     
     @Override

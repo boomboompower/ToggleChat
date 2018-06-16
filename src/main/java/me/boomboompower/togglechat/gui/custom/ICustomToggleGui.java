@@ -21,9 +21,19 @@ import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 
 /**
- * This gui has scrollable data guys, don't worry
+ * If a gui extends this, it'll have all modifications from {@link ModernGui} and will require
+ * a {@link #getCustomToggle()} method which returns the custom toggle assigned to this gui.
+ *
+ * This class is used in a few places throughout the code, its basically just an indicator
+ * for some of the other internal gui code which tells them that this class has data they can use.
  */
-public abstract class IHaveScrollableData extends ModernGui {
-
-    public abstract TypeCustom getCustom();
+public abstract class ICustomToggleGui extends ModernGui {
+    
+    /**
+     * Returns the data assigned to this gui, which can be used in other places
+     * in the code (without needing reflection etc)
+     *
+     * @return the custom toggle for this gui
+     */
+    public abstract TypeCustom getCustomToggle();
 }

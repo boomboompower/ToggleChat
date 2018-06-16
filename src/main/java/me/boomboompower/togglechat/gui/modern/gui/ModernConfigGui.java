@@ -19,11 +19,19 @@ package me.boomboompower.togglechat.gui.modern.gui;
 
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
-import me.boomboompower.togglechat.gui.togglechat.MainGui;
 import me.boomboompower.togglechat.toggles.dummy.ToggleDummyMessage;
 import me.boomboompower.togglechat.utils.ChatColor;
 
 public class ModernConfigGui extends ModernGui {
+
+    private ModernGui previous;
+
+    private boolean modified;
+
+    public ModernConfigGui(ModernGui previous) {
+        this.previous = previous;
+        this.modified = false;
+    }
 
     @Override
     public void initGui() {
@@ -63,22 +71,37 @@ public class ModernConfigGui extends ModernGui {
     public void buttonPressed(ModernButton button) {
         switch (button.getId()) {
             case 1:
+                this.modified = true;
+
                 this.configLoader.setModernBlur(!this.configLoader.isModernBlur());
                 button.setText("Blur: " + getStatus(this.configLoader.isModernBlur()));
                 this.mod.getBlurModHandler().reload();
                 break;
             case 2:
+                this.modified = true;
+
                 this.configLoader.setModernButton(!this.configLoader.isModernButton());
                 button.setText("Buttons: " + getClassic(this.configLoader.isModernButton()));
                 break;
             case 3:
+                this.modified = true;
+
                 this.configLoader.setModernTextbox(!this.configLoader.isModernTextbox());
                 button.setText("Textbox: " + getClassic(this.configLoader.isModernTextbox()));
                 break;
             case 4:
-                new MainGui(1).display();
+                this.mc.displayGuiScreen(this.previous);
                 break;
         }
+    }
+
+    @Override
+    public void onGuiClosed() {
+        if (!this.modified) {
+            return;
+        }
+
+        this.configLoader.saveModernUtils();
     }
 
     private String getClassic(boolean config) {

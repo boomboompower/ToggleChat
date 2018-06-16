@@ -163,13 +163,17 @@ public abstract class ModernGui extends GuiScreen {
     
     @Override
     public void setWorldAndResolution(Minecraft mc, int width, int height) {
+        // Required for compatibility
+        super.mc = mc;
+        
         this.itemRender = mc.getRenderItem();
         this.width = width;
         this.height = height;
         
         this.textList.clear();
         this.buttonList.clear();
-        this.initGui();
+        
+        initGui();
     }
     
     public void buttonPressed(ModernButton button) {

@@ -24,8 +24,8 @@ import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraft.client.audio.PositionedSoundRecord;
-
 import net.minecraft.util.ResourceLocation;
+
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.awt.*;
@@ -165,10 +165,10 @@ public class CustomToggleSelect extends ModernGui {
             this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
             switch (this.selectType) {
                 case TEST:
-                    this.mc.displayGuiScreen(new CustomToggleTest(this.hovered));
+                    this.mc.displayGuiScreen(new CustomToggleTest(this, this.hovered));
                     return;
                 case MODIFY:
-                    this.mc.displayGuiScreen(new CustomToggleModify(this.hovered));
+                    this.mc.displayGuiScreen(new CustomToggleModify(this, this.hovered));
                     return;
             }
         }

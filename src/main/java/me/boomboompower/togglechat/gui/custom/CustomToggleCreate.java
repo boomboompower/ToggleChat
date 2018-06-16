@@ -17,19 +17,24 @@
 
 package me.boomboompower.togglechat.gui.custom;
 
+import java.util.LinkedList;
+
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.toggles.custom.ToggleCondition;
 
 import java.awt.*;
-import java.util.ArrayList;
 
+/**
+ * This class is the base gui for creating a new custom toggle. Its just a user-friendly
+ * interface for toggles and such and isn't essential for the creation of new toggles
+ */
 public class CustomToggleCreate extends ModernGui {
     
     private ModernGui previous;
     
     private String name;
-    private ArrayList<ToggleCondition> conditionList = new ArrayList<>();
+    private LinkedList<ToggleCondition> conditionList = new LinkedList<>();
     
     public CustomToggleCreate(ModernGui previous) {
         this.previous = previous;

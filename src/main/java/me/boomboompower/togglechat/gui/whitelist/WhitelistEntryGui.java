@@ -17,31 +17,31 @@
 
 package me.boomboompower.togglechat.gui.whitelist;
 
+import java.io.IOException;
+
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
 import me.boomboompower.togglechat.utils.ChatColor;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-
 import java.awt.*;
+
+import org.lwjgl.input.Mouse;
 
 public class WhitelistEntryGui extends ModernGui {
 
     private ModernButton next;
 
-    private GuiScreen previousScreen;
+    private ModernGui previousScreen;
 
     private boolean pageInvalid;
+    
     private int pageNumber;
-    private Minecraft mc;
+    private int pages;
 
-    public WhitelistEntryGui(GuiScreen previous, int pageNumber) {
+    public WhitelistEntryGui(ModernGui previous, int pageNumber) {
         this.previousScreen = previous;
         this.pageNumber = pageNumber;
         this.pageInvalid = false;
-
-        this.mc = Minecraft.getMinecraft();
     }
 
     @Override
@@ -75,7 +75,8 @@ public class WhitelistEntryGui extends ModernGui {
         if (this.mod.getConfigLoader().getWhitelist().size() > 0) {
 
             int totalEntries = this.mod.getConfigLoader().getWhitelist().size();
-            int pages = (int) Math.ceil((double) this.mod.getConfigLoader().getWhitelist().size() / 10D);
+            
+            this.pages = (int) Math.ceil((double) this.mod.getConfigLoader().getWhitelist().size() / 10D);
 
             if (this.pageNumber < 1 || this.pageNumber > pages) {
                 writeInformation(this.width / 2, this.height / 2 - 40, 20, String.format(ChatColor.RED + "Invalid page number (%s)", (ChatColor.DARK_RED + String.valueOf(pageNumber) + ChatColor.RED)));
@@ -84,7 +85,7 @@ public class WhitelistEntryGui extends ModernGui {
             }
 
             this.pageInvalid = false;
-            this.next.setEnabled(pageNumber != pages); // Next
+            this.next.setEnabled(this.pageNumber != pages); // Next
 
             drawCenteredString(String.format("Page %s/%s", (this.pageNumber), pages), this.width / 2, this.height / 2 - 95, Color.WHITE.getRGB());
             drawCenteredString(String.format("There is a total of %s %s on the whitelist!", ChatColor.GOLD + String.valueOf(totalEntries), (totalEntries > 1 ? "entries" : "entry") + ChatColor.RESET), this.width / 2, this.height / 2 + 65, Color.WHITE.getRGB());
@@ -98,6 +99,8 @@ public class WhitelistEntryGui extends ModernGui {
 
             return;
         }
+        
+        this.pageInvalid = true;
 
         writeInformation(this.width / 2, this.height / 2 - 50, 20, "There are no entries on the whitelist!", "Insert some words then return to this page!");
     }
@@ -115,6 +118,23 @@ public class WhitelistEntryGui extends ModernGui {
             case 1:
                 new WhitelistEntryGui(this, this.pageNumber++);
                 break;
+        }
+    }
+    
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        
+        if (this.pageInvalid) {
+            return;
+        }
+        
+        int i = Mouse.getEventDWheel();
+    
+        if (i < 0 && this.pageNumber > 1) {
+            new WhitelistEntryGui(this, this.pageNumber--);
+        } else if (i > 0 && this.pageNumber != this.pages) {
+            new WhitelistEntryGui(this, this.pageNumber++);
         }
     }
 }
