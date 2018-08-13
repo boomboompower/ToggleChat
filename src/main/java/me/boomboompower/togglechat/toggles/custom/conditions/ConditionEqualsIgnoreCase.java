@@ -33,12 +33,12 @@ public class ConditionEqualsIgnoreCase extends ToggleCondition {
     }
     
     @Override
-    public String getSaveIdentifier() {
-        return "equalsIgnoreCase";
-    }
-    
-    @Override
     public Boolean apply(String input) {
         return input.equalsIgnoreCase(getText());
+    }
+
+    @Override
+    public ConditionType getConditionType() {
+        return ConditionType.EQUALSIGNORECASE;
     }
 }

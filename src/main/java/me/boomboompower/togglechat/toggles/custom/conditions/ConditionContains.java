@@ -34,21 +34,22 @@ public class ConditionContains extends ToggleCondition {
         super(input);
     }
     
-    @Override
-    public String getSaveIdentifier() {
-        return "contains";
-    }
-    
     public ConditionContains(String input, int matchCount) {
         super(input);
+
         this.matchCount = Math.max(1, matchCount);
     }
-    
+
     @Override
     public Boolean apply(String input) {
         return countMatches(input, getText()) == this.matchCount;
     }
-    
+
+    @Override
+    public ConditionType getConditionType() {
+        return ConditionType.CONTAINS;
+    }
+
     /**
      * Counts the amount of matches in the string
      *

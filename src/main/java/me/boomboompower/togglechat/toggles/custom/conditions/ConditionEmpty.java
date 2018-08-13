@@ -33,12 +33,12 @@ public class ConditionEmpty extends ToggleCondition {
     }
     
     @Override
-    public String getSaveIdentifier() {
-        return "empty";
-    }
-    
-    @Override
     public Boolean apply(String input) {
         return false;
+    }
+
+    @Override
+    public ConditionType getConditionType() {
+        return ConditionType.EMPTY;
     }
 }

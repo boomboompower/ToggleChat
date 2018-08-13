@@ -33,12 +33,12 @@ public class ConditionEquals extends ToggleCondition {
     }
     
     @Override
-    public String getSaveIdentifier() {
-        return "equals";
-    }
-    
-    @Override
     public Boolean apply(String input) {
         return input.equals(getText());
+    }
+
+    @Override
+    public ConditionType getConditionType() {
+        return ConditionType.EQUALS;
     }
 }

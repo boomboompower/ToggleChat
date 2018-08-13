@@ -17,8 +17,11 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
     
     @Getter
     @Setter
-    private boolean enabled = true; /** Enabled/Disabled */
-    
+    private boolean enabled = true;
+
+    @Getter
+    private boolean dirty; // If true, this will be saved on the next save request
+
     private String togglename; // The name of the toggle
     
     private LinkedList<ToggleCondition> conditions; // The conditions of the toggle
@@ -96,6 +99,8 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
      * @param condition the condition to add
      */
     public void _addCondition(ToggleCondition condition) {
+        markDirty();
+
         this.conditions.add(condition);
     }
     
@@ -114,6 +119,8 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
      * @param comments the comments of the file
      */
     public TypeCustom _setComments(LinkedList<String> comments) {
+        markDirty();
+
         this.comments = comments;
         
         return this;
@@ -127,5 +134,23 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
      */
     private LinkedList<ToggleCondition> asList(ToggleCondition... conditions) {
         return new LinkedList<>(Arrays.asList(conditions));
+    }
+
+    /**
+     * Indicates that this toggle has been modified and requires saving.
+     *
+     * When this is true, the save file will be overwritten with the new contents.
+     */
+    public void markDirty() {
+        this.dirty = true;
+    }
+
+    /**
+     * When this toggle is saved, it will no longer require saving (until it is modified again)
+     *
+     * We'll disable the save trigger
+     */
+    public void clean() {
+        this.dirty = false;
     }
 }

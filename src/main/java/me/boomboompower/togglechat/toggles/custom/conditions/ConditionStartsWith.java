@@ -31,14 +31,14 @@ public class ConditionStartsWith extends ToggleCondition {
     public ConditionStartsWith(String input) {
         super(input);
     }
-    
-    @Override
-    public String getSaveIdentifier() {
-        return "startsWith";
-    }
-    
+
     @Override
     public Boolean apply(String input) {
         return input.startsWith(getText());
+    }
+
+    @Override
+    public ConditionType getConditionType() {
+        return ConditionType.STARTSWITH;
     }
 }

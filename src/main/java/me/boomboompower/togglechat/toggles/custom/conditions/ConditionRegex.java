@@ -49,16 +49,16 @@ public class ConditionRegex extends ToggleCondition {
     }
     
     @Override
-    public String getSaveIdentifier() {
-        return "regex";
-    }
-    
-    @Override
     public Boolean apply(String input) {
         if (isEmpty(input) || this.pattern == null) {
             return false;
         }
         
         return this.pattern.matcher(input).matches();
+    }
+
+    @Override
+    public ConditionType getConditionType() {
+        return ConditionType.REGEX;
     }
 }

@@ -96,6 +96,8 @@ public class ConfigLoader {
         if (this.flagged) {
             this.customToggleDir = new File(directory, "custom");
         }
+
+        addToSaving(this); // M  o  d  e  r  n
     }
 
     public void loadToggles() {
@@ -295,6 +297,8 @@ public class ConfigLoader {
             }
 
             for (TypeCustom custom : customs) {
+                custom.clean(); // Hasn't been modified. Doesn't need saving
+
                 ToggleBase.addToggle(custom);
             }
         } catch (Exception ex) {
@@ -325,106 +329,17 @@ public class ConfigLoader {
         }
     }
 
-    public void loadModernUtils() {
-        if (!this.modernGuiFile.exists()) {
-            saveModernUtils();
-            return;
-        }
-        
-        // Set to true if an exception occurs whilst loading
-        boolean failed = false;
-        
-        try {
-            FileReader fileReader = new FileReader(this.modernGuiFile);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            StringBuilder builder = new StringBuilder();
-        
-            List<String> lines = bufferedReader.lines().collect(Collectors.toList());
-        
-            if (lines.isEmpty()) {
-                return;
-            }
-        
-            for (String s : lines) {
-                builder.append(s);
-            }
-    
-            this.modernJson = new BetterJsonObject(builder.toString().trim());
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        
-            failed = true;
-        } finally {
-            // Make sure it was read without errors
-            if (!failed) {
-                for (Object o : this.locations) {
-                    Class<?> clazz = o.getClass();
-                
-                    for (Field f : clazz.getDeclaredFields()) {
-                        if (f.isAnnotationPresent(Memes.class)) {
-                            f.setAccessible(true);
-                        
-                            try {
-                                String saveId = f.getAnnotation(Memes.class).saveId();
-                            
-                                if (saveId.trim().isEmpty()) {
-                                    saveId = f.getName();
-                                }
-                            
-                                if (!this.modernJson.has(saveId)) {
-                                    continue;
-                                }
-                                
-                                f.set(o, this.modernJson.getGsonData().fromJson(this.modernJson.get(saveId), f.getType()));
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                System.err.println("Failed to load settings for field " + f.getName() + " in " + clazz.getName());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public void saveModernUtils() {
-        if (this.locations.isEmpty()) {
-            return;
-        }
-    
-        for (Object o : this.locations) {
-            Class<?> clazz = o.getClass();
-        
-            for (Field f : clazz.getDeclaredFields()) {
-                f.setAccessible(true);
-                if (f.isAnnotationPresent(Memes.class)) {
-                    try {
-                        if (f.get(o) == null) {
-                            continue;
-                        }
-                    
-                        String saveId = f.getAnnotation(Memes.class).saveId();
-                    
-                        if (saveId.isEmpty()) {
-                            saveId = f.getName();
-                        }
-    
-                        this.modernJson.getData().add(saveId, this.modernJson.getGsonData().toJsonTree(f.get(o), f.getType()));
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        System.err.println("Failed to save settings for field " + f.getName() + " in " + clazz.getName());
-                    }
-                }
-            }
-        }
-        this.modernJson.writeToFile(this.modernGuiFile);
-    }
-
     public void saveSingle(TypeCustom base) {
+        if (!base.isDirty()) {
+            return;
+        }
+
+        System.out.println("Saving " + base.getName());
+
         try {
             File file = new File(this.customToggleDir, base.getName().toLowerCase() + ".txt");
             FileWriter writer = new FileWriter(file);
-    
+
             if (!base._getComments().isEmpty()) {
                 for (String s : base._getComments()) {
                     writer.append(s).append(System.lineSeparator());
@@ -445,20 +360,117 @@ public class ConfigLoader {
                 writer.append("// equalsIgnoreCase(string)    Equals \"string\" not case-sensitive").append(System.lineSeparator());
                 writer.append("// regex(regex)                Regex matches the input").append(System.lineSeparator());
             }
-    
+
             writer.append("").append(System.lineSeparator());
 
             for (ToggleCondition condition : base._getConditions()) {
                 if (!(condition instanceof ConditionEmpty)) {
-                    writer.append(base.getName()).append(" : ").append(condition.getSaveIdentifier()).append("(").append(condition.getText()).append(")").append(System.lineSeparator());
+                    writer.append(base.getName()).append(" : ").append(condition.getConditionType().getDisplayText()).append("(").append(condition.getText()).append(")").append(System.lineSeparator());
                 }
             }
             writer.close();
         } catch (Exception ex) {
             log("Failed to save custom toggle: \"%s\"!", base.getName());
         }
+
+        base.clean();
     }
-    
+
+    public void loadModernUtils() {
+        if (!this.modernGuiFile.exists()) {
+            saveModernUtils();
+            return;
+        }
+
+        // Set to true if an exception occurs whilst loading
+        boolean failed = false;
+
+        try {
+            FileReader fileReader = new FileReader(this.modernGuiFile);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            StringBuilder builder = new StringBuilder();
+
+            List<String> lines = bufferedReader.lines().collect(Collectors.toList());
+
+            if (lines.isEmpty()) {
+                return;
+            }
+
+            for (String s : lines) {
+                builder.append(s);
+            }
+
+            this.modernJson = new BetterJsonObject(builder.toString().trim());
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+
+            failed = true;
+        } finally {
+            // Make sure it was read without errors
+            if (!failed) {
+                for (Object o : this.locations) {
+                    Class<?> clazz = o.getClass();
+
+                    for (Field f : clazz.getDeclaredFields()) {
+                        if (f.isAnnotationPresent(Memes.class)) {
+                            f.setAccessible(true);
+
+                            try {
+                                String saveId = f.getAnnotation(Memes.class).saveId();
+
+                                if (saveId.trim().isEmpty()) {
+                                    saveId = f.getName();
+                                }
+
+                                if (!this.modernJson.has(saveId)) {
+                                    continue;
+                                }
+
+                                f.set(o, this.modernJson.getGsonData().fromJson(this.modernJson.get(saveId), f.getType()));
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                System.err.println("Failed to load settings for field " + f.getName() + " in " + clazz.getName());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void saveModernUtils() {
+        if (this.locations.isEmpty()) {
+            return;
+        }
+
+        for (Object o : this.locations) {
+            Class<?> clazz = o.getClass();
+
+            for (Field f : clazz.getDeclaredFields()) {
+                f.setAccessible(true);
+                if (f.isAnnotationPresent(Memes.class)) {
+                    try {
+                        if (f.get(o) == null) {
+                            continue;
+                        }
+
+                        String saveId = f.getAnnotation(Memes.class).saveId();
+
+                        if (saveId.isEmpty()) {
+                            saveId = f.getName();
+                        }
+
+                        this.modernJson.getData().add(saveId, this.modernJson.getGsonData().toJsonTree(f.get(o), f.getType()));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        System.err.println("Failed to save settings for field " + f.getName() + " in " + clazz.getName());
+                    }
+                }
+            }
+        }
+        this.modernJson.writeToFile(this.modernGuiFile);
+    }
+
     public void addToSaving(Object o) {
         if (o == null) {
             throw new IllegalArgumentException("Save cannot be null");

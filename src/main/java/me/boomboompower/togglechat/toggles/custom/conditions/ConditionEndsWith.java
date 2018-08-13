@@ -33,12 +33,12 @@ public class ConditionEndsWith extends ToggleCondition {
     }
     
     @Override
-    public String getSaveIdentifier() {
-        return "endsWith";
-    }
-    
-    @Override
     public Boolean apply(String input) {
         return input.endsWith(getText());
+    }
+
+    @Override
+    public ConditionType getConditionType() {
+        return ConditionType.ENDSWITH;
     }
 }

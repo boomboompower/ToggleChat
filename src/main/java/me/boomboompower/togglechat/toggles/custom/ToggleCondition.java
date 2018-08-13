@@ -19,8 +19,6 @@ package me.boomboompower.togglechat.toggles.custom;
 
 import me.boomboompower.togglechat.toggles.custom.conditions.*;
 
-import java.util.List;
-
 /**
  * A class used to load conditions, based of one something similar created by OrangeMarshall Used
  * with permission.
@@ -29,21 +27,15 @@ import java.util.List;
  * @version 1.0
  */
 public abstract class ToggleCondition implements Function<String, Boolean> {
-    
-    private String name;
-    private String text;
+
+    private final String text;
     
     public ToggleCondition(String input) {
         this.text = input;
     }
-    
-    /**
-     * The text that will be used to identify this condition in the save files
-     *
-     * @return the save id
-     */
-    public abstract String getSaveIdentifier();
-    
+
+    public abstract ConditionType getConditionType();
+
     /**
      * The text that was used to create this condition
      *
@@ -52,7 +44,7 @@ public abstract class ToggleCondition implements Function<String, Boolean> {
     public final String getText() {
         return this.text;
     }
-    
+
     /**
      * Gets a ToggleCondition from the given line, will return a empty condition if invalid
      *
@@ -63,37 +55,36 @@ public abstract class ToggleCondition implements Function<String, Boolean> {
         if (isEmpty(input)) {
             return new ConditionEmpty();
         }
-        
+
         String condName = input.substring(0, input.indexOf("(")).toLowerCase();
-        String[] arguments = input.substring(input.indexOf("(") + 1, input.lastIndexOf(")"))
-            .split(",");
+        String[] arguments = input.substring(input.indexOf("(") + 1, input.lastIndexOf(")")).split(",");
         try {
-            switch (condName.toLowerCase()) {
-                case "startswith":
+            ConditionType type = ConditionType.tryParse(condName);
+
+            switch (type) {
+                case STARTSWITH:
                     return new ConditionStartsWith(arguments[0]);
-                case "endswith":
+                case ENDSWITH:
                     return new ConditionEndsWith(arguments[0]);
-                case "equals":
+                case EQUALS:
                     return new ConditionEquals(arguments[0]);
-                case "equalsignorecase":
+                case EQUALSIGNORECASE:
                     return new ConditionEqualsIgnoreCase(arguments[0]);
-                case "contains":
+                case CONTAINS:
                     if (arguments.length == 1) {
                         return new ConditionContains(arguments[0]);
                     }
                     return new ConditionContains(arguments[0], parseInt(arguments[1]));
-                case "regex":
+                case REGEX:
                     return new ConditionRegex(arguments[0]);
             }
         } catch (Exception ex) {
-            System.err.println(String
-                .format("[ToggleCondition] Failed to load custom toggle: Input = [ \"%s\" ]",
-                    input));
+            System.err.println(String.format("[ToggleCondition] Failed to load custom toggle: Input = [ \"%s\" ]", input));
         }
         // If there is an issue, we'll return nothing
         return new ConditionEmpty();
     }
-    
+
     /**
      * Makes sure the string is not null or empty
      *
@@ -115,7 +106,7 @@ public abstract class ToggleCondition implements Function<String, Boolean> {
             if (!isEmpty(input)) {
                 return Integer.parseInt(input);
             }
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
         }
         return 1;
     }
@@ -151,5 +142,66 @@ public abstract class ToggleCondition implements Function<String, Boolean> {
     @Override
     public String toString() {
         return getText();
+    }
+
+    /**
+     * Stores information about each {@link ToggleCondition}. Used in saving & loading.
+     *
+     * Can be used to gain more information about a ToggleCondition
+     */
+    public enum ConditionType {
+        CONTAINS("contains", "Triggers if the text contains this message a certain amount of times"),
+        STARTSWITH("startsWith", "Triggers if the text starts with this message"),
+        ENDSWITH("endsWith", "Triggers if the text ends with this message"),
+        EQUALS("equals", "Triggers if the text equals this message **Case-sensitive"),
+        EQUALSIGNORECASE("equalsIgnoreCase", "Triggers if the text equals this message **Case insensitive"),
+        REGEX("regex", "Triggers if the chat message matches this regex"),
+        EMPTY("empty", "Never triggers");
+
+        private String displayText;
+        private String description;
+
+        private ConditionType(String display, String description) {
+            this.displayText = display;
+            this.description = description;
+        }
+
+        /**
+         * Returns the text used in saving and loading (How it will appear)
+         *
+         * @return the text that will be used in saving & loading
+         */
+        public String getDisplayText() {
+            return this.displayText;
+        }
+
+        public String getDescription() {
+            return this.description;
+        }
+
+        /**
+         * Attempts to find a toggle matching the string input.
+         * This method will never have a null response or throw an error.
+         *
+         * @param in the text to search
+         * @return the {@link ConditionType} for the text, or {@link #EMPTY} if nothhing is found
+         */
+        public static ConditionType tryParse(String in) {
+            if (in == null || in.isEmpty()) {
+                return ConditionType.EMPTY;
+            }
+
+            for (ConditionType type : values()) {
+                if (type == ConditionType.EMPTY) {
+                    continue;
+                }
+
+                if (type.name().equalsIgnoreCase(in)) {
+                    return type;
+                }
+            }
+
+            return ConditionType.EMPTY;
+        }
     }
 }
