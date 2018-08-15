@@ -171,7 +171,8 @@ public class ConfigLoader {
                 BufferedReader reader = new BufferedReader(new FileReader(this.whitelistFile));
 
                 for (String s : reader.lines().collect(Collectors.toList())) {
-                    if (s != null && s.toCharArray().length <= 16 && !s.contains(" ")) { // We don't want to load something that is over 16 characters, or has spaces in it!
+                    // Don't load something that is empty, greater than 16 characters, or has spaces
+                    if (s != null && !s.isEmpty() && s.length() <= 16 && !s.contains(" ")) {
                         this.whitelist.add(s);
                     }
                 }
