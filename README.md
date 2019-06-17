@@ -13,6 +13,9 @@
 * /toggle - *Command alias*
 * /tc - *Command alias*
 
+## Downloads
+Are located on the [Releases](https://github.com/boomboompower/ToggleChat/releases) tab
+
 ## Forum Thread
 [Can be found here](https://hypixel.net/threads/997547/)
 
