@@ -1,7 +1,5 @@
 # Hypixel ToggleChat Mod
-Version 3.0
-
-## Media
+#### Version 3.0
 
 ## Features
 * Eighteen different chat toggles for ultimate chat supremacy
@@ -18,8 +16,10 @@ Version 3.0
 ## Forum Thread
 [Can be found here](https://hypixel.net/threads/997547/)
 
-## Video
-[![Showcase](https://img.youtube.com/vi/YHewCQE668A/hqdefault.jpg)](https://youtu.be/YHewCQE668A)
+## Media
+![Main Menu](https://i.imgur.com/CEfiZm3.png "Main GUI")
+
+![Main Menu](https://i.imgur.com/QuGLB5G.png "Whitelist GUI")
 
 ## Credits
-The original version of this mod was initially based off 2Pi's ChatToggler mod
+The original version of this mod was initially based off [2Pi's ChatToggler mod](https://hypixel.net/threads/970975/)
