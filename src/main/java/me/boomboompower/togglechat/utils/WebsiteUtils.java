@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2018 boomboompower
+ *     Copyright (C) 2019 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -22,7 +22,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import lombok.Getter;
+
 import me.boomboompower.togglechat.ToggleChatMod;
 
 import net.minecraft.client.Minecraft;
@@ -158,6 +163,7 @@ public class WebsiteUtils {
                 int currentVersion = formatVersion(ToggleChatMod.VERSION);
                 int latestVersion = object.has("latest-version") ? formatVersion(
                     object.get("latest-version").getAsString()) : -1;
+
                 if (currentVersion < latestVersion && latestVersion > 0) {
                     this.needsUpdate = true;
                     this.updateVersion =
@@ -296,20 +302,25 @@ public class WebsiteUtils {
     }
     
     /**
-     * Strips all character that are not digits in the version input, this is a quick solution to
-     * update checking. Will probably not be used in newer versions
-     *
-     * @param input the verision input
-     * @return an integer for the string, or 0 if empty
+     * Calculates a version for the given input
      */
     private int formatVersion(String input) {
-        StringBuilder builder = new StringBuilder();
+        List<Character> chars = new ArrayList<>();
         for (char c : input.toCharArray()) {
             if (Character.isDigit(c)) {
-                builder.append(c);
+                chars.add(c);
             }
         }
-        return builder.toString().trim().isEmpty() ? 0 : Integer.valueOf(builder.toString().trim());
+
+        Collections.reverse(chars);
+
+        int total = 0;
+
+        for (int i = 0; i < chars.size(); i++) {
+            total += chars.get(i) * (10 * i);
+        }
+
+        return total;
     }
     
     // Handle message sending

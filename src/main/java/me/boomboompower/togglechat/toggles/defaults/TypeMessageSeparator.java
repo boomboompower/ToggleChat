@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2018 boomboompower
+ *     Copyright (C) 2019 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -47,7 +47,13 @@ public class TypeMessageSeparator extends ToggleBase {
      * @return the final text
      */
     public String editMessage(String formattedText) {
-        if (formattedText.contains("--")) {
+        if (formattedText.contains("▬▬")) {
+            formattedText = formattedText
+                .replace("▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬", "")
+                .replace("▬▬", "");
+            return formattedText;
+        }
+        if (formattedText.contains("---")) {
             formattedText = formattedText
                 .replace("----------------------------------------------------\n", "");
             return formattedText.replace("--\n", "").replace("\n--", "").replace("--", "");

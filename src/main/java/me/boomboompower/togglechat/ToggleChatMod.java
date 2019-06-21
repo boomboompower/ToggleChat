@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2018 boomboompower
+ *     Copyright (C) 2019 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -38,17 +38,17 @@ import java.util.Arrays;
 
 @Mod(modid = ToggleChatMod.MODID, version = ToggleChatMod.VERSION, acceptedMinecraftVersions = "*")
 public class ToggleChatMod {
-    
+
     public static final String MODID = "togglechatmod";
-    public static final String VERSION = "2.5.5";
-    
+    public static final String VERSION = "3.1.0";
+
     private WebsiteUtils websiteUtils;
     private ConfigLoader configLoader;
     private BlurModHandler blurModHandler;
-    
+
     @Mod.Instance
     private static ToggleChatMod instance;
-    
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         ModMetadata data = event.getModMetadata();
@@ -56,41 +56,41 @@ public class ToggleChatMod {
         data.name = ChatColor.GOLD + "ToggleChat";
         data.authorList.addAll(Arrays.asList("boomboompower", "OrangeMarshall", "tterrag1098"));
         data.description = "Use " + ChatColor.BLUE + "/tc" + ChatColor.RESET + " to get started! " + ChatColor.GRAY
-                + "|" + ChatColor.RESET + " Made with " + ChatColor.LIGHT_PURPLE + "<3" + ChatColor.RESET + " by boomboompower";
-        
+            + "|" + ChatColor.RESET + " Made with " + ChatColor.LIGHT_PURPLE + "<3" + ChatColor.RESET + " by boomboompower";
+
         data.url = "https://hypixel.net/threads/997547";
-        
+
         // These are the greatest people, shower them with praise and good fortune!
         data.credits = "2Pi for the idea, OrangeMarshall for help with CustomToggles and tterrag1098 for the gui blur code";
-        
+
         this.websiteUtils = new WebsiteUtils("ToggleChat");
         this.configLoader = new ConfigLoader(this,
             "mods" + File.separator + "togglechat" + File.separator + "mc" + File.separator);
 //        this.configLoader = new ConfigLoader(this, "mods" + File.separator + "togglechat" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId() + File.separator);
         this.blurModHandler = new BlurModHandler(this).preInit(event);
     }
-    
+
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         ToggleBase.remake();
-        
+
         MinecraftForge.EVENT_BUS.register(new ToggleEvents(this));
         ClientCommandHandler.instance.registerCommand(new ToggleCommand());
-        
+
         Minecraft.getMinecraft().addScheduledTask(() -> this.websiteUtils.begin());
     }
-    
+
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         if (this.websiteUtils.isFlagged()) {
             this.configLoader.loadCustomToggles();
         }
-        
+
         this.configLoader.loadToggles();
         this.configLoader.loadWhitelist();
         this.configLoader.loadModernUtils();
     }
-    
+
     /**
      * Getter for our config loader, used for saving
      *
@@ -99,7 +99,7 @@ public class ToggleChatMod {
     public ConfigLoader getConfigLoader() {
         return this.configLoader;
     }
-    
+
     /**
      * Getter for our websiteutils, used for update checking
      *
@@ -108,7 +108,7 @@ public class ToggleChatMod {
     public WebsiteUtils getWebsiteUtils() {
         return this.websiteUtils;
     }
-    
+
     /**
      * Getter for the blur mod handler, used for advanced customization
      *
@@ -117,7 +117,7 @@ public class ToggleChatMod {
     public BlurModHandler getBlurModHandler() {
         return this.blurModHandler;
     }
-    
+
     /**
      * Getter for this instance
      *
