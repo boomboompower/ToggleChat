@@ -25,7 +25,6 @@ import java.util.Map.Entry;
 import lombok.Getter;
 import lombok.Setter;
 
-import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.toggles.custom.ICustomToggle;
 import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 import me.boomboompower.togglechat.toggles.sorting.ToggleBaseComparator;
@@ -112,8 +111,6 @@ public abstract class ToggleBase {
         addToggle(new TypeFriendRequests());
         
         sortMap(toggles);
-
-        inheritFavourites(ToggleChatMod.getInstance().getConfigLoader().getFavourites());
     }
     
     /**
@@ -253,7 +250,7 @@ public abstract class ToggleBase {
         return new LinkedList<>(Arrays.asList(entry));
     }
 
-    private static void inheritFavourites(ArrayList<String> favourites) {
+    public static void inheritFavourites(ArrayList<String> favourites) {
         for (String f : favourites) {
             ToggleBase toggle = getToggle(f);
 

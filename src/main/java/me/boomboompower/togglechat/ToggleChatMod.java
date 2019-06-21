@@ -89,6 +89,8 @@ public class ToggleChatMod {
         this.configLoader.loadToggles();
         this.configLoader.loadWhitelist();
         this.configLoader.loadModernUtils();
+
+        ToggleBase.inheritFavourites(this.configLoader.getFavourites());
     }
 
     /**
