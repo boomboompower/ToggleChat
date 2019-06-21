@@ -22,7 +22,7 @@ import me.boomboompower.togglechat.config.ConfigLoader;
 import me.boomboompower.togglechat.gui.modern.blur.BlurModHandler;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 import me.boomboompower.togglechat.utils.ChatColor;
-import me.boomboompower.togglechat.utils.WebsiteUtils;
+import me.boomboompower.togglechat.updates.UpdateCore;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -42,7 +42,7 @@ public class ToggleChatMod {
     public static final String MODID = "togglechatmod";
     public static final String VERSION = "3.1.0";
 
-    private WebsiteUtils websiteUtils;
+    private UpdateCore websiteUtils;
     private ConfigLoader configLoader;
     private BlurModHandler blurModHandler;
 
@@ -63,7 +63,7 @@ public class ToggleChatMod {
         // These are the greatest people, shower them with praise and good fortune!
         data.credits = "2Pi for the idea, OrangeMarshall for help with CustomToggles and tterrag1098 for the gui blur code";
 
-        this.websiteUtils = new WebsiteUtils("ToggleChat");
+        this.websiteUtils = new UpdateCore("ToggleChat");
         this.configLoader = new ConfigLoader(this,
             "mods" + File.separator + "togglechat" + File.separator + "mc" + File.separator);
 //        this.configLoader = new ConfigLoader(this, "mods" + File.separator + "togglechat" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId() + File.separator);
@@ -105,7 +105,7 @@ public class ToggleChatMod {
      *
      * @return the website utils
      */
-    public WebsiteUtils getWebsiteUtils() {
+    public UpdateCore getWebsiteUtils() {
         return this.websiteUtils;
     }
 

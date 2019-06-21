@@ -15,20 +15,17 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.utils;
+package me.boomboompower.togglechat.updates;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import lombok.Getter;
 
 import me.boomboompower.togglechat.ToggleChatMod;
+import me.boomboompower.togglechat.utils.ChatColor;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.event.ClickEvent;
@@ -52,9 +49,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * WebsiteUtils, an UpdateChecker created by boomboompower, using json loading
  *
  * @author boomboompower
- * @version 3.1
+ * @version 3.5
  */
-public class WebsiteUtils {
+public class UpdateCore {
     
     private Minecraft mc = Minecraft.getMinecraft(); // The Minecraft instance
     private AtomicInteger threadNumber = new AtomicInteger(0); // The current ThreadCount
@@ -71,7 +68,7 @@ public class WebsiteUtils {
     
     @Getter
     private boolean isDisabled = false; // Is the mod disabled
-    
+
     @Getter
     private boolean flagged;
     
@@ -87,16 +84,16 @@ public class WebsiteUtils {
     private ScheduledFuture<?> modSettingsChecker;
     
     private final String modName;
-    private final String sessionId;
-    
+
     private final String BASE_LINK = "https://gist.githubusercontent.com/boomboompower/13db9d92bc86ec49229956f1ddd7c13f/raw";
+
+    // The version checking system
+    private final VersionComparator versionComparator = new VersionComparator();
     
-    public WebsiteUtils(String modName) {
+    public UpdateCore(String modName) {
         MinecraftForge.EVENT_BUS.register(this);
         
         this.modName = modName;
-        this.sessionId = Minecraft.getMinecraft().getSession().getProfile().getId().toString();
-        this.flagged = System.currentTimeMillis() > 1514120431673L;
     }
     
     /**
@@ -119,7 +116,7 @@ public class WebsiteUtils {
                     return;
                 }
                 
-                String message = rawWithAgent(this.BASE_LINK + "/" + this.sessionId + ".json");
+                String message = rawWithAgent(this.BASE_LINK);
                 JsonObject object = new JsonParser().parse(message).getAsJsonObject();
                 
                 if (object.has("success") && !object.get("success").getAsBoolean()) {
@@ -159,12 +156,12 @@ public class WebsiteUtils {
                 if (object.has("updateurl")) {
                     this.updateUrl = object.get("updateurl").getAsString();
                 }
-                
-                int currentVersion = formatVersion(ToggleChatMod.VERSION);
-                int latestVersion = object.has("latest-version") ? formatVersion(
-                    object.get("latest-version").getAsString()) : -1;
 
-                if (currentVersion < latestVersion && latestVersion > 0) {
+                String retrievedVersion = object.has("latest-version") ? object.get("latest-version").getAsString() : ToggleChatMod.VERSION;
+
+                int result = this.versionComparator.compare(retrievedVersion, ToggleChatMod.VERSION);
+
+                if (result > 0) {
                     this.needsUpdate = true;
                     this.updateVersion =
                         object.has("latest-version") ? object.get("latest-version").getAsString()
@@ -183,7 +180,7 @@ public class WebsiteUtils {
                             this.updateMessage = update;
                         }
                     }
-                } else if (currentVersion > latestVersion && latestVersion > 0) {
+                } else if (result < 0) {
                     this.higherVersion = true;
                 } else {
                     this.needsUpdate = false;
@@ -301,33 +298,11 @@ public class WebsiteUtils {
         }
     }
     
-    /**
-     * Calculates a version for the given input
-     */
-    private int formatVersion(String input) {
-        List<Character> chars = new ArrayList<>();
-        for (char c : input.toCharArray()) {
-            if (Character.isDigit(c)) {
-                chars.add(c);
-            }
-        }
-
-        Collections.reverse(chars);
-
-        int total = 0;
-
-        for (int i = 0; i < chars.size(); i++) {
-            total += chars.get(i) * (10 * i);
-        }
-
-        return total;
-    }
-    
     // Handle message sending
     
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onJoin(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        WebsiteUtils utils = ToggleChatMod.getInstance().getWebsiteUtils();
+        UpdateCore utils = ToggleChatMod.getInstance().getWebsiteUtils();
     
         if (utils.isDisabled()) {
             return;
