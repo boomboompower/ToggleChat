@@ -62,6 +62,10 @@ public class ModernButton extends Gui {
     private boolean visible;
 
     @Getter
+    @Setter
+    private boolean favourite;
+
+    @Getter
     private boolean hovered;
 
     @Getter
@@ -149,6 +153,11 @@ public class ModernButton extends Gui {
             } else if (this.hovered) {
                 j = 16777120;
             }
+
+            if (this.enabled && this.favourite) {
+                fontrenderer.drawString("\u2726", this.xPosition + this.width - fontrenderer.getStringWidth("\u2726") - 4, this.yPosition + ((fontrenderer.FONT_HEIGHT / 2) + 2), Color.ORANGE.getRGB());
+            }
+
             fontrenderer.drawString(this.displayString, (this.xPosition + this.width / 2 - fontrenderer.getStringWidth(this.displayString) / 2), this.yPosition + (this.height - 8) / 2, j, modern);
         }
     }

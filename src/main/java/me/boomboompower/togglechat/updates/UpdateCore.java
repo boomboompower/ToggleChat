@@ -70,7 +70,7 @@ public class UpdateCore {
     private boolean isDisabled = false; // Is the mod disabled
 
     @Getter
-    private boolean flagged;
+    private boolean flagged = true;
     
     private LinkedList<String> updateMessage = new LinkedList<>(); // A list of messages to send to the player
     private boolean hasSeenHigherMessage = false; // true if the user recieve a message for having a newer release

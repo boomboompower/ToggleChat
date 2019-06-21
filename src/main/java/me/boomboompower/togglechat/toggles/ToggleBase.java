@@ -17,13 +17,18 @@
 
 package me.boomboompower.togglechat.toggles;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.toggles.custom.ICustomToggle;
 import me.boomboompower.togglechat.toggles.custom.TypeCustom;
-import me.boomboompower.togglechat.toggles.custom.ToggleBaseComparator;
+import me.boomboompower.togglechat.toggles.sorting.ToggleBaseComparator;
 import me.boomboompower.togglechat.toggles.defaults.*;
 
 import java.util.Arrays;
@@ -42,13 +47,17 @@ import java.util.regex.Pattern;
 public abstract class ToggleBase {
     
     private static final ToggleBaseComparator comparator = new ToggleBaseComparator();
-    
+
     /* Name | ToggleBase */
     private static final LinkedHashMap<String, ToggleBase> toggles = new LinkedHashMap<>();
     
     /* Name | TypeCustom */
     private static final LinkedHashMap<String, ToggleBase> custom = new LinkedHashMap<>();
-    
+
+    @Getter
+    @Setter
+    private boolean favourite;
+
     /**
      * Default constructor for ToggleBase
      */
@@ -103,6 +112,8 @@ public abstract class ToggleBase {
         addToggle(new TypeFriendRequests());
         
         sortMap(toggles);
+
+        inheritFavourites(ToggleChatMod.getInstance().getConfigLoader().getFavourites());
     }
     
     /**
@@ -241,7 +252,17 @@ public abstract class ToggleBase {
     public final <T> LinkedList<T> asLinked(T... entry) {
         return new LinkedList<>(Arrays.asList(entry));
     }
-    
+
+    private static void inheritFavourites(ArrayList<String> favourites) {
+        for (String f : favourites) {
+            ToggleBase toggle = getToggle(f);
+
+            if (toggle != null) {
+                toggle.setFavourite(true);
+            }
+        }
+    }
+
     /**
      * Checks if the message contains something without being case-sensitive
      *

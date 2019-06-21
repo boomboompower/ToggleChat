@@ -41,10 +41,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ConfigLoader {
-    
+
     // All the places we'll save and load at
     private final List<Object> locations = new ArrayList<>();
-    
+
     @Getter
     private File toggleFile;
 
@@ -77,7 +77,12 @@ public class ConfigLoader {
     @Getter
     @Memes
     private boolean modernTextbox = true;
-    
+
+    @Getter
+    @Setter
+    @Memes(saveId = "favourites")
+    private ArrayList<String> favourites = new ArrayList<>();
+
     @Getter
     private LinkedList<String> whitelist = new LinkedList<>();
 
@@ -138,7 +143,7 @@ public class ConfigLoader {
             if (this.locations.isEmpty()) {
                 return;
             }
-            
+
             if (!this.toggleFile.getParentFile().exists()) {
                 this.toggleFile.getParentFile().mkdirs();
             }
@@ -183,18 +188,18 @@ public class ConfigLoader {
     }
 
     public void saveWhitelist() {
-       try {
-           FileWriter e = new FileWriter(this.whitelistFile);
+        try {
+            FileWriter e = new FileWriter(this.whitelistFile);
 
-           for (String s : this.whitelist) {
-               e.write(s + System.lineSeparator());
-           }
+            for (String s : this.whitelist) {
+                e.write(s + System.lineSeparator());
+            }
 
-           e.close();
-       } catch (Exception ex) {
-           log("Could not save whitelist.");
-           ex.printStackTrace();
-       }
+            e.close();
+        } catch (Exception ex) {
+            log("Could not save whitelist.");
+            ex.printStackTrace();
+        }
     }
 
     public void loadCustomToggles() {
@@ -241,7 +246,7 @@ public class ConfigLoader {
                     try {
                         FileReader fileReader = new FileReader(file);
                         BufferedReader reader = new BufferedReader(fileReader);
-                        
+
                         LinkedList<String> comments = new LinkedList<>();
                         LinkedList<String> lines = new LinkedList<>();
 
@@ -476,13 +481,13 @@ public class ConfigLoader {
         if (o == null) {
             throw new IllegalArgumentException("Save cannot be null");
         }
-        
+
         // Test if the class actually has any fields
         if (o.getClass().getDeclaredFields().length > 0) {
-            
+
             // Loop through all fields
             for (Field f : o.getClass().getDeclaredFields()) {
-                
+
                 // Check if a field has a save annotation, if so, add it to our saves
                 if (f.isAnnotationPresent(Memes.class)) {
                     this.locations.add(o);

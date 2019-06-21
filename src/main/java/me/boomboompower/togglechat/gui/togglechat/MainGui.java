@@ -43,10 +43,11 @@ public class MainGui extends ModernGui {
     //        + 21
     //        + 45
     //        + 69
-    
+
+    private boolean favouritesChanged = false;
     private boolean nobuttons = false;
     private boolean changed = false;
-    
+
     private int pages;
     private int pageNumber;
     
@@ -76,6 +77,9 @@ public class MainGui extends ModernGui {
                     if (baseType instanceof ICustomToggle) {
                         button = button.setEnabledColor(new Color(100, 88, 192, 75)).setDisabledColor(new Color(67, 67, 133, 75));
                     }
+
+                    button.setFavourite(baseType.isFavourite());
+
                     this.buttonList.add(button);
                     position[0] += 24;
                 });
@@ -159,14 +163,13 @@ public class MainGui extends ModernGui {
         
         // Make sure the id is 0 to prevent other buttons being pressed
         if (button.getId() == 0) {
-            for (ToggleBase base : ToggleBase.getToggles().values()) {
-                if (base.getIdString().equals(button.getButtonId())) {
-                    base.setEnabled(!base.isEnabled());
-                    button
-                        .setText(String.format(base.getDisplayName(), getStatus(base.isEnabled())));
-                    this.changed = true;
-                    break;
-                }
+            if (button.hasButtonData()) {
+                ToggleBase base = button.getButtonData();
+
+                base.setEnabled(!base.isEnabled());
+                button.setText(String.format(base.getDisplayName(), getStatus(base.isEnabled())));
+
+                this.changed = true;
             }
         }
     }
@@ -174,15 +177,23 @@ public class MainGui extends ModernGui {
     @Override
     public void rightClicked(ModernButton button) {
         if (this.mod.getWebsiteUtils().isFlagged()) {
-            for (ToggleBase base : ToggleBase.getToggles().values()) {
-                if (base instanceof TypeCustom) {
-                    TypeCustom custom = (TypeCustom) base;
-                    if (custom.getIdString().equals(button.getButtonId())) {
-                        this.mc.displayGuiScreen(new CustomToggleModify(this, custom));
-                        break;
-                    }
-                }
+            if (!button.hasButtonData()) {
+                return;
             }
+
+            ToggleBase base = button.getButtonData();
+
+            base.setFavourite(!base.isFavourite());
+            button.setFavourite(base.isFavourite());
+
+            this.favouritesChanged = true;
+
+//            if (base instanceof TypeCustom) {
+//                TypeCustom custom = (TypeCustom) base;
+//                if (custom.getIdString().equals(button.getButtonId())) {
+//                    this.mc.displayGuiScreen(new CustomToggleModify(this, custom));
+//                }
+//            }
         }
     }
     
@@ -190,6 +201,18 @@ public class MainGui extends ModernGui {
     public void onGuiClosed() {
         if (this.changed) {
             this.mod.getConfigLoader().saveToggles();
+        }
+
+        if (this.favouritesChanged) {
+            this.mod.getConfigLoader().getFavourites().clear();
+
+            for (ToggleBase t : ToggleBase.getToggles().values()) {
+                if (t.isFavourite()) {
+                    this.mod.getConfigLoader().getFavourites().add(t.getIdString());
+                }
+            }
+
+            this.mod.getConfigLoader().saveModernUtils();
         }
     }
     
