@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2018 boomboompower
+ *     Copyright (C) 2019 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -239,9 +239,7 @@ public abstract class ToggleBase {
      */
     @SafeVarargs
     public final <T> LinkedList<T> asLinked(T... entry) {
-        LinkedList<T> list = new LinkedList<>();
-        list.addAll(Arrays.asList(entry));
-        return list;
+        return new LinkedList<>(Arrays.asList(entry));
     }
     
     /**
