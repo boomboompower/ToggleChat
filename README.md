@@ -24,5 +24,7 @@ Are located on the [Releases](https://github.com/boomboompower/ToggleChat/releas
 
 ![Main Menu](https://i.imgur.com/QuGLB5G.png "Whitelist GUI")
 
+![Main Menu GIF](https://i.imgur.com/ASJVkhE.gif "Main GUI GIF")
+
 ## Credits
 The original version of this mod was initially based off [2Pi's ChatToggler mod](https://hypixel.net/threads/970975/)
