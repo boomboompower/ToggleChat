@@ -18,16 +18,38 @@
 package me.boomboompower.togglechat.toggles.sorting;
 
 import java.util.Comparator;
+import java.util.Map.Entry;
 
-import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
-public class UserSortedComparator implements Comparator<ToggleBase> {
+import org.apache.commons.lang3.text.WordUtils;
 
-    private final ToggleChatMod mod = ToggleChatMod.getInstance();
+public enum SortType {
 
-    @Override
-    public int compare(ToggleBase first, ToggleBase second) {
-        return 0;
+    NORMAL,
+    FAVOURITES;
+
+    private final String displayName;
+    private final Comparator<Entry<String, ToggleBase>> sorter;
+
+    SortType() {
+        this(null, null);
+    }
+
+    SortType(Comparator<Entry<String, ToggleBase>> sorter) {
+        this(null, sorter);
+    }
+
+    SortType(String displayName, Comparator<Entry<String, ToggleBase>> sorter) {
+        this.displayName = displayName == null ? WordUtils.capitalize(name().toLowerCase()) : displayName;
+        this.sorter = sorter == null ? new ToggleBaseComparator() : sorter;
+    }
+
+    public Comparator<Entry<String, ToggleBase>> getSorter() {
+        return this.sorter;
+    }
+
+    public String getDisplayName() {
+        return this.displayName;
     }
 }
