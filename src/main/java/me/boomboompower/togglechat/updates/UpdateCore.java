@@ -85,7 +85,7 @@ public class UpdateCore {
     
     private final String modName;
 
-    private final String BASE_LINK = "https://gist.githubusercontent.com/boomboompower/13db9d92bc86ec49229956f1ddd7c13f/raw";
+    private final String BASE_LINK = "http://do-you-like.me/i/mods/togglechat.json";
 
     // The version checking system
     private final VersionComparator versionComparator = new VersionComparator();
@@ -118,10 +118,6 @@ public class UpdateCore {
                 
                 String message = rawWithAgent(this.BASE_LINK);
                 JsonObject object = new JsonParser().parse(message).getAsJsonObject();
-                
-                if (object.has("success") && !object.get("success").getAsBoolean()) {
-                    object = new JsonParser().parse(rawWithAgent(this.BASE_LINK)).getAsJsonObject();
-                }
                 
                 // Test two, this is to test the normal url
                 if (object.has("success") && !object.get("success").getAsBoolean()) {

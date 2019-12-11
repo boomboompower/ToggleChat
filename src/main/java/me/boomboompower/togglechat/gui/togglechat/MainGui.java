@@ -19,6 +19,9 @@ package me.boomboompower.togglechat.gui.togglechat;
 
 import java.io.IOException;
 
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import me.boomboompower.togglechat.gui.custom.CustomToggleMain;
 import me.boomboompower.togglechat.gui.custom.CustomToggleModify;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
@@ -31,6 +34,8 @@ import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 import me.boomboompower.togglechat.toggles.dummy.ToggleDummyMessage;
 
 import java.awt.*;
+import me.boomboompower.togglechat.toggles.sorting.SortType;
+import me.boomboompower.togglechat.utils.ChatColor;
 import org.lwjgl.input.Mouse;
 
 public class MainGui extends ModernGui {
@@ -50,6 +55,11 @@ public class MainGui extends ModernGui {
 
     private int pages;
     private int pageNumber;
+
+    private boolean favouring;
+    private int favouriteCount;
+
+    private static SortType sortType = SortType.getCurrentSortType();
     
     public MainGui(int pageNumber) {
         this.pageNumber = pageNumber;
@@ -67,8 +77,10 @@ public class MainGui extends ModernGui {
             }
         
             final int[] position = {this.height / 2 - 75};
+
+            Comparator<ToggleBase> sorter = sortType.getSorter();
         
-            ToggleBase.getToggles().values().stream().skip((this.pageNumber - 1) * 7).limit(7)
+            ToggleBase.getToggles().values().stream().sorted(sorter).skip((this.pageNumber - 1) * 7).limit(7)
                 .forEach(baseType -> {
                     ModernButton button = new ModernButton(0, baseType.getIdString(),
                         this.width / 2 - 75, position[0], 150, 20,
@@ -84,23 +96,34 @@ public class MainGui extends ModernGui {
                     position[0] += 24;
                 });
         
-            this.buttonList.add(new ModernButton(1, "inbuilt_whitelist", 5, this.height - 25, 90, 20, "Whitelist"));
+            this.buttonList.add(new ModernButton(1, "inbuilt_whitelist", 5, this.height - 49, 90, 20, "Whitelist"));
             this.buttonList.add(new ModernButton(2, "inbuilt_back", this.width - 114, this.height - 25, 50, 20, "\u21E6").setEnabled(this.pageNumber > 1));
             this.buttonList.add(new ModernButton(3, "inbuilt_next", this.width - 60, this.height - 25, 50, 20, "\u21E8").setEnabled(this.pageNumber != pages));
-            this.buttonList.add(new ModernButton(4, "inbuilt_theme", 5, this.height - 49, 90, 20, "Theme Modifier")
+            this.buttonList.add(new ModernButton(4, "inbuilt_theme", 5, 5, 20, 20, "\u2699")
                 .setButtonData(
                     // Let them know what this button does
                     new ToggleDummyMessage(
-                        "Opens the glorious",
+                        "Opens the",
                         "&bTheme Modifier&r,",
-                        "allowing nearly full",
-                        "customization for the",
+                        "containing options which",
+                        "customization the",
                         "look of the mod"
                     )
                 ));
+
+            String sort_string = "Sort: " + ChatColor.AQUA + sortType.getDisplayName();
+
+            this.buttonList.add(new ModernButton(5, "inbuilt_sort", 5, this.height - 25, 90, 20, sort_string).setButtonData(
+                // Let them know what this button does
+                new ToggleDummyMessage(
+                    "Changes the sorting",
+                    "the toggles so some,",
+                    "are easier to find"
+                )
+            ));
         
             if (this.mod.getWebsiteUtils().isFlagged()) {
-                this.buttonList.add(new ModernButton(5, this.width - 114, this.height - 49, 104, 20,
+                this.buttonList.add(new ModernButton(6, this.width - 114, this.height - 49, 104, 20,
                     "Custom Toggles").setEnabledColor(new Color(100, 88, 192, 75))
                     .setDisabledColor(new Color(67, 67, 133, 75)).setButtonData(
                         new ToggleDummyMessage(
@@ -121,9 +144,28 @@ public class MainGui extends ModernGui {
         }
         this.nobuttons = true;
     }
-    
+
+    @Override
     public void drawScreen(int x, int y, float ticks) {
         drawDefaultBackground();
+
+        if (this.favouring) {
+            this.favouriteCount += 2;
+
+            if (this.favouriteCount > 2550) {
+                this.favouriteCount = 2550;
+
+                this.favouring = false;
+            }
+        } else if (this.favouriteCount > 0) {
+            this.favouriteCount -= 1;
+        }
+
+        if (this.favouriteCount > 0) {
+            Color favouriteColor = new Color(255, 170, 0, (int) this.favouriteCount / 10);
+
+            drawString(this.fontRendererObj, "Favourite Added", this.width - this.fontRendererObj.getStringWidth("Favourite Added") - 10, 10, favouriteColor.getRGB());
+        }
         
         if (this.nobuttons) {
             drawCenteredString(this.fontRendererObj, "An issue occured whilst loading ToggleChat!", this.width / 2, this.height / 2 - 50, Color.WHITE.getRGB());
@@ -157,6 +199,11 @@ public class MainGui extends ModernGui {
                 this.mc.displayGuiScreen(new ModernConfigGui(this));
                 return;
             case 5:
+                sortType = SortType.getNextSortType();
+
+                this.mc.displayGuiScreen(new MainGui(this.pageNumber));
+                return;
+            case 6:
                 this.mc.displayGuiScreen(new CustomToggleMain());
                 return;
         }

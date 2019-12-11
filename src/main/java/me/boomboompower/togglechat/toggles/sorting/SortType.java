@@ -18,7 +18,6 @@
 package me.boomboompower.togglechat.toggles.sorting;
 
 import java.util.Comparator;
-import java.util.Map.Entry;
 
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
@@ -26,30 +25,52 @@ import org.apache.commons.lang3.text.WordUtils;
 
 public enum SortType {
 
-    NORMAL,
-    FAVOURITES;
+    ALL("All", null),
+    ALPHABETICAL("Alphabetical", new AlphabeticalComparator()),
+    CUSTOM("Custom", new CustomComparator()),
+    FAVOURITES("Favourite", new FavouriteSortedComparator());
 
     private final String displayName;
-    private final Comparator<Entry<String, ToggleBase>> sorter;
+    private final Comparator<ToggleBase> sorter;
+
+    private static int chosenValue = 0;
 
     SortType() {
         this(null, null);
     }
 
-    SortType(Comparator<Entry<String, ToggleBase>> sorter) {
+    SortType(Comparator<ToggleBase> sorter) {
         this(null, sorter);
     }
 
-    SortType(String displayName, Comparator<Entry<String, ToggleBase>> sorter) {
+    SortType(String displayName, Comparator<ToggleBase> sorter) {
         this.displayName = displayName == null ? WordUtils.capitalize(name().toLowerCase()) : displayName;
-        this.sorter = sorter == null ? new ToggleBaseComparator() : sorter;
+        this.sorter = sorter == null ? new ToggleComparator() : sorter;
     }
 
-    public Comparator<Entry<String, ToggleBase>> getSorter() {
+    public Comparator<ToggleBase> getSorter() {
         return this.sorter;
     }
 
     public String getDisplayName() {
         return this.displayName;
+    }
+
+    public static SortType getCurrentSortType() {
+        return values()[chosenValue];
+    }
+
+    public static SortType getNextSortType() {
+        int nextValue = chosenValue + 1;
+
+        System.out.println("Current: " + chosenValue + " | Next: " + nextValue + " | Length: " + values().length);
+
+        if (nextValue >= values().length) {
+            nextValue = 0;
+        }
+
+        chosenValue = nextValue;
+
+        return values()[nextValue];
     }
 }

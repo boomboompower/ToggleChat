@@ -17,25 +17,32 @@
 
 package me.boomboompower.togglechat.toggles.sorting;
 
+import java.util.Comparator;
+
+import java.util.Map.Entry;
+
+import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
+import net.minecraft.client.Minecraft;
+
 /**
- * Sort by:
- *   -> Favourites
- *   -> String width (Default)
- *
- * If they are both favourites or neither is a favourite, display size will be used
+ * Compare by fontrender length, rather than relying on a linked list
  */
-public class FavouriteSortedComparator extends ToggleComparator {
+public class ToggleComparator implements Comparator<ToggleBase> {
+
+    private final ToggleChatMod mode = ToggleChatMod.getInstance();
+    private final Minecraft mc = Minecraft.getMinecraft();
 
     @Override
     public int compare(ToggleBase firstIn, ToggleBase secondIn) {
-        if (firstIn.isFavourite() && !secondIn.isFavourite()) {
-            return -1;
-        } else if (!firstIn.isFavourite() && secondIn.isFavourite()) {
-            return 0;
-        } else {
-            return compareDefault(firstIn, secondIn);
-        }
+        return compareDefault(firstIn, secondIn);
+    }
+
+    public int compareDefault(ToggleBase firstIn, ToggleBase secondIn) {
+        Integer first = this.mc.fontRendererObj.getStringWidth(firstIn.getDisplayName());
+        Integer second = this.mc.fontRendererObj.getStringWidth(secondIn.getDisplayName());
+
+        return first.compareTo(second);
     }
 }

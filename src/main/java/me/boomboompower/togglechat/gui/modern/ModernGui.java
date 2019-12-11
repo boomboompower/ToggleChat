@@ -205,6 +205,14 @@ public abstract class ModernGui extends GuiScreen {
         }
     }
 
+    /**
+     * Draws multiple lines on the screen
+     *
+     * @param startingX
+     * @param startingY
+     * @param separation
+     * @param lines
+     */
     public void writeInformation(int startingX, int startingY, int separation, String... lines) {
         for (String s : lines) {
             drawCenteredString(this.fontRendererObj, ChatColor.translateAlternateColorCodes('&', s), startingX, startingY, Color.WHITE.getRGB());
@@ -212,16 +220,31 @@ public abstract class ModernGui extends GuiScreen {
         }
     }
 
+    /**
+     * Forge 1.7.10 compatibility. This is how old GUIs would need to be opened.
+     */
     public final void display() {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    /**
+     * Allow the game to open the gui on the next client tick, whilst simultaneously
+     * removing this gui from all subsequent ticks.
+     *
+     * @param event the next client tick event
+     */
     @SubscribeEvent
     public final void onTick(TickEvent.ClientTickEvent event) {
         MinecraftForge.EVENT_BUS.unregister(this);
         Minecraft.getMinecraft().displayGuiScreen(this);
     }
 
+    /**
+     * Simple formatting for a toggled string.
+     *
+     * @param in the status of the toggle
+     * @return a formatted string containing the relevant status to the boolean
+     */
     public static String getStatus(boolean in) {
         return in ? ChatColor.GREEN + "Enabled" : (ToggleChatMod.getInstance().getConfigLoader().isModernButton() ? ChatColor.RED : ChatColor.GRAY) + "Disabled";
     }

@@ -18,21 +18,25 @@
 package me.boomboompower.togglechat.toggles.sorting;
 
 import me.boomboompower.togglechat.toggles.ToggleBase;
+import me.boomboompower.togglechat.toggles.custom.ICustomToggle;
 
 /**
  * Sort by:
- *   -> Favourites
- *   -> String width (Default)
+ *   -> Custom Toggles
+ *   -> String width
  *
- * If they are both favourites or neither is a favourite, display size will be used
+ * If they are both custom toggles or neither is a custom toggle, display size will be used
  */
-public class FavouriteSortedComparator extends ToggleComparator {
+public class CustomComparator extends ToggleComparator {
 
     @Override
     public int compare(ToggleBase firstIn, ToggleBase secondIn) {
-        if (firstIn.isFavourite() && !secondIn.isFavourite()) {
+        boolean isFirstCustom = firstIn instanceof ICustomToggle;
+        boolean isSecondCustom = secondIn instanceof ICustomToggle;
+
+        if (isFirstCustom && !isSecondCustom) {
             return -1;
-        } else if (!firstIn.isFavourite() && secondIn.isFavourite()) {
+        } else if (!isFirstCustom && isSecondCustom) {
             return 0;
         } else {
             return compareDefault(firstIn, secondIn);
