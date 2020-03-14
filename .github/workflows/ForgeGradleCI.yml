@@ -70,7 +70,7 @@ jobs:
         if: success()
         with:
           name: ToggleChat-${{ github.run_id }}
-          path: './build/libs/SkinChangerMod.jar'
+          path: './build/libs/ToggleChat.jar'
 
       - name: Upload Mod Source
         uses: actions/upload-artifact@v1
@@ -78,7 +78,7 @@ jobs:
         if: success()
         with:
           name: ToggleChat-sources-${{ github.run_id }}
-          path: './build/libs/SkinChangerMod-sources.jar'
+          path: './build/libs/ToggleChat-sources.jar'
 
   macOS:
     name: macOS Mod CI
