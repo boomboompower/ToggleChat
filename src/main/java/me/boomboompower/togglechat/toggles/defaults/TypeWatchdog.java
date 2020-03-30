@@ -50,8 +50,8 @@ public class TypeWatchdog extends ToggleBase {
     public LinkedList<String> getDescription() {
         return asLinked(
             "Toggles Watchdog",
-            "Announcements that give",
-            "ban counts.",
+            "Announcements that",
+            "give ban counts.",
             "",
             "This cleans up the chat",
             "whilst you are afk",
