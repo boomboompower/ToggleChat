@@ -2,7 +2,7 @@
 #### Version 3.0
 
 ## Features
-* Eighteen different chat toggles for ultimate chat supremacy
+* Twenty-six different chat toggles for ultimate chat supremacy
 * An inbuilt tutorial and developer api
 * A theme switcher, choose between modern and classic
 * A fancy GUI for toggles
