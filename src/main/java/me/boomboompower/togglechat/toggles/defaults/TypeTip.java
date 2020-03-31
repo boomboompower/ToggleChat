@@ -26,10 +26,10 @@ import java.util.regex.Pattern;
 
 public class TypeTip extends ToggleBase {
 
-    private Pattern manyPlayersTipPattern = Pattern.compile("You tipped (?<players>\\d+) players!");
-    private Pattern gamesTipPattern = Pattern.compile("You tipped (?<players>\\d+) in (?<games>\\d+) different games!");
+    private Pattern manyPlayersTipPattern = Pattern.compile("You tipped (?<players>\\d+) players?!");
+    private Pattern gamesTipPattern = Pattern.compile("You tipped (?<players>\\d+) players? in (?<games>\\d+) different games?!");
     private Pattern onePlayerTipPattern = Pattern.compile("You tipped (?<player>.+) in (?<game>.+)!");
-    private Pattern selfTipPattern = Pattern.compile("You were tipped by (?<players>.+) in the last minute!");
+    private Pattern selfTipPattern = Pattern.compile("You were tipped by (?<players>.+) players? in the last minute!");
 
     @Setter
     @Getter
