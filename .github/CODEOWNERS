@@ -26,3 +26,7 @@
 #
 # Makes @build-owner the owner of any directory with this name
 # build/ @build-owner
+
+src/main/java/me/boomboompower/togglechat/toggles/defaults/TypeGexp.java @SirNapkin1334
+src/main/java/me/boomboompower/togglechat/toggles/defaults/TypeTip.java @SirNapkin1334
+src/main/java/me/boomboompower/togglechat/toggles/defaults/TypeWatchdog.java @SirNapkin1334
