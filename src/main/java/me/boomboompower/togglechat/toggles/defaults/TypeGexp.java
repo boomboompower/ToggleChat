@@ -57,7 +57,7 @@ public class TypeGexp extends ToggleBase {
             "",
             "This cleans up the chat",
             "in Skyblock and The Pit,",
-            "and is good for AFKing."
+            "and is good for AFKing"
         );
     }
 }

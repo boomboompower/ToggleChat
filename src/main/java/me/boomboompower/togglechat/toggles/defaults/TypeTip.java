@@ -29,7 +29,7 @@ public class TypeTip extends ToggleBase {
     private Pattern manyPlayersTipPattern = Pattern.compile("You tipped (?<players>\\d+) players?!");
     private Pattern gamesTipPattern = Pattern.compile("You tipped (?<players>\\d+) players? in (?<games>\\d+) different games?!");
     private Pattern onePlayerTipPattern = Pattern.compile("You tipped (?<player>.+) in (?<game>.+)!");
-    private Pattern selfTipPattern = Pattern.compile("You were tipped by (?<players>.+) players? in the last minute!");
+    private Pattern selfTipPattern = Pattern.compile("You were tipped by (?<players>\\d+) players? in the last minute!");
 
     @Setter
     @Getter
@@ -61,7 +61,7 @@ public class TypeTip extends ToggleBase {
             "",
             "This is good if you",
             "use the AutoTip mod",
-            "or &6MVP&c++&r AutoTip."
+            "or &6MVP&c++&r AutoTip"
         );
     }
 }

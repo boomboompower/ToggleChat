@@ -26,8 +26,10 @@ import java.util.regex.Pattern;
 
 public class TypeWatchdog extends ToggleBase {
     
-    private Pattern watchdogAnnouncementPattern = Pattern.compile(
-        "\n\\[WATCHDOG ANNOUNCEMENT\\]\nWatchdog has banned (?<autoBans>.+) players in the last 7 days\\.\nStaff have banned an additional (?<staffBans>.+) in the last 7 days\\.\nBlacklisted modifications are a bannable offense!\n");
+    private Pattern watchdogOnePattern = Pattern.compile("\\[WATCHDOG ANNOUNCEMENT\\]");
+    private Pattern watchdogTwoPattern = Pattern.compile("Watchdog has banned (?<autoBans>.+) players in the last 7 days\\.");
+    private Pattern watchdogThreePattern = Pattern.compile("Staff have banned an additional (?<staffBans>.+) in the last 7 days\\.");
+    private Pattern watchdogFourPattern = Pattern.compile("Blacklisted modifications are a bannable offense!");
 
     @Setter
     @Getter
@@ -44,14 +46,24 @@ public class TypeWatchdog extends ToggleBase {
     }
     
     @Override
-    public boolean shouldToggle(String message) { return this.watchdogAnnouncementPattern.matcher(message).matches(); }
+    public boolean shouldToggle(String message) {
+        return this.watchdogOnePattern.matcher(message).matches() ||
+                this.watchdogTwoPattern.matcher(message).matches() ||
+                this.watchdogThreePattern.matcher(message).matches() ||
+                this.watchdogFourPattern.matcher(message).matches();
+    }
     
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
             "Toggles Watchdog",
             "Announcements that",
-            "give ban counts.",
+            "give ban counts",
+            "",
+            "&7(Note that this currently",
+            "&7does not remove the leading",
+            "&7and trailing blank chat",
+            "&7messages)",
             "",
             "This cleans up the chat",
             "whilst you are afk",
