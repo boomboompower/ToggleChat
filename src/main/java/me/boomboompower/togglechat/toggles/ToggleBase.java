@@ -93,6 +93,9 @@ public abstract class ToggleBase {
         addToggle(new TypeLeave());
         addToggle(new TypeGuild());
         addToggle(new TypeParty());
+        addToggle(new TypeGexp());
+        addToggle(new TypeTip());
+        addToggle(new TypeWatchdog());
         addToggle(new TypeShout());
         addToggle(new TypePit());
         addToggle(new TypeHousing());
