@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ import me.boomboompower.togglechat.config.ConfigLoader;
 import me.boomboompower.togglechat.gui.modern.blur.BlurModHandler;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 import me.boomboompower.togglechat.utils.ChatColor;
-import me.boomboompower.togglechat.updates.UpdateCore;
+import me.boomboompower.togglechat.updates.WebsiteUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -42,7 +42,7 @@ public class ToggleChatMod {
     public static final String MODID = "togglechatmod";
     public static final String VERSION = "3.1.0";
 
-    private UpdateCore websiteUtils;
+    private WebsiteUtils websiteUtils;
     private ConfigLoader configLoader;
     private BlurModHandler blurModHandler;
 
@@ -54,7 +54,7 @@ public class ToggleChatMod {
         ModMetadata data = event.getModMetadata();
         data.version = VERSION;
         data.name = ChatColor.GOLD + "ToggleChat";
-        data.authorList.addAll(Arrays.asList("boomboompower", "OrangeMarshall", "tterrag1098"));
+        data.authorList.addAll(Arrays.asList("boomboompower", "OrangeMarshall", "tterrag1098", "SirNapkin1334"));
         data.description = "Use " + ChatColor.BLUE + "/tc" + ChatColor.RESET + " to get started! " + ChatColor.GRAY
             + "|" + ChatColor.RESET + " Made with " + ChatColor.LIGHT_PURPLE + "<3" + ChatColor.RESET + " by boomboompower";
 
@@ -63,7 +63,7 @@ public class ToggleChatMod {
         // These are the greatest people, shower them with praise and good fortune!
         data.credits = "2Pi for the idea, OrangeMarshall for help with CustomToggles and tterrag1098 for the gui blur code";
 
-        this.websiteUtils = new UpdateCore("ToggleChat");
+        this.websiteUtils = new WebsiteUtils("ToggleChat");
         this.configLoader = new ConfigLoader(this,
             "mods" + File.separator + "togglechat" + File.separator + "mc" + File.separator);
 //        this.configLoader = new ConfigLoader(this, "mods" + File.separator + "togglechat" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId() + File.separator);
@@ -82,10 +82,7 @@ public class ToggleChatMod {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        if (this.websiteUtils.isFlagged()) {
-            this.configLoader.loadCustomToggles();
-        }
-
+        this.configLoader.loadCustomToggles();
         this.configLoader.loadToggles();
         this.configLoader.loadWhitelist();
         this.configLoader.loadModernUtils();
@@ -107,7 +104,7 @@ public class ToggleChatMod {
      *
      * @return the website utils
      */
-    public UpdateCore getWebsiteUtils() {
+    public WebsiteUtils getWebsiteUtils() {
         return this.websiteUtils;
     }
 

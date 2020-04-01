@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@ import java.util.Map.Entry;
 import lombok.Getter;
 import lombok.Setter;
 
-import me.boomboompower.togglechat.toggles.custom.ICustomToggle;
 import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 import me.boomboompower.togglechat.toggles.sorting.ToggleBaseComparator;
 import me.boomboompower.togglechat.toggles.defaults.*;
@@ -37,19 +36,19 @@ import java.util.regex.Pattern;
 
 /**
  * Created to replace the old ToggleBase class, supports custom toggles.
- *
+ * <p>
  * The best class for static abuse and other non-object-oriented-programming methods
  *
  * @author boomboompower
  * @version 2.4
  */
 public abstract class ToggleBase {
-    
+
     private static final ToggleBaseComparator comparator = new ToggleBaseComparator();
 
     /* Name | ToggleBase */
     private static final LinkedHashMap<String, ToggleBase> toggles = new LinkedHashMap<>();
-    
+
     /* Name | TypeCustom */
     private static final LinkedHashMap<String, ToggleBase> custom = new LinkedHashMap<>();
 
@@ -62,7 +61,7 @@ public abstract class ToggleBase {
      */
     public ToggleBase() {
     }
-    
+
     /**
      * Adds the developers own ToggleBase
      *
@@ -70,9 +69,9 @@ public abstract class ToggleBase {
      */
     public static void addToggle(ToggleBase toggleBase) {
         if (toggleBase != null && toggleBase.getName() != null) {
-            if (toggleBase instanceof ICustomToggle && toggleBase instanceof TypeCustom) {
+            if (toggleBase instanceof TypeCustom) {
                 custom.put(toggleBase.getIdString(), toggleBase);
-                
+
                 // We want to reorder every time a custom one is added, so things added later on will reorder it
                 sortMap(custom);
             } else {
@@ -80,7 +79,7 @@ public abstract class ToggleBase {
             }
         }
     }
-    
+
     /**
      * Clears all the normal toggles and orders them by the size of their unformatted display text.
      * Used at startup
@@ -112,10 +111,10 @@ public abstract class ToggleBase {
         addToggle(new TypeLobbyJoin());
         addToggle(new TypeMessageSeparator());
         addToggle(new TypeFriendRequests());
-        
+
         sortMap(toggles);
     }
-    
+
     /**
      * Gets a toggle by the given name, may return null
      *
@@ -125,7 +124,7 @@ public abstract class ToggleBase {
     public static ToggleBase getToggle(String name) {
         return toggles.getOrDefault(name, null);
     }
-    
+
     /**
      * Checks to see if the registered parsers contains a parser with the given name.
      *
@@ -135,17 +134,17 @@ public abstract class ToggleBase {
     public static boolean hasToggle(String name) {
         return toggles.containsKey(name);
     }
-    
+
     /**
      * Returns the name of the specified ToggleBase
      *
      * @return the name of the specified ToggleBase, cannot be null
      */
     public abstract String getName();
-    
+
     /**
      * Gets the display format for the button. Will be formatted when loaded
-     *
+     * <p>
      * IMPORTANT: IF OVERRIDING DO NOT FORMAT YOUR MESSAGE HERE!!!! Leave it as something like
      * "MyToggle: %s" instead of directly figuring out the value, or the ordering will be wrong.
      *
@@ -154,7 +153,7 @@ public abstract class ToggleBase {
     public String getDisplayName() {
         return getName() + ": %s";
     }
-    
+
     /**
      * Checks the given text to see if it should be toggled
      *
@@ -162,29 +161,29 @@ public abstract class ToggleBase {
      * @return true if the message matches the toggle test
      */
     public abstract boolean shouldToggle(final String message);
-    
+
     /**
      * Checks to see if the given chat is enabled
      *
      * @return true if the player wants to see the given chat
      */
     public abstract boolean isEnabled();
-    
+
     /**
      * Sets the message to be toggled or not. Is used in toggle loading
      *
      * @param enabled used in loading to set the toggled enabled/disabled
      */
     public abstract void setEnabled(boolean enabled);
-    
+
     /**
      * Gets the description of the specified toggle, this will show up in the main toggle gui
      *
      * @return description of the toggle, can be null
      */
     public abstract LinkedList<String> getDescription();
-    
-    
+
+
     /**
      * Should the shouldToggle method use the formatted chat for the regular check?
      *
@@ -193,7 +192,7 @@ public abstract class ToggleBase {
     public boolean useFormattedMessage() {
         return false;
     }
-    
+
     /**
      * Confirms if the toggle has a description returns false if the description is null or empty
      *
@@ -202,7 +201,7 @@ public abstract class ToggleBase {
     public final boolean hasDescription() {
         return getDescription() != null && !getDescription().isEmpty();
     }
-    
+
     /**
      * The id that will be used for this toggle globally, used as an identifier
      *
@@ -211,24 +210,24 @@ public abstract class ToggleBase {
     public final String getIdString() {
         return getName().toLowerCase().replace(" ", "_");
     }
-    
+
     @Override
     public final String toString() {
         String message = "ToggleBase{parsers = ";
-        
+
         if (toggles.isEmpty()) {
             message += "[]";
         } else {
             message += Arrays.toString(toggles.keySet().toArray());
         }
-        
+
         if (!custom.isEmpty()) {
             message += ", custom = " + Arrays.toString(custom.keySet().toArray());
         }
-        
+
         return message + "}";
     }
-    
+
     /**
      * Creates a new temporary HashMap for toggles. this is to prevent HashMap.clear
      *
@@ -240,12 +239,12 @@ public abstract class ToggleBase {
         custom.forEach(newInput::put);
         return newInput;
     }
-    
+
     /**
      * Assistance in linked-list creation
      *
      * @param entry the array by which the list will be backed
-     * @param <T> the class of the objects in the list
+     * @param <T>   the class of the objects in the list
      * @return a list view of the specified array
      */
     @SafeVarargs
@@ -266,15 +265,15 @@ public abstract class ToggleBase {
     /**
      * Checks if the message contains something without being case-sensitive
      *
-     * @param message The message to check
+     * @param message  The message to check
      * @param contains the contents
      * @return true if it contains it
      */
     public final boolean containsIgnoreCase(String message, String contains) {
         return Pattern.compile(Pattern.quote(contains), Pattern.CASE_INSENSITIVE).matcher(message)
-            .find();
+                .find();
     }
-    
+
     /**
      * Used to sort by the displayname of the toggle, so the gui looks neat without having to do it
      * manually
@@ -283,15 +282,15 @@ public abstract class ToggleBase {
      */
     private static void sortMap(LinkedHashMap<String, ToggleBase> map) {
         List<Entry<String, ToggleBase>> list = new LinkedList<>(map.entrySet());
-        
+
         list.sort(comparator);
-        
+
         Map<String, ToggleBase> sortedMap = new LinkedHashMap<>();
-        
+
         for (Entry<String, ToggleBase> entry : list) {
             sortedMap.put(entry.getKey(), entry.getValue());
         }
-        
+
         map.clear();
         map.putAll(sortedMap);
     }

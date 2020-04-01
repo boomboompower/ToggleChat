@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -25,31 +25,31 @@ import me.boomboompower.togglechat.toggles.ToggleBase;
 import java.util.LinkedList;
 
 public class TypeMessages extends ToggleBase {
-    
+
     @Setter
     @Getter
     private boolean enabled = true;
-    
+
     @Override
     public String getName() {
         return "Messages";
     }
-    
+
     @Override
     public boolean shouldToggle(String message) {
         return message.startsWith("To ") || message.startsWith("From ");
     }
-    
+
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-            "Toggles all incoming",
-            "private messages",
-            "or any being sent",
-            "",
-            "These are the formats",
-            "&dFrom &7Player&r: Hello",
-            "&dTo &7Player&r: Hello"
+                "Toggles all incoming",
+                "private messages",
+                "or any being sent",
+                "",
+                "These are the formats",
+                "&dFrom &7Player&r: Hello",
+                "&dTo &7Player&r: Hello"
         );
     }
 }

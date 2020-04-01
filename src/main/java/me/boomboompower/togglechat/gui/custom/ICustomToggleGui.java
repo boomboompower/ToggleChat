@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -23,12 +23,12 @@ import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 /**
  * If a gui extends this, it'll have all modifications from {@link ModernGui} and will require
  * a {@link #getCustomToggle()} method which returns the custom toggle assigned to this gui.
- *
+ * <p>
  * This class is used in a few places throughout the code, its basically just an indicator
  * for some of the other internal gui code which tells them that this class has data they can use.
  */
 public abstract class ICustomToggleGui extends ModernGui {
-    
+
     /**
      * Returns the data assigned to this gui, which can be used in other places
      * in the code (without needing reflection etc)

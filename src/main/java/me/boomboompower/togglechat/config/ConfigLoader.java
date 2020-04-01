@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -46,22 +46,19 @@ public class ConfigLoader {
     private final List<Object> locations = new ArrayList<>();
 
     @Getter
-    private File toggleFile;
+    private final File toggleFile;
 
     @Getter
-    private File whitelistFile;
+    private final File whitelistFile;
 
     @Getter
-    private File modernGuiFile;
+    private final File modernGuiFile;
 
     @Getter
     private File customToggleDir;
 
     private BetterJsonObject toggleJson = new BetterJsonObject();
     private BetterJsonObject modernJson = new BetterJsonObject();
-
-    @Getter
-    private boolean flagged;
 
     @Setter
     @Getter
@@ -84,7 +81,7 @@ public class ConfigLoader {
     private ArrayList<String> favourites = new ArrayList<>();
 
     @Getter
-    private LinkedList<String> whitelist = new LinkedList<>();
+    private final LinkedList<String> whitelist = new LinkedList<>();
 
     public ConfigLoader(ToggleChatMod mod, String directory) {
         File e = new File(directory);
@@ -96,11 +93,6 @@ public class ConfigLoader {
         this.toggleFile = new File(directory + "options.nn");
         this.whitelistFile = new File(directory + "whitelist.nn");
         this.modernGuiFile = new File(directory + "modern.nn");
-        this.flagged = mod.getWebsiteUtils().isFlagged();
-
-        if (this.flagged) {
-            this.customToggleDir = new File(directory, "custom");
-        }
 
         addToSaving(this); // M  o  d  e  r  n
     }
@@ -203,7 +195,7 @@ public class ConfigLoader {
     }
 
     public void loadCustomToggles() {
-        if (!this.flagged || this.customToggleDir == null) {
+        if (this.customToggleDir == null) {
             return;
         }
 
@@ -213,20 +205,9 @@ public class ConfigLoader {
             try {
                 File file = new File(this.customToggleDir, "mytoggle.txt");
                 FileWriter writer = new FileWriter(file);
-                writer.append("// Format").append(System.lineSeparator());
-                writer.append("// ToggleName : <Condition>").append(System.lineSeparator());
-                writer.append("//").append(System.lineSeparator());
-                writer.append("// This feature was created").append(System.lineSeparator());
-                writer.append("// by OrangeMarshall!").append(System.lineSeparator());
-                writer.append("//").append(System.lineSeparator());
-                writer.append("// Possible conditions").append(System.lineSeparator());
-                writer.append("// startsWith(string)          Starts with \"string\"").append(System.lineSeparator());
-                writer.append("// contains(string)            Contains \"string\"").append(System.lineSeparator());
-                writer.append("// contains(string,4)          Contains \"string\" 4 times").append(System.lineSeparator());
-                writer.append("// endsWith(string)            Ends with \"string\"").append(System.lineSeparator());
-                writer.append("// equals(string)              Equals \"string\" case-sensitive").append(System.lineSeparator());
-                writer.append("// equalsIgnoreCase(string)    Equals \"string\" not case-sensitive").append(System.lineSeparator());
-                writer.append("// regex(regex)                Regex matches the input").append(System.lineSeparator());
+
+                writeDefaultValues(writer);
+
                 writer.append("").append(System.lineSeparator());
                 writer.append("MyToggle : startsWith([YOUTUBE] Sk1er)").append(System.lineSeparator());
                 writer.close();
@@ -313,8 +294,25 @@ public class ConfigLoader {
         }
     }
 
+    private void writeDefaultValues(FileWriter writer) throws IOException {
+        writer.append("// Format").append(System.lineSeparator());
+        writer.append("// ToggleName : <Condition>").append(System.lineSeparator());
+        writer.append("//").append(System.lineSeparator());
+        writer.append("// This feature was created").append(System.lineSeparator());
+        writer.append("// by OrangeMarshall!").append(System.lineSeparator());
+        writer.append("//").append(System.lineSeparator());
+        writer.append("// Possible conditions").append(System.lineSeparator());
+        writer.append("// startsWith(string)          Starts with \"string\"").append(System.lineSeparator());
+        writer.append("// contains(string)            Contains \"string\"").append(System.lineSeparator());
+        writer.append("// contains(string,4)          Contains \"string\" 4 times").append(System.lineSeparator());
+        writer.append("// endsWith(string)            Ends with \"string\"").append(System.lineSeparator());
+        writer.append("// equals(string)              Equals \"string\" case-sensitive").append(System.lineSeparator());
+        writer.append("// equalsIgnoreCase(string)    Equals \"string\" not case-sensitive").append(System.lineSeparator());
+        writer.append("// regex(regex)                Regex matches the input").append(System.lineSeparator());
+    }
+
     public void saveCustomToggles() {
-        if (!this.flagged || this.customToggleDir == null) {
+        if (this.customToggleDir == null) {
             return;
         }
 
@@ -351,20 +349,7 @@ public class ConfigLoader {
                     writer.append(s).append(System.lineSeparator());
                 }
             } else {
-                writer.append("// Format").append(System.lineSeparator());
-                writer.append("// ToggleName : <Condition>").append(System.lineSeparator());
-                writer.append("//").append(System.lineSeparator());
-                writer.append("// This feature was created").append(System.lineSeparator());
-                writer.append("// by OrangeMarshall!").append(System.lineSeparator());
-                writer.append("//").append(System.lineSeparator());
-                writer.append("// Possible conditions").append(System.lineSeparator());
-                writer.append("// startsWith(string)          Starts with \"string\"").append(System.lineSeparator());
-                writer.append("// contains(string)            Contains \"string\"").append(System.lineSeparator());
-                writer.append("// contains(string,4)          Contains \"string\" 4 times").append(System.lineSeparator());
-                writer.append("// endsWith(string)            Ends with \"string\"").append(System.lineSeparator());
-                writer.append("// equals(string)              Equals \"string\" case-sensitive").append(System.lineSeparator());
-                writer.append("// equalsIgnoreCase(string)    Equals \"string\" not case-sensitive").append(System.lineSeparator());
-                writer.append("// regex(regex)                Regex matches the input").append(System.lineSeparator());
+                writeDefaultValues(writer);
             }
 
             writer.append("").append(System.lineSeparator());

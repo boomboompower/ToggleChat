@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -29,38 +29,38 @@ import java.util.regex.Pattern;
  * #BringBackSpecChat
  */
 public class TypeSpectator extends ToggleBase {
-    
+
     private Pattern spectatorPattern = Pattern
-        .compile("\\[SPECTATOR] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    
+            .compile("\\[SPECTATOR] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+
     @Setter
     @Getter
     private boolean enabled = true;
-    
+
     @Override
     public String getName() {
         return "Spectator";
     }
-    
+
     @Override
     public boolean shouldToggle(String message) {
         return this.spectatorPattern.matcher(message).matches();
     }
-    
+
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-            "Toggles all spectator",
-            "chat messages",
-            "",
-            "Message format",
-            "&7[SPECTATOR] &7Player&r: Hi",
-            "&7[SPECTATOR] &a[VIP] Player&r: Hi",
-            "&7[SPECTATOR] &b[MVP] Player&r: Hi",
-            "",
-            "Useful to ignore",
-            "post-game chat",
-            "messages"
+                "Toggles all spectator",
+                "chat messages",
+                "",
+                "Message format",
+                "&7[SPECTATOR] &7Player&r: Hi",
+                "&7[SPECTATOR] &a[VIP] Player&r: Hi",
+                "&7[SPECTATOR] &b[MVP] Player&r: Hi",
+                "",
+                "Useful to ignore",
+                "post-game chat",
+                "messages"
         );
     }
 }

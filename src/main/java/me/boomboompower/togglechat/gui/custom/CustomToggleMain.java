@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -26,24 +26,23 @@ import java.awt.*;
  * A hub for all custom toggles, linking all the "Custom Toggle" guis together in one place.
  */
 public class CustomToggleMain extends ModernGui {
-    
+
     @Override
     public void initGui() {
         this.buttonList.add(new ModernButton(0, this.width / 2 - 75, this.height / 2 - 27, 150, 20, "Create a Custom Toggle"));
         this.buttonList.add(new ModernButton(1, this.width / 2 - 75, this.height / 2 - 3, 150, 20, "Modify a Custom Toggle"));
         this.buttonList.add(new ModernButton(2, this.width / 2 - 75, this.height / 2 + 21, 150, 20, "Test a Custom Toggle"));
     }
-    
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        
-        drawCenteredString("The hub of all Custom Toggles", this.width / 2, this.height / 2 - 51,
-            Color.WHITE.getRGB());
-        
+
+        drawCenteredString("The hub of all Custom Toggles", this.width / 2, this.height / 2 - 51, Color.WHITE.getRGB());
+
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
-    
+
     @Override
     public void buttonPressed(ModernButton button) {
         switch (button.getId()) {
@@ -58,7 +57,7 @@ public class CustomToggleMain extends ModernGui {
                 break;
         }
     }
-    
+
     public enum SelectType {
         MODIFY,
         CREATE,

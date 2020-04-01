@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -27,75 +27,75 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TypeEasy extends ToggleBase {
-    
-    private Pattern chatPattern = Pattern
-        .compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    private Pattern guildPattern = Pattern
-        .compile("Guild > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    private Pattern shortGuildPattern = Pattern
-        .compile("G > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    private Pattern partyPattern = Pattern
-        .compile("Party > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    private Pattern shortPartyPattern = Pattern
-        .compile("P > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    private Pattern shoutPattern = Pattern
-        .compile("\\[SHOUT] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    
+
+    private final Pattern chatPattern = Pattern
+            .compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private final Pattern guildPattern = Pattern
+            .compile("Guild > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private final Pattern shortGuildPattern = Pattern
+            .compile("G > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private final Pattern partyPattern = Pattern
+            .compile("Party > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private final Pattern shortPartyPattern = Pattern
+            .compile("P > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private final Pattern shoutPattern = Pattern
+            .compile("\\[SHOUT] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+
     @Setter
     @Getter
     private boolean enabled = true;
-    
+
     @Override
     public String getName() {
         return "Ez messages";
     }
-    
+
     @Override
     public boolean shouldToggle(String message) {
         Matcher chatMatcher = this.chatPattern.matcher(message);
         if (chatMatcher.matches() && containsEasyMessage(chatMatcher.group("message"))) {
             return true;
         }
-        
+
         Matcher guildMatcher = this.guildPattern.matcher(message);
         if (guildMatcher.matches() && containsEasyMessage(guildMatcher.group("message"))) {
             return true;
         }
-        
+
         Matcher partyMatcher = this.partyPattern.matcher(message);
         if (partyMatcher.matches() && containsEasyMessage(partyMatcher.group("message"))) {
             return true;
         }
-        
+
         Matcher shoutMatcher = this.shoutPattern.matcher(message);
         if (shoutMatcher.matches() && containsEasyMessage(shoutMatcher.group("message"))) {
             return true;
         }
-        
+
         Matcher shortGuildMatcher = this.shortGuildPattern.matcher(message);
         if (shortGuildMatcher.matches() && containsEasyMessage(
-            shortGuildMatcher.group("message"))) {
+                shortGuildMatcher.group("message"))) {
             return true;
         }
-        
+
         Matcher shortPartyMatcher = this.shortPartyPattern.matcher(message);
         return shortPartyMatcher.matches() && containsEasyMessage(
-            shortPartyMatcher.group("message"));
-        
+                shortPartyMatcher.group("message"));
+
     }
-    
+
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-            "Removes all \"ez\"",
-            "messages across every",
-            "channel",
-            "",
-            "Finally, freedom from",
-            "the \"ez\" spam!"
+                "Removes all \"ez\"",
+                "messages across every",
+                "channel",
+                "",
+                "Finally, freedom from",
+                "the \"ez\" spam!"
         );
     }
-    
+
     private boolean containsEasyMessage(String input) {
         switch (input) {
             case "Hello everyone! I'm an innocent player who loves everything Hypixel.":
@@ -136,7 +136,7 @@ public class TypeEasy extends ToggleBase {
                 return true;
             default:
                 return false;
-            
+
         }
     }
 }

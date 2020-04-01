@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -25,35 +25,35 @@ import java.util.regex.Pattern;
 
 /**
  * This code was created by OrangeMarshall and used with permission by boomboompower.
- *
+ * <p>
  * Full credit to OrangeMarshall
  *
  * @author OrangeMarshall
  */
 public class ConditionRegex extends ToggleCondition {
-    
+
     private static final String REGEX = "https://regex101.com";
-    
+
     private Pattern pattern;
-    
+
     public ConditionRegex(String input) {
         super(input);
         try {
             this.pattern = Pattern.compile(input);
         } catch (PatternSyntaxException ex) {
             System.out.println(String
-                .format("[ToggleCondition] Invalid Regex: \"%s\", try using %s to fix it!", input,
-                    ConditionRegex.REGEX));
+                    .format("[ToggleCondition] Invalid Regex: \"%s\", try using %s to fix it!", input,
+                            ConditionRegex.REGEX));
             this.pattern = null;
         }
     }
-    
+
     @Override
     public Boolean apply(String input) {
         if (isEmpty(input) || this.pattern == null) {
             return false;
         }
-        
+
         return this.pattern.matcher(input).matches();
     }
 

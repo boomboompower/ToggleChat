@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -25,41 +25,41 @@ import me.boomboompower.togglechat.toggles.ToggleBase;
 import java.util.LinkedList;
 
 public class TypeColored extends ToggleBase {
-    
+
     @Setter
     @Getter
     private boolean enabled = true;
-    
+
     @Override
     public String getName() {
         return "Colored team";
     }
-    
+
     @Override
     public boolean shouldToggle(String message) {
         return message.startsWith("[BLUE] ") ||
-            message.startsWith("[YELLOW] ") ||
-            message.startsWith("[GREEN] ") ||
-            message.startsWith("[RED] ") ||
-            message.startsWith("[WHITE] ") ||
-            message.startsWith("[PURPLE] "
-            );
+                message.startsWith("[YELLOW] ") ||
+                message.startsWith("[GREEN] ") ||
+                message.startsWith("[RED] ") ||
+                message.startsWith("[WHITE] ") ||
+                message.startsWith("[PURPLE] "
+                );
     }
-    
+
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-            "Disables colored chat",
-            "messages in multiple games",
-            "",
-            "Toggles things like these",
-            "&e[YELLOW]",
-            "&d[PURPLE]",
-            "&a[GREEN]",
-            "&c[RED]",
-            "",
-            "This is good for games",
-            "such as paintball"
+                "Disables colored chat",
+                "messages in multiple games",
+                "",
+                "Toggles things like these",
+                "&e[YELLOW]",
+                "&d[PURPLE]",
+                "&a[GREEN]",
+                "&c[RED]",
+                "",
+                "This is good for games",
+                "such as paintball"
         );
     }
 }

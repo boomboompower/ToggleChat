@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -26,40 +26,40 @@ import lombok.Setter;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 public class TypePit extends ToggleBase {
-    
+
     private final Pattern pitPattern = Pattern
-        .compile("(?<number>\\[\\d+]) (?<rank>\\[.+?] )?(?<player>\\S{1,16}): (?<message>.*)");
-    
+            .compile("(?<number>\\[\\d+]) (?<rank>\\[.+?] )?(?<player>\\S{1,16}): (?<message>.*)");
+
     @Setter
     @Getter
     private boolean enabled = true;
-    
+
     @Override
     public String getName() {
         return "The_Pit";
     }
-    
+
     @Override
     public String getDisplayName() {
         return "The Pit: %s";
     }
-    
+
     @Override
     public boolean shouldToggle(String message) {
         return this.pitPattern.matcher(message).matches();
     }
-    
+
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-            "Toggles all pit",
-            "chat from players, regardless of",
-            "their rank. (Supports numbers over 120)",
-            "",
-            "Message format",
-            "&7[1] Player&r: Hi",
-            "&7[&5&b90&7] &a[VIP] Player&r: Hi",
-            "&7[&b&l120&7] &b[MVP] Player&r: Hi"
+                "Toggles all pit",
+                "chat from players, regardless of",
+                "their rank. (Supports numbers over 120)",
+                "",
+                "Message format",
+                "&7[1] Player&r: Hi",
+                "&7[&5&b90&7] &a[VIP] Player&r: Hi",
+                "&7[&b&l120&7] &b[MVP] Player&r: Hi"
         );
     }
 }

@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,10 +17,8 @@
 
 package me.boomboompower.togglechat.gui.custom;
 
-import java.util.TreeMap;
 import me.boomboompower.togglechat.gui.modern.ModernButton;
 import me.boomboompower.togglechat.gui.modern.ModernGui;
-import me.boomboompower.togglechat.toggles.custom.ToggleCondition;
 import me.boomboompower.togglechat.toggles.custom.TypeCustom;
 import me.boomboompower.togglechat.utils.ChatColor;
 
@@ -29,9 +27,9 @@ import java.io.IOException;
 
 public class CustomToggleModify extends ICustomToggleGui {
     
-    private TypeCustom custom;
+    private final TypeCustom custom;
     
-    private ModernGui previous;
+    private final ModernGui previous;
     
     public CustomToggleModify(ModernGui previous, TypeCustom customIn) {
         this.previous = previous;

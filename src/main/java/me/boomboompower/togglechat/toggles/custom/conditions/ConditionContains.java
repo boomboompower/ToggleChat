@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -21,19 +21,19 @@ import me.boomboompower.togglechat.toggles.custom.ToggleCondition;
 
 /**
  * This code was created by OrangeMarshall and used with permission by boomboompower.
- *
+ * <p>
  * Full credit to OrangeMarshall
  *
  * @author OrangeMarshall
  */
 public class ConditionContains extends ToggleCondition {
-    
+
     private int matchCount = 1;
-    
+
     public ConditionContains(String input) {
         super(input);
     }
-    
+
     public ConditionContains(String input, int matchCount) {
         super(input);
 
@@ -61,10 +61,10 @@ public class ConditionContains extends ToggleCondition {
         if (isEmpty(str) || isEmpty(sub)) {
             return 0;
         }
-        
+
         int count = 0;
         int idx = 0;
-        
+
         while ((idx = str.indexOf(sub, idx)) != -1) {
             count++;
             idx += sub.length();

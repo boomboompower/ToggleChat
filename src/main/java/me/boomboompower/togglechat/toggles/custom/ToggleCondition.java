@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ import me.boomboompower.togglechat.toggles.custom.conditions.*;
 public abstract class ToggleCondition implements Function<String, Boolean> {
 
     private final String text;
-    
+
     public ToggleCondition(String input) {
         this.text = input;
     }
@@ -94,7 +94,7 @@ public abstract class ToggleCondition implements Function<String, Boolean> {
     protected static boolean isEmpty(String input) {
         return input == null || input.isEmpty();
     }
-    
+
     /**
      * Parses a number silently, no error will be thrown here
      *
@@ -110,7 +110,7 @@ public abstract class ToggleCondition implements Function<String, Boolean> {
         }
         return 1;
     }
-    
+
     /**
      * Checks to see if the line give is a valid format and is supported by this version of
      * conditioning
@@ -120,9 +120,9 @@ public abstract class ToggleCondition implements Function<String, Boolean> {
      */
     public static boolean isValidFormat(String line) {
         return !line.startsWith("//") && !line.isEmpty() && line.contains(" : ") && !(get(
-            line.split(" : ")[1]) instanceof ConditionEmpty);
+                line.split(" : ")[1]) instanceof ConditionEmpty);
     }
-    
+
     /**
      * A getter for the format name of the given line. This will return null if the line is not
      * in the valid format for the condition system
@@ -137,7 +137,7 @@ public abstract class ToggleCondition implements Function<String, Boolean> {
             return null;
         }
     }
-    
+
     // Use our text
     @Override
     public String toString() {
@@ -146,7 +146,7 @@ public abstract class ToggleCondition implements Function<String, Boolean> {
 
     /**
      * Stores information about each {@link ToggleCondition}. Used in saving & loading.
-     *
+     * <p>
      * Can be used to gain more information about a ToggleCondition
      */
     public enum ConditionType {
@@ -158,8 +158,8 @@ public abstract class ToggleCondition implements Function<String, Boolean> {
         REGEX("regex", "Triggers if the chat message matches this regex"),
         EMPTY("empty", "Never triggers");
 
-        private String displayText;
-        private String description;
+        private final String displayText;
+        private final String description;
 
         private ConditionType(String display, String description) {
             this.displayText = display;

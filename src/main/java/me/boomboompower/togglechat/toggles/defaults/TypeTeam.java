@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -26,37 +26,37 @@ import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeTeam extends ToggleBase {
-    
-    private Pattern teamPattern = Pattern
-        .compile("\\[TEAM] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    
+
+    private final Pattern teamPattern = Pattern
+            .compile("\\[TEAM] (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+
     @Setter
     @Getter
     private boolean enabled = true;
-    
+
     @Override
     public String getName() {
         return "Team";
     }
-    
+
     @Override
     public boolean shouldToggle(String message) {
         return this.teamPattern.matcher(message).matches();
     }
-    
+
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-            "Toggles all",
-            "incoming team messages",
-            "",
-            "Message format:",
-            "&9[TEAM] &7Player&r: Hi",
-            "&9[TEAM] &a[VIP] Player&r: Hi",
-            "&9[TEAM] &b[MVP] Player&r: Hi",
-            "",
-            "Useful for large",
-            "team games"
+                "Toggles all",
+                "incoming team messages",
+                "",
+                "Message format:",
+                "&9[TEAM] &7Player&r: Hi",
+                "&9[TEAM] &a[VIP] Player&r: Hi",
+                "&9[TEAM] &b[MVP] Player&r: Hi",
+                "",
+                "Useful for large",
+                "team games"
         );
     }
 }

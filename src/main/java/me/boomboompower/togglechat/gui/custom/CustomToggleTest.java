@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -38,9 +38,9 @@ public class CustomToggleTest extends ModernGui {
 
     private ModernTextBox text;
 
-    private TypeCustom custom;
+    private final TypeCustom custom;
     
-    private ModernGui previous;
+    private final ModernGui previous;
 
     public CustomToggleTest(ModernGui previous, TypeCustom customIn) {
         this.previous = previous;
@@ -83,10 +83,8 @@ public class CustomToggleTest extends ModernGui {
     
     @Override
     public void buttonPressed(ModernButton button) {
-        switch (button.getId()) {
-            case 0:
-                this.mc.displayGuiScreen(this.previous);
-                break;
+        if (button.getId() == 0) {
+            this.mc.displayGuiScreen(this.previous);
         }
     }
     

@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -22,7 +22,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import lombok.Getter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.utils.ChatColor;
@@ -39,144 +48,162 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import org.apache.commons.io.IOUtils;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.LinkedList;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * WebsiteUtils, an UpdateChecker created by boomboompower, using json loading
  *
  * @author boomboompower
- * @version 3.5
+ * @version 3.1
+ *
+ * @deprecated to be removed in a future release
  */
-public class UpdateCore {
-    
-    private Minecraft mc = Minecraft.getMinecraft(); // The Minecraft instance
-    private AtomicInteger threadNumber = new AtomicInteger(0); // The current ThreadCount
-    
-    private ExecutorService POOL = Executors.newFixedThreadPool(8, r -> new Thread(r, String
-        .format("WebsiteUtils Thread %s",
-            this.threadNumber.incrementAndGet()))); // Async task scheduler
-    private ScheduledExecutorService RUNNABLE_POOL = Executors.newScheduledThreadPool(2,
-        r -> new Thread(r, "WebsiteUtils Thread " + this.threadNumber
-            .incrementAndGet())); // Repeating task scheduler
-    
-    @Getter
+@SuppressWarnings("DeprecatedIsStillUsed")
+@Deprecated
+public class WebsiteUtils {
+
+    @Deprecated
+    private final Minecraft mc = Minecraft.getMinecraft(); // The Minecraft instance
+    @Deprecated
+    private final AtomicInteger threadNumber = new AtomicInteger(0); // The current ThreadCount
+
+    @Deprecated
+    private final ExecutorService POOL = Executors.newFixedThreadPool(8, r -> new Thread(r, String
+            .format("WebsiteUtils Thread %s",
+                    this.threadNumber.incrementAndGet()))); // Async task scheduler
+
+    @Deprecated
+    private final ScheduledExecutorService RUNNABLE_POOL = Executors.newScheduledThreadPool(2,
+            r -> new Thread(r, "WebsiteUtils Thread " + this.threadNumber
+                    .incrementAndGet())); // Repeating task scheduler
+
+    @Deprecated
     private boolean isRunning = false; // Is the checker running?
-    
-    @Getter
+    @Deprecated
     private boolean isDisabled = false; // Is the mod disabled
 
-    @Getter
-    private boolean flagged = true;
-    
+    @Deprecated
     private LinkedList<String> updateMessage = new LinkedList<>(); // A list of messages to send to the player
-    private boolean hasSeenHigherMessage = false; // true if the user recieve a message for having a newer release
-    private boolean showUpdateSymbol = true; // true if a symbol should be shown before every update message
+    @Deprecated
+    private boolean hasSeenHigherMessage = false; // true if the user should be alerted for having a newer release
+    @Deprecated
+    private boolean showUpdateSymbol = true; // true if a arrow should be shown before every update message
+    @Deprecated
     private boolean showUpdateHeader = true; // true if the updater should show "this mod is out of date"
-    private boolean higherVersion = false;
-    private boolean needsUpdate = false;
-    private String updateVersion = "0";
-    private String updateUrl = "https://hypixel.net/threads/997547";
-    
-    private ScheduledFuture<?> modSettingsChecker;
-    
-    private final String modName;
+    @Deprecated
+    private boolean higherVersion = false; // Is this mod newer than the latest released version?
+    @Deprecated
+    private boolean needsUpdate = false; // Is this mod an older version than the latest released version?
+    @Deprecated
+    private String updateVersion = "0"; // The newest version availible to download
 
-    private final String BASE_LINK = "http://do-you-like.me/i/mods/togglechat.json";
+    @Deprecated
+    private ScheduledFuture<?> modVersionChecker; // The repeating runnable for version checking
 
-    // The version checking system
-    private final VersionComparator versionComparator = new VersionComparator();
-    
-    public UpdateCore(String modName) {
+    @Deprecated
+    private final String modName; // The id of this mod
+    @Deprecated
+    private final String sessionId; // The uuid of the player
+
+    // The base link of the site, this can be changed whenever required
+    @Deprecated
+    private final String BASE_LINK = "https://do-you-like.me/i/mods/togglechat.json";
+
+    @Deprecated
+    public WebsiteUtils(String modName) {
         MinecraftForge.EVENT_BUS.register(this);
-        
+
         this.modName = modName;
+        this.sessionId = Minecraft.getMinecraft().getSession().getProfile().getId().toString();
     }
-    
+
     /**
-     * Begins the WebsiteUtils updater service, starts all repeating threads, this can only be used
-     * if the service is not already running.
+     * Begins the WebsiteUtils updater service, starts all repeating threads,
+     * this can only be used if the service is not already running.
      *
      * @throws IllegalStateException if the service is already running
      */
+    @Deprecated
     public void begin() {
         if (!this.isRunning) {
             this.isRunning = true;
-            
+
             /*
-             * The checker updates every 5 minutes!
+             * All threads run every 5 minutes
              */
-            
-            this.modSettingsChecker = schedule(() -> {
+
+            this.modVersionChecker = schedule(() -> {
                 // Disable the update checker
                 if (this.isDisabled) {
                     return;
                 }
-                
-                String message = rawWithAgent(this.BASE_LINK);
-                JsonObject object = new JsonParser().parse(message).getAsJsonObject();
-                
-                // Test two, this is to test the normal url
+
+                // Below is a prime example of unreadable, bad code. This will be rewritten in a later release.
+
+                JsonObject object = new JsonParser().parse(rawWithAgent(this.BASE_LINK + "/" + this.sessionId + ".json")).getAsJsonObject();
+
                 if (object.has("success") && !object.get("success").getAsBoolean()) {
+
+                    object = new JsonParser().parse(rawWithAgent(this.BASE_LINK)).getAsJsonObject();
+                }
+
+                // Test two, this is to test the new grabbed url
+                if (object.has("success") && !object.get("success").getAsBoolean()) {
+                    // Test if the json has a fallback url
+                    if (object.has("url")) {
+                        System.out.println("Updater found a fallback url, using it... " + object.get("url").getAsString());
+                        object = new JsonParser().parse(rawWithAgent(object.get("url").getAsString())).getAsJsonObject();
+                        object.addProperty("generatedFallbackValue", true);
+                    } else {
+                        // Disabling because a second error occured while grabbing the normal url
+                        disableMod();
+                        return;
+                    }
+                }
+
+                if (object.has("success") && !object.get("success").getAsBoolean() && object.has("generatedFallbackValue")) {
+                    System.out.println("Fallback url failed. Halting the updater");
+                    disableMod();
                     return;
                 }
-                
+
                 // Disables the mod
                 if (!object.has("enabled") || !object.get("enabled").getAsBoolean()) {
                     disableMod();
                 }
-                
-                // Sets the flag mode
-                if (object.has("forceflag")) {
-                    this.flagged = object.get("forceflag").getAsBoolean();
-                }
-                
-                // Tells the mod to use the update symbol or not
+
+                // Tells the mod to use the updater symbol or not
                 if (object.has("showupdatesymbol")) {
                     this.showUpdateSymbol = object.get("showupdatesymbol").getAsBoolean();
                 }
-                
-                // Sets the seenhigherversion variable, used to display "You are using a newer version" messages
+
+                // Sets the seenhigherversion variable
                 if (object.has("seenhigherversion")) {
                     this.hasSeenHigherMessage = object.get("seenhigherversion").getAsBoolean();
                 }
-                
-                // True if the mod should show "This mod is out of date" before anything else
+
                 if (object.has("updateheader")) {
                     this.showUpdateHeader = object.get("updateheader").getAsBoolean();
                 }
-                
-                if (object.has("updateurl")) {
-                    this.updateUrl = object.get("updateurl").getAsString();
-                }
 
-                String retrievedVersion = object.has("latest-version") ? object.get("latest-version").getAsString() : ToggleChatMod.VERSION;
+                int currentVersion = formatVersion(ToggleChatMod.VERSION);
+                int latestVersion = object.has("latest-version") ? formatVersion(object.get("latest-version").getAsString()) : -1;
 
-                int result = this.versionComparator.compare(retrievedVersion, ToggleChatMod.VERSION);
-
-                if (result > 0) {
+                if (currentVersion < latestVersion && latestVersion > 0) {
                     this.needsUpdate = true;
-                    this.updateVersion =
-                        object.has("latest-version") ? object.get("latest-version").getAsString()
-                            : "-1";
-                    
-                    if (object.has("update-message") && object.get("update-message")
-                        .isJsonArray()) {
+                    this.updateVersion = object.has("latest-version") ? object.get("latest-version").getAsString() : "-1";
+
+                    if (object.has("update-message") && object.get("update-message").isJsonArray()) {
                         LinkedList<String> update = new LinkedList<>();
                         JsonArray array = object.get("update-message").getAsJsonArray();
-                        
+
                         for (JsonElement element : array) {
                             update.add(element.getAsString());
                         }
-                        
+
                         if (!update.isEmpty()) {
                             this.updateMessage = update;
                         }
                     }
-                } else if (result < 0) {
+                } else if (currentVersion > latestVersion && latestVersion > 0) {
                     this.higherVersion = true;
                 } else {
                     this.needsUpdate = false;
@@ -187,89 +214,120 @@ public class UpdateCore {
             throw new IllegalStateException("WebsiteUtils is already running!");
         }
     }
-    
+
     /**
      * Stops the WebsiteUtils service. Cancels all running tasks and erases the variables
      *
      * @throws IllegalStateException if the service is not running
      */
+    @Deprecated
     public void stop() {
         if (this.isRunning) {
             this.isRunning = false;
-            
-            this.modSettingsChecker.cancel(true);
+
+            this.modVersionChecker.cancel(true);
+            this.modVersionChecker = null;
         } else {
             throw new IllegalStateException("WebsiteUtils is not running!");
         }
     }
-    
+
     /**
      * Disables the mod
      */
+    @Deprecated
     public void disableMod() {
         this.isDisabled = true;
     }
-    
+
     /**
-     * A getter for the higher version field, which will be true if this mod is newer than the
-     * latest released version
+     * Getter for the isDisabled field
+     *
+     * @return true if the mod should be disabled
+     */
+    @Deprecated
+    public boolean isDisabled() {
+        return this.isDisabled;
+    }
+
+    /**
+     * Getter for the isRunning field
+     *
+     * @return true if this service is running
+     */
+    @Deprecated
+    public boolean isRunning() {
+        return this.isRunning;
+    }
+
+    /**
+     * A getter for the higher version field, which will be
+     * true if this mod is newer than the latest released version
      *
      * @return true if the version running is newer than the latest release
      */
+    @Deprecated
     public boolean isRunningNewerVersion() {
         return this.higherVersion;
     }
-    
+
     /**
      * Checks to see if this mod needs an update
      *
      * @return true if this mod version is older than the newest one
      */
+    @Deprecated
     public boolean needsUpdate() {
         return this.needsUpdate;
     }
-    
+
     /**
      * Getter for the latest availible version of the mod
      *
      * @return the latest version or -1 if not availible
      */
+    @Deprecated
     public String getUpdateVersion() {
         return this.updateVersion;
     }
-    
+
     /**
      * Runs a task async to the main thread
      *
      * @param runnable the runnable to run
      */
+    @Deprecated
     public void runAsync(Runnable runnable) {
         this.POOL.execute(runnable);
     }
-    
+
     /**
      * Schedules a repeating task that can be cancelled at any time
      *
      * @param r the runnable to run
      * @param initialDelay the delay for the first time ran
      * @param delay all the other delays
-     * @param unit the time duration type for the task to be executed, eg a delay of 50 with {@link
-     * TimeUnit#MILLISECONDS} will run the task every 50 milliseconds
+     * @param unit the time duration type for the task to be executed, eg
+     * a delay of 50 with {@link TimeUnit#MILLISECONDS} will run the task every
+     * 50 milliseconds
+     *
      * @return the scheduled task
      */
+    @Deprecated
     public ScheduledFuture<?> schedule(Runnable r, long initialDelay, long delay, TimeUnit unit) {
         return this.RUNNABLE_POOL.scheduleAtFixedRate(r, initialDelay, delay, unit);
     }
-    
+
     // Other things
-    
+
     /**
-     * Grabs JSON off a site, will return its own JSON if an error occurs, the format for an error
-     * is usually <i>{"success":false,"cause":"exception"}</i>
+     * Grabs JSON off a site, will return its own JSON if an error occurs,
+     * the format for an error is usually <i>{"success":false,"cause":"exception"}</i>
      *
      * @param url the url to grab the json off
      * @return the json recieved
      */
+    @Deprecated
     public String rawWithAgent(String url) {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -279,9 +337,9 @@ public class UpdateCore {
             connection.setReadTimeout(15000);
             connection.setConnectTimeout(15000);
             connection.setDoOutput(true);
-            return IOUtils.toString(connection.getInputStream(), "UTF-8");
+            return IOUtils.toString(connection.getInputStream(), StandardCharsets.UTF_8);
         } catch (Exception e) {
-            
+
             // Generic handling for bad errors, captures the error type and message (if specified)
             JsonObject object = new JsonObject();
             object.addProperty("success", false);
@@ -293,36 +351,43 @@ public class UpdateCore {
             return object.toString();
         }
     }
-    
-    // Handle message sending
-    
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public void onJoin(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        UpdateCore utils = ToggleChatMod.getInstance().getWebsiteUtils();
-    
-        if (utils.isDisabled()) {
-            return;
+
+    /**
+     * Strips all character that are not digits in the version input,
+     * this is a quick solution to update checking. Will probably not be
+     * used in newer versions
+     *
+     * @param input the verision input
+     * @return an integer for the string, or 0 if empty
+     */
+    @Deprecated
+    private int formatVersion(String input) {
+        StringBuilder builder = new StringBuilder();
+        for (char c : input.toCharArray()) {
+            if (Character.isDigit(c)) {
+                builder.append(c);
+            }
         }
-        
+        return builder.toString().trim().isEmpty() ? 0 : Integer.parseInt(builder.toString().trim());
+    }
+
+    // Handle message sending
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    @Deprecated
+    public void onJoin(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+        WebsiteUtils utils = this;
+
+        if (utils.isDisabled()) return;
+
         if (utils.needsUpdate()) {
             utils.runAsync(() -> {
-                try {
-                    Thread.sleep(3000L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                while (Minecraft.getMinecraft().thePlayer == null) {
-                    try {
-                        Thread.sleep(100L);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+                sleep();
+
                 sendMessage("&9&m---------------------------------------------");
                 sendMessage(" ");
                 if (this.showUpdateHeader) {
-                    sendMessage(" %s&eYour version of " + this.modName + " is out of date!",
-                        (this.showUpdateSymbol ? "&b\u21E8 " : ""));
+                    sendMessage(" %s&eYour version of " + this.modName + " is out of date!", (this.showUpdateSymbol ? "&b\u21E8 " : ""));
                     sendLinkText();
                 }
                 if (this.updateMessage != null && !this.updateMessage.isEmpty()) {
@@ -337,71 +402,71 @@ public class UpdateCore {
                 sendMessage("&9&m---------------------------------------------");
             });
         }
-        
+
         if (!this.hasSeenHigherMessage && utils.isRunningNewerVersion()) {
             this.hasSeenHigherMessage = true;
             utils.runAsync(() -> {
-                try {
-                    Thread.sleep(3000L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                while (Minecraft.getMinecraft().thePlayer == null) {
-                    try {
-                        Thread.sleep(100L);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+                sleep();
+
                 sendMessage("&9&m-----------------------------------------------");
                 sendMessage(" ");
-                sendMessage(" &b\u21E8 &aYou are running a newer version of " + this.modName + "!");
+                sendMessage(" &b\u21E8 &aYou are running a newer version of " + this.modName +"!");
                 sendMessage(" ");
                 sendMessage("&9&m-----------------------------------------------");
             });
         }
     }
-    
+
+    @SuppressWarnings("BusyWait")
+    private void sleep() {
+        try {
+            Thread.sleep(3000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        while (Minecraft.getMinecraft().thePlayer == null) {
+            try {
+                Thread.sleep(100L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /**
      * Sends a message to the player, this supports color codes
      *
      * @param message the message to send
      * @param replacements the arguments used to format the string
      */
+    @Deprecated
     private void sendMessage(String message, Object... replacements) {
-        if (Minecraft.getMinecraft().thePlayer == null) {
-            return; // Safety first! :)
-        }
-        
+        if (Minecraft.getMinecraft().thePlayer == null) return; // Safety first! :)
+
         try {
             message = String.format(message, replacements);
-        } catch (Exception ignored) {
-        }
-        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(
-            new ChatComponentText(ChatColor.translateAlternateColorCodes('&', message)));
+        } catch (Exception ignored) { }
+        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(ChatColor.translateAlternateColorCodes('&', message)));
     }
-    
+
     /**
      * Sends a clickable link to the user containing all updating information
      */
+    @Deprecated
     private void sendLinkText() {
-        if (Minecraft.getMinecraft().thePlayer == null) {
-            return; // Safety first! :)
-        }
-        
+        if (Minecraft.getMinecraft().thePlayer == null) return; // Safety first! :)
+
         try {
-            ChatComponentText text = new ChatComponentText(ChatColor.translateAlternateColorCodes(
-                String.format(" %s&eYou can download v&6%s&e by ",
-                    (this.showUpdateSymbol ? "&b\u21E8 " : ""), this.updateVersion)));
+            ChatComponentText text = new ChatComponentText(ChatColor.translateAlternateColorCodes(String.format(" %s&eYou can download v&6%s&e by ", (this.showUpdateSymbol ? "&b\u21E8 " : ""), this.updateVersion)));
             ChatComponentText url = new ChatComponentText(ChatColor.GREEN + "clicking here");
-            
+
             ChatStyle chatStyle = new ChatStyle();
-            chatStyle.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                new ChatComponentText(ChatColor.AQUA + "Click here to open the forum thread!")));
-            chatStyle.setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, this.updateUrl));
+            chatStyle.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(ChatColor.AQUA + "Click here to open the download website!")));
+            String DOWNLOAD_LINK = "https://do-you-like.me/mods";
+            chatStyle.setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, DOWNLOAD_LINK));
             url.setChatStyle(chatStyle);
             text.appendSibling(url).appendText(ChatColor.YELLOW + "!");
-            
+
             Minecraft.getMinecraft().thePlayer.addChatComponentMessage(text);
         } catch (Exception ignored) {
         }

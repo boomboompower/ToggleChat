@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -208,14 +208,42 @@ public abstract class ModernGui extends GuiScreen {
     /**
      * Draws multiple lines on the screen
      *
-     * @param startingX
-     * @param startingY
-     * @param separation
-     * @param lines
+     * @param startingX the starting x position of the text
+     * @param startingY the starting y position of the text
+     * @param separation the Y valye  separatation between each line
+     * @param lines the lines which will be drawn
      */
     public void writeInformation(int startingX, int startingY, int separation, String... lines) {
-        for (String s : lines) {
-            drawCenteredString(this.fontRendererObj, ChatColor.translateAlternateColorCodes('&', s), startingX, startingY, Color.WHITE.getRGB());
+        writeInformation(startingX, startingY, separation, true, lines);
+    }
+
+    /**
+     * Draws multiple lines on the screen
+     *
+     * @param startingX the starting x position of the text
+     * @param startingY the starting y position of the text
+     * @param separation the Y valye separatation between each line
+     * @param centered true if the text being rendered should be rendered as a centered string
+     * @param lines the lines which will be drawn
+     */
+    public void writeInformation(int startingX, int startingY, int separation, boolean centered, String... lines) {
+        if (lines == null || lines.length == 0) {
+            return;
+        }
+
+        // Loop through the lines
+        for (String line : lines) {
+            // Null components will be treated as an empty string
+            if (line == null) {
+                line = "";
+            }
+
+            if (centered) {
+                drawCenteredString(this.fontRendererObj, ChatColor.translateAlternateColorCodes('&', line), startingX, startingY, Color.WHITE.getRGB());
+            } else {
+                drawString(this.fontRendererObj, ChatColor.translateAlternateColorCodes('&', line), startingX, startingY, Color.WHITE.getRGB());
+            }
+
             startingY += separation;
         }
     }

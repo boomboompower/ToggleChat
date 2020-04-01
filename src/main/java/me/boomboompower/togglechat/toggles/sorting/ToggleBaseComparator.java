@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ package me.boomboompower.togglechat.toggles.sorting;
 
 import java.util.Comparator;
 import java.util.Map.Entry;
+
 import me.boomboompower.togglechat.ToggleChatMod;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 import net.minecraft.client.Minecraft;

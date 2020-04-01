@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -21,8 +21,8 @@ import me.boomboompower.togglechat.toggles.ToggleBase;
 
 /**
  * Sort by:
- *   -> Alphabetical
- *
+ * -> Alphabetical
+ * <p>
  * If the words are the same alphabetically, then 0 will be returned as it means they are the same word
  */
 public class AlphabeticalComparator extends ToggleComparator {

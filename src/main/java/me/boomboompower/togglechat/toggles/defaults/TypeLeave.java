@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -26,36 +26,36 @@ import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeLeave extends ToggleBase {
-    
-    private Pattern leavePattern = Pattern.compile("(?<player>\\S{1,16})(\\s+)(left\\.)");
-    
+
+    private final Pattern leavePattern = Pattern.compile("(?<player>\\S{1,16})(\\s+)(left\\.)");
+
     @Setter
     @Getter
     private boolean enabled = true;
-    
+
     @Override
     public String getName() {
         return "Leave";
     }
-    
+
     @Override
     public boolean shouldToggle(String message) {
         return this.leavePattern.matcher(message).matches();
     }
-    
+
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-            "Toggles all leave",
-            "notification messages",
-            "or anything matching",
-            "this format",
-            "",
-            "&ePlayer left.",
-            "",
-            "This is good for",
-            "people with a large",
-            "friends list"
+                "Toggles all leave",
+                "notification messages",
+                "or anything matching",
+                "this format",
+                "",
+                "&ePlayer left.",
+                "",
+                "This is good for",
+                "people with a large",
+                "friends list"
         );
     }
 }

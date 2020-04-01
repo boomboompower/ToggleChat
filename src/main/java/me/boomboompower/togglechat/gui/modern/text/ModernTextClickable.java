@@ -15,6 +15,17 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-function download(version) {
-    window.open("dl/ToggleChat-" + version + "-SNAPSHOT.jar");
+package me.boomboompower.togglechat.gui.modern.text;
+
+/**
+ * Simple template for a clickable class, a dummy for the {@link ModernTextDrawable} class
+ *
+ * @author boomboompower
+ */
+public interface ModernTextClickable {
+
+    /**
+     * This method will be called when the {@link ModernTextDrawable} is clicked.
+     */
+    public void onClicked();
 }

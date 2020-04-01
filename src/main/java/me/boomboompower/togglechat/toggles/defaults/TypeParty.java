@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -26,38 +26,38 @@ import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeParty extends ToggleBase {
-    
-    private Pattern partyPattern = Pattern
-        .compile("Party > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    private Pattern shortPartyPattern = Pattern
-        .compile("P > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    
+
+    private final Pattern partyPattern = Pattern
+            .compile("Party > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+    private final Pattern shortPartyPattern = Pattern
+            .compile("P > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+
     @Setter
     @Getter
     private boolean enabled = true;
-    
+
     @Override
     public String getName() {
         return "Party";
     }
-    
+
     @Override
     public boolean shouldToggle(String message) {
         return this.partyPattern.matcher(message).matches() || this.shortPartyPattern
-            .matcher(message).matches();
+                .matcher(message).matches();
     }
-    
+
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-            "Toggles all party",
-            "chat messages",
-            "",
-            "Toggle format",
-            "&9Party > &7Player&r: Hello",
-            "",
-            "Fairly useful when",
-            "You\'re in a large party"
+                "Toggles all party",
+                "chat messages",
+                "",
+                "Toggle format",
+                "&9Party > &7Player&r: Hello",
+                "",
+                "Fairly useful when",
+                "You're in a large party"
         );
     }
 }

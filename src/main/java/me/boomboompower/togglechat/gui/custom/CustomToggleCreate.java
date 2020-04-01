@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -31,10 +31,10 @@ import java.awt.*;
  */
 public class CustomToggleCreate extends ModernGui {
     
-    private ModernGui previous;
+    private final ModernGui previous;
     
     private String name;
-    private LinkedList<ToggleCondition> conditionList = new LinkedList<>();
+    private final LinkedList<ToggleCondition> conditionList = new LinkedList<>();
     
     public CustomToggleCreate(ModernGui previous) {
         this.previous = previous;

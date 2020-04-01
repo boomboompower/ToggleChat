@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public class CustomToggleSelect extends ModernGui {
     
     private ModernButton next;
     
-    private CustomToggleMain.SelectType selectType;
+    private final CustomToggleMain.SelectType selectType;
     private TypeCustom hovered;
     
     private boolean pageInvalid;
@@ -59,11 +59,8 @@ public class CustomToggleSelect extends ModernGui {
     public void initGui() {
         if (ToggleBase.getToggles().entrySet().stream()
             .anyMatch(e -> e.getValue() instanceof TypeCustom) && !this.pageInvalid) {
-            this.buttonList.add(
-                new ModernButton(0, this.width / 2 - 200, this.height / 2 + 80, 150, 20, "Back"));
-            this.buttonList.add(
-                this.next = new ModernButton(1, this.width / 2 + 50, this.height / 2 + 80, 150, 20,
-                    "Next"));
+            this.buttonList.add(new ModernButton(0, this.width / 2 - 200, this.height / 2 + 80, 150, 20, "Back"));
+            this.buttonList.add(this.next = new ModernButton(1, this.width / 2 + 50, this.height / 2 + 80, 150, 20, "Next"));
             
             this.next.setEnabled(false);
         } else {
@@ -80,10 +77,8 @@ public class CustomToggleSelect extends ModernGui {
         
         super.drawScreen(mouseX, mouseY, ticks);
         
-        if (ToggleBase.getToggles().entrySet().stream()
-            .anyMatch(e -> e.getValue() instanceof TypeCustom) && !this.pageInvalid) {
-            drawRect(this.width / 2 - 60, this.height / 2 - 80, this.width / 2 + 60,
-                this.height / 2 + 60, new Color(105, 105, 105, 75).getRGB());
+        if (ToggleBase.getToggles().entrySet().stream().anyMatch(e -> e.getValue() instanceof TypeCustom) && !this.pageInvalid) {
+            drawRect(this.width / 2 - 60, this.height / 2 - 80, this.width / 2 + 60, this.height / 2 + 60, new Color(105, 105, 105, 75).getRGB());
             
             drawHorizontalLine(this.width / 2 - 60, width / 2 + 60, this.height / 2 - 80, Color.WHITE.getRGB());
             drawHorizontalLine(this.width / 2 - 60, width / 2 + 60, this.height / 2 + 60, Color.WHITE.getRGB());

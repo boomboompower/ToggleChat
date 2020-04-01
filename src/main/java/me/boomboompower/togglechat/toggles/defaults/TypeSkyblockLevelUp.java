@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -18,35 +18,36 @@
 package me.boomboompower.togglechat.toggles.defaults;
 
 import java.util.LinkedList;
+
 import lombok.Getter;
 import lombok.Setter;
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 public class TypeSkyblockLevelUp extends ToggleBase {
-    
+
     @Setter
     @Getter
     private boolean enabled = true;
-    
+
     @Override
     public String getName() {
         return "Separators";
     }
-    
+
     @Override
     public boolean shouldToggle(String message) {
         return (message.startsWith("COLLECTION") || message.startsWith("SKILL")) && message.contains("LEVEL UP");
     }
-    
+
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-            "Toggles all SkyBlock",
-            "levelup messages",
-            "",
-            "Toggle format",
-            "&b&lSKILL LEVEL UP &dFarming &8II&7➜&dIII",
-            "&6&lCOLLECTION LEVEL UP &eFarming &8III&e➜&dIV"
+                "Toggles all SkyBlock",
+                "levelup messages",
+                "",
+                "Toggle format",
+                "&b&lSKILL LEVEL UP &dFarming &8II&7➜&dIII",
+                "&6&lCOLLECTION LEVEL UP &eFarming &8III&e➜&dIV"
         );
     }
 }

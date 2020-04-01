@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -21,17 +21,17 @@ import me.boomboompower.togglechat.toggles.custom.ToggleCondition;
 
 /**
  * This code was created by OrangeMarshall and used with permission by boomboompower.
- *
+ * <p>
  * Full credit to OrangeMarshall
  *
  * @author OrangeMarshall
  */
 public class ConditionEquals extends ToggleCondition {
-    
+
     public ConditionEquals(String input) {
         super(input);
     }
-    
+
     @Override
     public Boolean apply(String input) {
         return input.equals(getText());

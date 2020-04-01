@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -23,36 +23,36 @@ import java.util.LinkedList;
 
 /**
  * A dummy ToggleBase instance used as a hack to display messages on the ModernGui screens.
- *
+ * <p>
  * DO NOT REGISTER THIS IN THE {@link ToggleBase} CLASS!
  */
 public class ToggleDummyMessage extends ToggleBase {
-    
-    private LinkedList<String> message;
-    
+
+    private final LinkedList<String> message;
+
     public ToggleDummyMessage(String... message) {
         this.message = asLinked(message);
     }
-    
+
     @Override
     public String getName() {
         return "Dummy";
     }
-    
+
     @Override
     public boolean shouldToggle(String message) {
         return false;
     }
-    
+
     @Override
     public boolean isEnabled() {
         return false;
     }
-    
+
     @Override
     public void setEnabled(boolean enabled) {
     }
-    
+
     @Override
     public LinkedList<String> getDescription() {
         return this.message;

@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -28,49 +28,49 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TypeBuildBattle extends ToggleBase {
-    
-    private Pattern battlePattern = Pattern
-        .compile("(?<battle>.*\\w) (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    
+
+    private final Pattern battlePattern = Pattern
+            .compile("(?<battle>.*\\w) (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+
     @Setter
     @Getter
     private boolean enabled = true;
-    
+
     @Override
     public String getName() {
         return "Build Battle";
     }
-    
+
     @Override
     public String getDisplayName() {
         return "Build battle: %s";
     }
-    
+
     // Rookie [MVP+] boomboompower: tt
-    
+
     @Override
     public boolean shouldToggle(String message) {
         Matcher matcher = this.battlePattern.matcher(ChatColor.stripColor(message));
-        
+
         return matcher.matches() && validBattleRank(matcher.group("battle"));
     }
-    
+
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-            "Turns all build battle",
-            "chat on or off",
-            "",
-            "You can now play build",
-            "battle chat free!"
+                "Turns all build battle",
+                "chat on or off",
+                "",
+                "You can now play build",
+                "battle chat free!"
         );
     }
-    
+
     private boolean validBattleRank(String input) {
         if (input == null || input.isEmpty()) {
             return false;
         }
-        
+
         switch (input) {
             case "Rookie":
             case "Untrained":

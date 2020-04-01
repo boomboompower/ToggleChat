@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2019 boomboompower
+ *     Copyright (C) 2020 Isophene
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -26,43 +26,43 @@ import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeHousing extends ToggleBase {
-    
-    private Pattern worldJoinPattern = Pattern
-        .compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}) (?<action>.*) the world\\.");
-    
+
+    private final Pattern worldJoinPattern = Pattern
+            .compile("(?<rank>\\[.+] )?(?<player>\\S{1,16}) (?<action>.*) the world\\.");
+
     @Setter
     @Getter
     private boolean enabled = true;
-    
+
     @Override
     public String getName() {
         return "Housing";
     }
-    
+
     @Override
     public boolean shouldToggle(String message) {
         return this.worldJoinPattern.matcher(message).matches() || (message.startsWith("[OWNER] ")
-            || message.startsWith("[CO-OWNER] ") || message.startsWith("[RES] "));
+                || message.startsWith("[CO-OWNER] ") || message.startsWith("[RES] "));
     }
-    
+
     @Override
     public LinkedList<String> getDescription() {
         return asLinked(
-            "Toggles all Housing chat",
-            "messages that start with",
-            "the following",
-            "",
-            "&6[OWNER]",
-            "&6[CO-OWNER]",
-            "&6[RES]",
-            "",
-            "Also toggles housing join",
-            "and leave messages",
-            "",
-            "Build peacefully and",
-            "without hassle,",
-            "as if you were in a",
-            "zen garden"
+                "Toggles all Housing chat",
+                "messages that start with",
+                "the following",
+                "",
+                "&6[OWNER]",
+                "&6[CO-OWNER]",
+                "&6[RES]",
+                "",
+                "Also toggles housing join",
+                "and leave messages",
+                "",
+                "Build peacefully and",
+                "without hassle,",
+                "as if you were in a",
+                "zen garden"
         );
     }
 }
