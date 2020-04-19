@@ -15,27 +15,41 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles.sorting;
+package me.boomboompower.togglechat.toggles.sorting.impl;
 
 import me.boomboompower.togglechat.toggles.ToggleBase;
+import me.boomboompower.togglechat.toggles.sorting.ToggleComparator;
 
 /**
  * Sort by:
- * -> Favourites
- * -> String width (Default)
+ * -> Alphabetical
  * <p>
- * If they are both favourites or neither is a favourite, display size will be used
+ * If the words are the same alphabetically, then 0 will be returned as it means they are the same word
  */
-public class FavouriteSortedComparator extends ToggleComparator {
+public class AlphabeticalComparator extends ToggleComparator {
+
+    private boolean inverse = false;
 
     @Override
     public int compare(ToggleBase firstIn, ToggleBase secondIn) {
-        if (firstIn.isFavourite() && !secondIn.isFavourite()) {
-            return -1;
-        } else if (!firstIn.isFavourite() && secondIn.isFavourite()) {
-            return 0;
-        } else {
-            return compareDefault(firstIn, secondIn);
+        int trackedCompare = firstIn.getName().compareToIgnoreCase(secondIn.getName());
+
+        if (this.inverse && trackedCompare != 0) {
+            return -trackedCompare;
         }
+
+        return trackedCompare;
     }
+
+    /**
+     * Inverse this Comparator
+     *
+     * @return a comparator which is inversed.
+     */
+    public AlphabeticalComparator inverse() {
+        this.inverse = !this.inverse;
+
+        return this;
+    }
+
 }

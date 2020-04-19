@@ -110,15 +110,11 @@ public class MainGui extends ModernGui {
                     ));
 
             String sort_string = "Sort: " + ChatColor.AQUA + sortType.getDisplayName();
+            ToggleDummyMessage dummyMessage = new ToggleDummyMessage();
 
-            this.buttonList.add(new ModernButton(5, "inbuilt_sort", 5, this.height - 25, 90, 20, sort_string).setButtonData(
-                    // Let them know what this button does
-                    new ToggleDummyMessage(
-                            "Changes the sorting",
-                            "the toggles so some,",
-                            "are easier to find"
-                    )
-            ));
+            addSortMessageData(dummyMessage);
+
+            this.buttonList.add(new ModernButton(5, "inbuilt_sort", 5, this.height - 25, 90, 20, sort_string).setButtonData(dummyMessage));
 
             this.buttonList.add(new ModernButton(6, this.width - 114, this.height - 49, 104, 20,
                     "Custom Toggles").setEnabledColor(new Color(100, 88, 192, 75))
@@ -197,6 +193,16 @@ public class MainGui extends ModernGui {
             case 5:
                 sortType = SortType.getNextSortType();
 
+                ToggleBase inbuiltData = button.getButtonData();
+
+                if (inbuiltData instanceof ToggleDummyMessage) {
+                    ToggleDummyMessage dummyMessage = (ToggleDummyMessage) inbuiltData;
+
+                    dummyMessage.clearLines();
+
+                    addSortMessageData(dummyMessage);
+                }
+
                 this.mc.displayGuiScreen(new MainGui(this.pageNumber));
                 return;
             case 6:
@@ -271,6 +277,25 @@ public class MainGui extends ModernGui {
             this.mc.displayGuiScreen(new MainGui(this.pageNumber - 1));
         } else if (i > 0 && this.pageNumber != this.pages) {
             this.mc.displayGuiScreen(new MainGui(this.pageNumber + 1));
+        }
+    }
+
+    private void addSortMessageData(ToggleDummyMessage dummyMessage) {
+        dummyMessage.appendLine("Changes the sorting");
+        dummyMessage.appendLine("of the toggles so some");
+        dummyMessage.appendLine("are easier to find");
+        dummyMessage.appendLine(" ");
+
+        if (sortType.getDescription() != null) {
+            String sortDescription = sortType.getDescription();
+
+            if (sortDescription.contains("\n")) {
+                for (String line : sortDescription.split("\n")) {
+                    dummyMessage.appendLine(line);
+                }
+            } else {
+                dummyMessage.appendLine(sortDescription);
+            }
         }
     }
 }

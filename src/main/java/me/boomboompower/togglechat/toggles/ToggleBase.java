@@ -26,7 +26,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import me.boomboompower.togglechat.toggles.custom.TypeCustom;
-import me.boomboompower.togglechat.toggles.sorting.ToggleBaseComparator;
+import me.boomboompower.togglechat.toggles.sorting.impl.ToggleBaseComparator;
 import me.boomboompower.togglechat.toggles.defaults.*;
 
 import java.util.Arrays;

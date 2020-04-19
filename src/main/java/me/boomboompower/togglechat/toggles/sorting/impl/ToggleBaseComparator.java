@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.boomboompower.togglechat.toggles.sorting;
+package me.boomboompower.togglechat.toggles.sorting.impl;
 
 import java.util.Comparator;
 import java.util.Map.Entry;

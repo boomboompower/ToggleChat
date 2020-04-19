@@ -57,4 +57,12 @@ public class ToggleDummyMessage extends ToggleBase {
     public LinkedList<String> getDescription() {
         return this.message;
     }
+
+    public void appendLine(String line) {
+        this.message.add(line);
+    }
+
+    public void clearLines() {
+        this.message.clear();
+    }
 }
