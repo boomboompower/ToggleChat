@@ -27,7 +27,8 @@ import java.util.regex.Pattern;
 
 public class TypeJoin extends ToggleBase {
 
-    private final Pattern joinPattern = Pattern.compile("(?<player>\\S{1,16})(\\s+)(joined\\.)");
+    private final Pattern joinPattern = Pattern.compile("Friend > (?<player>\\S{1,16})(\\s+)(joined\\.)");
+    private final Pattern legacyJoinPattern = Pattern.compile("(?<player>\\S{1,16})(\\s+)(joined\\.)");
 
     @Setter
     @Getter
@@ -40,7 +41,9 @@ public class TypeJoin extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        return this.joinPattern.matcher(message).matches();
+        // Keeping legacy incase other servers use the old matcher
+        return this.joinPattern.matcher(message).matches() ||
+                this.legacyJoinPattern.matcher(message).matches();
     }
 
     @Override
@@ -52,6 +55,7 @@ public class TypeJoin extends ToggleBase {
                 "this format",
                 "",
                 "&ePlayer joined.",
+                "&aFriend > &bPlayer &ejoined.",
                 "",
                 "This is good for",
                 "people with a large",

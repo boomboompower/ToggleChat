@@ -27,7 +27,8 @@ import java.util.regex.Pattern;
 
 public class TypeLeave extends ToggleBase {
 
-    private final Pattern leavePattern = Pattern.compile("(?<player>\\S{1,16})(\\s+)(left\\.)");
+    private final Pattern leavePattern = Pattern.compile("Friend > (?<player>\\S{1,16})(\\s+)(left\\.)");
+    private final Pattern legacyLeavePattern = Pattern.compile("(?<player>\\S{1,16})(\\s+)(left\\.)");
 
     @Setter
     @Getter
@@ -40,7 +41,8 @@ public class TypeLeave extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        return this.leavePattern.matcher(message).matches();
+        return this.leavePattern.matcher(message).matches() ||
+                this.legacyLeavePattern.matcher(message).matches();
     }
 
     @Override
@@ -52,6 +54,7 @@ public class TypeLeave extends ToggleBase {
                 "this format",
                 "",
                 "&ePlayer left.",
+                "&aFriend > &bPlayer &eleft.",
                 "",
                 "This is good for",
                 "people with a large",
