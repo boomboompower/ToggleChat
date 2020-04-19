@@ -81,6 +81,10 @@ processResources {
 
 jar {
     archiveName = "$baseName.$extension"
+
+    manifest.attributes(
+            'Main-Class' : 'me.boomboompower.togglechat.installer.InstallerCore'
+    )
 }
 
 sourceJar {
