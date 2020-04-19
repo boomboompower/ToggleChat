@@ -25,7 +25,7 @@ import me.boomboompower.togglechat.toggles.ToggleBase;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
-public class TypeJoin extends ToggleBase {
+public class TypeFriendJoin extends ToggleBase {
 
     private final Pattern joinPattern = Pattern.compile("Friend > (?<player>\\S{1,16})(\\s+)(joined\\.)");
     private final Pattern legacyJoinPattern = Pattern.compile("(?<player>\\S{1,16})(\\s+)(joined\\.)");
@@ -36,12 +36,12 @@ public class TypeJoin extends ToggleBase {
 
     @Override
     public String getName() {
-        return "Join";
+        return "Friend Join";
     }
 
     @Override
     public boolean shouldToggle(String message) {
-        // Keeping legacy incase other servers use the old matcher
+        // Keeping legacy in case other servers use the old matcher
         return this.joinPattern.matcher(message).matches() ||
                 this.legacyJoinPattern.matcher(message).matches();
     }

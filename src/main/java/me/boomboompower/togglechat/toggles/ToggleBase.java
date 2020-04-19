@@ -87,30 +87,32 @@ public abstract class ToggleBase {
     public static void remake() {
         toggles.clear();
         addToggle(new TypeAds());
+        addToggle(new TypePit());
+        addToggle(new TypeTip());
+        addToggle(new TypeEasy());
+        addToggle(new TypeGexp());
         addToggle(new TypeTeam());
-        addToggle(new TypeJoin());
-        addToggle(new TypeLeave());
         addToggle(new TypeGuild());
         addToggle(new TypeParty());
-        addToggle(new TypeGexp());
-        addToggle(new TypeTip());
-        addToggle(new TypeWatchdog());
         addToggle(new TypeShout());
-        addToggle(new TypePit());
-        addToggle(new TypeHousing());
-        addToggle(new TypeSoulWell());
-        addToggle(new TypeMessages());
         addToggle(new TypeGlobal());
-        addToggle(new TypeEasy());
-        addToggle(new TypeSpecial());
         addToggle(new TypeColored());
-        addToggle(new TypePartyInvites());
-        addToggle(new TypeBuildBattle());
-        addToggle(new TypeMysteryBox());
-        addToggle(new TypeSpectator());
+        addToggle(new TypeHousing());
+        addToggle(new TypeSpecial());
+        addToggle(new TypeMessages());
+        addToggle(new TypeSoulWell());
+        addToggle(new TypeWatchdog());
+        addToggle(new TypeGuildJoin());
         addToggle(new TypeLobbyJoin());
-        addToggle(new TypeMessageSeparator());
+        addToggle(new TypeSpectator());
+        addToggle(new TypeFriendJoin());
+        addToggle(new TypeGuildLeave());
+        addToggle(new TypeMysteryBox());
+        addToggle(new TypeBuildBattle());
+        addToggle(new TypeFriendLeave());
+        addToggle(new TypePartyInvites());
         addToggle(new TypeFriendRequests());
+        addToggle(new TypeMessageSeparator());
 
         sortMap(toggles);
     }
