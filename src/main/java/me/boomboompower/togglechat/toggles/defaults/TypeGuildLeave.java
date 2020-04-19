@@ -19,16 +19,14 @@ package me.boomboompower.togglechat.toggles.defaults;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import me.boomboompower.togglechat.toggles.ToggleBase;
 
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
-public class TypeLeave extends ToggleBase {
+public class TypeGuildLeave extends ToggleBase {
 
-    private final Pattern leavePattern = Pattern.compile("Friend > (?<player>\\S{1,16})(\\s+)(left\\.)");
-    private final Pattern legacyLeavePattern = Pattern.compile("(?<player>\\S{1,16})(\\s+)(left\\.)");
+    private final Pattern leavePattern = Pattern.compile("Guild > (?<player>\\S{1,16})(\\s+)(left\\.)");
 
     @Setter
     @Getter
@@ -36,13 +34,12 @@ public class TypeLeave extends ToggleBase {
 
     @Override
     public String getName() {
-        return "Leave";
+        return "Guild Leave";
     }
 
     @Override
     public boolean shouldToggle(String message) {
-        return this.leavePattern.matcher(message).matches() ||
-                this.legacyLeavePattern.matcher(message).matches();
+        return this.leavePattern.matcher(message).matches();
     }
 
     @Override
@@ -54,11 +51,11 @@ public class TypeLeave extends ToggleBase {
                 "this format",
                 "",
                 "&ePlayer left.",
-                "&aFriend > &bPlayer &eleft.",
+                "&2Guild > &bPlayer &eleft.",
                 "",
                 "This is good for",
-                "people with a large",
-                "friends list"
+                "people in a large",
+                "guild"
         );
     }
 }
