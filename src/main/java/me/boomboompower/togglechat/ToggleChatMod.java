@@ -77,7 +77,7 @@ public class ToggleChatMod {
         MinecraftForge.EVENT_BUS.register(new ToggleEvents(this));
         ClientCommandHandler.instance.registerCommand(new ToggleCommand());
 
-        Minecraft.getMinecraft().addScheduledTask(() -> this.websiteUtils.begin());
+        // Minecraft.getMinecraft().addScheduledTask(() -> this.websiteUtils.begin());
     }
 
     @Mod.EventHandler
