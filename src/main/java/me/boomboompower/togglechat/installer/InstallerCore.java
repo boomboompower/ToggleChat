@@ -25,7 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
-public class InstallerCore {
+public class Main {
 
     private static final String MOD_NAME = "ToggleChat";
 
@@ -42,26 +42,36 @@ public class InstallerCore {
             int result = showStartupMenu();
 
             // User cancelled the operation
+            // Occurs when they hit the "X" button.
             if (result == -1) {
                 return;
             }
 
-            // User clicked no
+            // User clicked the "no" button.
             if (result == 1) {
                 return;
             }
 
-            System.out.println(result);
+            // The above could be colated however I'd like to
+            // keep them separate so they are more readable
+            // and in the future I might split them?
+            System.out.println("Running the installer");
 
+            // Tries to grab the OS type.
             OSType osType = OperatingSystem.getOSType();
+            
+            // Tries to retrieve the MC version from the os.
             File minecraftDirectory = OperatingSystem.getMinecraftDirectory(osType);
 
+            // Cancel if the OS is not supported.
+            // Report this to me if you're getting this message.
             if (osType == OSType.UNKNOWN || minecraftDirectory == null) {
                 onInstallationFailed("Your operating system is not supported by the installer.\nPlease place the mod file in your mods folder manually.");
 
                 return;
             }
 
+            // Occurs when minecraft is not installed on the computer.
             if (!minecraftDirectory.exists()) {
                 onInstallationFailed("Your operating system was supported\nhowever your minecraft directory did not exist.");
 
@@ -91,18 +101,25 @@ public class InstallerCore {
             File installLocation = new File(mcModDir, BUILT_FOR);
 
             try {
-                // Remove other versions of the mod.
-                // If it fails then we should do nothing
-                try {
-                    for (File file : Objects.requireNonNull(installLocation.listFiles())) {
-                        if (file.getName().startsWith(MOD_NAME)) {
-                            file.delete();
+                if (!installLocation.exists()) {
+                    installLocation.mkdirs();
+                } else {
+                    // Remove other versions of the mod.
+                    // If it fails then we should do nothing
+                    try {
+                        for (File file : Objects.requireNonNull(installLocation.listFiles())) {
+                            if (file.getName().startsWith(MOD_NAME)) {
+                                file.delete();
+                            }
                         }
-                    }
-                } catch (NullPointerException ignored) {
+                    } catch (NullPointerException ignored) { }
                 }
 
-                Files.copy(currentPath.toPath(), new File(installLocation, getModFileName() + ".jar").toPath(), StandardCopyOption.REPLACE_EXISTING);
+                File modFile = new File(installLocation, getModFileName() + ".jar");
+
+                System.out.println(currentPath.toPath() + " -> " + modFile.toPath());
+
+                Files.copy(currentPath.toPath(), modFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException ex) {
                 onInstallationFailed("The mod was unable to be written to the installation directory.");
 
@@ -118,6 +135,7 @@ public class InstallerCore {
             }
 
             // Remove the file from the current directory.
+            // This rarely works for me, but it's good practice.
             try {
                 currentPath.deleteOnExit();
             } catch (SecurityException ignored) {
@@ -126,6 +144,8 @@ public class InstallerCore {
 
             JOptionPane.showMessageDialog(null, MOD_NAME + " (v" + MOD_VERSION + ") has been installed at: \n " + installLocation.getAbsolutePath() + "\n\nFrom: \n" + currentPath.getAbsolutePath() + "\n\nYou may delete this file now!", "Installation Successful", JOptionPane.INFORMATION_MESSAGE);
         }
+        
+        System.err.println("The installer cannot be run in a headless environment. Please install the mod manually.");
     }
 
     private static int showStartupMenu() {
@@ -167,4 +187,3 @@ public class InstallerCore {
         JOptionPane.showMessageDialog(null, message, "Installation Failed", JOptionPane.ERROR_MESSAGE);
     }
 }
-
