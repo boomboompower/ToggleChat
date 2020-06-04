@@ -25,7 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
-public class Main {
+public class InstallerCore {
 
     private static final String MOD_NAME = "ToggleChat";
 
