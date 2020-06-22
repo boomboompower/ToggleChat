@@ -3,7 +3,7 @@
 # creator: boomboompower
 # version: 1.0
 
-name: Java CI with Forge
+name: ModDeployCI
 
 # Trigger the integration for pull requests and pushes
 # to every branch on the repository
@@ -15,7 +15,7 @@ on:
 
 jobs:
   linux:
-    name: Linux Mod CI
+    name: Linux Mod Build CI
 
     # Use latest linux distro
     runs-on: ubuntu-latest
@@ -76,10 +76,11 @@ jobs:
         if: success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          modID: ToggleChatMod
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: './build/libs/ToggleChat.jar'
-          asset_name: ToggleChat.jar
+          asset_path: './build/libs/${{ modID }}.jar'
+          asset_name: ${{ modID }}.jar
           asset_content_type: application/zip
       - name: Upload Mod Sources
         id: upload-sources-asset 
@@ -88,8 +89,9 @@ jobs:
         if: success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          modID: ToggleChatMod
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: './build/libs/ToggleChat-sources.jar'
-          asset_name: SkinChangerMod-sources.jar
+          asset_path: './build/libs/${{ modID }}-sources.jar'
+          asset_name: ${{ modID }}-sources.jar
           asset_content_type: application/zip
