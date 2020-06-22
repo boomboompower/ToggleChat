@@ -3,7 +3,7 @@
 # creator: boomboompower
 # version: 1.0
 
-name: ModDeployCI
+name: Java CI with Forge
 
 # Trigger the integration for pull requests and pushes
 # to every branch on the repository
@@ -79,8 +79,8 @@ jobs:
           modName: ToggleChat
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: './build/libs/$modName.jar'
-          asset_name: $modName.jar
+          asset_path: './build/libs/ToggleChat.jar'
+          asset_name: ToggleChat.jar
           asset_content_type: application/zip
       - name: Upload Mod Sources
         id: upload-sources-asset 
@@ -92,6 +92,6 @@ jobs:
           modName: ToggleChat
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: './build/libs/$modName-sources.jar'
-          asset_name: $modName-sources.jar
+          asset_path: './build/libs/ToggleChat-sources.jar'
+          asset_name: ToggleChat-sources.jar
           asset_content_type: application/zip
