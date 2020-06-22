@@ -76,11 +76,11 @@ jobs:
         if: success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          modID: ToggleChatMod
+          modName: ToggleChat
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: './build/libs/${{ modID }}.jar'
-          asset_name: ${{ modID }}.jar
+          asset_path: './build/libs/$modName.jar'
+          asset_name: $modName.jar
           asset_content_type: application/zip
       - name: Upload Mod Sources
         id: upload-sources-asset 
@@ -89,9 +89,9 @@ jobs:
         if: success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          modID: ToggleChatMod
+          modName: ToggleChat
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: './build/libs/${{ modID }}-sources.jar'
-          asset_name: ${{ modID }}-sources.jar
+          asset_path: './build/libs/$modName-sources.jar'
+          asset_name: $modName-sources.jar
           asset_content_type: application/zip
