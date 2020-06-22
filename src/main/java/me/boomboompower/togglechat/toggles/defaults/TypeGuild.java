@@ -25,9 +25,7 @@ import java.util.regex.Pattern;
 public class TypeGuild extends ToggleBase {
 
     private final Pattern guildPattern = Pattern
-            .compile("Guild > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
-    private final Pattern shortGuildPattern = Pattern
-            .compile("G > (?<rank>\\[.+] )?(?<player>\\S{1,16}): (?<message>.*)");
+            .compile("(Guild|G) > (?<rank>\\[.+] )?(?<player>\\S{1,16})( \\[.+])?: (?<message>.*)");
 
     private boolean showGuild = true;
 
@@ -38,8 +36,7 @@ public class TypeGuild extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        return this.guildPattern.matcher(message).matches() || this.shortGuildPattern
-                .matcher(message).matches();
+        return this.guildPattern.matcher(message).matches();
     }
 
     @Override
