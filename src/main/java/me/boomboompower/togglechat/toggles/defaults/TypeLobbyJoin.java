@@ -42,8 +42,8 @@ public class TypeLobbyJoin extends ToggleBase {
 
     @Override
     public boolean shouldToggle(String message) {
-        return message.endsWith("joined the lobby!") || (message.contains("joined the lobby")
-                && message.startsWith(" >>>"));
+        return message.endsWith("joined the lobby!") || (message.contains("joined the lobby") && message.startsWith(" >>>")) || 
+            message.endsWith("sled into the lobby!") || (message.contains("sled into the lobby") && message.startsWith(" >>>"));
     }
 
     @Override
