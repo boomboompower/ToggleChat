@@ -1,6 +1,7 @@
 [
   {
-   "modid": "togglechatmod",
-   "name": "ToggleChatMod"
+    "modid": "togglechatmod",
+    "name": "ToggleChatMod",
+    "author": "boomboompower"
   }
 ]
