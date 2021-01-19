@@ -68,11 +68,7 @@ public class ToggleEvents {
                         // the toggle is not enabled (this message is turned off)
                         // don't send the message to the player & stop looping
                         if (!type.isEnabled() && type.shouldToggle(input)) {
-                            if (type instanceof TypeMessageSeparator && formattedText.contains("\n")) { // Test for newlines
-                                modifySeparators((TypeMessageSeparator) type, event.message, formattedText);
-                            } else {
-                                event.setCanceled(true);
-                            }
+                            event.setCanceled(true);
                             break;
                         }
                     } catch (Exception ex) {
