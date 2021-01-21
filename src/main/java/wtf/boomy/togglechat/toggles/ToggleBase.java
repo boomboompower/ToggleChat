@@ -99,6 +99,7 @@ public abstract class ToggleBase {
         addToggle(new TypeWatchdog());
         addToggle(new TypeGuildJoin());
         addToggle(new TypeLobbyJoin());
+        addToggle(new TypeAutoQuest());
         addToggle(new TypeSpectator());
         addToggle(new TypeFriendJoin());
         addToggle(new TypeGuildLeave());
