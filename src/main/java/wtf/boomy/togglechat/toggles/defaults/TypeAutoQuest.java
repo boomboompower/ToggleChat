@@ -22,7 +22,6 @@ import wtf.boomy.togglechat.toggles.ToggleBase;
 import java.util.LinkedList;
 
 public class TypeAutoQuest extends ToggleBase {
-    private boolean enabled = true;
 
     @Override
     public String getName() {
@@ -52,15 +51,5 @@ public class TypeAutoQuest extends ToggleBase {
                 "&aAutomatically activated:",
                 "&6Weekly Quest: Break 25 beds"
         );
-    }
-    
-    @Override
-    public boolean isEnabled() {
-        return this.enabled;
-    }
-    
-    @Override
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 }
