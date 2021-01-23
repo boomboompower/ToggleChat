@@ -66,6 +66,6 @@ public class ClearListUI extends ModernGui {
 
     @Override
     public void onGuiClosed() {
-        this.mod.getConfigLoader().saveWhitelist();
+        this.mod.getConfigLoader().saveModernUtils();
     }
 }
