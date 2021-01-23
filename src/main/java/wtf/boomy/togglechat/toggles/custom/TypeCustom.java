@@ -19,8 +19,11 @@ package wtf.boomy.togglechat.toggles.custom;
 
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A custom Toggle, has all appropriate methods for user customization
@@ -36,26 +39,23 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
 
     private final String togglename; // The name of the toggle
     
-    private final LinkedList<ToggleCondition> conditions; // The conditions of the toggle
-    private LinkedList<String> comments; // The comments displayed on the top of the file
-    
-    public TypeCustom(String name) {
-        this(name, new LinkedList<>(), new LinkedList<>());
-    }
+    private final List<ToggleCondition> conditions; // The conditions of the toggle
+    private List<String> comments; // The comments displayed on the top of the file
     
     public TypeCustom(String name, ToggleCondition condition) {
+        //noinspection ArraysAsListWithZeroOrOneArgument
+        this.conditions = Arrays.asList(condition);
         this.togglename = name;
-        this.conditions = asList(condition);
-        this.comments = new LinkedList<>();
+        this.comments = new ArrayList<>();
     }
     
-    public TypeCustom(String name, LinkedList<ToggleCondition> condition, LinkedList<String> comments) {
+    public TypeCustom(String name, List<ToggleCondition> condition, List<String> comments) {
         this.togglename = name;
         this.conditions = condition;
         this.comments = comments;
     }
     
-        @Override
+    @Override
     public String getName() {
         return this.togglename;
     }
@@ -71,20 +71,20 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
     }
     
     @Override
-    public LinkedList<String> getDescription() {
-        return asLinked(
-            "A custom toggle",
-            "",
-            "&b" + _getName(),
-            "",
-            "This feature is still",
-            "in &cbeta&r and may be",
-            "modified at any time!",
-            "",
-            "Custom toggles were",
-            "created with help from",
-            "&6OrangeMarshall"
-        );
+    public String[] getDescription() {
+        return new String[] {
+                "A custom toggle",
+                "",
+                "&b" + _getName(),
+                "",
+                "This feature is still",
+                "in &cbeta&r and may be",
+                "modified at any time!",
+                "",
+                "Custom toggles were",
+                "created with help from",
+                "&6OrangeMarshall"
+        };
     }
     
     /**
@@ -101,7 +101,7 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
      *
      * @return the conditions
      */
-    public LinkedList<ToggleCondition> _getConditions() {
+    public List<ToggleCondition> _getConditions() {
         return this.conditions;
     }
     
@@ -121,7 +121,7 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
      *
      * @return the comments on top of the file
      */
-    public LinkedList<String> _getComments() {
+    public List<String> _getComments() {
         return this.comments;
     }
     
@@ -130,22 +130,12 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
      *
      * @param comments the comments of the file
      */
-    public TypeCustom _setComments(LinkedList<String> comments) {
+    public TypeCustom _setComments(List<String> comments) {
         markDirty();
 
         this.comments = comments;
         
         return this;
-    }
-    
-    /**
-     * Converts an array of conditions into one list
-     *
-     * @param conditions the conditions to add
-     * @return the list version of the conditions
-     */
-    private LinkedList<ToggleCondition> asList(ToggleCondition... conditions) {
-        return new LinkedList<>(Arrays.asList(conditions));
     }
 
     /**

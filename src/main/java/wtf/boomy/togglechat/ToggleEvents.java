@@ -17,27 +17,34 @@
 
 package wtf.boomy.togglechat;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import wtf.boomy.togglechat.toggles.ToggleBase;
-import wtf.boomy.togglechat.toggles.custom.TypeCustom;
-import wtf.boomy.togglechat.toggles.defaults.TypeMessageSeparator;
+import wtf.boomy.togglechat.toggles.defaults.qol.TypeMessageSeparator;
 import wtf.boomy.togglechat.utils.ChatColor;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
+
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.HashMap;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
- * The ToggleChat chat handler, this is the core of all the chat-logic. Actually semi-decent code
+ * The ToggleChat chat handler
  *
  * @author boomboompower
- * @version 4.0
+ * @version 4.1
  */
 public class ToggleEvents {
     
+    private final Logger logger = LogManager.getLogger("ToggleChat - Events");
     private final ToggleChatMod mod;
+    
+    // Improve performance. Use already compiled patterns if available.
+    private final HashMap<String, Pattern> compiledPatterns = new HashMap<>();
     
     public ToggleEvents(ToggleChatMod mod) {
         this.mod = mod;
@@ -45,171 +52,97 @@ public class ToggleEvents {
     
     @SubscribeEvent(priority = EventPriority.LOW) // We use the low priority to grab things first
     public void onChatReceive(ClientChatReceivedEvent event) {
-        // Strip the message of any colors for improved detectability
-        String unformattedText = ChatColor.stripColor(event.message.getUnformattedText());
+        // Retrieve the raw text from the TextComponent then filter it again
+        // through our ChatColor class to remove all remaining color codes.
+        String strippedText = ChatColor.stripColor(event.message.getUnformattedText());
         
         // The formatted message for a few of the custom toggles
         String formattedText = event.message.getFormattedText();
         
         try {
             // Check if the message contains something from
-            // The whitelist, if it doesn't, continue!
-            if (!containsWhitelisted(unformattedText)) {
-                
+            // The unblocked list, if it doesn't, continue!
+            if (!containsUnblocked(strippedText)) {
                 // Loop through all the toggles
-                for (ToggleBase type : ToggleBase.getToggles().values()) {
+                for (ToggleBase type : this.mod.getToggleHandler().getToggles().values()) {
                     // We don't want an issue with one toggle bringing
                     // the whole toggle system crashing down in flames.
                     try {
                         // The text we want to input into the shouldToggle method.
-                        String input = type.useFormattedMessage() ? formattedText : unformattedText;
+                        String input = type.useFormattedMessage() ? formattedText : strippedText;
                         
                         // If the toggle should toggle the specified message and
                         // the toggle is not enabled (this message is turned off)
                         // don't send the message to the player & stop looping
                         if (!type.isEnabled() && type.shouldToggle(input)) {
-                            event.setCanceled(true);
+                            if (type instanceof TypeMessageSeparator) {
+                                event.message = ((TypeMessageSeparator) type).removeSeparators(event.message);
+                            } else {
+                                event.setCanceled(true);
+                            }
+                            
                             break;
                         }
                     } catch (Exception ex) {
-                        printSmartEx(type, ex);
+                        this.logger.error("An error occurred while checking a message against a toggle {}", type, ex);
                     }
                 }
             }
-        } catch (Exception e1) {
-            printSmartEx(null, e1);
+        } catch (Exception ex) {
+            this.logger.error("An error occurred whilst comparing a message with the allow list.", ex);
         }
     }
 
     /**
-     * A hack to modify the separators in a {@link IChatComponent} by modifying sibling classes if possible
-     *
-     * @param toggle the TypeMessageSeparator toggle
-     * @param componentIn the component to modify
-     * @param formattedText the formattedText (just for an existance check)
-     */
-    private void modifySeparators(TypeMessageSeparator toggle, IChatComponent componentIn, String formattedText) {
-        if (!formattedText.contains("▬▬") && !formattedText.contains("---")) {
-            return;
-        }
-
-        // The first line of a ChatComponent is completely separate to the actual component
-        if (componentIn instanceof ChatComponentText) {
-            ChatComponentText original = (ChatComponentText) componentIn;
-
-            String firstLineText = original.getUnformattedTextForChat();
-
-            if (firstLineText.contains("---") || firstLineText.contains("▬")) {
-                // Create a modified component with styling stripped.
-                ChatComponentText newText = new ChatComponentText(toggle.editMessage(firstLineText));
-
-                // Apply style
-                newText.setChatStyle(original.getChatStyle());
-
-                // Keep any styling on this first piece of text
-                newText.getSiblings().addAll(componentIn.getSiblings());
-
-                // Set the component to our new component
-                componentIn = newText;
-            }
-        }
-
-        if (componentIn.getSiblings().size() > 0) {
-            // Loop through each sibling
-            for (int i = 0; i < componentIn.getSiblings().size(); i++) {
-                IChatComponent child = componentIn.getSiblings().get(i);
-
-                if (!(child instanceof ChatComponentText)) {
-                    continue;
-                }
-
-                String formattedChildText = child.getFormattedText();
-
-                // If this does not have anything worth replacing we'll ignore it.
-                if (!formattedChildText.contains("---") && !formattedChildText.contains("▬")) {
-                    continue;
-                }
-
-                // Replace the contents of the message if required.
-                String fixed = toggle.editMessage(formattedChildText);
-
-                // If the text has not been modified there is no point replacing the message
-                if (fixed.equals(formattedChildText)) {
-                    continue;
-                }
-
-                // Create a new message from the replaced content
-                ChatComponentText newComponent = new ChatComponentText(fixed);
-
-                // Add the old style of the child onto this new component (keeps Chat events working)
-                newComponent.setChatStyle(child.getChatStyle());
-
-                // Replace the sibling in the component with our new message.
-                componentIn.getSiblings().set(i, newComponent);
-            }
-        }
-    }
-
-    /**
-     * Check to see if a given message contains a whitelisted user/name/phrase
+     * Check to see if a given message contains a unblocked user/name/phrase
      *
      * @param message the message to check (case insensitive)
-     * @return true if the message contains a whitelisted phrase
+     * @return true if the message contains a unblocked phrase
      */
-    private boolean containsWhitelisted(String message) {
-        final boolean[] contains = {false};
-        this.mod.getConfigLoader().getWhitelist().forEach(s -> {
-            if (containsIgnoreCase(message, s)) {
-                contains[0] = true;
-            }
-        });
-        return contains[0];
+    private boolean containsUnblocked(String message) {
+        // Use Java 8 streams to find any matches with our requirements
+        // this is better than the previous implementation since anyMatch is self-terminating
+        // meaning it will return immediately as soon as one of the criteria is met.
+        return this.mod.getConfigLoader().getWhitelist().stream().anyMatch(s -> containsIgnoreCase(message, s));
     }
 
     /**
      * Case insensitive matcher.
+     *
+     * Caches the compiled patterns for later use (to save on performance).
      *
      * @param message the message to search
      * @param contains what to search for
      * @return true if the message contains the phrase
      */
     private boolean containsIgnoreCase(String message, String contains) {
-        return Pattern.compile(Pattern.quote(contains), Pattern.CASE_INSENSITIVE).matcher(message).find();
-    }
-
-    /**
-     * Logs an error to console. Handles most debugging logic
-     *
-     * @param baseIn the toggleBase where the error occurred
-     * @param ex the exception which was printed.
-     */
-    private void printSmartEx(ToggleBase baseIn, Exception ex) {
-        String message = "";
+        Pattern using = this.compiledPatterns.get(contains);
         
-        if (baseIn != null) {
-            if (baseIn instanceof TypeCustom) {
-                message = "[" + ((TypeCustom) baseIn)._getName() + ":" + ((TypeCustom) baseIn)
-                    ._getConditions().size() + " ] ";
-            } else {
-                message = "[" + baseIn.getName() + " ] ";
+        if (using == null) {
+            try {
+                // We want to compile a case-insensitive pattern for later use
+                using = Pattern.compile(Pattern.quote(contains), Pattern.CASE_INSENSITIVE);
+    
+                // Add the pattern to the precompiled pattern list.
+                this.compiledPatterns.put(contains, using);
+            } catch (PatternSyntaxException ex) {
+                // An error occurred when making the pattern. This is likely due to weird syntax
+                // when converting the raw message into a quoted pattern.
+                this.logger.error("Failed to compile a pattern using {}", contains, ex);
             }
-        } else {
-            message += "[Unknown] ";
         }
         
-        if (baseIn != null && ex != null) {
-            message += "An issue was encountered \"" + ex.getClass().getSimpleName() + "\" ";
-            
-            if (ex.getMessage() != null) {
-                message += ex.getMessage() + ", ";
-            }
-            if (ex.getCause() != null) {
-                message += ex.getCause();
-            }
-        } else {
-            message += "An unknown issue was encountered, please remove all other ToggleChat addons before reporting this issue!";
+        // If we've reached this stage it's likely that the previous
+        // pattern resulted in a syntax error. Just assume the message
+        // does not actually contain the allowed message to prevent
+        // a game crash.
+        if (using == null) {
+            return false;
         }
         
-        System.err.print(message);
+        // Identify if the message contains the text using Matcher#find() instead of Matcher#matches()
+        // since find() detects the pattern in a message, but doesn't require the entire message to follow
+        // the regex we compiled previously.
+        return using.matcher(message).find();
     }
 }

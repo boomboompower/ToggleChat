@@ -33,6 +33,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.Color;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -198,7 +199,7 @@ public abstract class ModernGui extends GuiScreen {
                 if (!toggleBase.hasDescription()) continue;
 
                 final int[] position = {firstPosition};
-                toggleBase.getDescription().forEach(text -> {
+                Arrays.stream(toggleBase.getDescription()).forEach(text -> {
                     drawCenteredString(ChatColor.translateAlternateColorCodes(text), this.width / 2 + 150, position[0], Color.WHITE.getRGB());
                     position[0] += 10;
                 });

@@ -50,10 +50,10 @@ public class MainCustomUI extends ModernGui {
                 this.mc.displayGuiScreen(new CreateCustomUI(this));
                 break;
             case 1:
-                this.mc.displayGuiScreen(new ToggleCustomUI(SelectType.MODIFY));
+                this.mc.displayGuiScreen(new ToggleCustomUI(this.mod, SelectType.MODIFY));
                 break;
             case 2:
-                this.mc.displayGuiScreen(new ToggleCustomUI(SelectType.TEST));
+                this.mc.displayGuiScreen(new ToggleCustomUI(this.mod, SelectType.TEST));
                 break;
         }
     }

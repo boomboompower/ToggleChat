@@ -17,6 +17,9 @@
 
 package wtf.boomy.togglechat.config;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import wtf.boomy.togglechat.ToggleChatMod;
 import wtf.boomy.togglechat.toggles.ICustomSaver;
 import wtf.boomy.togglechat.toggles.ToggleBase;
@@ -24,10 +27,10 @@ import wtf.boomy.togglechat.toggles.custom.ToggleCondition;
 import wtf.boomy.togglechat.toggles.custom.TypeCustom;
 import wtf.boomy.togglechat.toggles.custom.conditions.ConditionEmpty;
 import wtf.boomy.togglechat.toggles.custom.conditions.ConditionStartsWith;
+import wtf.boomy.togglechat.toggles.sorting.SortType;
 import wtf.boomy.togglechat.utils.BetterJsonObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -44,11 +47,12 @@ import java.util.stream.Collectors;
 
 public class ConfigLoader {
 
+    private final Logger logger = LogManager.getLogger("ToggleChat - Config");
+    
     // All the places we'll save and load at
     private final List<Object> locations = new ArrayList<>();
 
     private final File toggleFile;
-    private final File whitelistFile;
     private final File modernGuiFile;
 
     private File customToggleDir;
@@ -59,27 +63,32 @@ public class ConfigLoader {
     @SaveableField(saveId = "blur")
     private boolean modernBlur = true;
 
-    @SaveableField
+    @SaveableField(saveId = "button")
     private boolean modernButton = true;
 
-    @SaveableField
+    @SaveableField(saveId = "textbox")
     private boolean modernTextbox = true;
 
     @SaveableField(saveId = "favourites")
     private ArrayList<String> favourites = new ArrayList<>();
+    
+    @SaveableField(saveId = "whitelist")
+    private final ArrayList<String> whitelist = new ArrayList<>();
+    
+    @SaveableField(saveId = "sortType")
+    private SortType sortType = SortType.WIDTH;
+    
+    private final ToggleChatMod mod;
 
-    private final LinkedList<String> whitelist = new LinkedList<>();
+    public ConfigLoader(ToggleChatMod mod, File directory) {
+        this.mod = mod;
 
-    public ConfigLoader(ToggleChatMod mod, String directory) {
-        File e = new File(directory);
-
-        if (!e.exists()) {
-            e.mkdirs();
+        if (!directory.exists()) {
+            directory.mkdirs();
         }
 
-        this.toggleFile = new File(directory + "options.nn");
-        this.whitelistFile = new File(directory + "whitelist.nn");
-        this.modernGuiFile = new File(directory + "modern.nn");
+        this.toggleFile = new File(directory, "options.nn");
+        this.modernGuiFile = new File(directory, "modern.nn");
 
         addToSaving(this); // M  o  d  e  r  n
     }
@@ -97,11 +106,11 @@ public class ConfigLoader {
                 }
                 this.toggleJson = new BetterJsonObject(builder.toString());
             } catch (Exception ex) {
-                log("Could not read toggles properly, saving.");
+                this.logger.error("Could not read toggles properly, saving.", ex);
                 saveToggles();
             }
 
-            for (ToggleBase base : ToggleBase.getToggles().values()) {
+            for (ToggleBase base : this.mod.getToggleHandler().getToggles().values()) {
                 if (base instanceof ICustomSaver) {
                     ICustomSaver saver = (ICustomSaver) base;
                     if (!saver.useDefaultLoad()) {
@@ -128,10 +137,8 @@ public class ConfigLoader {
             }
 
             this.toggleFile.createNewFile();
-            FileWriter writer = new FileWriter(this.toggleFile);
-            BufferedWriter bufferedWriter = new BufferedWriter(writer);
 
-            for (ToggleBase base : ToggleBase.getToggles().values()) {
+            for (ToggleBase base : this.mod.getToggleHandler().getToggles().values()) {
                 if (base instanceof ICustomSaver) {
                     ICustomSaver saver = (ICustomSaver) base;
                     if (!saver.useDefaultSave()) {
@@ -144,40 +151,7 @@ public class ConfigLoader {
 
             this.toggleJson.writeToFile(this.toggleFile);
         } catch (Exception ex) {
-            log("Could not save toggles.");
-            ex.printStackTrace();
-        }
-    }
-
-    public void loadWhitelist() {
-        try {
-            if (exists(this.whitelistFile)) {
-                BufferedReader reader = new BufferedReader(new FileReader(this.whitelistFile));
-
-                for (String s : reader.lines().collect(Collectors.toList())) {
-                    // Don't load something that is empty, greater than 16 characters, or has spaces
-                    if (s != null && !s.isEmpty() && s.length() <= 16 && !s.contains(" ")) {
-                        this.whitelist.add(s);
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            saveWhitelist();
-        }
-    }
-
-    public void saveWhitelist() {
-        try {
-            FileWriter e = new FileWriter(this.whitelistFile);
-
-            for (String s : this.whitelist) {
-                e.write(s + System.lineSeparator());
-            }
-
-            e.close();
-        } catch (Exception ex) {
-            log("Could not save whitelist.");
-            ex.printStackTrace();
+            this.logger.error("Could not save toggles.", ex);
         }
     }
 
@@ -198,9 +172,10 @@ public class ConfigLoader {
                 writer.append("").append(System.lineSeparator());
                 writer.append("MyToggle : startsWith([YOUTUBE] Sk1er)").append(System.lineSeparator());
                 writer.close();
-
-                ToggleBase.addToggle(new TypeCustom("MyToggle", new ConditionStartsWith("[YOUTUBE] Sk1er")));
-            } catch (Exception ignored) {
+    
+                this.mod.getToggleHandler().addToggle(new TypeCustom("MyToggle", new ConditionStartsWith("[YOUTUBE] Sk1er")));
+            } catch (Exception ex) {
+                this.logger.error("Failed to save custom toggles", ex);
             }
             return;
         }
@@ -259,8 +234,7 @@ public class ConfigLoader {
                         }
 
                     } catch (Exception ex) {
-                        ex.printStackTrace();
-                        log("An issue occured while loading \"" + file.getName() + "\". Make sure it isn't corruputed!");
+                        this.logger.error("An issue occurred while loading \"{}\". Potentially corrupted?", file.getName(), ex);
                     }
                 }
             }
@@ -272,12 +246,11 @@ public class ConfigLoader {
 
             for (TypeCustom custom : customs) {
                 custom.clean(); // Hasn't been modified. Doesn't need saving
-
-                ToggleBase.addToggle(custom);
+    
+                this.mod.getToggleHandler().addToggle(custom);
             }
         } catch (Exception ex) {
-            log("Failed to load your custom toggles!");
-            ex.printStackTrace();
+            this.logger.error("Failed to load your custom toggles!", ex);
         }
     }
 
@@ -307,7 +280,7 @@ public class ConfigLoader {
             this.customToggleDir.mkdirs();
         }
 
-        for (Map.Entry<String, ToggleBase> entry : ToggleBase.getToggles().entrySet()) {
+        for (Map.Entry<String, ToggleBase> entry : this.mod.getToggleHandler().getToggles().entrySet()) {
             if (entry.getValue() instanceof TypeCustom) {
                 TypeCustom base = (TypeCustom) entry.getValue();
 
@@ -324,8 +297,6 @@ public class ConfigLoader {
         if (!base.isDirty()) {
             return;
         }
-
-        System.out.println("Saving " + base.getName());
 
         try {
             File file = new File(this.customToggleDir, base.getName().toLowerCase() + ".txt");
@@ -348,7 +319,7 @@ public class ConfigLoader {
             }
             writer.close();
         } catch (Exception ex) {
-            log("Failed to save custom toggle: \"%s\"!", base.getName());
+            this.logger.error("Failed to save custom toggle: \"{}\"!", base.getName(), ex);
         }
 
         base.clean();
@@ -380,7 +351,7 @@ public class ConfigLoader {
 
             this.modernJson = new BetterJsonObject(builder.toString().trim());
         } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
+            this.logger.error(ex);
 
             failed = true;
         } finally {
@@ -406,8 +377,7 @@ public class ConfigLoader {
 
                                 f.set(o, this.modernJson.getGsonData().fromJson(this.modernJson.get(saveId), f.getType()));
                             } catch (Exception ex) {
-                                ex.printStackTrace();
-                                System.err.println("Failed to load settings for field " + f.getName() + " in " + clazz.getName());
+                                this.logger.error("Failed to load settings for field {} in {}", f.getName(), clazz.getName(), ex);
                             }
                         }
                     }
@@ -440,8 +410,7 @@ public class ConfigLoader {
 
                         this.modernJson.getData().add(saveId, this.modernJson.getGsonData().toJsonTree(f.get(o), f.getType()));
                     } catch (Exception ex) {
-                        ex.printStackTrace();
-                        System.err.println("Failed to save settings for field " + f.getName() + " in " + clazz.getName());
+                        this.logger.error("Failed to save settings for field {} in {}", f.getName(), clazz.getName(), ex);
                     }
                 }
             }
@@ -472,17 +441,9 @@ public class ConfigLoader {
     public boolean exists(File file) {
         return Files.exists(Paths.get(file.getPath()));
     }
-
-    protected void log(String message, Object... replace) {
-        System.out.println(String.format("[ConfigLoader] " + message, replace));
-    }
     
     public File getToggleFile() {
         return this.toggleFile;
-    }
-    
-    public File getWhitelistFile() {
-        return this.whitelistFile;
     }
     
     public File getModernGuiFile() {
@@ -509,8 +470,12 @@ public class ConfigLoader {
         return this.favourites;
     }
     
-    public LinkedList<String> getWhitelist() {
+    public List<String> getWhitelist() {
         return this.whitelist;
+    }
+    
+    public SortType getSortType() {
+        return this.sortType;
     }
     
     public void setModernBlur(boolean modernBlur) {
@@ -527,5 +492,9 @@ public class ConfigLoader {
     
     public void setFavourites(ArrayList<String> favourites) {
         this.favourites = favourites;
+    }
+    
+    public void setSortType(SortType type) {
+        this.sortType = type;
     }
 }

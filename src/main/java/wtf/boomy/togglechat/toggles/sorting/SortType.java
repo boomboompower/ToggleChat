@@ -41,8 +41,6 @@ public enum SortType {
     private final String description;
     private final Comparator<ToggleBase> sorter;
 
-    private static int chosenValue = 0;
-
     SortType() {
         this(null, null);
     }
@@ -73,19 +71,13 @@ public enum SortType {
         return this.description;
     }
 
-    public static SortType getCurrentSortType() {
-        return values()[chosenValue];
-    }
-
-    public static SortType getNextSortType() {
-        int nextValue = chosenValue + 1;
-
-        if (nextValue >= values().length) {
-            nextValue = 0;
+    public SortType getNextSortType() {
+        int nextSort = ordinal() + 1;
+        
+        if (nextSort >= values().length) {
+            nextSort = 0;
         }
-
-        chosenValue = nextValue;
-
-        return values()[nextValue];
+        
+        return values()[nextSort];
     }
 }

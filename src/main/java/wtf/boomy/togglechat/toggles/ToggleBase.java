@@ -17,18 +17,9 @@
 
 package wtf.boomy.togglechat.toggles;
 
-import wtf.boomy.togglechat.toggles.custom.TypeCustom;
-import wtf.boomy.togglechat.toggles.defaults.*;
-import wtf.boomy.togglechat.toggles.sorting.impl.ToggleBaseComparator;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.regex.Pattern;
 
 /**
  * Created to replace the old ToggleBase class, supports custom toggles.
@@ -39,98 +30,14 @@ import java.util.regex.Pattern;
  * @version 2.4
  */
 public abstract class ToggleBase {
-
-    private static final ToggleBaseComparator comparator = new ToggleBaseComparator();
-
-    /* Name | ToggleBase */
-    private static final LinkedHashMap<String, ToggleBase> toggles = new LinkedHashMap<>();
-
-    /* Name | TypeCustom */
-    private static final LinkedHashMap<String, ToggleBase> custom = new LinkedHashMap<>();
     
+    private boolean enabled = true; // By default we want them enabled.
     private boolean favourite;
-    private boolean enabled;
 
     /**
      * Default constructor for ToggleBase
      */
     public ToggleBase() {
-    }
-
-    /**
-     * Adds the developers own ToggleBase
-     *
-     * @param toggleBase the developers toggle
-     */
-    public static void addToggle(ToggleBase toggleBase) {
-        if (toggleBase != null && toggleBase.getName() != null) {
-            if (toggleBase instanceof TypeCustom) {
-                custom.put(toggleBase.getIdString(), toggleBase);
-
-                // We want to reorder every time a custom one is added, so things added later on will reorder it
-                sortMap(custom);
-            } else {
-                toggles.put(toggleBase.getIdString(), toggleBase);
-            }
-        }
-    }
-
-    /**
-     * Clears all the normal toggles and orders them by the size of their unformatted display text.
-     * Used at startup
-     */
-    public static void remake() {
-        toggles.clear();
-        addToggle(new TypeAds());
-        addToggle(new TypePit());
-        addToggle(new TypeTip());
-        addToggle(new TypeEasy());
-        addToggle(new TypeGexp());
-        addToggle(new TypeTeam());
-        addToggle(new TypeGuild());
-        addToggle(new TypeParty());
-        addToggle(new TypeShout());
-        addToggle(new TypeGlobal());
-        addToggle(new TypeColored());
-        addToggle(new TypeHousing());
-        addToggle(new TypeSpecial());
-        addToggle(new TypeMessages());
-        addToggle(new TypeSoulWell());
-        addToggle(new TypeWatchdog());
-        addToggle(new TypeAutoQuest());
-        addToggle(new TypeGuildJoin());
-        addToggle(new TypeLobbyJoin());
-        addToggle(new TypeSpectator());
-        addToggle(new TypeFriendJoin());
-        addToggle(new TypeGuildLeave());
-        addToggle(new TypeMysteryBox());
-        addToggle(new TypeBuildBattle());
-        addToggle(new TypeFriendLeave());
-        addToggle(new TypePartyInvites());
-        addToggle(new TypeFriendRequests());
-        addToggle(new TypeMessageSeparator());
-
-        sortMap(toggles);
-    }
-
-    /**
-     * Gets a toggle by the given name, may return null
-     *
-     * @param name the toggle's name
-     * @return a ToggleBase instance if found, or else null
-     */
-    public static ToggleBase getToggle(String name) {
-        return toggles.getOrDefault(name, null);
-    }
-
-    /**
-     * Checks to see if the registered parsers contains a parser with the given name.
-     *
-     * @param name The toggle's name to test for
-     * @return true if it is registered
-     */
-    public static boolean hasToggle(String name) {
-        return toggles.containsKey(name);
     }
 
     /**
@@ -165,7 +72,7 @@ public abstract class ToggleBase {
      *
      * @return description of the toggle, can be null
      */
-    public abstract LinkedList<String> getDescription();
+    public abstract String[] getDescription();
 
 
     /**
@@ -183,7 +90,7 @@ public abstract class ToggleBase {
      * @return true if the description is valid
      */
     public final boolean hasDescription() {
-        return getDescription() != null && !getDescription().isEmpty();
+        return getDescription() != null && getDescription().length > 0;
     }
 
     /**
@@ -214,7 +121,7 @@ public abstract class ToggleBase {
     }
     
     /**
-     * Has this toggle been favourited by the user? This is used for filtering
+     * Is this toggle one of the users favourites? This is used for filtering
      *
      * @return return true if this is a favourite toggle
      */
@@ -233,31 +140,7 @@ public abstract class ToggleBase {
     
     @Override
     public final String toString() {
-        String message = "ToggleBase{parsers = ";
-
-        if (toggles.isEmpty()) {
-            message += "[]";
-        } else {
-            message += Arrays.toString(toggles.keySet().toArray());
-        }
-
-        if (!custom.isEmpty()) {
-            message += ", custom = " + Arrays.toString(custom.keySet().toArray());
-        }
-
-        return message + "}";
-    }
-
-    /**
-     * Creates a new temporary HashMap for toggles. this is to prevent HashMap.clear
-     *
-     * @return The toggle list
-     */
-    public static LinkedHashMap<String, ToggleBase> getToggles() {
-        LinkedHashMap<String, ToggleBase> newInput = new LinkedHashMap<>();
-        toggles.forEach(newInput::put);
-        custom.forEach(newInput::put);
-        return newInput;
+        return "ToggleBase{name = " + getName() + ", enabled = " + isEnabled() + ", favourite = " + isFavourite() + "}";
     }
 
     /**
@@ -268,50 +151,7 @@ public abstract class ToggleBase {
      * @return a list view of the specified array
      */
     @SafeVarargs
-    public final <T> LinkedList<T> asLinked(T... entry) {
+    protected final <T> LinkedList<T> asLinked(T... entry) {
         return new LinkedList<>(Arrays.asList(entry));
-    }
-
-    public static void inheritFavourites(ArrayList<String> favourites) {
-        for (String f : favourites) {
-            ToggleBase toggle = getToggle(f);
-
-            if (toggle != null) {
-                toggle.setFavourite(true);
-            }
-        }
-    }
-
-    /**
-     * Checks if the message contains something without being case-sensitive
-     *
-     * @param message  The message to check
-     * @param contains the contents
-     * @return true if it contains it
-     */
-    public final boolean containsIgnoreCase(String message, String contains) {
-        return Pattern.compile(Pattern.quote(contains), Pattern.CASE_INSENSITIVE).matcher(message)
-                .find();
-    }
-
-    /**
-     * Used to sort by the displayname of the toggle, so the gui looks neat without having to do it
-     * manually
-     *
-     * @param map the map to sort
-     */
-    private static void sortMap(LinkedHashMap<String, ToggleBase> map) {
-        List<Entry<String, ToggleBase>> list = new LinkedList<>(map.entrySet());
-
-        list.sort(comparator);
-
-        Map<String, ToggleBase> sortedMap = new LinkedHashMap<>();
-
-        for (Entry<String, ToggleBase> entry : list) {
-            sortedMap.put(entry.getKey(), entry.getValue());
-        }
-
-        map.clear();
-        map.putAll(sortedMap);
     }
 }

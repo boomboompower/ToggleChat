@@ -17,6 +17,9 @@
 
 package wtf.boomy.togglechat.toggles.custom.conditions;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import wtf.boomy.togglechat.toggles.custom.ToggleCondition;
 
 import java.util.regex.Pattern;
@@ -30,7 +33,8 @@ import java.util.regex.PatternSyntaxException;
  * @author OrangeMarshall
  */
 public class ConditionRegex extends ToggleCondition {
-
+    
+    private static final Logger logger = LogManager.getLogger("ToggleChat - Regex");
     private static final String REGEX = "https://regex101.com";
 
     private Pattern pattern;
@@ -40,9 +44,7 @@ public class ConditionRegex extends ToggleCondition {
         try {
             this.pattern = Pattern.compile(input);
         } catch (PatternSyntaxException ex) {
-            System.out.println(String
-                    .format("[ToggleCondition] Invalid Regex: \"%s\", try using %s to fix it!", input,
-                            ConditionRegex.REGEX));
+            logger.error("Invalid Regex: \"{}\", try using {} to fix it!", input, ConditionRegex.REGEX, ex);
             this.pattern = null;
         }
     }

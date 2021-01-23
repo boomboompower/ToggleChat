@@ -22,16 +22,16 @@ import wtf.boomy.togglechat.toggles.ToggleBase;
 import java.util.LinkedList;
 
 /**
- * A dummy ToggleBase instance used as a hack to display messages on the ModernGui screens.
+ * A dummy ToggleBase instance used to display messages on the ModernGui screens.
  * <p>
  * DO NOT REGISTER THIS IN THE {@link ToggleBase} CLASS!
  */
 public class ToggleDummyMessage extends ToggleBase {
 
-    private final LinkedList<String> message;
+    private String[] message;
 
     public ToggleDummyMessage(String... message) {
-        this.message = asLinked(message);
+        this.message = message;
     }
 
     @Override
@@ -54,15 +54,26 @@ public class ToggleDummyMessage extends ToggleBase {
     }
 
     @Override
-    public LinkedList<String> getDescription() {
+    public String[] getDescription() {
         return this.message;
     }
 
     public void appendLine(String line) {
-        this.message.add(line);
+        // Treat null chars as an empty line.
+        if (line == null) {
+            line = "";
+        }
+        
+        String[] addedArray = new String[this.message.length + 1];
+    
+        System.arraycopy(this.message, 0, addedArray, 0, this.message.length);
+        
+        addedArray[this.message.length] = line;
+    
+        this.message = addedArray;
     }
 
     public void clearLines() {
-        this.message.clear();
+        this.message = new String[0];
     }
 }

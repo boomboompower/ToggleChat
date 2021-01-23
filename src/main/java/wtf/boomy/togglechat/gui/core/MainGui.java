@@ -25,13 +25,14 @@ import wtf.boomy.togglechat.gui.list.ViewListUI;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 import wtf.boomy.togglechat.toggles.custom.ICustomToggle;
 import wtf.boomy.togglechat.toggles.dummy.ToggleDummyMessage;
-import wtf.boomy.togglechat.toggles.sorting.SortType;
 import wtf.boomy.togglechat.utils.ChatColor;
+
 import org.lwjgl.input.Mouse;
 
 import java.awt.Color;
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.Map;
 
 public class MainGui extends ModernGui {
 
@@ -45,16 +46,12 @@ public class MainGui extends ModernGui {
     //        + 69
 
     private boolean favouritesChanged = false;
-    private boolean nobuttons = false;
+    private boolean nothingFound = false;
     private boolean changed = false;
 
     private int pages;
     private int pageNumber;
-
-    private boolean favouring;
-    private int favouriteCount;
-
-    private static SortType sortType = SortType.getCurrentSortType();
+    private int pagesTotal;
 
     public MainGui(int pageNumber) {
         this.pageNumber = pageNumber;
@@ -62,10 +59,14 @@ public class MainGui extends ModernGui {
 
     @Override
     public void initGui() {
-        if (ToggleBase.getToggles().values().size() > 0) {
-            this.nobuttons = false;
+        Map<String, ToggleBase> toggles = this.mod.getToggleHandler().getToggles();
+        
+        this.pagesTotal = (int) Math.ceil((double) toggles.size() / 7D);
+        
+        if (toggles.values().size() > 0) {
+            this.nothingFound = false;
 
-            this.pages = (int) Math.ceil((double) ToggleBase.getToggles().size() / 7D);
+            this.pages = (int) Math.ceil((double) toggles.size() / 7D);
 
             if (this.pageNumber < 1 || this.pageNumber > pages) {
                 this.pageNumber = 1;
@@ -73,9 +74,9 @@ public class MainGui extends ModernGui {
 
             final int[] position = {this.height / 2 - 75};
 
-            Comparator<ToggleBase> sorter = sortType.getSorter();
-
-            ToggleBase.getToggles().values().stream().sorted(sorter).skip((this.pageNumber - 1) * 7).limit(7)
+            Comparator<ToggleBase> sorter = this.mod.getConfigLoader().getSortType().getSorter();
+    
+            toggles.values().stream().sorted(sorter).skip((this.pageNumber - 1) * 7).limit(7)
                     .forEach(baseType -> {
                         ModernButton button = new ModernButton(0, baseType.getIdString(),
                                 this.width / 2 - 75, position[0], 150, 20,
@@ -106,7 +107,7 @@ public class MainGui extends ModernGui {
                             )
                     ));
 
-            String sort_string = "Sort: " + ChatColor.AQUA + sortType.getDisplayName();
+            String sort_string = "Sort: " + ChatColor.AQUA + this.mod.getConfigLoader().getSortType().getDisplayName();
             ToggleDummyMessage dummyMessage = new ToggleDummyMessage();
 
             addSortMessageData(dummyMessage);
@@ -131,40 +132,20 @@ public class MainGui extends ModernGui {
                     ));
             return;
         }
-        this.nobuttons = true;
+        this.nothingFound = true;
     }
 
     @Override
     public void drawScreen(int x, int y, float ticks) {
         drawDefaultBackground();
 
-        if (this.favouring) {
-            this.favouriteCount += 2;
-
-            if (this.favouriteCount > 2550) {
-                this.favouriteCount = 2550;
-
-                this.favouring = false;
-            }
-        } else if (this.favouriteCount > 0) {
-            this.favouriteCount -= 1;
-        }
-
-        if (this.favouriteCount > 0) {
-            Color favouriteColor = new Color(255, 170, 0, this.favouriteCount / 10);
-
-            drawString(this.fontRendererObj, "Favourite Added", this.width - this.fontRendererObj.getStringWidth("Favourite Added") - 10, 10, favouriteColor.getRGB());
-        }
-
-        if (this.nobuttons) {
-            drawCenteredString(this.fontRendererObj, "An issue occured whilst loading ToggleChat!", this.width / 2, this.height / 2 - 50, Color.WHITE.getRGB());
+        if (this.nothingFound) {
+            drawCenteredString(this.fontRendererObj, "An issue occurred whilst loading ToggleChat!", this.width / 2, this.height / 2 - 50, Color.WHITE.getRGB());
             drawCenteredString(this.fontRendererObj, "Buttons have not loaded correctly", this.width / 2, this.height / 2 - 30, Color.WHITE.getRGB());
             drawCenteredString(this.fontRendererObj, "Please reinstall the mod!", this.width / 2, this.height / 2, Color.WHITE.getRGB());
             return;
         } else {
-            drawCenteredString(this.fontRendererObj, String.format("Page %s/%s", (this.pageNumber),
-                    (int) Math.ceil((double) ToggleBase.getToggles().size() / 7D)), this.width / 2,
-                    this.height / 2 - 94, Color.WHITE.getRGB());
+            drawCenteredString(this.fontRendererObj, "Page " + this.pageNumber + "/" + this.pagesTotal, this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
         }
 
         super.drawScreen(x, y, ticks);
@@ -188,7 +169,7 @@ public class MainGui extends ModernGui {
                 this.mc.displayGuiScreen(new ModernConfigGui(this));
                 return;
             case 5:
-                sortType = SortType.getNextSortType();
+                this.mod.getConfigLoader().setSortType(this.mod.getConfigLoader().getSortType().getNextSortType());
 
                 ToggleBase inbuiltData = button.getButtonData();
 
@@ -199,6 +180,8 @@ public class MainGui extends ModernGui {
 
                     addSortMessageData(dummyMessage);
                 }
+                
+                this.mod.getConfigLoader().saveModernUtils();
 
                 this.mc.displayGuiScreen(new MainGui(this.pageNumber));
                 return;
@@ -227,6 +210,11 @@ public class MainGui extends ModernGui {
         }
 
         ToggleBase base = button.getButtonData();
+        
+        // Patch for non-toggle buttons.
+        if (base instanceof ToggleDummyMessage) {
+            return;
+        }
 
         base.setFavourite(!base.isFavourite());
         button.setFavourite(base.isFavourite());
@@ -248,9 +236,10 @@ public class MainGui extends ModernGui {
         }
 
         if (this.favouritesChanged) {
+    
             this.mod.getConfigLoader().getFavourites().clear();
-
-            for (ToggleBase t : ToggleBase.getToggles().values()) {
+    
+            for (ToggleBase t : this.mod.getToggleHandler().getToggles().values()) {
                 if (t.isFavourite()) {
                     this.mod.getConfigLoader().getFavourites().add(t.getIdString());
                 }
@@ -264,7 +253,7 @@ public class MainGui extends ModernGui {
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
 
-        if (this.nobuttons) {
+        if (this.nothingFound) {
             return;
         }
 
@@ -282,16 +271,16 @@ public class MainGui extends ModernGui {
         dummyMessage.appendLine("of the toggles so some");
         dummyMessage.appendLine("are easier to find");
         dummyMessage.appendLine(" ");
+        
+        String desc = this.mod.getConfigLoader().getSortType().getDescription();
 
-        if (sortType.getDescription() != null) {
-            String sortDescription = sortType.getDescription();
-
-            if (sortDescription.contains("\n")) {
-                for (String line : sortDescription.split("\n")) {
+        if (desc != null) {
+            if (desc.contains("\n")) {
+                for (String line : desc.split("\n")) {
                     dummyMessage.appendLine(line);
                 }
             } else {
-                dummyMessage.appendLine(sortDescription);
+                dummyMessage.appendLine(desc);
             }
         }
     }

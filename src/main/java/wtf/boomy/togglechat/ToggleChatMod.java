@@ -19,6 +19,7 @@ package wtf.boomy.togglechat;
 
 import wtf.boomy.togglechat.commands.impl.ToggleCommand;
 import wtf.boomy.togglechat.config.ConfigLoader;
+import wtf.boomy.togglechat.toggles.ToggleHandler;
 import wtf.boomy.togglechat.utils.uis.blur.BlurModHandler;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 import wtf.boomy.togglechat.utils.ChatColor;
@@ -38,13 +39,18 @@ public class ToggleChatMod {
 
     public static final String MODID = "togglechatmod";
     public static final String VERSION = "3.1.0";
-
+    
+    private final ToggleHandler toggleHandler;
     private ConfigLoader configLoader;
     private BlurModHandler blurModHandler;
 
     @Mod.Instance
     private static ToggleChatMod instance;
 
+    public ToggleChatMod() {
+        this.toggleHandler = new ToggleHandler(this);
+    }
+    
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         ModMetadata data = event.getModMetadata();
@@ -59,15 +65,13 @@ public class ToggleChatMod {
         // These are the greatest people, shower them with praise and good fortune!
         data.credits = "2Pi for the idea, OrangeMarshall for help with CustomToggles and tterrag1098 for the gui blur code";
 
-        this.configLoader = new ConfigLoader(this,
-            "mods" + File.separator + "togglechat" + File.separator + "mc" + File.separator);
-//        this.configLoader = new ConfigLoader(this, "mods" + File.separator + "togglechat" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId() + File.separator);
+        this.configLoader = new ConfigLoader(this, new File(event.getModConfigurationDirectory(), "togglechat"));
         this.blurModHandler = new BlurModHandler(this).preInit(event);
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        ToggleBase.remake();
+        this.toggleHandler.remake();
 
         MinecraftForge.EVENT_BUS.register(new ToggleEvents(this));
         ClientCommandHandler.instance.registerCommand(new ToggleCommand(this));
@@ -77,10 +81,9 @@ public class ToggleChatMod {
     public void postInit(FMLPostInitializationEvent event) {
         this.configLoader.loadCustomToggles();
         this.configLoader.loadToggles();
-        this.configLoader.loadWhitelist();
         this.configLoader.loadModernUtils();
 
-        ToggleBase.inheritFavourites(this.configLoader.getFavourites());
+        this.toggleHandler.inheritFavourites(this.configLoader.getFavourites());
     }
 
     /**
@@ -100,7 +103,17 @@ public class ToggleChatMod {
     public BlurModHandler getBlurModHandler() {
         return this.blurModHandler;
     }
-
+    
+    /**
+     * Returns the instance of the togglehandler which stores all the registered
+     * custom and default toggles for the mod
+     *
+     * @return the ToggleHandler for the mod.
+     */
+    public ToggleHandler getToggleHandler() {
+        return this.toggleHandler;
+    }
+    
     /**
      * Getter for this instance
      *
