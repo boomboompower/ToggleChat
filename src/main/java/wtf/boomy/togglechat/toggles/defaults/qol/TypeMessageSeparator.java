@@ -39,8 +39,8 @@ public class TypeMessageSeparator extends ToggleBase {
         if (this.separatorPattern.matcher(message).matches()) {
             return true;
         }
-    
-        return message.contains("------");
+        
+        return message.contains("------") || message.contains("\u25AC\u25AC\u25AC\u25AC");
     }
     
     @Override

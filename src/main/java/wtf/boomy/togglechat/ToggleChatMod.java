@@ -66,7 +66,7 @@ public class ToggleChatMod {
         data.credits = "2Pi for the idea, OrangeMarshall for help with CustomToggles and tterrag1098 for the gui blur code";
 
         this.configLoader = new ConfigLoader(this, new File(event.getModConfigurationDirectory(), "togglechat"));
-        this.blurModHandler = new BlurModHandler(this).preInit(event);
+        this.blurModHandler = new BlurModHandler(this).load();
     }
 
     @Mod.EventHandler

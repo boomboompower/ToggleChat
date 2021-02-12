@@ -75,7 +75,7 @@ public class ModernConfigGui extends ModernGui {
 
                 this.configLoader.setModernBlur(!this.configLoader.isModernBlur());
                 button.setText("Blur: " + getStatus(this.configLoader.isModernBlur()));
-                this.mod.getBlurModHandler().reload();
+                this.mod.getBlurModHandler().reloadBlur(this.mc.currentScreen);
                 break;
             case 2:
                 this.modified = true;

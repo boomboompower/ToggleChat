@@ -17,8 +17,6 @@
 
 package wtf.boomy.togglechat.utils.uis.blur;
 
-import wtf.boomy.togglechat.ToggleChatMod;
-import wtf.boomy.togglechat.utils.uis.ModernGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -28,119 +26,192 @@ import net.minecraft.client.shader.ShaderUniform;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import wtf.boomy.togglechat.ToggleChatMod;
+import wtf.boomy.togglechat.utils.uis.ModernGui;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
- * Handles all blur-things for the mod. Licensing info and permission availible in resources
+ * An implementation of the BlurMC mod by tterrag1098.
  *
- * @author tterrag1098
+ * For the original source see https://github.com/tterrag1098/Blur/blob/1.8.9/src/main/java/com/tterrag/blur/Blur.java
+ * For the public license, see https://github.com/tterrag1098/Blur/blob/1.8.9/LICENSE
+ *
+ * License available under https://github.com/boomboompower/ToggleChat/blob/master/src/main/resources/licenses/BlurMC-License.txt
+ *
+ * @author tterrag1098, boomboompower
  */
 @SuppressWarnings("unchecked")
 public class BlurModHandler {
     
+    private final ResourceLocation blurShader = new ResourceLocation("shaders/post/fade_in_blur.json");
+    private final Logger logger = LogManager.getLogger("ToggleChat - Blur");
     private final Minecraft mc = Minecraft.getMinecraft();
     private final ToggleChatMod theMod;
     
     private Field _listShaders;
     private long start;
     
-    private boolean enabled;
+    private float lastProgress = 0;
     
     public BlurModHandler(ToggleChatMod mod) {
         this.theMod = mod;
     }
     
-    public BlurModHandler preInit(FMLPreInitializationEvent event) {
+    /**
+     * Simply initializes the blur mod so events are properly handled by forge.
+     */
+    public BlurModHandler load() {
         MinecraftForge.EVENT_BUS.register(this);
         
         return this;
     }
     
     @SubscribeEvent
-    public void onGuiChange(final GuiOpenEvent event) {
+    public void onGuiChange(GuiOpenEvent event) {
         if (this._listShaders == null) {
             this._listShaders = ReflectionHelper.findField(ShaderGroup.class, "field_148031_d", "listShaders");
         }
         
-        if (this.mc.theWorld != null) {
-            final EntityRenderer er = this.mc.entityRenderer;
-            if (this.theMod.getConfigLoader().isModernBlur() && !er.isShaderActive() && event.gui instanceof ModernGui) {
-                loadShader(er, new ResourceLocation("shaders/post/fade_in_blur.json"));
-                this.start = System.currentTimeMillis();
-            } else if (er.isShaderActive() && event.gui == null) {
-                er.stopUseShader();
-            }
-        }
+        reloadBlur(event.gui);
     }
     
     @SubscribeEvent
     public void onRenderTick(final TickEvent.RenderTickEvent event) {
+        this.mc.mcProfiler.startSection("blur");
+        
         if (event.phase != TickEvent.Phase.END) {
             return;
         }
         
-        if (this.mc.currentScreen != null && this.theMod.getConfigLoader().isModernBlur() && this.mc.entityRenderer.isShaderActive()) {
-            final ShaderGroup sg = this.mc.entityRenderer.getShaderGroup();
-            try {
-                if (this._listShaders == null) {
-                    this._listShaders = ReflectionHelper.findField(ShaderGroup.class, "field_148031_d", "listShaders");
-                }
-                
-                final List<Shader> shaders = (List<Shader>) this._listShaders.get(sg);
-                for (final Shader s : shaders) {
-                    final ShaderUniform su = s.getShaderManager().getShaderUniform("Progress");
-                    if (su != null) {
-                        su.set(this.getProgress());
-                    }
-                }
-            } catch (IllegalArgumentException | IllegalAccessException ignored) {
-            }
+        // Only blur if we have blur enabled.
+        if (!this.theMod.getConfigLoader().isModernBlur()) {
+            return;
         }
-    }
-    
-    /**
-     * Reloads all shaders
-     */
-    public void reload() {
-        if (this.mc.theWorld != null) {
-            GuiScreen gui = this.mc.currentScreen;
-            
-            final EntityRenderer er = this.mc.entityRenderer;
-            if (!er.isShaderActive() && gui instanceof ModernGui) {
-                loadShader(er, new ResourceLocation("shaders/post/fade_in_blur.json"));
-                this.start = System.currentTimeMillis();
-            } else if (er.isShaderActive() && (gui == null || !this.theMod.getConfigLoader().isModernBlur())) {
-                er.stopUseShader();
-            }
+        
+        // Only blur on our own menus
+        if (this.mc.currentScreen == null) {
+            return;
         }
-    }
+        
+        // Only update the shader if one is active
+        if (!this.mc.entityRenderer.isShaderActive()) {
+            return;
+        }
+        
+        float progress = getBlurStrengthProgress();
+        
+        // If the new progress value matches the old one this
+        // will skip the frame update, which (hopefully) resolves the issue
+        // with the heavy computations after the "animation" is complete.
+        if (progress == this.lastProgress) {
+            return;
+        }
+        
+        // Store it for the next iteration!
+        this.lastProgress = progress;
     
-    /**
-     * Gets the progress of the blur
-     */
-    private float getProgress() {
-        return Math.min((System.currentTimeMillis() - this.start) / 50, 5.0F);
-    }
+        // Grab the ShaderGroup instance. This can't be stored since it is
+        // consistently deleted by the game whenever a new shader is loaded.
+        ShaderGroup sg = this.mc.entityRenderer.getShaderGroup();
     
-    /**
-     * Loads a shader into the game
-     *
-     * @param er the entity renderer
-     * @param shader the shader
-     */
-    private void loadShader(EntityRenderer er, ResourceLocation shader) {
+        // This is hilariously bad, and could cause frame issues on low-end computers.
+        // Why is this being computed every tick? Surely there is a better way?
+        // This needs to be optimized.
         try {
-            ReflectionHelper
-                .findMethod(EntityRenderer.class, er, new String[] {"func_175069_a", "loadShader"},
-                    ResourceLocation.class).invoke(er, shader);
-        } catch (ReflectionHelper.UnableToFindMethodException | IllegalAccessException | InvocationTargetException ignored) {
+            // If no instance of our shader list is available, use
+            // reflection to retrieve it from the ShaderGroup class.
+            // this is cached for later use...
+            if (this._listShaders == null) {
+                this._listShaders = ReflectionHelper.findField(ShaderGroup.class, "field_148031_d", "listShaders");
+            }
+
+            // Should not happen. Something bad happened.
+            if (this._listShaders == null) {
+                return;
+            }
+
+            // Get the list of shaders from the list.
+            List<Shader> shaders = (List<Shader>) this._listShaders.get(sg);
+            
+            // Iterate through the list of shaders.
+            for (Shader shader : shaders) {
+                ShaderUniform su = shader.getShaderManager().getShaderUniform("Progress");
+                
+                if (su == null) {
+                    continue;
+                }
+    
+                // All this for this.
+                su.set(progress);
+            }
+        } catch (IllegalArgumentException | IllegalAccessException ex) {
+            this.logger.error("An error occurred while updating the blur. Please report this!", ex);
+        }
+    }
+    
+    /**
+     * Activates/deactivates the blur in the current world if
+     * one of many conditions are met, such as no current other shader
+     * is being used, we actually have the blur setting enabled
+     */
+    public void reloadBlur(GuiScreen gui) {
+        // Don't do anything if no world is loaded
+        if (this.mc.theWorld == null) {
+            return;
+        }
+    
+        EntityRenderer er = this.mc.entityRenderer;
+    
+        // If a shader is not already active and the UI is
+        // a one of ours, we should load our own blur!
+        if (!er.isShaderActive() && gui instanceof ModernGui) {
+            loadShader(er, this.blurShader);
+        
+            this.start = System.currentTimeMillis();
+            
+        // If a shader is active and the incoming UI is null or we have blur disabled, stop using the shader.
+        } else if (er.isShaderActive() && (gui == null || !this.theMod.getConfigLoader().isModernBlur())) {
+            String name = er.getShaderGroup().getShaderGroupName();
+        
+            // Only stop our specific blur ;)
+            if (!name.endsWith("fade_in_blur.json")) {
+                return;
+            }
+        
+            er.stopUseShader();
+        }
+    }
+    
+    /**
+     * Returns the strength of the blur as determined by the duration the effect of the blur.
+     *
+     * The strength of the blur does not go below 5.0F.
+     */
+    private float getBlurStrengthProgress() {
+        return Math.min((System.currentTimeMillis() - this.start) / 50F, 5.0F);
+    }
+    
+    /**
+     * Uses reflection to load a shader into the EntityRenderer class from a ResourceLocation.
+     *
+     * @param renderer the entity renderer
+     * @param shader the shader to load into the renderer.
+     */
+    private void loadShader(EntityRenderer renderer, ResourceLocation shader) {
+        try {
+            ReflectionHelper.findMethod(EntityRenderer.class, renderer, new String[] {"func_175069_a", "loadShader"}, ResourceLocation.class).invoke(renderer, shader);
+        } catch (ReflectionHelper.UnableToFindMethodException | IllegalAccessException | InvocationTargetException ex) {
+            this.logger.error("Failed to load a shader {}", renderer, ex);
         }
     }
 }
