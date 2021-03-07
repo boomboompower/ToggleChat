@@ -81,7 +81,7 @@ public class BlurModHandler {
         if (this._listShaders == null) {
             this._listShaders = ReflectionHelper.findField(ShaderGroup.class, "field_148031_d", "listShaders");
         }
-        
+
         reloadBlur(event.gui);
     }
     
@@ -90,21 +90,25 @@ public class BlurModHandler {
         this.mc.mcProfiler.startSection("blur");
         
         if (event.phase != TickEvent.Phase.END) {
+            this.mc.mcProfiler.endSection();
             return;
         }
         
         // Only blur if we have blur enabled.
         if (!this.theMod.getConfigLoader().isModernBlur()) {
+            this.mc.mcProfiler.endSection();
             return;
         }
         
         // Only blur on our own menus
         if (this.mc.currentScreen == null) {
+            this.mc.mcProfiler.endSection();
             return;
         }
         
         // Only update the shader if one is active
         if (!this.mc.entityRenderer.isShaderActive()) {
+            this.mc.mcProfiler.endSection();
             return;
         }
         
@@ -114,6 +118,7 @@ public class BlurModHandler {
         // will skip the frame update, which (hopefully) resolves the issue
         // with the heavy computations after the "animation" is complete.
         if (progress == this.lastProgress) {
+            this.mc.mcProfiler.endSection();
             return;
         }
         
@@ -137,6 +142,7 @@ public class BlurModHandler {
 
             // Should not happen. Something bad happened.
             if (this._listShaders == null) {
+                this.mc.mcProfiler.endSection();
                 return;
             }
 
@@ -157,6 +163,8 @@ public class BlurModHandler {
         } catch (IllegalArgumentException | IllegalAccessException ex) {
             this.logger.error("An error occurred while updating the blur. Please report this!", ex);
         }
+
+        this.mc.mcProfiler.endSection();
     }
     
     /**
