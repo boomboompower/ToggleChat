@@ -74,13 +74,16 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
     }
+
+    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 jar {
     archiveName = "$baseName.$extension"
 
     manifest.attributes(
-            'Main-Class' : 'wtf.boomy.togglechat.installer.InstallerCore'
+            'Main-Class' : 'wtf.boomy.togglechat.installer.InstallerCore',
+            'FMLAT': 'togglechatmod_at.cfg'
     )
 }
 
