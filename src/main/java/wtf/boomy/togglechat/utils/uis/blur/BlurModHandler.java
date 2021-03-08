@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import wtf.boomy.togglechat.ToggleChatMod;
 import wtf.boomy.togglechat.utils.uis.ModernGui;
 
@@ -76,21 +77,25 @@ public class BlurModHandler {
         this.mc.mcProfiler.startSection("blur");
         
         if (event.phase != TickEvent.Phase.END) {
+            this.mc.mcProfiler.endSection();
             return;
         }
         
         // Only blur if we have blur enabled.
         if (!this.theMod.getConfigLoader().isModernBlur()) {
+            this.mc.mcProfiler.endSection();
             return;
         }
         
         // Only blur on our own menus
         if (this.mc.currentScreen == null) {
+            this.mc.mcProfiler.endSection();
             return;
         }
         
         // Only update the shader if one is active
         if (!this.mc.entityRenderer.isShaderActive()) {
+            this.mc.mcProfiler.endSection();
             return;
         }
         
@@ -100,6 +105,7 @@ public class BlurModHandler {
         // will skip the frame update, which (hopefully) resolves the issue
         // with the heavy computations after the "animation" is complete.
         if (progress == this.lastProgress) {
+            this.mc.mcProfiler.endSection();
             return;
         }
         
@@ -114,6 +120,7 @@ public class BlurModHandler {
 
             // Should not happen. Something bad happened.
             if (listShaders == null) {
+                this.mc.mcProfiler.endSection();
                 return;
             }
 
@@ -131,6 +138,8 @@ public class BlurModHandler {
         } catch (IllegalArgumentException  ex) {
             this.logger.error("An error occurred while updating ToggleChat's blur. Please report this!", ex);
         }
+
+        this.mc.mcProfiler.endSection();
     }
     
     /**
