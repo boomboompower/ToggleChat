@@ -17,9 +17,9 @@
 
 package wtf.boomy.togglechat.toggles.defaults.parties;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
-import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypePartyInvites extends ToggleBase {
@@ -61,5 +61,10 @@ public class TypePartyInvites extends ToggleBase {
                 "This goes well with",
                 "separators toggled"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.PARTIES;
     }
 }

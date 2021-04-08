@@ -17,9 +17,10 @@
 
 package wtf.boomy.togglechat.gui.custom;
 
-import wtf.boomy.togglechat.utils.uis.ModernButton;
+import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
+import wtf.boomy.togglechat.utils.uis.impl.ModernButton;
 import wtf.boomy.togglechat.utils.uis.ModernGui;
-import wtf.boomy.togglechat.utils.uis.ModernTextBox;
+import wtf.boomy.togglechat.utils.uis.impl.ModernTextBox;
 import wtf.boomy.togglechat.toggles.custom.TypeCustom;
 import wtf.boomy.togglechat.utils.ChatColor;
 import net.minecraft.client.renderer.GlStateManager;
@@ -32,7 +33,7 @@ import java.awt.Color;
  *
  * This menu is designed to be simple and not overload the user with information.
  */
-public class TestCustomUI extends ModernGui {
+public class TestCustomUI extends ToggleChatModernUI {
 
     private ModernTextBox text;
 
@@ -46,25 +47,27 @@ public class TestCustomUI extends ModernGui {
     }
 
     @Override
-    public void initGui() {
+    public void onGuiOpen() {
         Keyboard.enableRepeatEvents(true);
         
-        this.buttonList.add(new ModernButton(0, 5, this.height - 25, 75, 20, "Back"));
+        registerElement(new ModernButton(0, 5, this.height - 25, 75, 20, "Back"));
         
-        this.textList.add(this.text = new ModernTextBox(this.width / 2 - 150, this.height / 2 - 10, 300, 20));
+        registerElement(this.text = new ModernTextBox(1, this.width / 2 - 150, this.height / 2 - 10, 300, 20));
 
-        this.text.setForceOldTheme(true);
         this.text.setMaxStringLength(1000);
     }
-
+    
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void preRender(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-
+    }
+    
+    @Override
+    public void onRender(int mouseX, int mouseY, float partialTicks) {
         drawCenteredString(this.fontRendererObj, String.format("Testing %s", ChatColor.GOLD + this.custom._getName()), this.width / 2, this.height / 2 - 85, Color.WHITE.getRGB());
-
+    
         double upSize = 1.5;
-
+    
         GlStateManager.pushMatrix();
         GlStateManager.scale(upSize, upSize, 0);
         if (this.text.getText().isEmpty()) {
@@ -75,8 +78,6 @@ public class TestCustomUI extends ModernGui {
             drawCenteredString(this.fontRendererObj, ChatColor.RED + "Will not be toggled", (int) ((this.width / 2) / upSize), (int) ((this.height / 2 - 50) / upSize), Color.WHITE.getRGB());
         }
         GlStateManager.popMatrix();
-
-        super.drawScreen(mouseX, mouseY, partialTicks);
     }
     
     @Override
@@ -85,14 +86,9 @@ public class TestCustomUI extends ModernGui {
             this.mc.displayGuiScreen(this.previous);
         }
     }
-    
-    @Override
-    public void updateScreen() {
-        this.text.updateCursorCounter();
-    }
 
     @Override
-    public void onGuiClosed() {
+    public void onGuiClose() {
         Keyboard.enableRepeatEvents(false);
     }
 }

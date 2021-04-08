@@ -17,30 +17,31 @@
 
 package wtf.boomy.togglechat.gui.custom;
 
-import wtf.boomy.togglechat.utils.uis.ModernButton;
-import wtf.boomy.togglechat.utils.uis.ModernGui;
+import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
+import wtf.boomy.togglechat.utils.uis.impl.ModernButton;
 
 import java.awt.Color;
 
 /**
  * A hub for all custom toggles, linking all the "Custom Toggle" guis together in one place.
  */
-public class MainCustomUI extends ModernGui {
+public class MainCustomUI extends ToggleChatModernUI {
 
     @Override
-    public void initGui() {
-        this.buttonList.add(new ModernButton(0, this.width / 2 - 75, this.height / 2 - 27, 150, 20, "Create a Custom Toggle"));
-        this.buttonList.add(new ModernButton(1, this.width / 2 - 75, this.height / 2 - 3, 150, 20, "Modify a Custom Toggle"));
-        this.buttonList.add(new ModernButton(2, this.width / 2 - 75, this.height / 2 + 21, 150, 20, "Test a Custom Toggle"));
+    public void onGuiOpen() {
+        registerElement(new ModernButton(0, this.width / 2 - 75, this.height / 2 - 27, 150, 20, "Create a Custom Toggle"));
+        registerElement(new ModernButton(1, this.width / 2 - 75, this.height / 2 - 3, 150, 20, "Modify a Custom Toggle"));
+        registerElement(new ModernButton(2, this.width / 2 - 75, this.height / 2 + 21, 150, 20, "Test a Custom Toggle"));
     }
-
+    
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void preRender(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-
-        drawCenteredString("The hub of all Custom Toggles", this.width / 2, this.height / 2 - 51, Color.WHITE.getRGB());
-
-        super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+    
+    @Override
+    public void onRender(int mouseX, int mouseY, float partialTicks) {
+        drawCenteredString(this.fontRendererObj, "The hub of all Custom Toggles", this.width / 2, this.height / 2 - 51, Color.WHITE.getRGB());
     }
 
     @Override

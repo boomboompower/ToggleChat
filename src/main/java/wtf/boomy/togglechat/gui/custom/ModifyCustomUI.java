@@ -17,13 +17,12 @@
 
 package wtf.boomy.togglechat.gui.custom;
 
-import wtf.boomy.togglechat.utils.uis.ModernButton;
+import wtf.boomy.togglechat.utils.uis.impl.ModernButton;
 import wtf.boomy.togglechat.utils.uis.ModernGui;
 import wtf.boomy.togglechat.toggles.custom.TypeCustom;
 import wtf.boomy.togglechat.utils.ChatColor;
 
 import java.awt.Color;
-import java.io.IOException;
 
 public class ModifyCustomUI extends CustomUI {
     
@@ -37,50 +36,29 @@ public class ModifyCustomUI extends CustomUI {
     }
     
     @Override
-    public void initGui() {
+    public void onGuiOpen() {
         generateScreen();
 
-        this.buttonList.add(new ModernButton(0, 5, this.height - 25, 75, 20, "Back"));
+        registerElement(new ModernButton(0, 5, this.height - 25, 75, 20, "Back", (button) -> {
+            this.mc.displayGuiScreen(this.previous);
+        }));
     }
     
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void preRender(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        
-        drawCenteredString("Modifying " + ChatColor.GOLD + this.custom._getName(), this.width / 2, 13, new Color(255, 255, 255).getRGB());
-        
-        drawCenteredString("Click on the toggle you would like to modify!", this.width / 2, this.height - 17, new Color(255, 255, 255).getRGB());
-        
-        super.drawScreen(mouseX, mouseY, partialTicks);
     }
     
     @Override
-    public void handleMouseInput() throws IOException {
-        super.handleMouseInput();
+    public void onRender(int mouseX, int mouseY, float partialTicks) {
+        drawCenteredString(this.mc.fontRendererObj, "Modifying " + ChatColor.GOLD + this.custom._getName(), this.width / 2, 13, new Color(255, 255, 255).getRGB());
+    
+        drawCenteredString(this.mc.fontRendererObj, "Click on the toggle you would like to modify!", this.width / 2, this.height - 17, new Color(255, 255, 255).getRGB());
     }
     
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
-    }
-    
-    @Override
-    protected void mouseReleased(int mouseX, int mouseY, int state) {
-        super.mouseReleased(mouseX, mouseY, state);
-    }
-    
-    @Override
-    public void onGuiClosed() {
+    public void onGuiClose() {
         //ToggleChatMod.getInstance().getConfigLoader().saveCustomToggles();
-    }
-    
-    @Override
-    public void buttonPressed(ModernButton button) {
-        switch (button.getId()) {
-            case 0:
-                this.mc.displayGuiScreen(this.previous);
-                break;
-        }
     }
     
     @Override

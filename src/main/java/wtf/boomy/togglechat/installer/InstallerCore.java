@@ -46,7 +46,7 @@ public class InstallerCore {
     private static final String MOD_NAME = "ToggleChat";
     
     private static final String BUILT_FOR = "1.8.9";
-    private static final String MOD_VERSION = "3.1.0";
+    private static final String MOD_VERSION = "3.1.1";
     
     private InstallerCore() {
     }

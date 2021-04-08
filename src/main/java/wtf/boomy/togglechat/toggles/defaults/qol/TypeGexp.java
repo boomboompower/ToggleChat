@@ -17,9 +17,9 @@
 
 package wtf.boomy.togglechat.toggles.defaults.qol;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
-import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeGexp extends ToggleBase {
@@ -57,5 +57,10 @@ public class TypeGexp extends ToggleBase {
                 "in Skyblock and The Pit,",
                 "and is good for AFKing"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.QOL;
     }
 }

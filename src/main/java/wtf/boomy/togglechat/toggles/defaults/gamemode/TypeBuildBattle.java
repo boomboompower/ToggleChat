@@ -17,6 +17,7 @@
 
 package wtf.boomy.togglechat.toggles.defaults.gamemode;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 import wtf.boomy.togglechat.utils.ChatColor;
 
@@ -56,6 +57,11 @@ public class TypeBuildBattle extends ToggleBase {
                 "You can now play build",
                 "battle chat free!"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.GAMES;
     }
 
     private boolean validBattleRank(String input) {

@@ -17,12 +17,11 @@
 
 package wtf.boomy.togglechat.toggles.custom;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -85,6 +84,11 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
                 "created with help from",
                 "&6OrangeMarshall"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.CUSTOM;
     }
     
     /**

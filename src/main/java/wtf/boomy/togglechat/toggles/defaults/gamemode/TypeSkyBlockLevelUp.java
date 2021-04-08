@@ -17,9 +17,10 @@
 
 package wtf.boomy.togglechat.toggles.defaults.gamemode;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
-public class TypeSkyblockLevelUp extends ToggleBase {
+public class TypeSkyBlockLevelUp extends ToggleBase {
 
     @Override
     public String getName() {
@@ -46,5 +47,10 @@ public class TypeSkyblockLevelUp extends ToggleBase {
                 "&b&lSKILL LEVEL UP &dFarming &8II&7➜&dIII",
                 "&6&lCOLLECTION LEVEL UP &eFarming &8III&e➜&dIV"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.GAMES;
     }
 }

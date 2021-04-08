@@ -52,6 +52,11 @@ public class ToggleEvents {
     
     @SubscribeEvent(priority = EventPriority.LOW) // We use the low priority to grab things first
     public void onChatReceive(ClientChatReceivedEvent event) {
+        // Ignore the actionbar.
+        if (event.type == 2) {
+            return;
+        }
+        
         // Retrieve the raw text from the TextComponent then filter it again
         // through our ChatColor class to remove all remaining color codes.
         String strippedText = ChatColor.stripColor(event.message.getUnformattedText());

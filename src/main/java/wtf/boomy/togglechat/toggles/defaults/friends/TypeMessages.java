@@ -17,6 +17,7 @@
 
 package wtf.boomy.togglechat.toggles.defaults.friends;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
 public class TypeMessages extends ToggleBase {
@@ -42,5 +43,10 @@ public class TypeMessages extends ToggleBase {
                 "&dFrom &7Player&r: Hello",
                 "&dTo &7Player&r: Hello"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.FRIENDS;
     }
 }

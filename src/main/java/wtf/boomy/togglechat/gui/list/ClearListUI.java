@@ -17,11 +17,12 @@
 
 package wtf.boomy.togglechat.gui.list;
 
-import wtf.boomy.togglechat.utils.uis.ModernButton;
+import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
+import wtf.boomy.togglechat.utils.uis.impl.ModernButton;
 import wtf.boomy.togglechat.utils.uis.ModernGui;
 import net.minecraft.client.Minecraft;
 
-public class ClearListUI extends ModernGui {
+public class ClearListUI extends ToggleChatModernUI {
 
     private ModernGui previousScreen;
     private Minecraft mc;
@@ -33,21 +34,22 @@ public class ClearListUI extends ModernGui {
     }
 
     @Override
-    public void initGui() {
-        this.buttonList.add(new ModernButton(0, this.width / 2 - 200, this.height / 2 + 30, 150, 20, "Cancel"));
-        this.buttonList.add(new ModernButton(1, this.width / 2 + 50, this.height / 2 + 30, 150, 20, "Confirm"));
+    public void onGuiOpen() {
+        registerElement(new ModernButton(0, this.width / 2 - 200, this.height / 2 + 30, 150, 20, "Cancel"));
+        registerElement(new ModernButton(1, this.width / 2 + 50, this.height / 2 + 30, 150, 20, "Confirm"));
     }
-
+    
     @Override
-    public void drawScreen(int x, int y, float ticks) {
+    public void preRender(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-
+    }
+    
+    @Override
+    public void onRender(int mouseX, int mouseY, float partialTicks) {
         writeInformation(this.width / 2, this.height / 2 - 60, 15,
                 String.format("Are you sure you wish to clear &6%s %s&r from your whitelist?", this.mod.getConfigLoader().getWhitelist().size(), (this.mod.getConfigLoader().getWhitelist().size() == 1 ? "entry" : "entries")),
                 "This action cannot be undone, use at your own risk!"
         );
-
-        super.drawScreen(x, y, ticks);
     }
 
     @Override
@@ -65,7 +67,7 @@ public class ClearListUI extends ModernGui {
     }
 
     @Override
-    public void onGuiClosed() {
+    public void onGuiClose() {
         this.mod.getConfigLoader().saveModernUtils();
     }
 }

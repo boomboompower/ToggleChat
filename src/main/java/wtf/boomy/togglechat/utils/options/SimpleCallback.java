@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2021 boomboompower
+ *     Copyright (C) 2020 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -15,17 +15,37 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wtf.boomy.togglechat.utils.uis.text;
+package wtf.boomy.togglechat.utils.options;
 
 /**
- * Simple template for a clickable class, a dummy for the {@link ModernTextDrawable} class
+ * Simple callback class
+ *
+ * @param <T> the type of data to receive
  *
  * @author boomboompower
+ * @since 3.0.0
  */
-public interface ModernTextClickable {
-
+public interface SimpleCallback<T> {
+    
     /**
-     * This method will be called when the {@link ModernTextDrawable} is clicked.
+     * Runs the callback and provides the associated data
+     *
+     * @param data the data to receive once the callback is run
      */
-    public void onClicked();
+    public abstract void run(T data);
+    
+    /**
+     * Called when this callback is cancelled
+     */
+    public default void onCancel() {
+    }
+    
+    /**
+     * Called when an error occurs while running this callback
+     *
+     * @param message the message from the error
+     */
+    public default void onError(String message) {
+    }
+    
 }

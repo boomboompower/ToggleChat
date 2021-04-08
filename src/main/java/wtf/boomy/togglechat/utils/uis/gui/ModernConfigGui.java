@@ -17,14 +17,14 @@
 
 package wtf.boomy.togglechat.utils.uis.gui;
 
-import wtf.boomy.togglechat.utils.uis.ModernButton;
+import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
 import wtf.boomy.togglechat.utils.uis.ModernGui;
-import wtf.boomy.togglechat.toggles.dummy.ToggleDummyMessage;
 import wtf.boomy.togglechat.utils.ChatColor;
+import wtf.boomy.togglechat.utils.uis.impl.tc.ToggleChatButton;
 
-public class ModernConfigGui extends ModernGui {
+public class ModernConfigGui extends ToggleChatModernUI {
 
-    private ModernGui previous;
+    private final ModernGui previous;
 
     private boolean modified;
 
@@ -34,28 +34,53 @@ public class ModernConfigGui extends ModernGui {
     }
 
     @Override
-    public void initGui() {
-        this.buttonList.add(new ModernButton(1, "blur", this.width / 2 - 75, this.height / 2 - 34, 150, 20, "Blur: " + getStatus(configLoader.isModernBlur())).setButtonData(
-                // Blur settings
-                new ToggleDummyMessage("Toggles Gaussian bluring", "&aOn&r or &cOff&r", "on all our menus", "", "Created by &6tterrag1098", "for the BlurMC mod")
+    public void onGuiOpen() {
+        // Blur settings, turn this on for worse performance but with hotter UIs
+        registerElement(new ToggleChatButton(1, this.width / 2 - 75, this.height / 2 - 34, 150, 20, "Blur: " + getStatus(this.configLoader.isModernBlur()), button -> {
+            this.modified = true;
+    
+            this.configLoader.setModernBlur(!this.configLoader.isModernBlur());
+            button.setText("Blur: " + getStatus(this.configLoader.isModernBlur()));
+            this.mod.getBlurModHandler().reloadBlur(this.mc.currentScreen);
+        }).setButtonData(
+                "Toggles Gaussian bluring", "&aOn&r or &cOff&r", "on all our menus", "", "Created by &6tterrag1098", "for the BlurMC mod"
         ));
-        this.buttonList.add(new ModernButton(2, "button", this.width / 2 - 75, this.height / 2 - 10, 150, 20, "Buttons: " + getClassic(configLoader.isModernButton())).setButtonData(
+        
+        // Toggles the style of the buttons for the mod, between one which renders the texture
+        // pack style and the other which is literally just a transparent rectangle for a background.
+        registerElement(new ToggleChatButton(2, this.width / 2 - 75, this.height / 2 - 10, 150, 20, "Buttons: " + getClassic(this.configLoader.isModernButton()), button -> {
+            this.modified = true;
+    
+            this.configLoader.setModernButton(!this.configLoader.isModernButton());
+            button.setText("Buttons: " + getClassic(this.configLoader.isModernButton()));
+        }).setButtonData(
                 // Button editing
-                new ToggleDummyMessage("Changes the button", "theme to either", "&6Modern&r or &bClassic", "", "&6Modern&r is see-through", "&bClassic&r is texture based")
+                "Changes the button", "theme to either", "&6Modern&r or &bClassic", "", "&6Modern&r is see-through", "&bClassic&r is texture based"
         ));
-        this.buttonList.add(new ModernButton(3, "button", this.width / 2 - 75, this.height / 2 + 14, 150, 20, "Textbox: " + getClassic(configLoader.isModernTextbox())).setButtonData(
+        
+        // Toggles the style of the text boxes in the mod, between the one which appears when you're in
+        // the command block and once more one which is just a rectangle with extra steps.
+        registerElement(new ToggleChatButton(3, this.width / 2 - 75, this.height / 2 + 14, 150, 20, "Textbox: " + getClassic(this.configLoader.isModernTextbox()), button -> {
+            this.modified = true;
+    
+            this.configLoader.setModernTextbox(!this.configLoader.isModernTextbox());
+            button.setText("Textbox: " + getClassic(this.configLoader.isModernTextbox()));
+        }).setButtonData(
                 // Textbox editing
-                new ToggleDummyMessage("Changes the textbox", "theme to either", "&6Modern&r or &bClassic")
+                "Changes the textbox", "theme to either", "&6Modern&r or &bClassic"
         ));
-        this.buttonList.add(new ModernButton(4, 5, this.height - 25, 90, 20, "Back"));
+        
+        // Standard button to return to the previous page.
+        registerElement(new ToggleChatButton(4, 5, this.height - 25, 90, 20, "Back", button -> this.mc.displayGuiScreen(this.previous)));
     }
-
+    
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void preRender(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-
-        super.drawScreen(mouseX, mouseY, partialTicks);
-
+    }
+    
+    @Override
+    public void onRender(int mouseX, int mouseY, float partialTicks) {
         writeInformation(this.width / 2, this.height / 2 + 40, 12,
                 "&6Modern&r is our custom theme",
                 "featuring cleaner interfaces and game bluring",
@@ -63,40 +88,15 @@ public class ModernConfigGui extends ModernGui {
                 "&bClassic&r is the default game",
                 "theme, usually based on texturepacks"
         );
-
+    }
+    
+    @Override
+    public void postRender(float partialTicks) {
         checkHover(this.height / 2 - 75);
     }
 
     @Override
-    public void buttonPressed(ModernButton button) {
-        switch (button.getId()) {
-            case 1:
-                this.modified = true;
-
-                this.configLoader.setModernBlur(!this.configLoader.isModernBlur());
-                button.setText("Blur: " + getStatus(this.configLoader.isModernBlur()));
-                this.mod.getBlurModHandler().reloadBlur(this.mc.currentScreen);
-                break;
-            case 2:
-                this.modified = true;
-
-                this.configLoader.setModernButton(!this.configLoader.isModernButton());
-                button.setText("Buttons: " + getClassic(this.configLoader.isModernButton()));
-                break;
-            case 3:
-                this.modified = true;
-
-                this.configLoader.setModernTextbox(!this.configLoader.isModernTextbox());
-                button.setText("Textbox: " + getClassic(this.configLoader.isModernTextbox()));
-                break;
-            case 4:
-                this.mc.displayGuiScreen(this.previous);
-                break;
-        }
-    }
-
-    @Override
-    public void onGuiClosed() {
+    public void onGuiClose() {
         if (!this.modified) {
             return;
         }

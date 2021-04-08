@@ -19,8 +19,6 @@ package wtf.boomy.togglechat.toggles.dummy;
 
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
-import java.util.LinkedList;
-
 /**
  * A dummy ToggleBase instance used to display messages on the ModernGui screens.
  * <p>

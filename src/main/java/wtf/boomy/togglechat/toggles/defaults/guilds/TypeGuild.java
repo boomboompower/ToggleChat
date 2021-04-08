@@ -17,6 +17,7 @@
 
 package wtf.boomy.togglechat.toggles.defaults.guilds;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
 import java.util.regex.Pattern;
@@ -52,5 +53,10 @@ public class TypeGuild extends ToggleBase {
                 "regardless of the",
                 "rank a player has"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.GUILDS;
     }
 }

@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import wtf.boomy.togglechat.ToggleChatMod;
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ICustomSaver;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 import wtf.boomy.togglechat.toggles.custom.ToggleCondition;
@@ -77,6 +78,9 @@ public class ConfigLoader {
     
     @SaveableField(saveId = "sortType")
     private SortType sortType = SortType.WIDTH;
+    
+    @SaveableField(saveId = "filter")
+    private Categories categoryFilter = Categories.ALL;
     
     private final ToggleChatMod mod;
 
@@ -478,6 +482,10 @@ public class ConfigLoader {
         return this.sortType;
     }
     
+    public Categories getCategoryFilter() {
+        return this.categoryFilter;
+    }
+    
     public void setModernBlur(boolean modernBlur) {
         this.modernBlur = modernBlur;
     }
@@ -496,5 +504,9 @@ public class ConfigLoader {
     
     public void setSortType(SortType type) {
         this.sortType = type;
+    }
+    
+    public void setCategoryFilter(Categories categoryFilter) {
+        this.categoryFilter = categoryFilter;
     }
 }

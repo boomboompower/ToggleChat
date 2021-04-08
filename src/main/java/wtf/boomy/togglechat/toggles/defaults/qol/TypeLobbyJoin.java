@@ -17,9 +17,9 @@
 
 package wtf.boomy.togglechat.toggles.defaults.qol;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
-import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeLobbyJoin extends ToggleBase {
@@ -59,5 +59,10 @@ public class TypeLobbyJoin extends ToggleBase {
                 "join messages to make",
                 "lobby chat more readable"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.QOL;
     }
 }

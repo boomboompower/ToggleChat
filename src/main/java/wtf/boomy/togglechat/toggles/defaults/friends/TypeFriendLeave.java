@@ -17,6 +17,7 @@
 
 package wtf.boomy.togglechat.toggles.defaults.friends;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
 import java.util.regex.Pattern;
@@ -53,5 +54,10 @@ public class TypeFriendLeave extends ToggleBase {
                 "people with a large",
                 "friends list"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.FRIENDS;
     }
 }

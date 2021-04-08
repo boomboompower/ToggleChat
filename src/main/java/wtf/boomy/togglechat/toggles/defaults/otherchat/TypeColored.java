@@ -17,6 +17,7 @@
 
 package wtf.boomy.togglechat.toggles.defaults.otherchat;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
 public class TypeColored extends ToggleBase {
@@ -51,5 +52,10 @@ public class TypeColored extends ToggleBase {
                 "This is good for games",
                 "such as paintball"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.CHAT;
     }
 }

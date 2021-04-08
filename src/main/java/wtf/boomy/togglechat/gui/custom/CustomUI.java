@@ -19,6 +19,7 @@ package wtf.boomy.togglechat.gui.custom;
 
 import wtf.boomy.togglechat.utils.uis.ModernGui;
 import wtf.boomy.togglechat.toggles.custom.TypeCustom;
+import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
 
 /**
  * If a gui extends this, it'll have all modifications from {@link ModernGui} and will require
@@ -27,7 +28,7 @@ import wtf.boomy.togglechat.toggles.custom.TypeCustom;
  * This class is used in a few places throughout the code, its basically just an indicator
  * for some of the other internal gui code which tells them that this class has data they can use.
  */
-public abstract class CustomUI extends ModernGui {
+public abstract class CustomUI extends ToggleChatModernUI {
 
     /**
      * Returns the data assigned to this gui, which can be used in other places

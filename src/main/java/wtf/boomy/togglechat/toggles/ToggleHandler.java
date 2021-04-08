@@ -10,7 +10,8 @@ import wtf.boomy.togglechat.toggles.defaults.gamemode.TypeBuildBattle;
 import wtf.boomy.togglechat.toggles.defaults.gamemode.TypeHousing;
 import wtf.boomy.togglechat.toggles.defaults.gamemode.TypeMysteryBox;
 import wtf.boomy.togglechat.toggles.defaults.gamemode.TypePit;
-import wtf.boomy.togglechat.toggles.defaults.gamemode.TypeSkyblockLevelUp;
+import wtf.boomy.togglechat.toggles.defaults.gamemode.TypeSkyBlockAbility;
+import wtf.boomy.togglechat.toggles.defaults.gamemode.TypeSkyBlockLevelUp;
 import wtf.boomy.togglechat.toggles.defaults.gamemode.TypeSoulWell;
 import wtf.boomy.togglechat.toggles.defaults.guilds.TypeGuild;
 import wtf.boomy.togglechat.toggles.defaults.guilds.TypeGuildJoin;
@@ -82,11 +83,12 @@ public final class ToggleHandler {
     }
     
     /**
-     * Clears all the normal toggles and orders them by the size of their unformatted display text.
-     * Used at startup
+     * Clears all the normal toggles and orders them by the
+     * size of their unformatted display text. Used at startup
      */
     public void remake() {
         this.toggles.clear();
+        
         addToggle(new TypeAds());
         addToggle(new TypePit());
         addToggle(new TypeTip());
@@ -114,7 +116,8 @@ public final class ToggleHandler {
         addToggle(new TypeFriendLeave());
         addToggle(new TypePartyInvites());
         addToggle(new TypeFriendRequests());
-        addToggle(new TypeSkyblockLevelUp());
+        addToggle(new TypeSkyBlockAbility());
+        addToggle(new TypeSkyBlockLevelUp());
         addToggle(new TypeMessageSeparator());
         
         sortMap(this.toggles);
@@ -161,10 +164,18 @@ public final class ToggleHandler {
         return this.combinedToggleList;
     }
     
+    /**
+     * Iterates through a string list of favourites and sets
+     * their respective toggles as favourited if they appear
+     * in the list of strings.
+     *
+     * @param favourites the arraylist containing the ids of the favourite toggles.
+     */
     public void inheritFavourites(ArrayList<String> favourites) {
-        for (String f : favourites) {
-            ToggleBase toggle = getToggle(f);
+        for (String favourite : favourites) {
+            ToggleBase toggle = getToggle(favourite);
             
+            // Existence check. Some toggles could've been renamed or deleted.
             if (toggle != null) {
                 toggle.setFavourite(true);
             }
@@ -172,14 +183,15 @@ public final class ToggleHandler {
     }
     
     /**
-     * Used to sort by the displayname of the toggle, so the gui looks neat without having to do it
-     * manually
+     * Used to sort by the displayname of the toggle, so the gui
+     * looks neat without having to manually sort the entries.
      *
      * @param map the map to sort
      */
     private void sortMap(LinkedHashMap<String, ToggleBase> map) {
         List<Map.Entry<String, ToggleBase>> list = new LinkedList<>(map.entrySet());
         
+        // Use the comparator
         list.sort(this.comparator);
         
         Map<String, ToggleBase> sortedMap = new LinkedHashMap<>();
@@ -188,6 +200,7 @@ public final class ToggleHandler {
             sortedMap.put(entry.getKey(), entry.getValue());
         }
         
+        // What is this shit
         map.clear();
         map.putAll(sortedMap);
     }

@@ -17,9 +17,9 @@
 
 package wtf.boomy.togglechat.toggles.defaults.parties;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
-import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeParty extends ToggleBase {
@@ -49,5 +49,10 @@ public class TypeParty extends ToggleBase {
                 "Fairly useful when",
                 "You're in a large party"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.PARTIES;
     }
 }

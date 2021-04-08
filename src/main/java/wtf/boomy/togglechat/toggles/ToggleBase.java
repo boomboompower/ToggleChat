@@ -17,10 +17,6 @@
 
 package wtf.boomy.togglechat.toggles;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Created to replace the old ToggleBase class, supports custom toggles.
  * <p>
@@ -73,7 +69,16 @@ public abstract class ToggleBase {
      * @return description of the toggle, can be null
      */
     public abstract String[] getDescription();
-
+    
+    /**
+     * Returns the respective category this toggle should be defined under.
+     * This is used for filtering purposes in the main UI.
+     *
+     * @return the category for this toggle.
+     */
+    public Categories getCategory() {
+        return Categories.OTHER;
+    }
 
     /**
      * Should the shouldToggle method use the formatted chat for the regular check?
@@ -141,17 +146,5 @@ public abstract class ToggleBase {
     @Override
     public final String toString() {
         return "ToggleBase{name = " + getName() + ", enabled = " + isEnabled() + ", favourite = " + isFavourite() + "}";
-    }
-
-    /**
-     * Assistance in linked-list creation
-     *
-     * @param entry the array by which the list will be backed
-     * @param <T>   the class of the objects in the list
-     * @return a list view of the specified array
-     */
-    @SafeVarargs
-    protected final <T> LinkedList<T> asLinked(T... entry) {
-        return new LinkedList<>(Arrays.asList(entry));
     }
 }

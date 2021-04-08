@@ -17,9 +17,9 @@
 
 package wtf.boomy.togglechat.toggles.defaults.gamemode;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
-import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeSoulWell extends ToggleBase {
@@ -54,5 +54,10 @@ public class TypeSoulWell extends ToggleBase {
                 "Good for recording",
                 "in a skywars lobby"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.GAMES;
     }
 }

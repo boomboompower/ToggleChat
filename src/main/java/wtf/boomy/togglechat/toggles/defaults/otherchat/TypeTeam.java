@@ -17,9 +17,9 @@
 
 package wtf.boomy.togglechat.toggles.defaults.otherchat;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
-import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeTeam extends ToggleBase {
@@ -51,5 +51,10 @@ public class TypeTeam extends ToggleBase {
                 "Useful for large",
                 "team games"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.CHAT;
     }
 }

@@ -17,6 +17,7 @@
 
 package wtf.boomy.togglechat.toggles.defaults.gamemode;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
 import java.util.regex.Pattern;
@@ -56,5 +57,10 @@ public class TypeMysteryBox extends ToggleBase {
                 "Useful to prevent those",
                 "weird box opening messages"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.GAMES;
     }
 }

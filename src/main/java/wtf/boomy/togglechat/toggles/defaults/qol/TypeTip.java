@@ -17,9 +17,9 @@
 
 package wtf.boomy.togglechat.toggles.defaults.qol;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
-import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeTip extends ToggleBase {
@@ -54,12 +54,17 @@ public class TypeTip extends ToggleBase {
                 "",
                 "Such as:",
                 "&aYou tipped 4 players!",
-                "&aYou tipped SirNapkin1334 in Duels!",
+                "&aYou tipped SirNapkin in Duels!",
                 "&7(and more)",
                 "",
                 "This is good if you",
                 "use the AutoTip mod",
                 "or &6MVP&c++&r AutoTip"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.QOL;
     }
 }

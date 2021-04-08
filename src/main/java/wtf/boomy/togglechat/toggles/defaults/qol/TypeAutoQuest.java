@@ -17,6 +17,7 @@
 
 package wtf.boomy.togglechat.toggles.defaults.qol;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
 public class TypeAutoQuest extends ToggleBase {
@@ -49,5 +50,10 @@ public class TypeAutoQuest extends ToggleBase {
                 "&aAutomatically activated:",
                 "&6Weekly Quest: Break 25 beds"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.QOL;
     }
 }

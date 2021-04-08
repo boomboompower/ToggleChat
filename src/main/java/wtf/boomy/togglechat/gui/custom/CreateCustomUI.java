@@ -20,6 +20,7 @@ package wtf.boomy.togglechat.gui.custom;
 import wtf.boomy.togglechat.ToggleChatMod;
 import wtf.boomy.togglechat.utils.uis.ModernGui;
 import wtf.boomy.togglechat.toggles.custom.ToggleCondition;
+import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
 
 import java.awt.Color;
 import java.util.LinkedList;
@@ -28,7 +29,7 @@ import java.util.LinkedList;
  * This class is the base gui for creating a new custom toggle. Its just a user-friendly
  * interface for toggles and such and isn't essential for the creation of new toggles
  */
-public class CreateCustomUI extends ModernGui {
+public class CreateCustomUI extends ToggleChatModernUI {
     
     private final ModernGui previous;
     
@@ -40,30 +41,33 @@ public class CreateCustomUI extends ModernGui {
     }
     
     @Override
-    public void initGui() {
+    public void onGuiOpen() {
     
     }
     
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void preRender(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        
-        drawCenteredString("This page is still in progress!", this.width / 2, this.height / 2 - 4, Color.WHITE.getRGB());
-        
-        super.drawScreen(mouseX, mouseY, partialTicks);
     }
     
     @Override
-    protected void keyTyped(char typedChar, int keyCode) {
+    public void onRender(int mouseX, int mouseY, float partialTicks) {
+        drawCenteredString(this.mc.fontRendererObj, "This page is still in progress!", this.width / 2, this.height / 2 - 4, Color.WHITE.getRGB());
+    }
+    
+    @Override
+    public boolean onKeyTyped(int keyCode, char keyCharacter) {
         if (keyCode == 1) {
             this.mc.displayGuiScreen(this.previous);
-        } else {
-            super.keyTyped(typedChar, keyCode);
+            
+            return true;
         }
+        
+        return false;
     }
     
     @Override
-    public void onGuiClosed() {
+    public void onGuiClose() {
         ToggleChatMod.getInstance().getConfigLoader().saveCustomToggles();
     }
 }

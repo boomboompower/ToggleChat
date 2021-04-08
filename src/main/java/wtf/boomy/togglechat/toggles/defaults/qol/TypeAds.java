@@ -17,9 +17,9 @@
 
 package wtf.boomy.togglechat.toggles.defaults.qol;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
-import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class TypeAds extends ToggleBase {
@@ -70,5 +70,10 @@ public class TypeAds extends ToggleBase {
                 "so you don't miss",
                 "important messages"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.QOL;
     }
 }

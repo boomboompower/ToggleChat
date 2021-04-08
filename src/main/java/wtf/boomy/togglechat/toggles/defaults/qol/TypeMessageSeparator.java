@@ -21,6 +21,7 @@ import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
 import java.util.regex.Pattern;
@@ -57,6 +58,11 @@ public class TypeMessageSeparator extends ToggleBase {
                 "",
                 "Less lines = more fun"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.QOL;
     }
     
     /**

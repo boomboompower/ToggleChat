@@ -17,6 +17,7 @@
 
 package wtf.boomy.togglechat.toggles.defaults.guilds;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
 import java.util.regex.Pattern;
@@ -50,5 +51,10 @@ public class TypeGuildJoin extends ToggleBase {
                 "people in a large",
                 "guild"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.GUILDS;
     }
 }

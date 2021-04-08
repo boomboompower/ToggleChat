@@ -17,17 +17,18 @@
 
 package wtf.boomy.togglechat.gui.list;
 
-import wtf.boomy.togglechat.utils.uis.ModernButton;
-import wtf.boomy.togglechat.utils.uis.ModernGui;
-import wtf.boomy.togglechat.utils.uis.ModernTextBox;
-import wtf.boomy.togglechat.gui.core.MainGui;
-import wtf.boomy.togglechat.toggles.dummy.ToggleDummyMessage;
 import org.lwjgl.input.Keyboard;
+
+import wtf.boomy.togglechat.gui.core.MainGui;
+import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
+import wtf.boomy.togglechat.utils.uis.impl.ModernButton;
+import wtf.boomy.togglechat.utils.uis.impl.ModernTextBox;
+import wtf.boomy.togglechat.utils.uis.impl.tc.ToggleChatButton;
 
 import java.awt.Color;
 import java.text.Collator;
 
-public class ViewListUI extends ModernGui {
+public class ViewListUI extends ToggleChatModernUI {
 
     private ModernButton add;
     private ModernButton remove;
@@ -45,69 +46,78 @@ public class ViewListUI extends ModernGui {
     }
 
     @Override
-    public void initGui() {
+    public void onGuiOpen() {
         Keyboard.enableRepeatEvents(true);
+    
+        registerElement(this.text = new ModernTextBox(-1, this.width / 2 - 75, this.height / 2 - 58, 150, 20));
 
-        this.textList.add(this.text = new ModernTextBox(this.width / 2 - 75, this.height / 2 - 58, 150, 20));
-
-        this.buttonList.add(this.add = new ModernButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add").setButtonData(new ToggleDummyMessage(
+        registerElement(this.add = new ToggleChatButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add").setButtonData(
                 "Adds a word to",
                 "the whitelist",
                 "",
                 "Messages containing",
                 "this word will not be",
                 "toggled"
-        )));
-        this.buttonList.add(this.remove = new ModernButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove").setButtonData(new ToggleDummyMessage(
+        ));
+        registerElement(this.remove = new ToggleChatButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove").setButtonData(
                 "Removes a word from",
                 "the whitelist",
                 "",
                 "Messages containing",
                 "this will no longer",
                 "be ignored"
-        )));
-        this.buttonList.add(this.clear = new ModernButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear").setButtonData(new ToggleDummyMessage(
+        ));
+        registerElement(this.clear = new ToggleChatButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear").setButtonData(
                 "Clears every word",
                 "from the whitelist",
                 "",
                 "This action cannot be",
                 "undone, use at your",
                 "own peril"
-        )));
-        this.buttonList.add(new ModernButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List").setButtonData(new ToggleDummyMessage(
+        ));
+        registerElement(new ToggleChatButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List").setButtonData(
                 "Shows a list of all",
                 "word entries in the",
                 "whitelist",
                 "",
                 "Also has a page system",
                 "for extra fanciness"
-        )));
+        ));
 
-        this.buttonList.add(new ModernButton(10, 5, this.height - 25, 90, 20, "Back"));
+        registerElement(new ToggleChatButton(10, 5, this.height - 25, 90, 20, "Back"));
 
         this.text.setText(this.input);
         this.text.setFocused(true);
     }
-
+    
     @Override
-    public void drawScreen(int x, int y, float ticks) {
+    public void preRender(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
+    
         drawCenteredString(this.fontRendererObj, "Whitelist", this.width / 2, this.height / 2 - 82, Color.WHITE.getRGB());
-
+    }
+    
+    @Override
+    public void onRender(int mouseX, int mouseY, float partialTicks) {
         this.add.setEnabled(!this.text.getText().isEmpty() && !whitelistContains(this.text.getText()));
         this.remove.setEnabled(!this.text.getText().isEmpty() && whitelistContains(this.text.getText()));
         this.clear.setEnabled(!this.mod.getConfigLoader().getWhitelist().isEmpty());
-
-        super.drawScreen(x, y, ticks);
-
+    }
+    
+    @Override
+    public void postRender(float partialTicks) {
         checkHover(this.height / 2 - 15);
     }
-
+    
     @Override
-    protected void keyTyped(char c, int key) {
-        if (key == 1) {
-            this.mc.displayGuiScreen(null);
-        } else if (key == 28) {
+    public boolean onKeyTyped(int keyCode, char keyCharacter) {
+        // Ignore other logic.
+        if (keyCode == 1) {
+            return false;
+        }
+        
+        // Handles enter keypress.
+        if (keyCode == 28) {
             if (this.text.getText().isEmpty()) {
                 sendChatMessage("No name given!");
             } else if (whitelistContains(this.text.getText())) {
@@ -118,14 +128,18 @@ public class ViewListUI extends ModernGui {
                 this.text.setText("");
                 this.mod.getConfigLoader().getWhitelist().sort(Collator.getInstance());
             }
-        } else if (Character.isLetterOrDigit(c) || c == '_' || key == 14 || isCool(key) || isCooler(c)) { // Sorry to anyone who originally used other things
-            this.text.textboxKeyTyped(c, key);
+            
+            return true;
         }
-    }
-
-    @Override
-    public void updateScreen() {
-        this.text.updateCursorCounter();
+    
+        // Sorry to anyone who originally used other things
+        if (Character.isLetterOrDigit(keyCharacter) || keyCharacter == '_' || keyCode == 14 || isCool(keyCode) || isCooler(keyCharacter)) {
+            this.text.onKeyTyped(keyCharacter, keyCode);
+            
+            return true;
+        }
+        
+        return false;
     }
 
     @Override
@@ -172,7 +186,7 @@ public class ViewListUI extends ModernGui {
     }
 
     @Override
-    public void onGuiClosed() {
+    public void onGuiClose() {
         this.mod.getConfigLoader().saveModernUtils();
         Keyboard.enableRepeatEvents(false);
     }

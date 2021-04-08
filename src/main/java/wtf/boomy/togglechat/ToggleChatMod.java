@@ -17,19 +17,21 @@
 
 package wtf.boomy.togglechat;
 
-import wtf.boomy.togglechat.commands.impl.ToggleCommand;
-import wtf.boomy.togglechat.config.ConfigLoader;
-import wtf.boomy.togglechat.toggles.ToggleHandler;
-import wtf.boomy.togglechat.utils.uis.blur.BlurModHandler;
-import wtf.boomy.togglechat.toggles.ToggleBase;
-import wtf.boomy.togglechat.utils.ChatColor;
 import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+
+import wtf.boomy.togglechat.commands.impl.ToggleCommand;
+import wtf.boomy.togglechat.config.ConfigLoader;
+import wtf.boomy.togglechat.toggles.ToggleHandler;
+import wtf.boomy.togglechat.utils.ChatColor;
+import wtf.boomy.togglechat.utils.uis.blur.BlurModHandler;
 
 import java.io.File;
 import java.util.Arrays;
@@ -84,6 +86,36 @@ public class ToggleChatMod {
         this.configLoader.loadModernUtils();
 
         this.toggleHandler.inheritFavourites(this.configLoader.getFavourites());
+    }
+    
+    /**
+     * Version independent event registering. 1.7 does not
+     * use the same event bus as 1.8 and above.
+     *
+     * @param target the object to register events under.
+     */
+    public void registerEvents(Object target) {
+        // noinspection ConstantConditions
+        if (ForgeVersion.mcVersion.startsWith("1.7")) {
+            FMLCommonHandler.instance().bus().register(target);
+        } else {
+            MinecraftForge.EVENT_BUS.register(target);
+        }
+    }
+    
+    /**
+     * Version independent event registering. 1.7 does not
+     * use the same event bus as 1.8 and above.
+     *
+     * @param target the object to deregister events under.
+     */
+    public void unregisterEvents(Object target) {
+        // noinspection ConstantConditions
+        if (ForgeVersion.mcVersion.startsWith("1.7")) {
+            FMLCommonHandler.instance().bus().unregister(target);
+        } else {
+            MinecraftForge.EVENT_BUS.unregister(target);
+        }
     }
 
     /**

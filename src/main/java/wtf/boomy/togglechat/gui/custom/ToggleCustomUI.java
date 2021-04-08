@@ -18,8 +18,8 @@
 package wtf.boomy.togglechat.gui.custom;
 
 import wtf.boomy.togglechat.ToggleChatMod;
-import wtf.boomy.togglechat.utils.uis.ModernButton;
-import wtf.boomy.togglechat.utils.uis.ModernGui;
+import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
+import wtf.boomy.togglechat.utils.uis.impl.ModernButton;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 import wtf.boomy.togglechat.toggles.custom.TypeCustom;
 import wtf.boomy.togglechat.utils.ChatColor;
@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ToggleCustomUI extends ModernGui {
+public class ToggleCustomUI extends ToggleChatModernUI {
     
     private final ToggleChatMod mod;
     
@@ -69,47 +69,45 @@ public class ToggleCustomUI extends ModernGui {
     }
     
     @Override
-    public void initGui() {
+    public void onGuiOpen() {
         Stream<Map.Entry<String, ToggleBase>> filter = this.mod.getToggleHandler().getToggles().entrySet().stream().filter(e -> e.getValue() instanceof TypeCustom);
     
         this.entriesTotal = (int) filter.count();
         this.hasCustomToggle = this.entriesTotal > 0;
         this.pageTotal = (int) Math.ceil(this.entriesTotal / 7D);
-        this.renderingToggles = filter.skip((this.pageNumber - 1) * 10).limit(10).collect(Collectors.toList());
-        
-        // Dispose
-        filter.close();
+        this.renderingToggles = filter.skip((this.pageNumber - 1) * 10L).limit(10).collect(Collectors.toList());
         
         if (this.hasCustomToggle && !this.pageInvalid) {
-            this.buttonList.add(new ModernButton(0, this.width / 2 - 200, this.height / 2 + 80, 150, 20, "Back"));
-            this.buttonList.add(this.next = new ModernButton(1, this.width / 2 + 50, this.height / 2 + 80, 150, 20, "Next"));
+            registerElement(new ModernButton(0, this.width / 2 - 200, this.height / 2 + 80, 150, 20, "Back"));
+            registerElement(this.next = new ModernButton(1, this.width / 2 + 50, this.height / 2 + 80, 150, 20, "Next"));
             
             this.next.setEnabled(false);
         } else {
-            this.buttonList.add(
-                new ModernButton(0, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Back"));
+            registerElement(new ModernButton(0, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Back"));
         }
     }
     
     @Override
-    public void drawScreen(int mouseX, int mouseY, float ticks) {
+    public void preRender(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        
+    }
+    
+    @Override
+    public void onRender(int mouseX, int mouseY, float partialTicks) {
         drawCenteredString(this.fontRendererObj, String.format("Selecting a custom toggle to %s", ChatColor.GOLD + WordUtils.capitalizeFully(this.selectType.name().toLowerCase())), this.width / 2, this.height / 2 - 110, Color.WHITE.getRGB());
-        
-        super.drawScreen(mouseX, mouseY, ticks);
-        
+    
         if (this.hasCustomToggle) {
             if (!this.pageInvalid) {
                 drawInvalidPage();
             } else {
                 drawEntriesPage(mouseX, mouseY);
             }
-            
+        
             return;
         }
-        
+    
         writeInformation(this.width / 2, this.height / 2 - 50, 20, "You do not currently have", "any registered custom toggles!");
+    
     }
     
     private void drawInvalidPage() {
@@ -134,8 +132,8 @@ public class ToggleCustomUI extends ModernGui {
         this.pageInvalid = false;
         this.next.setEnabled(this.pageNumber < this.pageTotal); // Next
     
-        drawCenteredString(String.format("Page %s/%s", (this.pageNumber), this.pageTotal), this.width / 2, this.height / 2 - 95, Color.WHITE.getRGB());
-        drawCenteredString(String.format("You have a total of %s custom %s!", ChatColor.GOLD + String.valueOf(this.entriesTotal) + ChatColor.RESET, (this.entriesTotal > 1 ? "toggles" : "toggle")), this.width / 2, this.height / 2 + 65, Color.WHITE.getRGB());
+        drawCenteredString(this.fontRendererObj, String.format("Page %s/%s", (this.pageNumber), this.pageTotal), this.width / 2, this.height / 2 - 95, Color.WHITE.getRGB());
+        drawCenteredString(this.fontRendererObj, String.format("You have a total of %s custom %s!", ChatColor.GOLD + String.valueOf(this.entriesTotal) + ChatColor.RESET, (this.entriesTotal > 1 ? "toggles" : "toggle")), this.width / 2, this.height / 2 + 65, Color.WHITE.getRGB());
     
         final int[] position = {this.height / 2 - 73};
     
@@ -148,11 +146,11 @@ public class ToggleCustomUI extends ModernGui {
             int yEnd = yStart + 13;
         
             if (mouseX >= xStart && mouseY >= yStart && mouseX < xEnd && mouseY < yEnd) {
-                drawCenteredString(entry.getValue().getName(), this.width / 2, position[0], new Color(210, 210, 255).getRGB());
+                drawCenteredString(this.fontRendererObj, entry.getValue().getName(), this.width / 2, position[0], new Color(210, 210, 255).getRGB());
                 drawHover[0] = true;
                 this.hovered = (TypeCustom) entry.getValue();
             } else {
-                drawCenteredString(ChatColor.WHITE + entry.getValue().getName(), this.width / 2, position[0], new Color(255, 255, 255, 255).getRGB());
+                drawCenteredString(this.fontRendererObj, ChatColor.WHITE + entry.getValue().getName(), this.width / 2, position[0], new Color(255, 255, 255, 255).getRGB());
             }
         
             position[0] += 13;

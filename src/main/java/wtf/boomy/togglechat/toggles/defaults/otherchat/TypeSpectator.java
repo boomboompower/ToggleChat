@@ -17,9 +17,9 @@
 
 package wtf.boomy.togglechat.toggles.defaults.otherchat;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
-import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 /**
@@ -55,5 +55,10 @@ public class TypeSpectator extends ToggleBase {
                 "post-game chat",
                 "messages"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.CHAT;
     }
 }

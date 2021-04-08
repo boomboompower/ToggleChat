@@ -17,6 +17,7 @@
 
 package wtf.boomy.togglechat.toggles.defaults.otherchat;
 
+import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
 import java.util.regex.Matcher;
@@ -49,6 +50,11 @@ public class TypeEasy extends ToggleBase {
                 "Finally, freedom from",
                 "the \"ez\" spam!"
         };
+    }
+    
+    @Override
+    public Categories getCategory() {
+        return Categories.CHAT;
     }
 
     private boolean containsEasyMessage(String input) {
