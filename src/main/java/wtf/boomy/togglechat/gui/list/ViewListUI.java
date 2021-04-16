@@ -19,26 +19,32 @@ package wtf.boomy.togglechat.gui.list;
 
 import org.lwjgl.input.Keyboard;
 
-import wtf.boomy.togglechat.gui.core.MainGui;
+import wtf.boomy.togglechat.utils.uis.ModernGui;
 import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
-import wtf.boomy.togglechat.utils.uis.impl.ModernButton;
-import wtf.boomy.togglechat.utils.uis.impl.ModernTextBox;
-import wtf.boomy.togglechat.utils.uis.impl.tc.ToggleChatButton;
+import wtf.boomy.togglechat.utils.uis.components.ButtonComponent;
+import wtf.boomy.togglechat.utils.uis.components.TextBoxComponent;
+import wtf.boomy.togglechat.utils.uis.components.tc.ToggleChatButtonComponent;
 
 import java.awt.Color;
 import java.text.Collator;
 
 public class ViewListUI extends ToggleChatModernUI {
 
-    private ModernButton add;
-    private ModernButton remove;
-    private ModernButton clear;
+    private ButtonComponent add;
+    private ButtonComponent remove;
+    private ButtonComponent clear;
 
-    private ModernTextBox text;
+    private TextBoxComponent text;
     private String input = "";
 
+    private ModernGui previousUI;
+    
     public ViewListUI() {
         this("");
+    }
+    
+    public ViewListUI(ModernGui previousUI) {
+        this.previousUI = previousUI;
     }
 
     public ViewListUI(String input) {
@@ -49,9 +55,9 @@ public class ViewListUI extends ToggleChatModernUI {
     public void onGuiOpen() {
         Keyboard.enableRepeatEvents(true);
     
-        registerElement(this.text = new ModernTextBox(-1, this.width / 2 - 75, this.height / 2 - 58, 150, 20));
+        registerElement(this.text = new TextBoxComponent(-1, this.width / 2 - 75, this.height / 2 - 58, 150, 20));
 
-        registerElement(this.add = new ToggleChatButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add").setButtonData(
+        registerElement(this.add = new ToggleChatButtonComponent(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add").setButtonData(
                 "Adds a word to",
                 "the whitelist",
                 "",
@@ -59,7 +65,7 @@ public class ViewListUI extends ToggleChatModernUI {
                 "this word will not be",
                 "toggled"
         ));
-        registerElement(this.remove = new ToggleChatButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove").setButtonData(
+        registerElement(this.remove = new ToggleChatButtonComponent(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove").setButtonData(
                 "Removes a word from",
                 "the whitelist",
                 "",
@@ -67,7 +73,7 @@ public class ViewListUI extends ToggleChatModernUI {
                 "this will no longer",
                 "be ignored"
         ));
-        registerElement(this.clear = new ToggleChatButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear").setButtonData(
+        registerElement(this.clear = new ToggleChatButtonComponent(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear").setButtonData(
                 "Clears every word",
                 "from the whitelist",
                 "",
@@ -75,7 +81,7 @@ public class ViewListUI extends ToggleChatModernUI {
                 "undone, use at your",
                 "own peril"
         ));
-        registerElement(new ToggleChatButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List").setButtonData(
+        registerElement(new ToggleChatButtonComponent(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List").setButtonData(
                 "Shows a list of all",
                 "word entries in the",
                 "whitelist",
@@ -84,7 +90,7 @@ public class ViewListUI extends ToggleChatModernUI {
                 "for extra fanciness"
         ));
 
-        registerElement(new ToggleChatButton(10, 5, this.height - 25, 90, 20, "Back"));
+        registerElement(new ToggleChatButtonComponent(10, 5, this.height - 25, 90, 20, "Back"));
 
         this.text.setText(this.input);
         this.text.setFocused(true);
@@ -143,7 +149,7 @@ public class ViewListUI extends ToggleChatModernUI {
     }
 
     @Override
-    public void buttonPressed(ModernButton button) {
+    public void buttonPressed(ButtonComponent button) {
         switch (button.getId()) {
             case 1:
                 if (this.text.getText().isEmpty()) {
@@ -180,7 +186,7 @@ public class ViewListUI extends ToggleChatModernUI {
                 new AddNewListUI(this, 1).display();
                 break;
             case 10:
-                new MainGui(1).display();
+                this.previousUI.display();
                 break;
         }
     }

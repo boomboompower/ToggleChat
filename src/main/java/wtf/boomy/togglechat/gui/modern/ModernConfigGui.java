@@ -15,12 +15,12 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wtf.boomy.togglechat.utils.uis.gui;
+package wtf.boomy.togglechat.gui.modern;
 
 import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
 import wtf.boomy.togglechat.utils.uis.ModernGui;
 import wtf.boomy.togglechat.utils.ChatColor;
-import wtf.boomy.togglechat.utils.uis.impl.tc.ToggleChatButton;
+import wtf.boomy.togglechat.utils.uis.components.tc.ToggleChatButtonComponent;
 
 public class ModernConfigGui extends ToggleChatModernUI {
 
@@ -36,7 +36,7 @@ public class ModernConfigGui extends ToggleChatModernUI {
     @Override
     public void onGuiOpen() {
         // Blur settings, turn this on for worse performance but with hotter UIs
-        registerElement(new ToggleChatButton(1, this.width / 2 - 75, this.height / 2 - 34, 150, 20, "Blur: " + getStatus(this.configLoader.isModernBlur()), button -> {
+        registerElement(new ToggleChatButtonComponent(1, this.width / 2 - 75, this.height / 2 - 34, 150, 20, "Blur: " + getStatus(this.configLoader.isModernBlur()), button -> {
             this.modified = true;
     
             this.configLoader.setModernBlur(!this.configLoader.isModernBlur());
@@ -48,7 +48,7 @@ public class ModernConfigGui extends ToggleChatModernUI {
         
         // Toggles the style of the buttons for the mod, between one which renders the texture
         // pack style and the other which is literally just a transparent rectangle for a background.
-        registerElement(new ToggleChatButton(2, this.width / 2 - 75, this.height / 2 - 10, 150, 20, "Buttons: " + getClassic(this.configLoader.isModernButton()), button -> {
+        registerElement(new ToggleChatButtonComponent(2, this.width / 2 - 75, this.height / 2 - 10, 150, 20, "Buttons: " + getClassic(this.configLoader.isModernButton()), button -> {
             this.modified = true;
     
             this.configLoader.setModernButton(!this.configLoader.isModernButton());
@@ -60,7 +60,7 @@ public class ModernConfigGui extends ToggleChatModernUI {
         
         // Toggles the style of the text boxes in the mod, between the one which appears when you're in
         // the command block and once more one which is just a rectangle with extra steps.
-        registerElement(new ToggleChatButton(3, this.width / 2 - 75, this.height / 2 + 14, 150, 20, "Textbox: " + getClassic(this.configLoader.isModernTextbox()), button -> {
+        registerElement(new ToggleChatButtonComponent(3, this.width / 2 - 75, this.height / 2 + 14, 150, 20, "Textbox: " + getClassic(this.configLoader.isModernTextbox()), button -> {
             this.modified = true;
     
             this.configLoader.setModernTextbox(!this.configLoader.isModernTextbox());
@@ -71,7 +71,7 @@ public class ModernConfigGui extends ToggleChatModernUI {
         ));
         
         // Standard button to return to the previous page.
-        registerElement(new ToggleChatButton(4, 5, this.height - 25, 90, 20, "Back", button -> this.mc.displayGuiScreen(this.previous)));
+        registerElement(new ToggleChatButtonComponent(4, 5, this.height - 25, 90, 20, "Back", button -> this.mc.displayGuiScreen(this.previous)));
     }
     
     @Override

@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2020 boomboompower
+ *     Copyright (C) 2021 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -15,22 +15,24 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wtf.boomy.togglechat.utils.uis.impl;
-
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+package wtf.boomy.togglechat.utils.uis.components;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+
 import wtf.boomy.togglechat.utils.uis.ModernGui;
+import wtf.boomy.togglechat.utils.uis.faces.HeaderChildComponent;
 import wtf.boomy.togglechat.utils.uis.faces.InteractiveUIElement;
 import wtf.boomy.togglechat.utils.uis.faces.ModernUIElement;
 import wtf.boomy.togglechat.utils.uis.faces.StartEndUIElement;
+
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple class for drawing headers. Useful for UI categories.
@@ -38,7 +40,7 @@ import wtf.boomy.togglechat.utils.uis.faces.StartEndUIElement;
  * @author boomboompower
  * @version 1.1
  */
-public class ModernHeader extends Gui implements InteractiveUIElement {
+public class HeaderComponent extends Gui implements InteractiveUIElement {
     
     private int x;
     private int y;
@@ -52,7 +54,7 @@ public class ModernHeader extends Gui implements InteractiveUIElement {
     
     private final Color headerColor;
     
-    private final List<ModernUIElement> children;
+    private final List<HeaderChildComponent> children;
     
     private float offsetBetweenChildren = 12;
     
@@ -75,7 +77,7 @@ public class ModernHeader extends Gui implements InteractiveUIElement {
      * @param drawUnderline true if an underline should be drawn.
      * @param color         the color of which the elements will be drawn.
      */
-    public ModernHeader(ModernGui gui, int x, int y, String header, float scaleSize, boolean drawUnderline, Color color) {
+    public HeaderComponent(ModernGui gui, int x, int y, String header, float scaleSize, boolean drawUnderline, Color color) {
         this.modernGui = gui;
         
         this.x = x;
@@ -159,7 +161,7 @@ public class ModernHeader extends Gui implements InteractiveUIElement {
         if (this.children.size() > 0) {
             float yOffset = (12 * this.scaleSize) + this.offsetBetweenChildren / 2;
         
-            for (ModernUIElement child : this.children) {
+            for (HeaderChildComponent child : this.children) {
                 // Renders relative to this headers position.
                 if (child.renderRelativeToHeader()) {
                     GlStateManager.pushMatrix();
@@ -190,21 +192,6 @@ public class ModernHeader extends Gui implements InteractiveUIElement {
     @Override
     public boolean isEnabled() {
         return this.visible;
-    }
-    
-    @Override
-    public void setAsPartOfHeader(ModernHeader parent) {
-        throw new IllegalStateException("A header cannot be placed in a header");
-    }
-    
-    @Override
-    public void renderFromHeader(int xPos, int yPos, float yTranslation, float partialTicks, int mouseX, int mouseY, int recommendedYOffset) {
-        throw new IllegalStateException("A header cannot be placed in a header");
-    }
-    
-    @Override
-    public boolean renderRelativeToHeader() {
-        return false;
     }
     
     /**
@@ -261,7 +248,7 @@ public class ModernHeader extends Gui implements InteractiveUIElement {
         return this.heightOfSub;
     }
     
-    public void addChild(ModernUIElement element) {
+    public void addChild(HeaderChildComponent element) {
         element.setAsPartOfHeader(this);
         
         if (element.renderRelativeToHeader()) {
@@ -292,8 +279,8 @@ public class ModernHeader extends Gui implements InteractiveUIElement {
         if (this.children.size() > 0) {
             for (ModernUIElement child : this.children) {
                 // Special case :V
-                if (child instanceof ModernButton) {
-                    ModernButton button = (ModernButton) child;
+                if (child instanceof ButtonComponent) {
+                    ButtonComponent button = (ButtonComponent) child;
                     
                     if (!child.isEnabled()) {
                         continue;
@@ -341,8 +328,8 @@ public class ModernHeader extends Gui implements InteractiveUIElement {
     
     public void setButtonWidth(int widthIn) {
         for (ModernUIElement element : this.children) {
-            if (element instanceof ModernButton) {
-                ((ModernButton) element).setWidth(widthIn);
+            if (element instanceof ButtonComponent) {
+                ((ButtonComponent) element).setWidth(widthIn);
                 
                 if (widthIn > this.widthOfSub) {
                     this.widthOfSub = widthIn;

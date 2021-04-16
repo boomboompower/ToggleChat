@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2020 boomboompower
+ *     Copyright (C) 2021 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wtf.boomy.togglechat.utils.uis.impl;
+package wtf.boomy.togglechat.utils.uis.components;
 
 import wtf.boomy.togglechat.locale.Language;
 import wtf.boomy.togglechat.utils.options.SimpleCallback;
@@ -27,9 +27,9 @@ import java.util.List;
  * A type of ModernButton which supports translations.
  * <br>
  * <br>
- * An implementation of the {@link ModernButton} designed to adhere to the specifications in the Translation system.
+ * An implementation of the {@link ButtonComponent} designed to adhere to the specifications in the Translation system.
  */
-public class ModernLocaleButton extends ModernButton {
+public class LocaleButtonComponent extends ButtonComponent {
     
     private final String title;
     private final String key;
@@ -47,7 +47,7 @@ public class ModernLocaleButton extends ModernButton {
      * @param title the title of the button (to remember what the translation is for)
      * @param key the translation key for the button.
      */
-    public ModernLocaleButton(int buttonId, int x, int y, int widthIn, int heightIn, String title, String key) {
+    public LocaleButtonComponent(int buttonId, int x, int y, int widthIn, int heightIn, String title, String key) {
         super(buttonId, x, y, widthIn, heightIn, Language.format(key));
         
         this.title = title;
@@ -66,7 +66,7 @@ public class ModernLocaleButton extends ModernButton {
      * @param key the translation key for the button.
      * @param clicked the event which is called when the button is clicked (supersedes buttonId)
      */
-    public ModernLocaleButton(int buttonId, int x, int y, int widthIn, int heightIn, String title, String key, SimpleCallback<ModernLocaleButton> clicked) {
+    public LocaleButtonComponent(int buttonId, int x, int y, int widthIn, int heightIn, String title, String key, SimpleCallback<LocaleButtonComponent> clicked) {
         super(buttonId, x, y, widthIn, heightIn, Language.format(key), clicked);
         
         this.title = title;
@@ -87,7 +87,7 @@ public class ModernLocaleButton extends ModernButton {
      * @param value the value of the button (formatted)
      * @param clicked the event which is called when the button is clicked (supersedes buttonId)
      */
-    public ModernLocaleButton(int buttonId, int x, int y, int widthIn, int heightIn, String title, String key, String value, SimpleCallback<ModernLocaleButton> clicked) {
+    public LocaleButtonComponent(int buttonId, int x, int y, int widthIn, int heightIn, String title, String key, String value, SimpleCallback<LocaleButtonComponent> clicked) {
         super(buttonId, x, y, widthIn, heightIn, Language.format(key, value), clicked);
         
         this.title = title;
@@ -102,7 +102,7 @@ public class ModernLocaleButton extends ModernButton {
      *
      * @return this instance of the button.
      */
-    public ModernLocaleButton interpretLoreKey(String key, String defaultVal) {
+    public LocaleButtonComponent interpretLoreKey(String key, String defaultVal) {
         List<String> lines = new ArrayList<>(Language.getMultiLine(key));
         
         lines.add(" ");
@@ -130,7 +130,7 @@ public class ModernLocaleButton extends ModernButton {
         setText(translatedString);
     }
     
-    public ModernLocaleButton setDefaultValue(String defaultValue) {
+    public LocaleButtonComponent setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
         
         return this;

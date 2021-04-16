@@ -24,7 +24,7 @@ public class TypeSkyBlockLevelUp extends ToggleBase {
 
     @Override
     public String getName() {
-        return "skyblock_level";
+        return "Skyblock Levelup";
     }
     
     @Override

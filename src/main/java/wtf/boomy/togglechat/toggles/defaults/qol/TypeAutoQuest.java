@@ -24,7 +24,7 @@ public class TypeAutoQuest extends ToggleBase {
 
     @Override
     public String getName() {
-        return "auto_quest";
+        return "Auto Quest";
     }
 
     @Override

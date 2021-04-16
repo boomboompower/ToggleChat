@@ -31,7 +31,7 @@ public class TypePit extends ToggleBase {
     
     @Override
     public String getName() {
-        return "The_Pit";
+        return "The Pit";
     }
 
     @Override

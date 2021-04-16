@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2020 boomboompower
+ *     Copyright (C) 2021 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 
 package wtf.boomy.togglechat.utils.uis.faces;
 
-import wtf.boomy.togglechat.utils.uis.impl.ModernButton;
+import wtf.boomy.togglechat.utils.uis.components.ButtonComponent;
 
 /**
  * Provides the base methods for a Gui, these methods are designed to be applicable to multiple Minecraft versions.
@@ -74,19 +74,19 @@ public interface UISkeleton {
     }
     
     /**
-     * Called when a {@link ModernButton} is left clicked.
+     * Called when a {@link ButtonComponent} is left clicked.
      *
      * @param button the button that was left clicked.
      */
-    public default void buttonPressed(ModernButton button) {
+    public default void buttonPressed(ButtonComponent button) {
     }
     
     /**
-     * Called when a {@link ModernButton} is right clicked.
+     * Called when a {@link ButtonComponent} is right clicked.
      *
      * @param button the button that was right clicked.
      */
-    public default void rightClicked(ModernButton button) {
+    public default void rightClicked(ButtonComponent button) {
     }
     
     /**

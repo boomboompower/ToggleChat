@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2020 boomboompower
+ *     Copyright (C) 2021 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 package wtf.boomy.togglechat.utils.uis.faces;
 
 import wtf.boomy.togglechat.utils.uis.ModernGui;
-import wtf.boomy.togglechat.utils.uis.impl.ModernHeader;
 
 /**
  * Interface for a basic ModernUIElement item. Contains universal methods which **ALL** elements
@@ -60,37 +59,12 @@ public interface ModernUIElement {
     public void render(int mouseX, int mouseY, float yTranslation, float partialTicks);
     
     /**
-     * Renders the element from a header position. By default this will just call the {@link
-     * #render(int, int, float, float)} method, however some {@link ModernUIElement}'s will react differently
-     * to this change.
-     *
-     * @param xPos               the x position of the element
-     * @param yPos               the y position of the element
-     * @param yTranslation       the translation in the y axis
-     * @param mouseX             the raw x location of the mouse
-     * @param mouseY             the raw y location of the mouse
-     * @param recommendedYOffset the recommended offset this {@link ModernUIElement} should follow (how
-     *                           far down it should be shifted).
-     */
-    public default void renderFromHeader(int xPos, int yPos, float yTranslation, float partialTicks, int mouseX, int mouseY, int recommendedYOffset) {
-        render(mouseX, mouseY, yTranslation, partialTicks);
-    }
-    
-    /**
      * Should this element be drawn? If this is false the header will not call the {@link
      * #render(int, int, float, float)} method.
      *
      * @return true if {@link #render(int, int, float, float)} should be called for the element.
      */
     public boolean isEnabled();
-    
-    /**
-     * Tells this element to register itself as part of this header. Some elements will react
-     * differently to this change
-     *
-     * @param parent the header which the element should be set under.
-     */
-    public void setAsPartOfHeader(ModernHeader parent);
     
     /**
      * Stops this element being translatable
@@ -107,15 +81,6 @@ public interface ModernUIElement {
      * @return true if it should be translated.
      */
     public default boolean isTranslatable() {
-        return true;
-    }
-    
-    /**
-     * Should this element be rendered relative to its header (if its part of one)?
-     *
-     * @return true if the element should be moved based on header position.
-     */
-    public default boolean renderRelativeToHeader() {
         return true;
     }
 }

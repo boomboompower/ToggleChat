@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import wtf.boomy.togglechat.ToggleChatMod;
+import wtf.boomy.togglechat.gui.selector.UITheme;
 import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ICustomSaver;
 import wtf.boomy.togglechat.toggles.ToggleBase;
@@ -81,6 +82,9 @@ public class ConfigLoader {
     
     @SaveableField(saveId = "filter")
     private Categories categoryFilter = Categories.ALL;
+    
+    @SaveableField(saveId = "theme")
+    private UITheme uiTheme = UITheme.UNKNOWN;
     
     private final ToggleChatMod mod;
 
@@ -486,6 +490,10 @@ public class ConfigLoader {
         return this.categoryFilter;
     }
     
+    public UITheme getUITheme() {
+        return this.uiTheme;
+    }
+    
     public void setModernBlur(boolean modernBlur) {
         this.modernBlur = modernBlur;
     }
@@ -508,5 +516,9 @@ public class ConfigLoader {
     
     public void setCategoryFilter(Categories categoryFilter) {
         this.categoryFilter = categoryFilter;
+    }
+    
+    public void setUITheme(UITheme designTypes) {
+        this.uiTheme = designTypes;
     }
 }

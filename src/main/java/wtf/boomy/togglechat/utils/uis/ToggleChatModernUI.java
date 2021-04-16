@@ -7,7 +7,7 @@ import wtf.boomy.togglechat.ToggleChatMod;
 import wtf.boomy.togglechat.config.ConfigLoader;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 import wtf.boomy.togglechat.utils.ChatColor;
-import wtf.boomy.togglechat.utils.uis.impl.tc.ToggleChatButton;
+import wtf.boomy.togglechat.utils.uis.components.tc.ToggleChatButtonComponent;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public abstract class ToggleChatModernUI extends ModernGui {
     protected final ToggleChatMod mod = ToggleChatMod.getInstance();
     protected final ConfigLoader configLoader = ToggleChatMod.getInstance().getConfigLoader();
     
-    protected List<ToggleChatButton> toggleChatButtons = new ArrayList<>();
+    protected List<ToggleChatButtonComponent> toggleChatButtons = new ArrayList<>();
     
     @Override
     public void setWorldAndResolution(Minecraft mc, int width, int height) {
@@ -45,15 +45,15 @@ public abstract class ToggleChatModernUI extends ModernGui {
     @Override
     public final void registerElement(Object element) {
         // A hack for the checkHover function.
-        if (element instanceof ToggleChatButton) {
-            this.toggleChatButtons.add((ToggleChatButton) element);
+        if (element instanceof ToggleChatButtonComponent) {
+            this.toggleChatButtons.add((ToggleChatButtonComponent) element);
         }
         
         super.registerElement(element);
     }
     
     public final void checkHover(int firstPosition) {
-        for (ToggleChatButton button : this.toggleChatButtons) {
+        for (ToggleChatButtonComponent button : this.toggleChatButtons) {
             if (button == null) continue;
             
             if (button.isHovered() && button.hasButtonData()) {

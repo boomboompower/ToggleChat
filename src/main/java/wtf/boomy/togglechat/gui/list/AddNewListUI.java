@@ -18,7 +18,7 @@
 package wtf.boomy.togglechat.gui.list;
 
 import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
-import wtf.boomy.togglechat.utils.uis.impl.ModernButton;
+import wtf.boomy.togglechat.utils.uis.components.ButtonComponent;
 import wtf.boomy.togglechat.utils.uis.ModernGui;
 import wtf.boomy.togglechat.utils.ChatColor;
 
@@ -26,7 +26,7 @@ import java.awt.Color;
 
 public class AddNewListUI extends ToggleChatModernUI {
 
-    private ModernButton next;
+    private ButtonComponent next;
 
     private ModernGui previousScreen;
 
@@ -44,10 +44,10 @@ public class AddNewListUI extends ToggleChatModernUI {
     @Override
     public void onGuiOpen() {
         if (this.mod.getConfigLoader().getWhitelist().size() > 0) {
-            registerElement(new ModernButton(0, this.width / 2 - 200, this.height / 2 + 80, 150, 20, "Back"));
-            registerElement(this.next = new ModernButton(1, this.width / 2 + 50, this.height / 2 + 80, 150, 20, "Next"));
+            registerElement(new ButtonComponent(0, this.width / 2 - 200, this.height / 2 + 80, 150, 20, "Back"));
+            registerElement(this.next = new ButtonComponent(1, this.width / 2 + 50, this.height / 2 + 80, 150, 20, "Next"));
         } else {
-            registerElement(new ModernButton(0, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Back"));
+            registerElement(new ButtonComponent(0, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Back"));
         }
     }
     
@@ -114,7 +114,7 @@ public class AddNewListUI extends ToggleChatModernUI {
     }
     
     @Override
-    public void buttonPressed(ModernButton button) {
+    public void buttonPressed(ButtonComponent button) {
         switch (button.getId()) {
             case 0:
                 if (this.pageNumber > 1) {

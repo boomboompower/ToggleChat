@@ -18,16 +18,16 @@
 package wtf.boomy.togglechat.gui.core;
 
 import wtf.boomy.togglechat.gui.list.ViewListUI;
+import wtf.boomy.togglechat.gui.modern.ModernConfigGui;
+import wtf.boomy.togglechat.gui.selector.DesignSelectorMenu;
 import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 import wtf.boomy.togglechat.toggles.custom.ICustomToggle;
 import wtf.boomy.togglechat.toggles.dummy.ToggleDummyMessage;
 import wtf.boomy.togglechat.utils.ChatColor;
 import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
-import wtf.boomy.togglechat.utils.uis.gui.ModernConfigGui;
-import wtf.boomy.togglechat.utils.uis.impl.ModernButton;
-import wtf.boomy.togglechat.utils.uis.impl.ModernTextBox;
-import wtf.boomy.togglechat.utils.uis.impl.tc.ToggleChatButton;
+import wtf.boomy.togglechat.utils.uis.components.ButtonComponent;
+import wtf.boomy.togglechat.utils.uis.components.tc.ToggleChatButtonComponent;
 
 import java.awt.Color;
 import java.util.Comparator;
@@ -114,7 +114,7 @@ public class MainGui extends ToggleChatModernUI {
             String displayName = String.format(baseType.getDisplayName(), getStatus(baseType.isEnabled()));
         
             // Construct the button instance. Use ID 0 to prevent clashes (legacy). Use the callback since it's always unique.
-            ToggleChatButton button = new ToggleChatButton(0, this.width / 2 - 75, position[0], 150, 20, displayName, btn -> {
+            ToggleChatButtonComponent button = new ToggleChatButtonComponent(0, this.width / 2 - 75, position[0], 150, 20, displayName, btn -> {
                 // Buttons which don't have data shouldn't be toggled.
                 if (btn.hasButtonData()) {
                     ToggleBase base = btn.getButtonData();
@@ -128,7 +128,7 @@ public class MainGui extends ToggleChatModernUI {
         
             // Change the colour for custom toggles.
             if (baseType instanceof ICustomToggle) {
-                button = (ToggleChatButton) button.setEnabledColor(new Color(100, 88, 192, 75)).setDisabledColor(new Color(67, 67, 133, 75));
+                button = (ToggleChatButtonComponent) button.setEnabledColor(new Color(100, 88, 192, 75)).setDisabledColor(new Color(67, 67, 133, 75));
             }
         
             // Favourite it if needed :)
@@ -140,11 +140,14 @@ public class MainGui extends ToggleChatModernUI {
             position[0] += 24;
         });
     
+        // Opens the theme menu
+        registerElement(new ToggleChatButtonComponent(1, this.width - 114, this.height - 72, 104, 20, "Theme Menu", button -> new DesignSelectorMenu().display()));
+    
         // Opens the list menu
-        registerElement(new ToggleChatButton(1, this.width - 114, this.height - 49, 104, 20, "Whitelist", button -> new ViewListUI().display()));
+        registerElement(new ToggleChatButtonComponent(1, this.width - 114, this.height - 49, 104, 20, "Whitelist", button -> new ViewListUI(this).display()));
     
         // Switches the current category filter
-        registerElement(new ToggleChatButton(2, 5, this.height - 49, 100, 20, "Category: " + ChatColor.AQUA + this.configLoader.getCategoryFilter().getDisplayName(), button -> {
+        registerElement(new ToggleChatButtonComponent(2, 5, this.height - 49, 100, 20, "Category: " + ChatColor.AQUA + this.configLoader.getCategoryFilter().getDisplayName(), button -> {
             // Choose the next node
             this.configLoader.setCategoryFilter(this.configLoader.getCategoryFilter().getNextMode());
     
@@ -156,13 +159,13 @@ public class MainGui extends ToggleChatModernUI {
         }).setButtonData("Filters the list", "of toggles into", "their respective", "categories.", " ", "Current Mode:", this.configLoader.getCategoryFilter().getDescription()));
         
         // Displays the previous page in the toggle list. Tries to disable itself if there is no prior page.
-        registerElement(new ToggleChatButton(3, this.width - 114, this.height - 25, 50, 20, "\u21E6", button -> this.mc.displayGuiScreen(new MainGui(this.pageNumber - 1))).setEnabled(this.pageNumber > 1));
+        registerElement(new ToggleChatButtonComponent(3, this.width - 114, this.height - 25, 50, 20, "\u21E6", button -> this.mc.displayGuiScreen(new MainGui(this.pageNumber - 1))).setEnabled(this.pageNumber > 1));
     
         // Displays the next page in the toggle list. Reminder this will skip the 7 * page entries as defined above.
-        registerElement(new ToggleChatButton(4, this.width - 60, this.height - 25, 50, 20, "\u21E8", button -> this.mc.displayGuiScreen(new MainGui(this.pageNumber + 1))).setEnabled(this.pageNumber != this.pagesTotal));
+        registerElement(new ToggleChatButtonComponent(4, this.width - 60, this.height - 25, 50, 20, "\u21E8", button -> this.mc.displayGuiScreen(new MainGui(this.pageNumber + 1))).setEnabled(this.pageNumber != this.pagesTotal));
     
         // Opens the Theme modifier menu
-        registerElement(new ToggleChatButton(5, 5, 5, 20, 20, "\u2699", button -> this.mc.displayGuiScreen(new ModernConfigGui(this))).setButtonData(
+        registerElement(new ToggleChatButtonComponent(5, 5, 5, 20, 20, "\u2699", button -> this.mc.displayGuiScreen(new ModernConfigGui(this))).setButtonData(
                 // Let them know what this button does
                 "Opens the",
                 "&bTheme Modifier&r,",
@@ -175,7 +178,7 @@ public class MainGui extends ToggleChatModernUI {
         String sortingString = "Sort: " + ChatColor.AQUA + this.configLoader.getSortType().getDisplayName();
     
         // Create the sorting button, when it's pressed it'll just reopen the current page.
-        registerElement(new ToggleChatButton(6, 5, this.height - 25, 100, 20, sortingString, button -> {
+        registerElement(new ToggleChatButtonComponent(6, 5, this.height - 25, 100, 20, sortingString, button -> {
             // Go to the next sorting type!!!
             this.mod.getConfigLoader().setSortType(this.mod.getConfigLoader().getSortType().getNextSortType());
         
@@ -220,12 +223,12 @@ public class MainGui extends ToggleChatModernUI {
     }
 
     @Override
-    public void rightClicked(ModernButton modernButton) {
-        if (!(modernButton instanceof ToggleChatButton)) {
+    public void rightClicked(ButtonComponent buttonComponent) {
+        if (!(buttonComponent instanceof ToggleChatButtonComponent)) {
             return;
         }
         
-        ToggleChatButton button = (ToggleChatButton) modernButton;
+        ToggleChatButtonComponent button = (ToggleChatButtonComponent) buttonComponent;
         
         if (!button.hasButtonData()) {
             return;

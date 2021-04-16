@@ -29,7 +29,7 @@ public class TypeGexp extends ToggleBase {
 
     @Override
     public String getName() {
-        return "GEXP_Messages";
+        return "GEXP Messages";
     }
 
     @Override
@@ -61,6 +61,6 @@ public class TypeGexp extends ToggleBase {
     
     @Override
     public Categories getCategory() {
-        return Categories.QOL;
+        return Categories.GUILDS;
     }
 }

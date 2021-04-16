@@ -31,7 +31,7 @@ public class TypeTip extends ToggleBase {
 
         @Override
     public String getName() {
-        return "Tip_Messages";
+        return "Tip Messages";
     }
 
     @Override

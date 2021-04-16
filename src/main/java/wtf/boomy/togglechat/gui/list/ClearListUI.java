@@ -18,7 +18,7 @@
 package wtf.boomy.togglechat.gui.list;
 
 import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
-import wtf.boomy.togglechat.utils.uis.impl.ModernButton;
+import wtf.boomy.togglechat.utils.uis.components.ButtonComponent;
 import wtf.boomy.togglechat.utils.uis.ModernGui;
 import net.minecraft.client.Minecraft;
 
@@ -35,8 +35,8 @@ public class ClearListUI extends ToggleChatModernUI {
 
     @Override
     public void onGuiOpen() {
-        registerElement(new ModernButton(0, this.width / 2 - 200, this.height / 2 + 30, 150, 20, "Cancel"));
-        registerElement(new ModernButton(1, this.width / 2 + 50, this.height / 2 + 30, 150, 20, "Confirm"));
+        registerElement(new ButtonComponent(0, this.width / 2 - 200, this.height / 2 + 30, 150, 20, "Cancel"));
+        registerElement(new ButtonComponent(1, this.width / 2 + 50, this.height / 2 + 30, 150, 20, "Confirm"));
     }
     
     @Override
@@ -53,7 +53,7 @@ public class ClearListUI extends ToggleChatModernUI {
     }
 
     @Override
-    public void buttonPressed(ModernButton button) {
+    public void buttonPressed(ButtonComponent button) {
         switch (button.getId()) {
             case 0:
                 this.mc.displayGuiScreen(this.previousScreen);

@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2020 boomboompower
+ *     Copyright (C) 2021 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -15,19 +15,21 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wtf.boomy.togglechat.utils.uis.impl;
-
-import org.lwjgl.opengl.Display;
+package wtf.boomy.togglechat.utils.uis.components;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.Display;
+
 import wtf.boomy.togglechat.ToggleChatMod;
 import wtf.boomy.togglechat.config.ConfigLoader;
 import wtf.boomy.togglechat.utils.options.SimpleCallback;
 import wtf.boomy.togglechat.utils.uis.ModernGui;
+import wtf.boomy.togglechat.utils.uis.faces.HeaderChildComponent;
 import wtf.boomy.togglechat.utils.uis.faces.InteractiveUIElement;
 import wtf.boomy.togglechat.utils.uis.faces.StartEndUIElement;
 
@@ -42,7 +44,7 @@ import java.util.List;
  * @version 2.0
  * @since 3.0.0
  */
-public class ModernButton implements InteractiveUIElement, StartEndUIElement {
+public class ButtonComponent implements HeaderChildComponent, InteractiveUIElement, StartEndUIElement {
     
     private static final ResourceLocation buttonTextures = new ResourceLocation("textures/gui/widgets.png");
     
@@ -66,12 +68,12 @@ public class ModernButton implements InteractiveUIElement, StartEndUIElement {
     private Color disabledColor = null;
     private Color hoverColor = null;
     
-    private final SimpleCallback<? extends ModernButton> clickCallback;
+    private final SimpleCallback<? extends ButtonComponent> clickCallback;
     private List<String> messageLines = null;
 
     private boolean partOfHeader;
 
-    private ModernHeader parentHeader;
+    private HeaderComponent parentHeader;
     private int recommendedYPosition;
 
     private boolean translatable;
@@ -80,11 +82,11 @@ public class ModernButton implements InteractiveUIElement, StartEndUIElement {
     private float glowPadding;
     private float glowIncrements;
 
-    public ModernButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText) {
+    public ButtonComponent(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText) {
         this(buttonId, x, y, widthIn, heightIn, buttonText, null);
     }
     
-    public ModernButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, SimpleCallback<? extends ModernButton> clicked) {
+    public ButtonComponent(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, SimpleCallback<? extends ButtonComponent> clicked) {
         this.handler = ToggleChatMod.getInstance().getConfigLoader();
         this.width = 200;
         this.height = 20;
@@ -200,7 +202,7 @@ public class ModernButton implements InteractiveUIElement, StartEndUIElement {
     }
     
     @Override
-    public void setAsPartOfHeader(ModernHeader parent) {
+    public void setAsPartOfHeader(HeaderComponent parent) {
         this.partOfHeader = true;
 
         this.parentHeader = parent;
@@ -241,7 +243,7 @@ public class ModernButton implements InteractiveUIElement, StartEndUIElement {
         return this.enabledColor == null ? (this.enabledColor = new Color(255, 255, 255, 75)) : this.enabledColor;
     }
     
-    public ModernButton setEnabledColor(Color enabledColor) {
+    public ButtonComponent setEnabledColor(Color enabledColor) {
         this.enabledColor = enabledColor;
         
         return this;
@@ -251,7 +253,7 @@ public class ModernButton implements InteractiveUIElement, StartEndUIElement {
         return this.disabledColor == null ? (this.disabledColor = new Color(100, 100, 100, 75)) : this.disabledColor;
     }
     
-    public ModernButton setDisabledColor(Color disabledColor) {
+    public ButtonComponent setDisabledColor(Color disabledColor) {
         this.disabledColor = disabledColor;
         
         return this;
@@ -285,7 +287,7 @@ public class ModernButton implements InteractiveUIElement, StartEndUIElement {
         this.height = height;
     }
     
-    public ModernButton setMessageLines(List<String> messageLines) {
+    public ButtonComponent setMessageLines(List<String> messageLines) {
         this.messageLines = messageLines;
         
         return this;
@@ -295,13 +297,13 @@ public class ModernButton implements InteractiveUIElement, StartEndUIElement {
         return messageLines;
     }
     
-    public ModernButton setEnabled(boolean isEnabled) {
+    public ButtonComponent setEnabled(boolean isEnabled) {
         this.enabled = isEnabled;
 
         return this;
     }
     
-    public ModernButton setOuterGlow(float padding, float increments) {
+    public ButtonComponent setOuterGlow(float padding, float increments) {
         if (padding <= 0) {
             this.glowPadding = 0;
             this.glowIncrements = 0;
@@ -394,7 +396,7 @@ public class ModernButton implements InteractiveUIElement, StartEndUIElement {
         return translatable;
     }
     
-    private <T extends ModernButton> T getMe() {
+    private <T extends ButtonComponent> T getMe() {
         return (T) this;
     }
     

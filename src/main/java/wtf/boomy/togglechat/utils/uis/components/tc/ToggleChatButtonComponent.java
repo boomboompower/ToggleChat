@@ -1,10 +1,10 @@
-package wtf.boomy.togglechat.utils.uis.impl.tc;
+package wtf.boomy.togglechat.utils.uis.components.tc;
 
 import net.minecraft.client.gui.FontRenderer;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 import wtf.boomy.togglechat.toggles.dummy.ToggleDummyMessage;
 import wtf.boomy.togglechat.utils.options.SimpleCallback;
-import wtf.boomy.togglechat.utils.uis.impl.ModernButton;
+import wtf.boomy.togglechat.utils.uis.components.ButtonComponent;
 
 import java.awt.Color;
 
@@ -14,18 +14,18 @@ import java.awt.Color;
  *
  * @since 3.1
  */
-public class ToggleChatButton extends ModernButton {
+public class ToggleChatButtonComponent extends ButtonComponent {
     
     private boolean isFavourite = false;
     
     // The stored button data.
     private ToggleBase buttonData;
     
-    public ToggleChatButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText) {
+    public ToggleChatButtonComponent(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText) {
         super(buttonId, x, y, widthIn, heightIn, buttonText);
     }
     
-    public ToggleChatButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, SimpleCallback<? extends ToggleChatButton> clicked) {
+    public ToggleChatButtonComponent(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, SimpleCallback<? extends ToggleChatButtonComponent> clicked) {
         super(buttonId, x, y, widthIn, heightIn, buttonText, clicked);
     }
     
@@ -41,6 +41,15 @@ public class ToggleChatButton extends ModernButton {
         super.renderButtonString(fontrenderer, xPosition, yPosition, textColor);
     }
     
+    @Override
+    public void onRightClick(int mouseX, int mouseY, float yTranslation) {
+        if (this.buttonData != null && !(this.buttonData instanceof ToggleDummyMessage)) {
+            this.buttonData.setEnabled(!this.buttonData.isFavourite());
+            
+            this.setFavourite(this.buttonData.isFavourite());
+        }
+    }
+    
     /**
      * Sets this button as a favourite or not. If this is true a star will be displayed next to
      * the displayname of the button. If false the button will exhibit normal behaviour.
@@ -48,7 +57,7 @@ public class ToggleChatButton extends ModernButton {
      * @param favourite true for the favourite flag!
      * @return the instance of this button.
      */
-    public ToggleChatButton setFavourite(boolean favourite) {
+    public ToggleChatButtonComponent setFavourite(boolean favourite) {
         this.isFavourite = favourite;
         
         return this;
@@ -82,7 +91,7 @@ public class ToggleChatButton extends ModernButton {
      * @param buttonData the data for the button.
      * @return the instance of this button.
      */
-    public ToggleChatButton setButtonData(String... buttonData) {
+    public ToggleChatButtonComponent setButtonData(String... buttonData) {
         this.buttonData = new ToggleDummyMessage(buttonData);
         
         return this;
@@ -95,7 +104,7 @@ public class ToggleChatButton extends ModernButton {
      * @param buttonData the button data for this button.
      * @return the instance of this button.
      */
-    public ToggleChatButton setButtonData(ToggleBase buttonData) {
+    public ToggleChatButtonComponent setButtonData(ToggleBase buttonData) {
         this.buttonData = buttonData;
         
         return this;

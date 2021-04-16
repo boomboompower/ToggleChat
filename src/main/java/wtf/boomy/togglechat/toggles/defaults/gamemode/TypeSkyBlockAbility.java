@@ -11,7 +11,7 @@ public class TypeSkyBlockAbility extends ToggleBase {
     
     @Override
     public String getName() {
-        return "skyblock_ability";
+        return "Skyblock Abilities";
     }
     
     @Override

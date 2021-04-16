@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2020 boomboompower
+ *     Copyright (C) 2021 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wtf.boomy.togglechat.utils.uis.impl;
+package wtf.boomy.togglechat.utils.uis.components;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -34,11 +34,11 @@ import java.util.Collections;
  *
  * @author boomboompower
  */
-public class ModernButtonHead extends ModernButton {
+public class HeadButtonComponent extends ButtonComponent {
     
     private final AbstractClientPlayer player;
     
-    public ModernButtonHead(int buttonId, int x, int y, int widthIn, int heightIn, AbstractClientPlayer player, SimpleCallback<? extends ModernButton> clicked) {
+    public HeadButtonComponent(int buttonId, int x, int y, int widthIn, int heightIn, AbstractClientPlayer player, SimpleCallback<? extends ButtonComponent> clicked) {
         super(buttonId, x, y, widthIn, heightIn, player == null ? "" : player.getName(), clicked);
         
         this.player = player;
@@ -77,7 +77,7 @@ public class ModernButtonHead extends ModernButton {
             ModernGui.drawRectangleOutline(xPos - 3, yPos - 3, xPos + width + 2, yPos + height + 2, getTextHoverColor().getRGB());
         }
         
-        // pop the gl buffer to the stackv
+        // pop the gl buffer to the stack
         GlStateManager.disableAlpha();
         GlStateManager.popMatrix();
     }
@@ -87,7 +87,7 @@ public class ModernButtonHead extends ModernButton {
      *
      * @return this buttons instance.
      */
-    public ModernButtonHead enableNameOnHover() {
+    public HeadButtonComponent enableNameOnHover() {
         setMessageLines(Collections.singletonList(this.player.getName()));
         
         return this;

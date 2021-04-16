@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2020 boomboompower
+ *     Copyright (C) 2021 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -31,11 +31,11 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Mouse;
 
 import wtf.boomy.togglechat.ToggleChatMod;
+import wtf.boomy.togglechat.utils.uis.components.ButtonComponent;
+import wtf.boomy.togglechat.utils.uis.components.TextBoxComponent;
 import wtf.boomy.togglechat.utils.uis.faces.InteractiveUIElement;
 import wtf.boomy.togglechat.utils.uis.faces.ModernUIElement;
 import wtf.boomy.togglechat.utils.uis.faces.UISkeleton;
-import wtf.boomy.togglechat.utils.uis.impl.ModernButton;
-import wtf.boomy.togglechat.utils.uis.impl.ModernTextBox;
 
 import java.awt.Color;
 import java.util.Collections;
@@ -54,7 +54,7 @@ public abstract class ModernGui extends UILock implements UISkeleton {
     protected final Minecraft mc = Minecraft.getMinecraft();
     protected final FontRenderer fontRendererObj = this.mc.fontRendererObj;
     
-    private final List<ModernTextBox> textList = Lists.newArrayList();
+    private final List<TextBoxComponent> textList = Lists.newArrayList();
     private final List<ModernUIElement> modernList = Lists.newLinkedList();
     
     /**
@@ -63,7 +63,7 @@ public abstract class ModernGui extends UILock implements UISkeleton {
      * @deprecated Superseded by {@link #modernList}
      */
     @Deprecated
-    private final List<ModernButton> buttonList = Collections.emptyList();
+    private final List<ButtonComponent> buttonList = Collections.emptyList();
     
     private final List<InteractiveUIElement> selectedElements = Lists.newArrayList();
     
@@ -130,7 +130,7 @@ public abstract class ModernGui extends UILock implements UISkeleton {
             ex.printStackTrace();
         }
         
-        for (ModernTextBox text : this.textList) {
+        for (TextBoxComponent text : this.textList) {
             GlStateManager.pushMatrix();
             
             text.drawTextBox();
@@ -147,17 +147,17 @@ public abstract class ModernGui extends UILock implements UISkeleton {
         }
         
         for (ModernUIElement element : this.modernList) {
-            if (!(element instanceof ModernButton)) {
+            if (!(element instanceof ButtonComponent)) {
                 continue;
             }
             
             // For drawing text on the screen when hovered.
-            if (((ModernButton) element).isHovered() && ((ModernButton) element).getMessageLines() != null) {
+            if (((ButtonComponent) element).isHovered() && ((ButtonComponent) element).getMessageLines() != null) {
                 GlStateManager.pushMatrix();
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 GlStateManager.disableAlpha();
                 
-                drawHoveringText(((ModernButton) element).getMessageLines(), mouseX, mouseY, this.fontRendererObj);
+                drawHoveringText(((ButtonComponent) element).getMessageLines(), mouseX, mouseY, this.fontRendererObj);
                 
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 GlStateManager.enableAlpha();
@@ -181,7 +181,7 @@ public abstract class ModernGui extends UILock implements UISkeleton {
             return;
         }
         
-        for (ModernTextBox text : this.textList) {
+        for (TextBoxComponent text : this.textList) {
             text.onKeyTyped(typedChar, keyCode);
         }
     }
@@ -196,9 +196,9 @@ public abstract class ModernGui extends UILock implements UISkeleton {
                 .forEach(dummy -> {
                     InteractiveUIElement element = (InteractiveUIElement) dummy;
                     
-                    if (!(element instanceof ModernButton) && !element.isInside(mouseX, mouseY, this.yTranslation)) {
+                    if (!(element instanceof ButtonComponent) && !element.isInside(mouseX, mouseY, this.yTranslation)) {
                         return;
-                    } else if (element instanceof ModernButton && !((ModernButton) element).isHovered()) {
+                    } else if (element instanceof ButtonComponent && !((ButtonComponent) element).isHovered()) {
                         return;
                     }
                     
@@ -208,8 +208,8 @@ public abstract class ModernGui extends UILock implements UISkeleton {
                             
                             this.selectedElements.add(element);
                             
-                            if (element instanceof ModernButton) {
-                                buttonPressed((ModernButton) element);
+                            if (element instanceof ButtonComponent) {
+                                buttonPressed((ButtonComponent) element);
                             }
                             break;
                         case 1:
@@ -224,7 +224,7 @@ public abstract class ModernGui extends UILock implements UISkeleton {
                 });
         
         try {
-            for (ModernTextBox text : this.textList) {
+            for (TextBoxComponent text : this.textList) {
                 text.mouseClicked(mouseX, mouseY, mouseButton);
             }
         } catch (NullPointerException exception) {
@@ -249,7 +249,7 @@ public abstract class ModernGui extends UILock implements UISkeleton {
     
     @Override
     public final void updateScreen() {
-        for (ModernTextBox textBox : this.textList) {
+        for (TextBoxComponent textBox : this.textList) {
             textBox.updateCursorCounter();
         }
     }
@@ -278,7 +278,7 @@ public abstract class ModernGui extends UILock implements UISkeleton {
     /**
      * Registers an element into the element loader.
      *
-     * @param element the element to register. Can be a {@link ModernUIElement} or {@link ModernTextBox}
+     * @param element the element to register. Can be a {@link ModernUIElement} or {@link TextBoxComponent}
      */
     public void registerElement(Object element) {
         if (element == null) {
@@ -287,8 +287,8 @@ public abstract class ModernGui extends UILock implements UISkeleton {
         
         if (element instanceof ModernUIElement) {
             this.modernList.add((ModernUIElement) element);
-        } else if (element instanceof ModernTextBox) {
-            this.textList.add((ModernTextBox) element);
+        } else if (element instanceof TextBoxComponent) {
+            this.textList.add((TextBoxComponent) element);
         } else {
             System.err.println("Unable to register element (Elem: " + element.getClass() + ") as it was not a ModernDrawable.");
         }
@@ -514,6 +514,19 @@ public abstract class ModernGui extends UILock implements UISkeleton {
         worldrenderer.pos(x + width, y + height, 0).tex((textureX + width) * f, (textureY + height) * f1).endVertex();
         worldrenderer.pos(x + width, y, 0).tex((textureX + width) * f, textureY * f1).endVertex();
         worldrenderer.pos(x, y, 0).tex(textureX * f, textureY * f1).endVertex();
+        tessellator.draw();
+    }
+    
+    public static void drawTexturedModalRectS(int x, int y, int textureX, int textureY, int width, int height) {
+        float f = 0.00390625F;
+        float f1 = 0.00390625F;
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        worldrenderer.pos(x, y + height, 0).tex((float) (textureX) * f, (float) (textureY + height) * f1).endVertex();
+        worldrenderer.pos(x + width, y + height, 0).tex((float) (textureX + width) * f, (float) (textureY + height) * f1).endVertex();
+        worldrenderer.pos(x + width, y, 0).tex((float) (textureX + width) * f, (float) (textureY) * f1).endVertex();
+        worldrenderer.pos(x, y, 0).tex((float) (textureX) * f, (float) (textureY) * f1).endVertex();
         tessellator.draw();
     }
 }

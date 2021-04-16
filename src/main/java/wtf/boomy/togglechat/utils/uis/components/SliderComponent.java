@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2020 boomboompower
+ *     Copyright (C) 2021 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wtf.boomy.togglechat.utils.uis.impl;
+package wtf.boomy.togglechat.utils.uis.components;
 
 import java.awt.*;
 
@@ -34,7 +34,7 @@ import wtf.boomy.togglechat.utils.uis.faces.StartEndUIElement;
  *
  * @author boomboompower
  */
-public class ModernSlider implements InteractiveUIElement, StartEndUIElement {
+public class SliderComponent implements InteractiveUIElement, StartEndUIElement {
     
     private static final ResourceLocation buttonTextures = new ResourceLocation("textures/gui/widgets.png");
     
@@ -62,15 +62,15 @@ public class ModernSlider implements InteractiveUIElement, StartEndUIElement {
     private final double minValue;
     private final double maxValue;
     
-    public ModernSlider(int id, int xPos, int yPos, int width, int height, String prefix) {
+    public SliderComponent(int id, int xPos, int yPos, int width, int height, String prefix) {
         this(id, xPos, yPos, width, height, prefix, "", 0, 1, 0.5);
     }
     
-    public ModernSlider(int id, int xPos, int yPos, int width, int height, String prefix, double minVal, double maxVal, double currentVal) {
+    public SliderComponent(int id, int xPos, int yPos, int width, int height, String prefix, double minVal, double maxVal, double currentVal) {
         this(id, xPos, yPos, width, height, prefix, "", minVal, maxVal, currentVal);
     }
     
-    public ModernSlider(int id, int xPos, int yPos, int width, int height, String prefix, String suffix, double minVal, double maxVal, double currentVal) {
+    public SliderComponent(int id, int xPos, int yPos, int width, int height, String prefix, String suffix, double minVal, double maxVal, double currentVal) {
         this.handler = ToggleChatMod.getInstance().getConfigLoader();
         
         this.id = id;
@@ -147,11 +147,7 @@ public class ModernSlider implements InteractiveUIElement, StartEndUIElement {
     }
     
     @Override
-    public void setAsPartOfHeader(ModernHeader parent) {
-    }
-    
-    @Override
-    public ModernSlider disableTranslatable() {
+    public SliderComponent disableTranslatable() {
         this.translatable = false;
         
         return this;

@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2020 boomboompower
+ *     Copyright (C) 2021 boomboompower
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wtf.boomy.togglechat.utils.uis.impl;
+package wtf.boomy.togglechat.utils.uis.components;
 
 import java.awt.Color;
 
@@ -35,7 +35,7 @@ import wtf.boomy.togglechat.utils.uis.ModernGui;
 /**
  * A modified vanilla class textbox
  */
-public class ModernTextBox {
+public class TextBoxComponent {
     
     private final int id;
     
@@ -60,11 +60,11 @@ public class ModernTextBox {
     
     private final String noTextMessage;
     
-    public ModernTextBox(int componentId, int x, int y, int width, int height) {
+    public TextBoxComponent(int componentId, int x, int y, int width, int height) {
         this(componentId, x, y, width, height, "Write Here!");
     }
     
-    public ModernTextBox(int componentId, int x, int y, int width, int height, String noTextMessage) {
+    public TextBoxComponent(int componentId, int x, int y, int width, int height, String noTextMessage) {
         this.id = componentId;
         this.x = x;
         this.y = y;
