@@ -21,6 +21,8 @@ import wtf.boomy.togglechat.ToggleChatMod;
 import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
+import java.lang.IllegalArgumentException;
+import java.lang.IllegalStateException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,11 +86,17 @@ public class TypeGlobal extends ToggleBase {
     }
 
     private boolean isNotOtherChat(Matcher input) {
-        String rank;
+        String rank = null;
 
         try {
             rank = input.group("rank");
-        } catch (Exception ex) {
+        } catch (IllegalStateException | IllegalArgumentException ex) {
+            return true;
+        }
+
+        // If the matcher returns null then we
+        // need to stop before we cause a NPE :)
+        if (rank == null) {
             return true;
         }
 
