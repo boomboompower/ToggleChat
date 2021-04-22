@@ -61,7 +61,7 @@ public class ToggleChatMod {
         ApagogeHandler apagogeHandler1;
         try {
             apagogeHandler1 = new ApagogeHandler(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()), "SkinChanger", ToggleChatMod.VERSION);
-        } catch (URISyntaxException e) {
+        } catch (URISyntaxException | IllegalArgumentException e) {
             apagogeHandler1 = null;
         }
         this.apagogeHandler = apagogeHandler1;
