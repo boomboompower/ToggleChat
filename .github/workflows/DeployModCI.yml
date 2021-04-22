@@ -52,7 +52,7 @@ jobs:
 
         # Uses ForgeGradle to build the jar
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build shadowJar
       
       - name: Calculate Hashes
         id: hashes
@@ -70,24 +70,39 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: 3.0.${{ github.run_number }}
-          release_name: Beta Release ${{ github.run_number }}
+          release_name: Beta Release ${{ github.run_number }} (3.0.${{ github.run_number }})
           body: |
-            ### ToggleChat Beta ${{ github.run_number }}
+            ### ToggleChat Beta 3.0.${{ github.run_number }}
             > Huh, nothing here?
             
             ```
             ${{ steps.com-mess.outputs.commitmsg }}
             ```
-            
-            **Next up**
+
+            ### Next up
             > What's on the roadmap?
             
             It seems quiet... Too quiet...
-            
-            **Hashes**
+
+            ### Installation
+
+            ##### Using the installer:
+            1. Download "ToggleChat.jar"
+            2. Double click the file
+            3. Go through the installer
+            4. Run the game
+
+            ##### Manual install:
+            1. Install [Forge for 1.8.9](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.8.9.html)
+            2. [Locate .minecraft](https://help.minecraft.net/hc/en-us/articles/360035131551-Where-are-Minecraft-files-stored) folder
+            3. Download the "ToggleChat.jar" to your ".minecraft/mods/1.8.9" directory
+            4. Run the game
+
+
+            ### Hashes
             > Don't install untrusted files
-            * ToggleChat: ${{ steps.hashes.outputs.program_hash }}
-            * ToggleChat-sources: ${{ steps.hashes.outputs.source_hash }}
+            * ToggleChat: `${{ steps.hashes.outputs.program_hash }}`
+            * ToggleChat-sources: `${{ steps.hashes.outputs.source_hash }}`
             
             Automagically generated with lots of ❤
           draft: false
@@ -101,7 +116,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: './build/libs/ToggleChat.jar'
+          asset_path: './ToggleChat/build/libs/ToggleChat.jar'
           asset_name: ToggleChat.jar
           asset_content_type: application/zip
       - name: Upload Mod Sources
@@ -113,6 +128,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: './build/libs/ToggleChat-sources.jar'
+          asset_path: './ToggleChat/build/libs/ToggleChat-sources.jar'
           asset_name: ToggleChat-sources.jar
           asset_content_type: application/zip

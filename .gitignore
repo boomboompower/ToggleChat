@@ -10,4 +10,4 @@ gradle
 # Other directories
 build/
 jars/
-run/
+ToggleChat/run/
