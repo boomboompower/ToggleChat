@@ -155,7 +155,7 @@ public class ToggleChatMod {
         // Depending on the implementation this can be ignored.
         // We don't use the handler case for it, since it also
         // makes the updater instance null.
-        if (this.apagogeHandler.getUpdater() != null) this.apagogeHandler.getUpdater().kill();
+        if (this.apagogeHandler!= null && this.apagogeHandler.getUpdater() != null) this.apagogeHandler.getUpdater().kill();
     }
 
     /**
