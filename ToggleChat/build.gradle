@@ -100,6 +100,11 @@ shadowJar {
     }
 }
 
+reobf {
+    // Reobfuscate the shadowed JAR
+    shadowJar {}
+}
+
 sourceJar {
     // Rename the jar so it doesn't contain "SNAPSHOT"
     archiveName = "$baseName-sources.$extension"

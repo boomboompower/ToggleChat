@@ -52,7 +52,7 @@ jobs:
 
         # Uses ForgeGradle to build the jar
       - name: Build with Gradle
-        run: ./gradlew build shadowJar
+        run: ./gradlew build
       
       - name: Calculate Hashes
         id: hashes
