@@ -60,9 +60,9 @@ public class ToggleChatMod {
         
         ApagogeHandler apagogeHandler1;
         try {
-            apagogeHandler1 = new ApagogeHandler(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()), "SkinChanger", ToggleChatMod.VERSION);
+            apagogeHandler1 = new ApagogeHandler(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()), "ToggleChat", ToggleChatMod.VERSION);
         } catch (URISyntaxException | IllegalArgumentException e) {
-            apagogeHandler1 = null;
+            apagogeHandler1 = new ApagogeHandler(new File(""), "ToggleChat", ToggleChatMod.VERSION);
         }
         this.apagogeHandler = apagogeHandler1;
     }
@@ -87,17 +87,15 @@ public class ToggleChatMod {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        if (this.apagogeHandler != null) {
-            // Requests for Apagoge to check these files. This is only a request
-            // and may be ignored in some implementations of Apagoge.
-            this.apagogeHandler.addValidatorClasses(
-                    ToggleChatMod.class,
-                    ToggleEvents.class,
-                    ConfigLoader.class,
-                    ToggleCommand.class,
-                    BlurModHandler.class
-            );
-        }
+        // Requests for Apagoge to check these files. This is only a request
+        // and may be ignored in some implementations of Apagoge.
+        this.apagogeHandler.addValidatorClasses(
+                ToggleChatMod.class,
+                ToggleEvents.class,
+                ConfigLoader.class,
+                ToggleCommand.class,
+                BlurModHandler.class
+        );
         
         this.toggleHandler.remake();
 
@@ -110,19 +108,17 @@ public class ToggleChatMod {
         // hook and not the handler. With ApagogeHandler#getUpdater() which
         // will return the internal ApagogeVerifier instance (or null if
         // it has either been destroyed or cannot be found).
-        if (this.apagogeHandler != null) {
-            this.apagogeHandler.addCompletionListener((handler, success) -> {
-                if (!success) {
-                    if (handler.getUpdater() == null) {
-                        this.logger.error("Apagoge was unable to run, no updater was found.");
-                    } else {
-                        this.logger.error("Apagoge failed. Assuming invalid build.");
-                    }
+        this.apagogeHandler.addCompletionListener((handler, success) -> {
+            if (!success) {
+                if (handler.getUpdater() == null) {
+                    this.logger.error("Apagoge was unable to run, no updater was found.");
                 } else {
-                    this.logger.trace("Apagoge succeeded. This build is official.");
+                    this.logger.error("Apagoge failed. Assuming invalid build.");
                 }
-            });
-        }
+            } else {
+                this.logger.trace("Apagoge succeeded. This build is official.");
+            }
+        });
     }
 
     @Mod.EventHandler
@@ -155,7 +151,7 @@ public class ToggleChatMod {
         // Depending on the implementation this can be ignored.
         // We don't use the handler case for it, since it also
         // makes the updater instance null.
-        if (this.apagogeHandler!= null && this.apagogeHandler.getUpdater() != null) this.apagogeHandler.getUpdater().kill();
+        if (this.apagogeHandler.getUpdater() != null) this.apagogeHandler.getUpdater().kill();
     }
 
     /**
