@@ -11,6 +11,7 @@ on:
   push:
     paths:
       - src/**
+      - ToggleChat/src**
       - build.gradle
 
 jobs:
