@@ -33,7 +33,7 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }} 
         run: |
            echo ::set-output name=commitmsg::$(git log --format=%B -n 1 ${{ github.event.after }})
-           echo "${{ github.run_number }}" > ./src/main/resources/GHCI.txt
+           echo "${{ github.run_number }}" > ./ToggleChat/src/main/resources/GHCI.txt
 
         # Required so gradlew can build the JAR file
       - name: Grant execute permission for gradlew
@@ -57,8 +57,8 @@ jobs:
       - name: Calculate Hashes
         id: hashes
         run: |
-          echo ::set-output name=program_hash::$(sha256sum ./build/libs/ToggleChat.jar | cut -d ' ' -f 1)
-          echo ::set-output name=source_hash::$(sha256sum ./build/libs/ToggleChat-sources.jar | cut -d ' ' -f 1)
+          echo ::set-output name=program_hash::$(sha256sum ./ToggleChat/build/libs/ToggleChat.jar | cut -d ' ' -f 1)
+          echo ::set-output name=source_hash::$(sha256sum ./ToggleChat/build/libs/ToggleChat-sources.jar | cut -d ' ' -f 1)
 
       # Upload the main mod to the releases tab
       - name: Create Release
