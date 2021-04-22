@@ -22,8 +22,14 @@ public abstract class ToggleChatModernUI extends ModernGui {
     
     protected List<ToggleChatButtonComponent> toggleChatButtons = new ArrayList<>();
     
+    protected boolean modernButton;
+    protected boolean modernTextbox;
+    
     @Override
     public void setWorldAndResolution(Minecraft mc, int width, int height) {
+        this.modernButton = this.configLoader.isModernButton();
+        this.modernTextbox = this.configLoader.isModernTextbox();
+        
         this.toggleChatButtons.clear();
         
         super.setWorldAndResolution(mc, width, height);

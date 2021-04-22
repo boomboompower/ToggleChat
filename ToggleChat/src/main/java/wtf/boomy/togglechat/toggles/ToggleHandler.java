@@ -1,7 +1,7 @@
 package wtf.boomy.togglechat.toggles;
 
 import wtf.boomy.togglechat.ToggleChatMod;
-import wtf.boomy.togglechat.toggles.custom.TypeCustom;
+import wtf.boomy.togglechat.toggles.custom.CustomToggle;
 import wtf.boomy.togglechat.toggles.defaults.friends.TypeFriendJoin;
 import wtf.boomy.togglechat.toggles.defaults.friends.TypeFriendLeave;
 import wtf.boomy.togglechat.toggles.defaults.friends.TypeFriendRequests;
@@ -35,6 +35,8 @@ import wtf.boomy.togglechat.toggles.defaults.qol.TypeWatchdog;
 import wtf.boomy.togglechat.toggles.sorting.impl.ToggleBaseComparator;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,7 +73,7 @@ public final class ToggleHandler {
         
         this.dirty = true;
         
-        if (toggleBase instanceof TypeCustom) {
+        if (toggleBase instanceof CustomToggle) {
             this.custom.put(toggleBase.getIdString(), toggleBase);
         
             // Custom toggles reorder the map each time.
@@ -162,6 +164,15 @@ public final class ToggleHandler {
         this.combinedToggleList = newInput;
         
         return this.combinedToggleList;
+    }
+    
+    /**
+     * Returns an unmodifiable list of the stored custom toggles.
+     *
+     * @return the custom toggle list.
+     */
+    public Map<String, ToggleBase> getCustomToggles() {
+        return Collections.unmodifiableMap(this.custom);
     }
     
     /**

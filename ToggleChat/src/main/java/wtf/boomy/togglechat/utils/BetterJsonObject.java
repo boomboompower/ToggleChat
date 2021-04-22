@@ -45,7 +45,7 @@ public class BetterJsonObject {
     /**
      * Our pretty printer
      */
-    private final Gson prettyPrinter = new GsonBuilder().setPrettyPrinting().create();
+    private final Gson prettyPrinter = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     /**
      * The data holder for our json

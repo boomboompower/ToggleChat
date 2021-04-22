@@ -55,7 +55,7 @@ public class ViewListUI extends ToggleChatModernUI {
     public void onGuiOpen() {
         Keyboard.enableRepeatEvents(true);
     
-        registerElement(this.text = new TextBoxComponent(-1, this.width / 2 - 75, this.height / 2 - 58, 150, 20));
+        registerElement(this.text = new TextBoxComponent(-1, this.width / 2 - 75, this.height / 2 - 58, 150, 20).setDrawingModern(this.modernTextbox));
 
         registerElement(this.add = new ToggleChatButtonComponent(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Add").setButtonData(
                 "Adds a word to",
@@ -64,7 +64,7 @@ public class ViewListUI extends ToggleChatModernUI {
                 "Messages containing",
                 "this word will not be",
                 "toggled"
-        ));
+        ).setDrawingModern(this.modernButton));
         registerElement(this.remove = new ToggleChatButtonComponent(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Remove").setButtonData(
                 "Removes a word from",
                 "the whitelist",
@@ -72,7 +72,7 @@ public class ViewListUI extends ToggleChatModernUI {
                 "Messages containing",
                 "this will no longer",
                 "be ignored"
-        ));
+        ).setDrawingModern(this.modernButton));
         registerElement(this.clear = new ToggleChatButtonComponent(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Clear").setButtonData(
                 "Clears every word",
                 "from the whitelist",
@@ -80,7 +80,7 @@ public class ViewListUI extends ToggleChatModernUI {
                 "This action cannot be",
                 "undone, use at your",
                 "own peril"
-        ));
+        ).setDrawingModern(this.modernButton));
         registerElement(new ToggleChatButtonComponent(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "List").setButtonData(
                 "Shows a list of all",
                 "word entries in the",
@@ -88,9 +88,9 @@ public class ViewListUI extends ToggleChatModernUI {
                 "",
                 "Also has a page system",
                 "for extra fanciness"
-        ));
+        ).setDrawingModern(this.modernButton));
 
-        registerElement(new ToggleChatButtonComponent(10, 5, this.height - 25, 90, 20, "Back"));
+        registerElement(new ToggleChatButtonComponent(10, 5, this.height - 25, 90, 20, "Back").setDrawingModern(this.modernButton));
 
         this.text.setText(this.input);
         this.text.setFocused(true);

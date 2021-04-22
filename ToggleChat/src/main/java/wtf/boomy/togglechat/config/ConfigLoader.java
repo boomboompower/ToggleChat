@@ -25,10 +25,7 @@ import wtf.boomy.togglechat.gui.selector.UITheme;
 import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ICustomSaver;
 import wtf.boomy.togglechat.toggles.ToggleBase;
-import wtf.boomy.togglechat.toggles.custom.ToggleCondition;
-import wtf.boomy.togglechat.toggles.custom.TypeCustom;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionEmpty;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionStartsWith;
+import wtf.boomy.togglechat.toggles.custom.interpreter.ToggleInterpreter;
 import wtf.boomy.togglechat.toggles.sorting.SortType;
 import wtf.boomy.togglechat.utils.BetterJsonObject;
 
@@ -36,15 +33,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ConfigLoader {
@@ -56,8 +49,6 @@ public class ConfigLoader {
 
     private final File toggleFile;
     private final File modernGuiFile;
-
-    private File customToggleDir;
 
     private BetterJsonObject toggleJson = new BetterJsonObject();
     private BetterJsonObject modernJson = new BetterJsonObject();
@@ -87,6 +78,7 @@ public class ConfigLoader {
     private UITheme uiTheme = UITheme.UNKNOWN;
     
     private final ToggleChatMod mod;
+    private final ToggleInterpreter toggleInterpreter;
 
     public ConfigLoader(ToggleChatMod mod, File directory) {
         this.mod = mod;
@@ -97,6 +89,7 @@ public class ConfigLoader {
 
         this.toggleFile = new File(directory, "options.nn");
         this.modernGuiFile = new File(directory, "modern.nn");
+        this.toggleInterpreter = new ToggleInterpreter(mod, new File(directory, "custom"));
 
         addToSaving(this); // M  o  d  e  r  n
     }
@@ -163,175 +156,59 @@ public class ConfigLoader {
         }
     }
 
-    public void loadCustomToggles() {
-        if (this.customToggleDir == null) {
-            return;
-        }
+//    public void saveCustomToggles() {
+//        if (this.customToggleDir == null) {
+//            return;
+//        }
+//
+//        if (!exists(this.customToggleDir)) {
+//            this.customToggleDir.mkdirs();
+//        }
+//
+//        for (Map.Entry<String, ToggleBase> entry : this.mod.getToggleHandler().getToggles().entrySet()) {
+//            if (entry.getValue() instanceof TypeCustom) {
+//                TypeCustom base = (TypeCustom) entry.getValue();
+//
+//                if (base._getConditions().isEmpty()) {
+//                    continue;
+//                }
+//
+//                saveSingle(base);
+//            }
+//        }
+//    }
 
-        if (!exists(this.customToggleDir)) {
-            this.customToggleDir.mkdirs();
-
-            try {
-                File file = new File(this.customToggleDir, "mytoggle.txt");
-                FileWriter writer = new FileWriter(file);
-
-                writeDefaultValues(writer);
-
-                writer.append("").append(System.lineSeparator());
-                writer.append("MyToggle : startsWith([YOUTUBE] Sk1er)").append(System.lineSeparator());
-                writer.close();
-    
-                this.mod.getToggleHandler().addToggle(new TypeCustom("MyToggle", new ConditionStartsWith("[YOUTUBE] Sk1er")));
-            } catch (Exception ex) {
-                this.logger.error("Failed to save custom toggles", ex);
-            }
-            return;
-        }
-
-        try {
-            LinkedList<TypeCustom> customs = new LinkedList<>();
-
-            // noinspection ConstantConditions
-            for (File file : this.customToggleDir.listFiles()) {
-                if (!file.isDirectory()) {
-                    try {
-                        FileReader fileReader = new FileReader(file);
-                        BufferedReader reader = new BufferedReader(fileReader);
-
-                        LinkedList<String> comments = new LinkedList<>();
-                        LinkedList<String> lines = new LinkedList<>();
-
-                        for (String s : reader.lines().collect(Collectors.toList())) {
-                            if (!s.isEmpty()) {
-                                if (s.startsWith("//")) {
-                                    comments.add(s);
-                                } else {
-                                    lines.add(s);
-                                }
-                            }
-                        }
-
-                        if (lines.isEmpty()) {
-                            // We don't need to worry about an empty file.
-                            continue;
-                        }
-
-                        for (String line : lines) {
-                            if (ToggleCondition.isValidFormat(line)) {
-                                ToggleCondition condition = ToggleCondition.get(line.split(" : ")[1]);
-                                String name = ToggleCondition.getFormatName(line);
-
-                                if (name == null || name.isEmpty()) {
-                                    continue;
-                                }
-
-                                boolean added = false;
-
-                                for (TypeCustom customer : customs) {
-                                    if (name.equalsIgnoreCase(customer.getName())) {
-                                        customer._addCondition(condition);
-                                        added = true;
-                                        break;
-                                    }
-                                }
-
-                                if (!added) {
-                                    customs.add(new TypeCustom(name, condition)._setComments(comments));
-                                }
-                            }
-                        }
-
-                    } catch (Exception ex) {
-                        this.logger.error("An issue occurred while loading \"{}\". Potentially corrupted?", file.getName(), ex);
-                    }
-                }
-            }
-
-            if (customs.isEmpty()) {
-                // Custom toggles is empty, lets move on...
-                return;
-            }
-
-            for (TypeCustom custom : customs) {
-                custom.clean(); // Hasn't been modified. Doesn't need saving
-    
-                this.mod.getToggleHandler().addToggle(custom);
-            }
-        } catch (Exception ex) {
-            this.logger.error("Failed to load your custom toggles!", ex);
-        }
-    }
-
-    private void writeDefaultValues(FileWriter writer) throws IOException {
-        writer.append("// Format").append(System.lineSeparator());
-        writer.append("// ToggleName : <Condition>").append(System.lineSeparator());
-        writer.append("//").append(System.lineSeparator());
-        writer.append("// This feature was created").append(System.lineSeparator());
-        writer.append("// by OrangeMarshall!").append(System.lineSeparator());
-        writer.append("//").append(System.lineSeparator());
-        writer.append("// Possible conditions").append(System.lineSeparator());
-        writer.append("// startsWith(string)          Starts with \"string\"").append(System.lineSeparator());
-        writer.append("// contains(string)            Contains \"string\"").append(System.lineSeparator());
-        writer.append("// contains(string,4)          Contains \"string\" 4 times").append(System.lineSeparator());
-        writer.append("// endsWith(string)            Ends with \"string\"").append(System.lineSeparator());
-        writer.append("// equals(string)              Equals \"string\" case-sensitive").append(System.lineSeparator());
-        writer.append("// equalsIgnoreCase(string)    Equals \"string\" not case-sensitive").append(System.lineSeparator());
-        writer.append("// regex(regex)                Regex matches the input").append(System.lineSeparator());
-    }
-
-    public void saveCustomToggles() {
-        if (this.customToggleDir == null) {
-            return;
-        }
-
-        if (!exists(this.customToggleDir)) {
-            this.customToggleDir.mkdirs();
-        }
-
-        for (Map.Entry<String, ToggleBase> entry : this.mod.getToggleHandler().getToggles().entrySet()) {
-            if (entry.getValue() instanceof TypeCustom) {
-                TypeCustom base = (TypeCustom) entry.getValue();
-
-                if (base._getConditions().isEmpty()) {
-                    continue;
-                }
-
-                saveSingle(base);
-            }
-        }
-    }
-
-    public void saveSingle(TypeCustom base) {
-        if (!base.isDirty()) {
-            return;
-        }
-
-        try {
-            File file = new File(this.customToggleDir, base.getName().toLowerCase() + ".txt");
-            FileWriter writer = new FileWriter(file);
-
-            if (!base._getComments().isEmpty()) {
-                for (String s : base._getComments()) {
-                    writer.append(s).append(System.lineSeparator());
-                }
-            } else {
-                writeDefaultValues(writer);
-            }
-
-            writer.append("").append(System.lineSeparator());
-
-            for (ToggleCondition condition : base._getConditions()) {
-                if (!(condition instanceof ConditionEmpty)) {
-                    writer.append(base.getName()).append(" : ").append(condition.getConditionType().getDisplayText()).append("(").append(condition.getText()).append(")").append(System.lineSeparator());
-                }
-            }
-            writer.close();
-        } catch (Exception ex) {
-            this.logger.error("Failed to save custom toggle: \"{}\"!", base.getName(), ex);
-        }
-
-        base.clean();
-    }
+//    public void saveSingle(TypeCustom base) {
+//        if (!base.isDirty()) {
+//            return;
+//        }
+//
+//        try {
+//            File file = new File(this.customToggleDir, base.getName().toLowerCase() + ".txt");
+//            FileWriter writer = new FileWriter(file);
+//
+//            if (!base._getComments().isEmpty()) {
+//                for (String s : base._getComments()) {
+//                    writer.append(s).append(System.lineSeparator());
+//                }
+//            } else {
+//                writeDefaultValues(writer);
+//            }
+//
+//            writer.append("").append(System.lineSeparator());
+//
+//            for (ToggleCondition condition : base._getConditions()) {
+//                if (!(condition instanceof ConditionEmpty)) {
+//                    writer.append(base.getName()).append(" : ").append(condition.getConditionType().getDisplayText()).append("(").append(condition.getText()).append(")").append(System.lineSeparator());
+//                }
+//            }
+//            writer.close();
+//        } catch (Exception ex) {
+//            this.logger.error("Failed to save custom toggle: \"{}\"!", base.getName(), ex);
+//        }
+//
+//        base.clean();
+//    }
 
     public void loadModernUtils() {
         if (!this.modernGuiFile.exists()) {
@@ -445,7 +322,11 @@ public class ConfigLoader {
             }
         }
     }
-
+    
+    public ToggleInterpreter getToggleInterpreter() {
+        return this.toggleInterpreter;
+    }
+    
     public boolean exists(File file) {
         return Files.exists(Paths.get(file.getPath()));
     }
@@ -456,10 +337,6 @@ public class ConfigLoader {
     
     public File getModernGuiFile() {
         return this.modernGuiFile;
-    }
-    
-    public File getCustomToggleDir() {
-        return this.customToggleDir;
     }
     
     public boolean isModernBlur() {

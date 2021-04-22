@@ -17,6 +17,7 @@
 
 package wtf.boomy.togglechat.toggles.custom.conditions;
 
+import wtf.boomy.togglechat.toggles.custom.ConditionType;
 import wtf.boomy.togglechat.toggles.custom.ToggleCondition;
 
 /**
@@ -33,7 +34,7 @@ public class ConditionEndsWith extends ToggleCondition {
     }
 
     @Override
-    public Boolean apply(String input) {
+    public boolean shouldToggle(String input) {
         return input.endsWith(getText());
     }
 

@@ -103,7 +103,7 @@ public abstract class ToggleBase {
      *
      * @return the id of this toggle
      */
-    public final String getIdString() {
+    public String getIdString() {
         return getName().toLowerCase().replace(" ", "_");
     }
     

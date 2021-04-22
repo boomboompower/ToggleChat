@@ -124,7 +124,7 @@ public class MainGui extends ToggleChatModernUI {
                 
                     this.changed = true;
                 }
-            }).setButtonData(baseType);
+            }).setButtonData(baseType).setDrawingModern(this.modernButton);
         
             // Change the colour for custom toggles.
             if (baseType instanceof ICustomToggle) {
@@ -141,10 +141,10 @@ public class MainGui extends ToggleChatModernUI {
         });
     
         // Opens the theme menu
-        registerElement(new ToggleChatButtonComponent(1, this.width - 114, this.height - 72, 104, 20, "Theme Menu", button -> new DesignSelectorMenu().display()));
+        registerElement(new ToggleChatButtonComponent(1, this.width - 114, this.height - 72, 104, 20, "Theme Menu", button -> new DesignSelectorMenu().display()).setDrawingModern(this.modernButton));
     
         // Opens the list menu
-        registerElement(new ToggleChatButtonComponent(1, this.width - 114, this.height - 49, 104, 20, "Whitelist", button -> new ViewListUI(this).display()));
+        registerElement(new ToggleChatButtonComponent(1, this.width - 114, this.height - 49, 104, 20, "Whitelist", button -> new ViewListUI(this).display()).setDrawingModern(this.modernButton));
     
         // Switches the current category filter
         registerElement(new ToggleChatButtonComponent(2, 5, this.height - 49, 100, 20, "Category: " + ChatColor.AQUA + this.configLoader.getCategoryFilter().getDisplayName(), button -> {
@@ -156,16 +156,16 @@ public class MainGui extends ToggleChatModernUI {
             
             // Reset to the first page
             this.mc.displayGuiScreen(new MainGui(1));
-        }).setButtonData("Filters the list", "of toggles into", "their respective", "categories.", " ", "Current Mode:", this.configLoader.getCategoryFilter().getDescription()));
+        }).setDrawingModern(this.modernButton).setButtonData("Filters the list", "of toggles into", "their respective", "categories.", " ", "Current Mode:", this.configLoader.getCategoryFilter().getDescription()));
         
         // Displays the previous page in the toggle list. Tries to disable itself if there is no prior page.
-        registerElement(new ToggleChatButtonComponent(3, this.width - 114, this.height - 25, 50, 20, "\u21E6", button -> this.mc.displayGuiScreen(new MainGui(this.pageNumber - 1))).setEnabled(this.pageNumber > 1));
+        registerElement(new ToggleChatButtonComponent(3, this.width - 114, this.height - 25, 50, 20, "\u21E6", button -> this.mc.displayGuiScreen(new MainGui(this.pageNumber - 1))).setDrawingModern(this.modernButton).setEnabled(this.pageNumber > 1));
     
         // Displays the next page in the toggle list. Reminder this will skip the 7 * page entries as defined above.
-        registerElement(new ToggleChatButtonComponent(4, this.width - 60, this.height - 25, 50, 20, "\u21E8", button -> this.mc.displayGuiScreen(new MainGui(this.pageNumber + 1))).setEnabled(this.pageNumber != this.pagesTotal));
+        registerElement(new ToggleChatButtonComponent(4, this.width - 60, this.height - 25, 50, 20, "\u21E8", button -> this.mc.displayGuiScreen(new MainGui(this.pageNumber + 1))).setDrawingModern(this.modernButton).setEnabled(this.pageNumber != this.pagesTotal));
     
         // Opens the Theme modifier menu
-        registerElement(new ToggleChatButtonComponent(5, 5, 5, 20, 20, "\u2699", button -> this.mc.displayGuiScreen(new ModernConfigGui(this))).setButtonData(
+        registerElement(new ToggleChatButtonComponent(5, 5, 5, 20, 20, "\u2699", button -> this.mc.displayGuiScreen(new ModernConfigGui(this))).setDrawingModern(this.modernButton).setButtonData(
                 // Let them know what this button does
                 "Opens the",
                 "&bTheme Modifier&r,",
@@ -187,7 +187,7 @@ public class MainGui extends ToggleChatModernUI {
         
             // Open our page again
             this.mc.displayGuiScreen(new MainGui(this.pageNumber));
-        }).setButtonData(getSortingMessage()));
+        }).setDrawingModern(this.modernButton).setButtonData(getSortingMessage()));
         
 //        TODO implement search box!
 //        registerElement(this.searchBox = new ModernTextBox(-1, this.width / 2 - 50, this.height - 30, 100, 20));

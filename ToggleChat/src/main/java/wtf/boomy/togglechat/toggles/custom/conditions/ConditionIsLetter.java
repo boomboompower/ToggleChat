@@ -17,29 +17,54 @@
 
 package wtf.boomy.togglechat.toggles.custom.conditions;
 
+import com.google.gson.JsonObject;
+
 import wtf.boomy.togglechat.toggles.custom.ConditionType;
 import wtf.boomy.togglechat.toggles.custom.ToggleCondition;
 
 /**
- * This code was created by OrangeMarshall and used with permission by boomboompower.
- * <p>
- * Full credit to OrangeMarshall
+ * A condition to check if a character at a specific index is a letter
  *
- * @author OrangeMarshall
+ * E.g toggle any messages which have a 'X' at the 7th letter.
  */
-public class ConditionStartsWith extends ToggleCondition {
-
-    public ConditionStartsWith(String input) {
-        super(input);
+public class ConditionIsLetter extends ToggleCondition {
+    
+    private int index;
+    
+    /**
+     * Constructor to check if the value at a specific index is something.
+     */
+    public ConditionIsLetter(String index) {
+        super(index);
+        
+        this.index = Integer.parseInt(index);
     }
 
     @Override
     public boolean shouldToggle(String input) {
-        return input.startsWith(getText());
+        if (input.length() < this.index) {
+            return false;
+        }
+        
+        return Character.isLetter(input.charAt(this.index));
     }
-
+    
+    @Override
+    public JsonObject serialize() {
+        // Retrieve the value from our parent.
+        JsonObject object = super.serialize();
+    
+        // Remove the string property
+        object.remove("condition");
+        
+        // Add our custom property!
+        object.addProperty("condition", this.index);
+    
+        return object;
+    }
+    
     @Override
     public ConditionType getConditionType() {
-        return ConditionType.STARTSWITH;
+        return ConditionType.CHARACTERAT;
     }
 }

@@ -17,6 +17,7 @@
 
 package wtf.boomy.togglechat.toggles.custom.conditions;
 
+import wtf.boomy.togglechat.toggles.custom.ConditionType;
 import wtf.boomy.togglechat.toggles.custom.ToggleCondition;
 
 /**
@@ -28,13 +29,23 @@ import wtf.boomy.togglechat.toggles.custom.ToggleCondition;
  */
 public class ConditionEquals extends ToggleCondition {
 
+    private boolean caseSensitive = true;
+    
     public ConditionEquals(String input) {
         super(input);
+        
+        this.caseSensitive = true;
+    }
+    
+    public ConditionEquals(String input, boolean caseSensitive) {
+        super(input);
+        
+        this.caseSensitive = caseSensitive;
     }
 
     @Override
-    public Boolean apply(String input) {
-        return input.equals(getText());
+    public boolean shouldToggle(String input) {
+        return this.caseSensitive ? input.equals(getText()) : input.equalsIgnoreCase(getText());
     }
 
     @Override

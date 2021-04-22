@@ -18,15 +18,17 @@
 package wtf.boomy.togglechat;
 
 import net.minecraftforge.client.ClientCommandHandler;
-import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModMetadata;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import wtf.boomy.apagoge.ApagogeHandler;
 import wtf.boomy.mods.modernui.uis.ChatColor;
 import wtf.boomy.togglechat.commands.impl.ToggleCommand;
 import wtf.boomy.togglechat.config.ConfigLoader;
@@ -34,6 +36,7 @@ import wtf.boomy.togglechat.toggles.ToggleHandler;
 import wtf.boomy.togglechat.utils.uis.blur.BlurModHandler;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 @Mod(modid = ToggleChatMod.MODID, version = ToggleChatMod.VERSION, acceptedMinecraftVersions = "*")
@@ -42,7 +45,10 @@ public class ToggleChatMod {
     public static final String MODID = "togglechatmod";
     public static final String VERSION = "3.1.0";
     
+    private final Logger logger = LogManager.getLogger("ToggleChat - Core");
     private final ToggleHandler toggleHandler;
+    private final ApagogeHandler apagogeHandler;
+    
     private ConfigLoader configLoader;
     private BlurModHandler blurModHandler;
 
@@ -51,6 +57,14 @@ public class ToggleChatMod {
 
     public ToggleChatMod() {
         this.toggleHandler = new ToggleHandler(this);
+        
+        ApagogeHandler apagogeHandler1;
+        try {
+            apagogeHandler1 = new ApagogeHandler(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()), "SkinChanger", ToggleChatMod.VERSION);
+        } catch (URISyntaxException e) {
+            apagogeHandler1 = null;
+        }
+        this.apagogeHandler = apagogeHandler1;
     }
     
     @Mod.EventHandler
@@ -73,49 +87,75 @@ public class ToggleChatMod {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        if (this.apagogeHandler != null) {
+            // Requests for Apagoge to check these files. This is only a request
+            // and may be ignored in some implementations of Apagoge.
+            this.apagogeHandler.addValidatorClasses(
+                    ToggleChatMod.class,
+                    ToggleEvents.class,
+                    ConfigLoader.class,
+                    ToggleCommand.class,
+                    BlurModHandler.class
+            );
+        }
+        
         this.toggleHandler.remake();
 
         MinecraftForge.EVENT_BUS.register(new ToggleEvents(this));
         ClientCommandHandler.instance.registerCommand(new ToggleCommand(this));
+    
+        // Called once apagoge has determined if the build succeeded or not
+        // if no instance of Apagoge is available this will be called
+        // with a failure code. This can by bypassed by using the internal
+        // hook and not the handler. With ApagogeHandler#getUpdater() which
+        // will return the internal ApagogeVerifier instance (or null if
+        // it has either been destroyed or cannot be found).
+        if (this.apagogeHandler != null) {
+            this.apagogeHandler.addCompletionListener((handler, success) -> {
+                if (!success) {
+                    if (handler.getUpdater() == null) {
+                        this.logger.error("Apagoge was unable to run, no updater was found.");
+                    } else {
+                        this.logger.error("Apagoge failed. Assuming invalid build.");
+                    }
+                } else {
+                    this.logger.trace("Apagoge succeeded. This build is official.");
+                }
+            });
+        }
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        this.configLoader.loadCustomToggles();
+        // Loads all custom toggles from the directory.
+        this.configLoader.getToggleInterpreter().interpretFiles();
+        
+        // Load all the toggle options
         this.configLoader.loadToggles();
+        
+        // Loads all the modern settings
         this.configLoader.loadModernUtils();
 
+        // Sets the appropriate favourites.
         this.toggleHandler.inheritFavourites(this.configLoader.getFavourites());
+    
+        // Runs the updater
+        this.apagogeHandler.begin();
     }
     
-    /**
-     * Version independent event registering. 1.7 does not
-     * use the same event bus as 1.8 and above.
-     *
-     * @param target the object to register events under.
-     */
-    public void registerEvents(Object target) {
-        // noinspection ConstantConditions
-        if (ForgeVersion.mcVersion.startsWith("1.7")) {
-            FMLCommonHandler.instance().bus().register(target);
-        } else {
-            MinecraftForge.EVENT_BUS.register(target);
-        }
-    }
-    
-    /**
-     * Version independent event registering. 1.7 does not
-     * use the same event bus as 1.8 and above.
-     *
-     * @param target the object to deregister events under.
-     */
-    public void unregisterEvents(Object target) {
-        // noinspection ConstantConditions
-        if (ForgeVersion.mcVersion.startsWith("1.7")) {
-            FMLCommonHandler.instance().bus().unregister(target);
-        } else {
-            MinecraftForge.EVENT_BUS.unregister(target);
-        }
+    @Mod.EventHandler
+    public void onSignatureViolation(FMLFingerprintViolationEvent event) {
+        this.logger.warn("Signature violation detected. ToggleChat is NOT running an official release.");
+        this.logger.warn("This may be a sign the mod has been modified, or a dev build is being ran");
+        this.logger.warn("The only official place to get ToggleChat safely is from https://mods.boomy.wtf/");
+        this.logger.warn("or from the github page located at https://github.com/boomboompower/SkinChanger/");
+        this.logger.warn("If you're using a beta version you can ignore this notice.");
+        
+        // Requests the updater to destroy itself.
+        // Depending on the implementation this can be ignored.
+        // We don't use the handler case for it, since it also
+        // makes the updater instance null.
+        if (this.apagogeHandler.getUpdater() != null) this.apagogeHandler.getUpdater().kill();
     }
 
     /**
@@ -144,6 +184,16 @@ public class ToggleChatMod {
      */
     public ToggleHandler getToggleHandler() {
         return this.toggleHandler;
+    }
+    
+    /**
+     * Returns the mod updater instance, this may be null if the mod is running
+     * in a beta environment (if the file hash cannot be checked)
+     *
+     * @return the mod updater instance or null if the build is not official.
+     */
+    public ApagogeHandler getApagogeHandler() {
+        return this.apagogeHandler;
     }
     
     /**

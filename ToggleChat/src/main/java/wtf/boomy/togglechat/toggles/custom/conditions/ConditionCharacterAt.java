@@ -17,48 +17,52 @@
 
 package wtf.boomy.togglechat.toggles.custom.conditions;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import com.google.gson.JsonObject;
 import wtf.boomy.togglechat.toggles.custom.ConditionType;
 import wtf.boomy.togglechat.toggles.custom.ToggleCondition;
 
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
 /**
- * A condition which checks if a
+ * A condition to check if the character at a specific index of a string matches an expected value.
+ *
+ * E.g toggle any messages which have a 'T' at the 4th letter.
  */
-public class ConditionRegex extends ToggleCondition {
+public class ConditionCharacterAt extends ToggleCondition {
     
-    private static final Logger logger = LogManager.getLogger("ToggleChat - Regex");
-    private static final String REGEX = "https://regex101.com";
-
-    private Pattern pattern;
-
-    public ConditionRegex(String input) {
-        super(input);
+    private char character;
+    private int index;
+    
+    /**
+     * Constructor to check if the value at a specific index is something.
+     */
+    public ConditionCharacterAt(String character, int index) {
+        super(String.valueOf(character.charAt(0)));
         
-        try {
-            this.pattern = Pattern.compile(input);
-        } catch (PatternSyntaxException ex) {
-            logger.error("Invalid Regex: \"{}\", try using {} to fix it!", input, ConditionRegex.REGEX, ex);
-            
-            this.pattern = null;
-        }
+        this.character = character.charAt(0);
+        this.index = index;
     }
 
     @Override
     public boolean shouldToggle(String input) {
-        if (isEmpty(input) || this.pattern == null) {
+        if (input.length() < this.index) {
             return false;
         }
-
-        return this.pattern.matcher(input).matches();
+        
+        return input.charAt(this.index) == this.character;
     }
 
     @Override
     public ConditionType getConditionType() {
-        return ConditionType.REGEX;
+        return ConditionType.CHARACTERAT;
+    }
+    
+    @Override
+    public JsonObject serialize() {
+        // Retrieve the value from our parent.
+        JsonObject object = super.serialize();
+        
+        // Add our custom property!
+        object.addProperty("charIndex", this.index);
+        
+        return object;
     }
 }

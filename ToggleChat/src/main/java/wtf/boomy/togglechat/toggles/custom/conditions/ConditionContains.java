@@ -17,39 +17,73 @@
 
 package wtf.boomy.togglechat.toggles.custom.conditions;
 
+import com.google.gson.JsonObject;
+import wtf.boomy.togglechat.toggles.custom.ConditionType;
 import wtf.boomy.togglechat.toggles.custom.ToggleCondition;
 
 /**
- * This code was created by OrangeMarshall and used with permission by boomboompower.
- * <p>
- * Full credit to OrangeMarshall
  *
- * @author OrangeMarshall
  */
 public class ConditionContains extends ToggleCondition {
-
+    
+    // The expected match count.
     private int matchCount = 1;
-
+    
+    /**
+     * Ctor which does not care about the match count.
+     *
+     * @param input the text to check for
+     */
     public ConditionContains(String input) {
         super(input);
+        
+        this.matchCount = -1;
     }
-
+    
+    /**
+     * Ctor which makes the condition check for n matches where n can be any quantity from 0 to infinity.
+     *
+     * If this value is negative then the check will not care about the quantity of matches.
+     *
+     * @param input the input to match against
+     * @param matchCount the quantity of matches.
+     */
     public ConditionContains(String input, int matchCount) {
         super(input);
 
-        this.matchCount = Math.max(1, matchCount);
+        this.matchCount = Math.max(-1, matchCount);
     }
 
     @Override
-    public Boolean apply(String input) {
-        return countMatches(input, getText()) == this.matchCount;
+    public boolean shouldToggle(String input) {
+        // If there is no match count just use the default search
+        if (this.matchCount < 0) {
+            return input.contains(getText());
+        }
+        
+        // Collect the count of matches
+        int countedMatches = countMatches(input, getText());
+        
+        // Check if the count match matches our thing
+        return countedMatches == this.matchCount;
     }
 
     @Override
     public ConditionType getConditionType() {
         return ConditionType.CONTAINS;
     }
-
+    
+    @Override
+    public JsonObject serialize() {
+        // Retrieve the value from our parent.
+        JsonObject object = super.serialize();
+        
+        // Add our custom property!
+        object.addProperty("matchCount", this.matchCount);
+        
+        return object;
+    }
+    
     /**
      * Counts the amount of matches in the string
      *

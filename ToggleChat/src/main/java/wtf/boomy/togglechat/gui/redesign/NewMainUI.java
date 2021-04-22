@@ -17,6 +17,7 @@
 
 package wtf.boomy.togglechat.gui.redesign;
 
+import com.google.gson.JsonObject;
 import net.minecraft.client.renderer.GlStateManager;
 
 import wtf.boomy.mods.modernui.uis.ChatColor;
@@ -27,13 +28,19 @@ import wtf.boomy.mods.modernui.uis.components.LabelComponent;
 import wtf.boomy.mods.modernui.uis.components.ScrollComponent;
 import wtf.boomy.togglechat.ToggleChatMod;
 import wtf.boomy.togglechat.gui.core.MainGui;
+import wtf.boomy.togglechat.gui.custom.NewCustomUI;
 import wtf.boomy.togglechat.gui.list.ViewListUI;
 import wtf.boomy.togglechat.gui.modern.ModernConfigGui;
 import wtf.boomy.togglechat.gui.selector.DesignSelectorMenu;
 import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
+import wtf.boomy.togglechat.toggles.custom.CustomToggle;
 
 import java.awt.Color;
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -68,8 +75,14 @@ public class NewMainUI extends ModernGui {
     // so we can retrieve it's scrolling values :)
     private ScrollComponent scrollComponent = null;
     
+    // If this is not null then a message on the screen will display indicating
+    // that a newer version of the mod is now available!
+    private String newerVersion = null;
+    
     @Override
     public void onGuiOpen() {
+        boolean buttonModern = ToggleChatMod.getInstance().getConfigLoader().isModernButton();
+        
         // We want to use half the font height to correctly position
         // most of the label's we'll draw onto the screen.
         int halfFontHeight = this.fontRendererObj.FONT_HEIGHT / 2;
@@ -114,6 +127,11 @@ public class NewMainUI extends ModernGui {
             // nodes. The downside to this approach is the user currently has to hover over the checkbox
             // to actually see the toggles description.
             for (ToggleBase toggle : categoryToggles) {
+                // Skip any of the toggles which haven't been populated.
+                if (toggle instanceof CustomToggle && ((CustomToggle) toggle)._getConditions().size() == 0) {
+                    continue;
+                }
+                
                 // Adds the label for the toggle based on the name
                 // TODO create a dedicated method in the toggle class containing
                 //      to separate the internal id for the toggle and the actual display name.
@@ -142,33 +160,71 @@ public class NewMainUI extends ModernGui {
         }
         
         this.finalYPos = yPos;
+        
+        int inversedHeight = 0;
     
-        // Displays the theme editor menu.
-        registerElement(new ButtonComponent(2, this.width - 105, this.height - 75, 75, 20, "Theme Editor", btn -> {
-            new ModernConfigGui(this).display();
-        }));
-        
         // Displays the allow list menu
-        registerElement(new ButtonComponent(1, this.width - 105, this.height - 50, 75, 20, "Allow List", btn -> {
+        registerElement(new ButtonComponent(0, this.width - 115, this.height - (inversedHeight += 25), 85, 20, "Allow List", btn -> {
             new ViewListUI(this).display();
-        }));
-        
+        }).setDrawingModern(buttonModern));
+    
         // Displays the design selector menu
-        registerElement(new ButtonComponent(0, this.width - 105, this.height - 25, 75, 20, "Select Theme", btn -> {
+        registerElement(new ButtonComponent(1, this.width - 115, this.height - (inversedHeight += 25), 85, 20, "Choose Menu", btn -> {
             new DesignSelectorMenu().display();
-        }));
+        }).setDrawingModern(buttonModern));
+        
+        // Displays the theme editor menu.
+        registerElement(new ButtonComponent(2, this.width - 115, this.height - (inversedHeight += 25), 85, 20, "Theme Editor", btn -> {
+            new ModernConfigGui(this).display();
+        }).setDrawingModern(buttonModern));
         
         // Adds the scrollbar which modifies the y translation on the page.
         registerElement(this.scrollComponent = new ScrollComponent(this.width - 20, 5, 12, this.height - 10, component -> {
             this.yTranslation = -(this.finalYPos - this.height) * this.scrollComponent.getCurrentScroll();
         }));
+        
+        // Add a button for the update
+        if (ToggleChatMod.getInstance().getApagogeHandler().isUpdateAvailable()) {
+            JsonObject updateData = ToggleChatMod.getInstance().getApagogeHandler().getUpdateData();
+
+            String versionURL = "https://mods.boomy.wtf/";
+
+            if (updateData.has("latestVersion")) {
+                // versions.boomy.wtf
+                this.newerVersion = updateData.get("version").getAsString();
+                versionURL = updateData.get("download").getAsString();
+            } else if (updateData.has("tag_name")) {
+                // github builds
+                this.newerVersion = updateData.get("tag_name").getAsString();
+                versionURL = updateData.get("html_url").getAsString();
+            }
+
+            final String finalVersionURL = versionURL;
+            
+            registerElement(new ButtonComponent(3, this.width - 115, this.height - (inversedHeight += 25), 85, 20, ChatColor.BOLD + "New Update", btn -> {
+                try {
+                    Desktop.getDesktop().browse(new URI(finalVersionURL));
+                } catch (IOException | URISyntaxException exception) {
+                    exception.printStackTrace();
+                }
+            }).setDrawingModern(buttonModern));
+        }
+    
+        // Displays the custom toggle menu
+        registerElement(new ButtonComponent(4, this.width - 115, this.height - (inversedHeight + 25), 85, 20, "Custom Toggles", btn -> {
+            new NewCustomUI(this).display();
+        }).setDrawingModern(buttonModern));
     }
     
     @Override
     public void preRender(int mouseX, int mouseY, float partialTicks) {
         // Draw the default background as always.
         drawDefaultBackground();
-        
+    
+        if (this.newerVersion != null) {
+            drawCenteredString(this.fontRendererObj, "A new update " + ChatColor.GOLD + this.newerVersion + ChatColor.RESET + " is now available!", this.width / 2, 5, Color.WHITE.getRGB());
+        }
+    
         // Draw the left strip background and vertical line.
         ModernGui.drawRect(0, 0, this.backDropWidth, this.height, this.backdropColour);
         ModernGui.drawVerticalLine_(this.backDropWidth, 0, this.height, this.lineColour);
@@ -203,6 +259,10 @@ public class NewMainUI extends ModernGui {
     
         // Pop the matrix once more, clearing the stack again.
         GlStateManager.popMatrix();
+    }
+    
+    @Override
+    public void postRender(float partialTicks) {
     }
     
     @Override

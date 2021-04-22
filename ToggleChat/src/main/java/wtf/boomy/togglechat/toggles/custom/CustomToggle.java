@@ -20,9 +20,11 @@ package wtf.boomy.togglechat.toggles.custom;
 import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A custom Toggle, has all appropriate methods for user customization
@@ -30,28 +32,67 @@ import java.util.List;
  * @author boomboompower
  * @version 1.0
  */
-public class TypeCustom extends ToggleBase implements ICustomToggle {
+public class CustomToggle extends ToggleBase implements ICustomToggle {
     
-    private boolean enabled = true;
+    // If true, this will be saved on the next save request
+    private boolean dirty;
 
-    private boolean dirty; // If true, this will be saved on the next save request
-
-    private final String togglename; // The name of the toggle
+    // The actual display name of the toggle
+    private final String togglename;
     
-    private final List<ToggleCondition> conditions; // The conditions of the toggle
-    private List<String> comments; // The comments displayed on the top of the file
+    // The internal id of the toggle
+    private final String identifier;
     
-    public TypeCustom(String name, ToggleCondition condition) {
-        //noinspection ArraysAsListWithZeroOrOneArgument
-        this.conditions = Arrays.asList(condition);
+    // The conditions of the toggle
+    private final List<ToggleCondition> conditions;
+    
+    // The description for this toggle to be displayed
+    private String[] description;
+    
+    // The save file name
+    private File saveFile;
+    
+    public CustomToggle(String name) {
+        this.conditions = new ArrayList<>();
+        this.identifier = UUID.randomUUID().toString();
         this.togglename = name;
-        this.comments = new ArrayList<>();
+        this.description = new String[] {
+                "A custom toggle",
+                "",
+                "&b" + name,
+                "",
+                "This feature is still",
+                "in &cbeta&r and may be",
+                "modified at any time!"
+        };
     }
     
-    public TypeCustom(String name, List<ToggleCondition> condition, List<String> comments) {
+    public CustomToggle(String name, String identifier, ToggleCondition condition) {
+        //noinspection ArraysAsListWithZeroOrOneArgument
+        this.conditions = Arrays.asList(condition);
+        this.identifier = identifier;
         this.togglename = name;
+        this.description = new String[] {
+                "A custom toggle",
+                "",
+                "&b" + name,
+                "",
+                "This feature is still",
+                "in &cbeta&r and may be",
+                "modified at any time!"
+        };
+    }
+    
+    public CustomToggle(String name, String identifier, List<ToggleCondition> condition, List<String> comments) {
+        this.togglename = name;
+        this.identifier = identifier;
         this.conditions = condition;
-        this.comments = comments;
+        this.description = comments.toArray(new String[0]);
+    }
+    
+    @Override
+    public String getIdString() {
+        return this.identifier;
     }
     
     @Override
@@ -62,7 +103,7 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
     @Override
     public boolean shouldToggle(String message) {
         for (ToggleCondition condition : this.conditions) {
-            if (condition.apply(message)) {
+            if (condition.shouldToggle(message)) {
                 return true;
             }
         }
@@ -71,19 +112,7 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
     
     @Override
     public String[] getDescription() {
-        return new String[] {
-                "A custom toggle",
-                "",
-                "&b" + _getName(),
-                "",
-                "This feature is still",
-                "in &cbeta&r and may be",
-                "modified at any time!",
-                "",
-                "Custom toggles were",
-                "created with help from",
-                "&6OrangeMarshall"
-        };
+        return this.description;
     }
     
     @Override
@@ -121,27 +150,39 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
     }
     
     /**
-     * Returns the comments that will be displayed on top of the file
-     *
-     * @return the comments on top of the file
-     */
-    public List<String> _getComments() {
-        return this.comments;
-    }
-    
-    /**
      * Sets the comments of the file
      *
      * @param comments the comments of the file
      */
-    public TypeCustom _setComments(List<String> comments) {
+    public CustomToggle _setDescription(List<String> comments) {
         markDirty();
 
-        this.comments = comments;
+        this.description = comments.toArray(new String[0]);
         
         return this;
     }
-
+    
+    /**
+     * Sets this custom toggles save file
+     *
+     * @param file the file which this will be saved to
+     * @return the {@link CustomToggle} instance.
+     */
+    public CustomToggle _setSaveFile(File file) {
+        this.saveFile = file;
+        
+        return this;
+    }
+    
+    /**
+     * Returns the expected save file.
+     *
+     * @return the save file
+     */
+    public File _getSaveFile() {
+        return this.saveFile;
+    }
+    
     /**
      * Indicates that this toggle has been modified and requires saving.
      *
@@ -160,15 +201,7 @@ public class TypeCustom extends ToggleBase implements ICustomToggle {
         this.dirty = false;
     }
     
-    public boolean isEnabled() {
-        return this.enabled;
-    }
-    
     public boolean isDirty() {
         return this.dirty;
-    }
-    
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 }

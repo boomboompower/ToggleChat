@@ -44,10 +44,10 @@ public class AddNewListUI extends ToggleChatModernUI {
     @Override
     public void onGuiOpen() {
         if (this.mod.getConfigLoader().getWhitelist().size() > 0) {
-            registerElement(new ButtonComponent(0, this.width / 2 - 200, this.height / 2 + 80, 150, 20, "Back"));
-            registerElement(this.next = new ButtonComponent(1, this.width / 2 + 50, this.height / 2 + 80, 150, 20, "Next"));
+            registerElement(new ButtonComponent(0, this.width / 2 - 200, this.height / 2 + 80, 150, 20, "Back").setDrawingModern(this.modernButton));
+            registerElement(this.next = (new ButtonComponent(1, this.width / 2 + 50, this.height / 2 + 80, 150, 20, "Next").setDrawingModern(this.modernButton)));
         } else {
-            registerElement(new ButtonComponent(0, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Back"));
+            registerElement(new ButtonComponent(0, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Back").setDrawingModern(this.modernButton));
         }
     }
     

@@ -35,8 +35,8 @@ public class ClearListUI extends ToggleChatModernUI {
 
     @Override
     public void onGuiOpen() {
-        registerElement(new ButtonComponent(0, this.width / 2 - 200, this.height / 2 + 30, 150, 20, "Cancel"));
-        registerElement(new ButtonComponent(1, this.width / 2 + 50, this.height / 2 + 30, 150, 20, "Confirm"));
+        registerElement(new ButtonComponent(0, this.width / 2 - 200, this.height / 2 + 30, 150, 20, "Cancel").setDrawingModern(this.modernButton));
+        registerElement(new ButtonComponent(1, this.width / 2 + 50, this.height / 2 + 30, 150, 20, "Confirm").setDrawingModern(this.modernButton));
     }
     
     @Override

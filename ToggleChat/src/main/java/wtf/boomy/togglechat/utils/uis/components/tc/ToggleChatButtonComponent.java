@@ -50,6 +50,13 @@ public class ToggleChatButtonComponent extends ButtonComponent {
         }
     }
     
+    @Override
+    public ToggleChatButtonComponent setDrawingModern(boolean drawingModern) {
+        super.setDrawingModern(drawingModern);
+        
+        return this;
+    }
+    
     /**
      * Sets this button as a favourite or not. If this is true a star will be displayed next to
      * the displayname of the button. If false the button will exhibit normal behaviour.
