@@ -3,6 +3,7 @@ package wtf.boomy.togglechat.toggles.custom.interpreter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 
 import org.apache.commons.io.IOUtils;
@@ -339,7 +340,8 @@ public final class ToggleInterpreter {
         
         // Copy all the descriptions into the save file.
         for (String description : custom.getDescription()) {
-            array.add(description);
+            // We need to create a primitive because gson 2.2.4 (used in 1.8.9) did not support adding anything else to Json Arrays
+            array.add(new JsonPrimitive(description));
         }
         
         // Store it in the array
