@@ -45,7 +45,7 @@ public class TypeBedwars extends ToggleBase {
     @Override
     public String[] getDescription() {
         return new String[] {
-                "Turns some bedwards chat",
+                "Turns some bedwars chat",
                 "messages on or off",
                 "",
                 "&cYou have been eliminated!",
