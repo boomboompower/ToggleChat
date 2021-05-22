@@ -4,7 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import org.apache.commons.io.IOUtils;
+
 import wtf.boomy.apagoge.ApagogeHandler;
 import wtf.boomy.apagoge.ApagogeVerifier;
 import wtf.boomy.apagoge.CompletionListener;
@@ -38,6 +40,10 @@ public class ApagogeUpdater implements ApagogeVerifier {
     // Stores the latest update information
     private JsonObject updateInformation = null;
     
+    // Am I running a newer version than release?
+    private boolean runningNewer = false;
+    
+    // Stores the matching pattern
     private final Pattern versionPattern = Pattern.compile("(?<version>[0-9]+(\\.[0-9]+)*)");
     
     /**
@@ -91,7 +97,7 @@ public class ApagogeUpdater implements ApagogeVerifier {
      */
     @Override
     public boolean isRunningNewerVersion() {
-        return false;
+        return this.runningNewer;
     }
     
     /**
@@ -246,12 +252,17 @@ public class ApagogeUpdater implements ApagogeVerifier {
                     return;
                 }
                 
+                // Store the compared information
+                int comparison = getComparison(this.currentVersion, child.getAsJsonObject());
+                
                 // Check if the object is newer than the current version.
-                if (isNewerVersion(this.currentVersion, child.getAsJsonObject())) {
+                if (comparison < 0) {
                     // Store the update information
                     this.updateInformation = child.getAsJsonObject();
                     
                     break;
+                } else if (comparison > 0) {
+                    this.runningNewer = true;
                 }
             }
         } catch (IllegalArgumentException | IOException ex) {
@@ -270,26 +281,28 @@ public class ApagogeUpdater implements ApagogeVerifier {
     }
     
     /**
-     * Returns true if the supplied version in the json object is newer than the currentVersion.
+     * Returns the comparison between the two versions
+     *
+     * -1 if jsonObject is newer
+     * 0 on failure or if they're the same
+     * 1 if the current version is newer
      *
      * @param currentVersion the version we're currently using
      * @param jsonObject the object to check update information on
      *
      * @return true if the json object has newer version information
      */
-    private boolean isNewerVersion(Version currentVersion, JsonObject jsonObject) {
+    private int getComparison(Version currentVersion, JsonObject jsonObject) {
         String version = getVersionFromObject(jsonObject);
     
         if (version == null) {
-            return false;
+            return 0;
         }
         
         try {
-            Version foundVersion = new Version(version);
-        
-            return currentVersion.compareTo(foundVersion) < 1;
+            return currentVersion.compareTo(new Version(version));
         } catch (IllegalArgumentException ignored) {
-            return false;
+            return 0;
         }
     }
     
