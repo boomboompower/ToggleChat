@@ -1,9 +1,10 @@
 # The workflow will build a Forge Mod with Gradle
+# then upload it to the github releases tab
 #
 # creator: boomboompower
 # version: 1.0
 
-name: Java CI with Forge
+name: Mod Deployment CI
 
 # Trigger the integration for pull requests and pushes
 # to every branch on the repository
@@ -35,6 +36,7 @@ jobs:
         run: |
            echo ::set-output name=commitmsg::$(git log --format=%B -n 1 ${{ github.event.after }})
            echo "${{ github.run_number }}" > ./ToggleChat/src/main/resources/GHCI.txt
+           echo "${{ github.sha }}" > ./ToggleChat/src/main/resources/commit.txt
 
         # Required so gradlew can build the JAR file
       - name: Grant execute permission for gradlew

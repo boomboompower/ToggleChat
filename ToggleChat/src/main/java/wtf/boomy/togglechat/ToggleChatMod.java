@@ -28,7 +28,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import wtf.boomy.apagoge.ApagogeHandler;
+import wtf.boomy.apagoge.updater.ApagogeUpdater;
 import wtf.boomy.mods.modernui.uis.ChatColor;
 import wtf.boomy.togglechat.commands.impl.ToggleCommand;
 import wtf.boomy.togglechat.config.ConfigLoader;
@@ -36,6 +38,7 @@ import wtf.boomy.togglechat.toggles.ToggleHandler;
 import wtf.boomy.togglechat.utils.uis.blur.BlurModHandler;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 
@@ -54,17 +57,18 @@ public class ToggleChatMod {
 
     @Mod.Instance
     private static ToggleChatMod instance;
-
+    
     public ToggleChatMod() {
         this.toggleHandler = new ToggleHandler(this);
         
-        ApagogeHandler apagogeHandler1;
+        File runFile;
         try {
-            apagogeHandler1 = new ApagogeHandler(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()), "ToggleChat", ToggleChatMod.VERSION);
+            runFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
         } catch (URISyntaxException | IllegalArgumentException e) {
-            apagogeHandler1 = new ApagogeHandler(new File(""), "ToggleChat", ToggleChatMod.VERSION);
+            runFile = new File("");
         }
-        this.apagogeHandler = apagogeHandler1;
+        
+        this.apagogeHandler = hackHandler(new ApagogeHandler(runFile, "ToggleChat", ToggleChatMod.VERSION), runFile);
     }
     
     @Mod.EventHandler
@@ -72,14 +76,12 @@ public class ToggleChatMod {
         ModMetadata data = event.getModMetadata();
         data.version = VERSION;
         data.name = ChatColor.GOLD + "ToggleChat";
-        data.authorList.addAll(Arrays.asList("boomboompower", "OrangeMarshall", "tterrag1098", "SirNapkin1334"));
+        data.authorList.addAll(Arrays.asList("boomboompower", "tterrag1098", "SirNapkin1334"));
         data.description = "Use " + ChatColor.BLUE + "/tc" + ChatColor.RESET + " to get started! " + ChatColor.GRAY
             + "|" + ChatColor.RESET + " Made with " + ChatColor.LIGHT_PURPLE + "<3" + ChatColor.RESET + " by boomboompower";
 
         data.url = "https://hypixel.net/threads/997547";
-
-        // These are the greatest people, shower them with praise and good fortune!
-        data.credits = "2Pi for the idea, OrangeMarshall for help with CustomToggles and tterrag1098 for the gui blur code";
+        data.credits = "2pi for the concept and tterrag1098 for the gui blur code";
 
         this.configLoader = new ConfigLoader(this, new File(event.getModConfigurationDirectory(), "togglechat"));
         this.blurModHandler = new BlurModHandler(this).load();
@@ -151,7 +153,7 @@ public class ToggleChatMod {
         // Depending on the implementation this can be ignored.
         // We don't use the handler case for it, since it also
         // makes the updater instance null.
-        if (this.apagogeHandler.getUpdater() != null) this.apagogeHandler.getUpdater().kill();
+//        if (this.apagogeHandler.getUpdater() != null) this.apagogeHandler.getUpdater().kill();
     }
 
     /**
@@ -199,5 +201,21 @@ public class ToggleChatMod {
      */
     public static ToggleChatMod getInstance() {
         return instance;
+    }
+    
+    // Never do this.
+    private ApagogeHandler hackHandler(ApagogeHandler in, File runFile) {
+        try {
+            Class<?> clazz = in.getClass();
+            
+            Field updater = clazz.getDeclaredField("updater");
+            updater.setAccessible(true);
+            
+            updater.set(in, new ApagogeUpdater(runFile, "ToggleChat", ToggleChatMod.VERSION, in));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        
+        return in;
     }
 }
