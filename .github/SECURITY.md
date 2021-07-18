@@ -16,7 +16,7 @@ Versions of ToggleChat below version 2.0 are no longer supported.
 ## Reporting a Vulnerability
 
 If a vulnerability with ToggleChat (for any version) is found, please do one of these (in order of preference):
- - [Message me on Twitter](https://twitter.com/messages/compose?recipient_id=713547573840097280)
+ - Send me an email security(at)boomy.wtf
  - [Create an issue](https://github.com/boomboompower/ToggleChat/issues/new/choose) - *Don't do this for high severity security issues*
 
 #### Afterwards
