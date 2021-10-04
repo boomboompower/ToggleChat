@@ -38,7 +38,9 @@ import wtf.boomy.togglechat.toggles.custom.conditions.ConditionRegex;
 import wtf.boomy.togglechat.toggles.custom.conditions.ConditionStartsWith;
 
 import java.awt.Color;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * A layout for the custom toggle menu
@@ -70,6 +72,10 @@ public class NewCustomUI extends ModernGui {
     
     // Currently editing
     private CustomToggle customToggle;
+    private ToggleCondition customCondition;
+    
+    // Condition editing
+    private ToggleCondition condition;
     
     public NewCustomUI(ModernGui previous) {
         this.previousGUI = previous;
@@ -91,7 +97,7 @@ public class NewCustomUI extends ModernGui {
         int yPos = 10;
     
         // Collect all the currently registered toggles for the mod.
-        Collection<ToggleBase> toggles = ToggleChatMod.getInstance().getToggleHandler().getCustomToggles().values();
+        Collection<ToggleBase> toggles = this.customToggle == null ? ToggleChatMod.getInstance().getToggleHandler().getCustomToggles().values() : Collections.singleton(this.customToggle);
     
         // Displays the theme editor menu.
         if (this.previousGUI != null) {
@@ -108,7 +114,22 @@ public class NewCustomUI extends ModernGui {
             
             CustomToggle customToggle = (CustomToggle) base;
             
-            String headerText = (this.customToggle == customToggle ? ChatColor.AQUA.toString() : ChatColor.YELLOW.toString() ) + ChatColor.BOLD + customToggle.getName();
+            StringBuilder headerName = new StringBuilder();
+            
+            if (this.customToggle == base) {
+                headerName.append(ChatColor.AQUA);
+            } else {
+                headerName.append("[");
+                headerName.append(customToggle._getConditions().size());
+                headerName.append("] ");
+                
+                headerName.append(ChatColor.YELLOW);
+            }
+            
+            headerName.append(ChatColor.BOLD);
+            headerName.append(customToggle.getName());
+            
+            String headerText = headerName.toString().trim();
             
             if (10 + this.fontRendererObj.getStringWidth(headerText) > this.backDropWidth - 35) {
                 headerText = this.fontRendererObj.trimStringToWidth(headerText, this.backDropWidth - 45) + "...";
@@ -118,43 +139,67 @@ public class NewCustomUI extends ModernGui {
             
             // Register a label containing the category name in bold.
             registerElement(headerComponent);
+    
+            if (this.customToggle != base) {
+                registerElement(new ButtonComponent(-2, this.backDropWidth - 22, yPos, 16, 16, "\u2699", btn -> {
+                    btn.setEnabled(false);
         
-            registerElement(new ButtonComponent(-1, this.backDropWidth - 22, yPos, 16, 16, "\u002B", btn -> {
-                btn.setEnabled(false);
-    
-                String newHeaderText = ChatColor.AQUA.toString() + ChatColor.BOLD + customToggle.getName();
-    
-                if (10 + this.fontRendererObj.getStringWidth(newHeaderText) > this.backDropWidth - 35) {
-                    newHeaderText = this.fontRendererObj.trimStringToWidth(newHeaderText, this.backDropWidth - 45) + "...";
-                }
-                
-                this.customToggle = customToggle;
-                
-                headerComponent.setText(newHeaderText);
-                
-                display();
-            }).setEnabled(customToggle != this.customToggle).enableTranslatable());
-            
-            // Move down from the category name
-            yPos += 20;
-            
-            for (ToggleCondition condition : customToggle._getConditions()) {
-                // Adds the label for the toggle based on the name
-                // TODO create a dedicated method in the toggle class containing
-                //      to separate the internal id for the toggle and the actual display name.
-                registerElement(new LabelComponent(20, yPos + halfFontHeight, condition.getText()));
-            
-                // Adds the button for toggling stuff
-                registerElement(new ButtonComponent(0, this.backDropWidth - 20, yPos + (halfFontHeight / 2), 12, 12, "\u270F", box -> {
-                    // Indicate that the config
-                    // will need to be saved.
-                    this.changesMade = true;
-                
-                    editCondition(customToggle, condition);
+                    this.customToggle = customToggle;
+        
+                    display();
                 }).setDrawingModern(buttonModern).enableTranslatable());
-            
-                // Move down the window
+    
+                yPos += 5;
+            } else {
+                registerElement(new ButtonComponent(-2, this.backDropWidth - 22, yPos, 16, 16, "\u2190", btn -> {
+                    btn.setEnabled(true);
+        
+                    this.customToggle = null;
+        
+                    display();
+                }).setDrawingModern(buttonModern).enableTranslatable());
+    
+                registerElement(new ButtonComponent(-1, this.backDropWidth - 40, yPos, 16, 16, "\u002B", btn -> {
+                    btn.setEnabled(false);
+        
+                    String newHeaderText = ChatColor.AQUA.toString() + ChatColor.BOLD + customToggle.getName();
+        
+                    if (10 + this.fontRendererObj.getStringWidth(newHeaderText) > this.backDropWidth - 35) {
+                        newHeaderText = this.fontRendererObj.trimStringToWidth(newHeaderText, this.backDropWidth - 45) + "...";
+                    }
+        
+                    this.customToggle = customToggle;
+        
+                    headerComponent.setText(newHeaderText);
+        
+                    display();
+                }).setDrawingModern(buttonModern).setEnabled(customToggle != this.customToggle).enableTranslatable());
+    
+                // Move down from the category name
                 yPos += 20;
+    
+                for (ToggleCondition condition : customToggle._getConditions()) {
+                    // Adds the label for the toggle based on the name
+                    // TODO create a dedicated method in the toggle class containing
+                    //      to separate the internal id for the toggle and the actual display name.
+                    registerElement(new LabelComponent(20, yPos + halfFontHeight, condition.getText()));
+                    
+                    // Adds the button for toggling stuff
+                    registerElement(new ButtonComponent(0, this.backDropWidth - 20, yPos + (halfFontHeight / 2), 12, 12, "\u270F", box -> {
+                        // Indicate that the config
+                        // will need to be saved.
+                        this.changesMade = true;
+    
+                        editCondition(customToggle, condition);
+                    }).setDrawingModern(buttonModern).setMessageLines(Collections.singletonList("Edit this")).enableTranslatable());
+    
+                    registerElement(new ButtonComponent(0, this.backDropWidth - 38, yPos + (halfFontHeight / 2), 12, 12, "\u2715", box -> {
+                        deleteCondition(customToggle, condition);
+                    }).setDrawingModern(buttonModern).setMessageLines(Collections.singletonList("Delete this")).enableTranslatable());
+        
+                    // Move down the window
+                    yPos += 20;
+                }
             }
         
             // Move further down the window.
@@ -162,29 +207,31 @@ public class NewCustomUI extends ModernGui {
             yPos += 15;
         }
         
-        TextBoxComponent textBox = new TextBoxComponent(1, this.width / 2 - this.width / 8, this.height - 24, this.width / 4, 20, "Toggle Name").setDrawingModern(textboxModern);
+        TextBoxComponent textBox = new TextBoxComponent(1, this.width / 2 - this.width / 8, this.height - 44, this.width / 4, 20, "Toggle Name").setDrawingModern(textboxModern);
     
-        registerElement(textBox);
+        if (this.customToggle == null) {
+            registerElement(textBox);
+    
+            registerElement(new ButtonComponent(2, this.width / 2 + this.width / 8 + 5, this.height - 44, 20, 20, "+", button -> {
+                if (textBox.getText().trim().isEmpty()) {
+                    return;
+                }
         
-        registerElement(new ButtonComponent(2, this.width / 2 + this.width / 8 + 5, this.height - 24, 20, 20, "+", button -> {
-            if (textBox.getText().trim().isEmpty()) {
-                return;
-            }
-            
-            // Tell the UI to save when it's closed
-            this.changesMade = true;
-            
-            // Create a new custom toggle
-            CustomToggle customToggle = new CustomToggle(textBox.getText().trim());
-            
-            // Needs to be saved regardless
-            customToggle.markDirty();
-            
-            ToggleChatMod.getInstance().getToggleHandler().addToggle(customToggle);
-            
-            // Reopen the menu
-            display();
-        }).setDrawingModern(buttonModern));
+                // Tell the UI to save when it's closed
+                this.changesMade = true;
+        
+                // Create a new custom toggle
+                CustomToggle customToggle = new CustomToggle(textBox.getText().trim());
+        
+                // Needs to be saved regardless
+                customToggle.markDirty();
+        
+                ToggleChatMod.getInstance().getToggleHandler().addToggle(customToggle);
+        
+                // Reopen the menu
+                display();
+            }).setDrawingModern(buttonModern));
+        }
         
         this.finalYPos = yPos;
     
@@ -194,14 +241,18 @@ public class NewCustomUI extends ModernGui {
         }));
         
         if (this.customToggle != null) {
-            addCustomToggleButtons(buttonModern, textboxModern);
+            addCustomToggleButtons(buttonModern, textboxModern, this.customCondition != null);
         }
     }
     
-    private void addCustomToggleButtons(boolean modernButton, boolean modernTextbox) {
+    private void addCustomToggleButtons(boolean modernButton, boolean modernTextbox, boolean existing) {
         int middleX = (this.width / 3 * 2) - 10;
     
         final ConditionType[] type = {ConditionType.EMPTY};
+        
+        if (existing) {
+            type[0] = this.customCondition.getConditionType();
+        }
         
         String label = ChatColor.YELLOW.toString() + "Editing " + this.customToggle.getName();
     
@@ -221,8 +272,12 @@ public class NewCustomUI extends ModernGui {
     
             String chosenText = componentValue.getText();
     
+            if (existing) {
+                this.customToggle._getConditions().remove(this.customCondition);
+            }
+    
             handleNewType(chosenText, current);
-        }).setEnabled(false);
+        }).setDrawingModern(modernButton).setEnabled(false);
         
         ButtonComponent typeButton = new ButtonComponent(69, middleX - 60, 50, 120, 20, type[0].getDisplayText(), btn -> {
             type[0] = type[0].next();
@@ -230,14 +285,24 @@ public class NewCustomUI extends ModernGui {
             ConditionType current = type[0];
             
             componentValue.setEnabled(current != ConditionType.EMPTY);
-            componentValue.setMaxStringLength(current.isUsesIndex() ? 2 : 64);
+            componentValue.setMaxStringLength(current.isUsesIndex() ? 2 : 128);
             componentValue.setText(componentValue.getText());
             
             submitButton.setEnabled(current != ConditionType.EMPTY);
             
             btn.setText(current.getDisplayText());
         }).setDrawingModern(modernButton);
+        
+        if (existing) {
+            ConditionType current = type[0];
+            
+            componentValue.setEnabled(current != ConditionType.EMPTY);
+            componentValue.setMaxStringLength(current.isUsesIndex() ? 2 : 128);
+            componentValue.setText(this.customCondition.getText());
     
+            submitButton.setEnabled(current != ConditionType.EMPTY);
+        }
+        
         registerElement(componentValue);
         registerElement(typeButton);
         registerElement(submitButton);
@@ -247,7 +312,7 @@ public class NewCustomUI extends ModernGui {
     
     private void handleNewType(String chosenText, ConditionType current) {
         if (current.isUsesIndex() && !isStringANumber(chosenText)) {
-            System.err.println("Fuck you");
+            System.err.println("Unable to handle new type, expected a index [as a number] but a number was not given!");
         
             return;
         }
@@ -282,6 +347,8 @@ public class NewCustomUI extends ModernGui {
         }
         
         if (condition != null) {
+            this.changesMade = true;
+            
             this.customToggle._addCondition(condition);
             this.customToggle.markDirty();
             
@@ -291,8 +358,15 @@ public class NewCustomUI extends ModernGui {
         }
     }
     
-    private void editCondition(CustomToggle customToggle, ToggleCondition condition) {
+    private void deleteCondition(CustomToggle customToggle, ToggleCondition condition) {
+        new NewCustomDelete(this, customToggle, condition).display();
+    }
     
+    private void editCondition(CustomToggle customToggle, ToggleCondition condition) {
+        this.customCondition = condition;
+        this.customToggle = customToggle;
+        
+        display();
     }
     
     @Override

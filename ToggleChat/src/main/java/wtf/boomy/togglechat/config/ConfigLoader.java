@@ -156,60 +156,6 @@ public class ConfigLoader {
         }
     }
 
-//    public void saveCustomToggles() {
-//        if (this.customToggleDir == null) {
-//            return;
-//        }
-//
-//        if (!exists(this.customToggleDir)) {
-//            this.customToggleDir.mkdirs();
-//        }
-//
-//        for (Map.Entry<String, ToggleBase> entry : this.mod.getToggleHandler().getToggles().entrySet()) {
-//            if (entry.getValue() instanceof TypeCustom) {
-//                TypeCustom base = (TypeCustom) entry.getValue();
-//
-//                if (base._getConditions().isEmpty()) {
-//                    continue;
-//                }
-//
-//                saveSingle(base);
-//            }
-//        }
-//    }
-
-//    public void saveSingle(TypeCustom base) {
-//        if (!base.isDirty()) {
-//            return;
-//        }
-//
-//        try {
-//            File file = new File(this.customToggleDir, base.getName().toLowerCase() + ".txt");
-//            FileWriter writer = new FileWriter(file);
-//
-//            if (!base._getComments().isEmpty()) {
-//                for (String s : base._getComments()) {
-//                    writer.append(s).append(System.lineSeparator());
-//                }
-//            } else {
-//                writeDefaultValues(writer);
-//            }
-//
-//            writer.append("").append(System.lineSeparator());
-//
-//            for (ToggleCondition condition : base._getConditions()) {
-//                if (!(condition instanceof ConditionEmpty)) {
-//                    writer.append(base.getName()).append(" : ").append(condition.getConditionType().getDisplayText()).append("(").append(condition.getText()).append(")").append(System.lineSeparator());
-//                }
-//            }
-//            writer.close();
-//        } catch (Exception ex) {
-//            this.logger.error("Failed to save custom toggle: \"{}\"!", base.getName(), ex);
-//        }
-//
-//        base.clean();
-//    }
-
     public void loadModernUtils() {
         if (!this.modernGuiFile.exists()) {
             saveModernUtils();

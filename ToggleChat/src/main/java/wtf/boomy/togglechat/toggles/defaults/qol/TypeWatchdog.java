@@ -31,7 +31,7 @@ public class TypeWatchdog extends ToggleBase {
 
     // SirNapkin1334
 
-        @Override
+    @Override
     public String getName() {
         return "Watchdog";
     }

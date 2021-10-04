@@ -182,9 +182,11 @@ public final class ToggleInterpreter {
         if (object.has("saveFile")) {
             saveFileName = object.optString("saveFile");
             
+            // Remove all path separator's in the file
             if (saveFileName.contains(File.pathSeparator)) {
                 String[] temp = saveFileName.split(File.pathSeparator);
                 
+                // Use the final split
                 saveFileName = temp[temp.length - 1];
             }
             
@@ -192,6 +194,8 @@ public final class ToggleInterpreter {
             if (saveFileName.contains("..")) {
                 saveFileName = saveFileName.replace("..", ".");
             }
+            
+            saveFileName = sanitizeFileName(saveFileName);
         } else {
             saveFileName = identifier.replace("-", "") + ".json";
         }
@@ -282,7 +286,7 @@ public final class ToggleInterpreter {
             
             // Set the default save name
             if (custom._getSaveFile() == null) {
-                custom._setSaveFile(new File(this.customToggleDir, custom.getIdString().replace("-", "") + ".json"));
+                custom._setSaveFile(new File(this.customToggleDir, sanitizeFileName(custom.getIdString().replace("-", "") + ".json")));
             }
             
             // Don't bother saving toggles which haven't been edited.
@@ -397,6 +401,48 @@ public final class ToggleInterpreter {
     
         // Return the file
         return incoming;
+    }
+    
+    /**
+     * Removes invalid characters from a filename
+     *
+     * @param filename the file name to sanitize
+     * @return a sanitized filename.
+     */
+    private String sanitizeFileName(String filename) {
+        if (filename == null) {
+            return null;
+        }
+        
+        // iterate through the characters
+        char[] chars = filename.toCharArray();
+        boolean changed = false;
+        
+        for (int i = 0; i < chars.length; i++) {
+            // get current char
+            char charAt = chars[i];
+            
+            switch(charAt) {
+                case '/':
+                case ':':
+                case '*':
+                case '?':
+                case '\"':
+                case '<':
+                case '>':
+                case '|':
+                case '\\':
+                case '&':
+                    // flag it
+                    changed = true;
+                    
+                    // set char to underscore
+                    chars[i] = '_';
+            }
+        }
+        
+        // construct new string or use old one if nothing changed
+        return changed ? String.valueOf(chars) : filename;
     }
     
     /**

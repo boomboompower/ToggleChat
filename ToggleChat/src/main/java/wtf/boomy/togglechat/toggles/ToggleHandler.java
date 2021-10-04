@@ -32,6 +32,7 @@ import wtf.boomy.togglechat.toggles.defaults.qol.TypeGexp;
 import wtf.boomy.togglechat.toggles.defaults.qol.TypeLimbo;
 import wtf.boomy.togglechat.toggles.defaults.qol.TypeLobbyJoin;
 import wtf.boomy.togglechat.toggles.defaults.qol.TypeMessageSeparator;
+import wtf.boomy.togglechat.toggles.defaults.qol.TypePlayerInformation;
 import wtf.boomy.togglechat.toggles.defaults.qol.TypeTip;
 import wtf.boomy.togglechat.toggles.defaults.qol.TypeWatchdog;
 import wtf.boomy.togglechat.toggles.sorting.impl.ToggleBaseComparator;
@@ -125,6 +126,7 @@ public final class ToggleHandler {
         addToggle(new TypeSkyBlockAbility());
         addToggle(new TypeSkyBlockLevelUp());
         addToggle(new TypeMessageSeparator());
+        addToggle(new TypePlayerInformation());
         
         sortMap(this.toggles);
     }

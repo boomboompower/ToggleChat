@@ -46,7 +46,7 @@ import java.util.Arrays;
 public class ToggleChatMod {
 
     public static final String MODID = "togglechatmod";
-    public static final String VERSION = "3.1.0";
+    public static final String VERSION = "3.1.1";
     
     private final Logger logger = LogManager.getLogger("ToggleChat - Core");
     private final ToggleHandler toggleHandler;
@@ -143,11 +143,7 @@ public class ToggleChatMod {
     
     @Mod.EventHandler
     public void onSignatureViolation(FMLFingerprintViolationEvent event) {
-        this.logger.warn("Signature violation detected. ToggleChat is NOT running an official release.");
-        this.logger.warn("This may be a sign the mod has been modified, or a dev build is being ran");
-        this.logger.warn("The only official place to get ToggleChat safely is from https://mods.boomy.wtf/");
-        this.logger.warn("or from the github page located at https://github.com/boomboompower/SkinChanger/");
-        this.logger.warn("If you're using a beta version you can ignore this notice.");
+        this.logger.warn("ToggleChat is running in beta mode (or may be modified) - Get official releases at https://github.com/boomboompower/ToggleChat/");
         
         // Requests the updater to destroy itself.
         // Depending on the implementation this can be ignored.
