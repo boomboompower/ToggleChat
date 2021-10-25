@@ -18,17 +18,14 @@
 package wtf.boomy.togglechat;
 
 import net.minecraftforge.client.ClientCommandHandler;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import wtf.boomy.apagoge.ApagogeHandler;
 import wtf.boomy.apagoge.updater.ApagogeUpdater;
 import wtf.boomy.mods.modernui.uis.ChatColor;
@@ -93,7 +90,7 @@ public class ToggleChatMod {
         // and may be ignored in some implementations of Apagoge.
         this.apagogeHandler.addValidatorClasses(
                 ToggleChatMod.class,
-                ToggleEvents.class,
+                GuiNewChatToggleHook.class,
                 ConfigLoader.class,
                 ToggleCommand.class,
                 BlurModHandler.class
@@ -101,7 +98,6 @@ public class ToggleChatMod {
         
         this.toggleHandler.remake();
 
-        MinecraftForge.EVENT_BUS.register(new ToggleEvents(this));
         ClientCommandHandler.instance.registerCommand(new ToggleCommand(this));
     
         // Called once apagoge has determined if the build succeeded or not

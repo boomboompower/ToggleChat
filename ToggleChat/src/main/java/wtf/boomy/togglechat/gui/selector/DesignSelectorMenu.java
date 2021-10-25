@@ -17,6 +17,8 @@
 
 package wtf.boomy.togglechat.gui.selector;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ChatLine;
 import wtf.boomy.mods.modernui.uis.ChatColor;
 import wtf.boomy.mods.modernui.uis.ModernGui;
 import wtf.boomy.togglechat.ToggleChatMod;
@@ -25,6 +27,7 @@ import wtf.boomy.togglechat.gui.core.MainGui;
 import wtf.boomy.togglechat.gui.redesign.NewMainUI;
 import wtf.boomy.togglechat.gui.selector.elements.LegacyMenuBoxedElement;
 import wtf.boomy.togglechat.gui.selector.elements.NewMenuBoxedElement;
+import wtf.boomy.togglechat.mixin.GuiNewChatAccessor;
 
 import java.awt.Color;
 
@@ -119,5 +122,18 @@ public class DesignSelectorMenu extends ModernGui {
         
         // Save the config
         this.configLoader.saveModernUtils();
+        try {
+            Minecraft.getMinecraft().ingameGUI.getChatGUI().refreshChat();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getDrawnChatLines().clear();
+            Minecraft.getMinecraft().ingameGUI.getChatGUI().resetScroll();
+
+            for (int i = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines().size() - 1; i >= 0; --i)
+            {
+                ChatLine chatline = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getDrawnChatLines().get(i);
+                ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).invokeSetChatLine(chatline.getChatComponent(), chatline.getChatLineID(), chatline.getUpdatedCounter(), true);
+            }
+        }
     }
 }

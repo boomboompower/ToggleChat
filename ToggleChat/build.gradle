@@ -20,16 +20,19 @@ buildscript {
         jcenter()
         maven { url = "https://jitpack.io/" }
         maven { url = "https://maven.minecraftforge.net/" }
+        maven { url "https://repo.spongepowered.org/repository/maven-public/" }
     }
     dependencies {
         classpath 'com.github.asbyth:ForgeGradle:f6500bf402'
         classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
+        classpath "com.github.Skytils:MixinGradle:d5f9873"
     }
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'org.spongepowered.mixin'
 
 version = "3.1.1-SNAPSHOT"
 group = "wtf.boomy.togglechat"
@@ -47,16 +50,33 @@ minecraft {
     // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "stable_22"
+    clientRunArgs += "--tweakClass org.spongepowered.asm.launch.MixinTweaker"
+    clientRunArgs += "--mixin mixins.togglechat.json"
+    clientJvmArgs += "-Dfml.coreMods.load=wtf.boomy.togglechat.core.MixinLoadingPlugin"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
 repositories {
     mavenCentral()
+    maven { url "https://repo.spongepowered.org/repository/maven-public/" }
+}
+
+configurations {
+    embed
+    implementation.extendsFrom(embed)
 }
 
 dependencies {
-    implementation 'com.github.boomboompower:ApagogeJava:master-SNAPSHOT'
-    implementation 'com.github.boomboompower:ModernUI:e16ecf0a27'
+    embed ('com.github.boomboompower:ApagogeJava:master-SNAPSHOT') {
+        exclude (module: 'gson')
+    }
+    embed ('com.github.boomboompower:ModernUI:e16ecf0a27') {
+        exclude (module: 'gson')
+    }
+    embed ("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
+        transitive = false
+    }
+    annotationProcessor ("org.spongepowered:mixin:0.7.11-SNAPSHOT")
 }
 
 processResources {
@@ -76,8 +96,6 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
     }
-
-    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 jar {
@@ -85,21 +103,36 @@ jar {
 
     manifest.attributes(
             'Main-Class' : 'wtf.boomy.togglechat.installer.InstallerCore',
-            'FMLAT': 'togglechatmod_at.cfg'
+            "FMLCorePlugin" : "wtf.boomy.togglechat.core.MixinLoadingPlugin",
+            "FMLCorePluginContainsFMLMod" : true,
+            "ForceLoadAsMod" : true,
+            "MixinConfigs" : "mixins.togglechat.json",
+            "ModSide" : "CLIENT",
+            "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
+            "TweakOrder": "0"
+
     )
 }
 
 shadowJar {
     archiveName = "$baseName.$extension"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    dependencies {
-        exclude(dependency('com.google.code.gson:gson:2.8.6'))
-    }
+    configurations = [project.configurations.embed]
 }
 
+mixin {
+    disableRefMapWarning = true
+    defaultObfuscationEnv searge
+    add sourceSets.main, "mixins.togglechat.refmap.json"
+}
+
+reobfJar.dependsOn tasks.shadowJar
+
 reobf {
-    // Reobfuscate the shadowed JAR
-    shadowJar {}
+    shadowJar {
+        mappingType = 'SEARGE'
+    }
 }
 
 sourceJar {

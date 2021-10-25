@@ -18,6 +18,8 @@
 package wtf.boomy.togglechat.gui.redesign;
 
 import com.google.gson.JsonObject;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.renderer.GlStateManager;
 
 import wtf.boomy.apagoge.ApagogeHandler;
@@ -34,6 +36,7 @@ import wtf.boomy.togglechat.gui.custom.NewCustomUI;
 import wtf.boomy.togglechat.gui.list.ViewListUI;
 import wtf.boomy.togglechat.gui.modern.ModernConfigGui;
 import wtf.boomy.togglechat.gui.selector.DesignSelectorMenu;
+import wtf.boomy.togglechat.mixin.GuiNewChatAccessor;
 import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 import wtf.boomy.togglechat.toggles.custom.CustomToggle;
@@ -307,5 +310,18 @@ public class NewMainUI extends ModernGui {
     
         // Save all the toggles
         ToggleChatMod.getInstance().getConfigLoader().saveToggles();
+        try {
+            Minecraft.getMinecraft().ingameGUI.getChatGUI().refreshChat();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getDrawnChatLines().clear();
+            Minecraft.getMinecraft().ingameGUI.getChatGUI().resetScroll();
+
+            for (int i = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines().size() - 1; i >= 0; --i)
+            {
+                ChatLine chatline = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getDrawnChatLines().get(i);
+                ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).invokeSetChatLine(chatline.getChatComponent(), chatline.getChatLineID(), chatline.getUpdatedCounter(), true);
+            }
+        }
     }
 }

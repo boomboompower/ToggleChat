@@ -17,11 +17,14 @@
 
 package wtf.boomy.togglechat.gui.list;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ChatLine;
 import org.lwjgl.input.Keyboard;
 
 import wtf.boomy.mods.modernui.uis.ModernGui;
 import wtf.boomy.mods.modernui.uis.components.ButtonComponent;
 import wtf.boomy.mods.modernui.uis.components.TextBoxComponent;
+import wtf.boomy.togglechat.mixin.GuiNewChatAccessor;
 import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
 import wtf.boomy.togglechat.utils.uis.components.tc.ToggleChatButtonComponent;
 
@@ -195,6 +198,19 @@ public class ViewListUI extends ToggleChatModernUI {
     public void onGuiClose() {
         this.mod.getConfigLoader().saveModernUtils();
         Keyboard.enableRepeatEvents(false);
+        try {
+            Minecraft.getMinecraft().ingameGUI.getChatGUI().refreshChat();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getDrawnChatLines().clear();
+            Minecraft.getMinecraft().ingameGUI.getChatGUI().resetScroll();
+
+            for (int i = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines().size() - 1; i >= 0; --i)
+            {
+                ChatLine chatline = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getDrawnChatLines().get(i);
+                ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).invokeSetChatLine(chatline.getChatComponent(), chatline.getChatLineID(), chatline.getUpdatedCounter(), true);
+            }
+        }
     }
     
     private boolean whitelistContains(String word) {

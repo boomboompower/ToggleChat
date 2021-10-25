@@ -17,11 +17,14 @@
 
 package wtf.boomy.togglechat.gui.core;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ChatLine;
 import wtf.boomy.mods.modernui.uis.ChatColor;
 import wtf.boomy.mods.modernui.uis.components.ButtonComponent;
 import wtf.boomy.togglechat.gui.list.ViewListUI;
 import wtf.boomy.togglechat.gui.modern.ModernConfigGui;
 import wtf.boomy.togglechat.gui.selector.DesignSelectorMenu;
+import wtf.boomy.togglechat.mixin.GuiNewChatAccessor;
 import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 import wtf.boomy.togglechat.toggles.custom.ICustomToggle;
@@ -254,6 +257,19 @@ public class MainGui extends ToggleChatModernUI {
         // this will also run if someone clicks a toggle to disable it, then clicks it again.
         if (this.changed) {
             this.mod.getConfigLoader().saveToggles();
+            try {
+                Minecraft.getMinecraft().ingameGUI.getChatGUI().refreshChat();
+            } catch (Exception e) {
+                e.printStackTrace();
+                ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getDrawnChatLines().clear();
+                Minecraft.getMinecraft().ingameGUI.getChatGUI().resetScroll();
+
+                for (int i = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines().size() - 1; i >= 0; --i)
+                {
+                    ChatLine chatline = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getDrawnChatLines().get(i);
+                    ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).invokeSetChatLine(chatline.getChatComponent(), chatline.getChatLineID(), chatline.getUpdatedCounter(), true);
+                }
+            }
         }
 
         // Only run if the favourite list has been modified.
