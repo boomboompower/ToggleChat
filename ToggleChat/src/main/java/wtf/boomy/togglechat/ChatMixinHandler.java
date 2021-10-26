@@ -30,17 +30,23 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * The ToggleChat chat handler.
+ * The ToggleChat chat mixin handler.
  *
  * @author boomboompower
  * @version 4.1
  */
-public class GuiNewChatToggleHook {
+public class ChatMixinHandler {
 
-    private static final Logger logger = LogManager.getLogger("ToggleChat - GuiNewChatHook");
+    private final Logger logger = LogManager.getLogger("ToggleChat - ChatMixinHandler");
 
     // Improve performance. Use already compiled patterns if available.
-    private static final HashMap<String, Pattern> compiledPatterns = new HashMap<>();
+    private final HashMap<String, Pattern> compiledPatterns = new HashMap<>();
+
+    private final ToggleChatMod mod;
+
+    public ChatMixinHandler(ToggleChatMod mod) {
+        this.mod = mod;
+    }
 
     /**
      * Handles the chat message provided.
@@ -48,7 +54,7 @@ public class GuiNewChatToggleHook {
      * @return Whether to cancel the message.
      * @author boomboompower
      */
-    public static Tuple<Boolean, IChatComponent> handleChat(IChatComponent message) {
+    public Tuple<Boolean, IChatComponent> handleChat(IChatComponent message) {
         // Retrieve the raw text from the TextComponent then filter it again
         // through our ChatColor class to remove all remaining color codes.
         String strippedText = ChatColor.stripColor(message.getUnformattedText());
@@ -61,7 +67,7 @@ public class GuiNewChatToggleHook {
             // The unblocked list, if it doesn't, continue!
             if (!containsUnblocked(strippedText)) {
                 // Loop through all the toggles
-                for (ToggleBase type : ToggleChatMod.getInstance().getToggleHandler().getToggles().values()) {
+                for (ToggleBase type : mod.getToggleHandler().getToggles().values()) {
                     // We don't want an issue with one toggle bringing
                     // the whole toggle system crashing down in flames.
                     try {
@@ -95,11 +101,11 @@ public class GuiNewChatToggleHook {
      * @param message the message to check (case insensitive)
      * @return true if the message contains a unblocked phrase
      */
-    private static boolean containsUnblocked(String message) {
+    private boolean containsUnblocked(String message) {
         // Use Java 8 streams to find any matches with our requirements
         // this is better than the previous implementation since anyMatch is self-terminating
         // meaning it will return immediately as soon as one of the criteria is met.
-        return ToggleChatMod.getInstance().getConfigLoader().getWhitelist().stream().anyMatch(s -> containsIgnoreCase(message, s));
+        return mod.getConfigLoader().getWhitelist().stream().anyMatch(s -> containsIgnoreCase(message, s));
     }
 
     /**
@@ -111,7 +117,7 @@ public class GuiNewChatToggleHook {
      * @param contains what to search for
      * @return true if the message contains the phrase
      */
-    private static boolean containsIgnoreCase(String message, String contains) {
+    private boolean containsIgnoreCase(String message, String contains) {
         Pattern using = compiledPatterns.get(contains);
 
         if (using == null) {

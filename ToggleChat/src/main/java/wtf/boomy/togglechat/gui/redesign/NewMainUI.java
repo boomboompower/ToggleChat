@@ -18,10 +18,7 @@
 package wtf.boomy.togglechat.gui.redesign;
 
 import com.google.gson.JsonObject;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.renderer.GlStateManager;
-
 import wtf.boomy.apagoge.ApagogeHandler;
 import wtf.boomy.apagoge.updater.ApagogeUpdater;
 import wtf.boomy.mods.modernui.uis.ChatColor;
@@ -36,13 +33,11 @@ import wtf.boomy.togglechat.gui.custom.NewCustomUI;
 import wtf.boomy.togglechat.gui.list.ViewListUI;
 import wtf.boomy.togglechat.gui.modern.ModernConfigGui;
 import wtf.boomy.togglechat.gui.selector.DesignSelectorMenu;
-import wtf.boomy.togglechat.mixin.GuiNewChatAccessor;
 import wtf.boomy.togglechat.toggles.Categories;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 import wtf.boomy.togglechat.toggles.custom.CustomToggle;
 
-import java.awt.Color;
-import java.awt.Desktop;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -170,24 +165,16 @@ public class NewMainUI extends ModernGui {
         int inversedHeight = 0;
     
         // Displays the allow list menu
-        registerElement(new ButtonComponent(0, this.width - 115, this.height - (inversedHeight += 25), 85, 20, "Allow List", btn -> {
-            new ViewListUI(this).display();
-        }).setMessageLines(Arrays.asList("A list of words/phrases which", "the mod will never toggle if", "a message has them.")).setDrawingModern(buttonModern));
+        registerElement(new ButtonComponent(0, this.width - 115, this.height - (inversedHeight += 25), 85, 20, "Allow List", btn -> new ViewListUI(this).display()).setMessageLines(Arrays.asList("A list of words/phrases which", "the mod will never toggle if", "a message has them.")).setDrawingModern(buttonModern));
     
         // Displays the design selector menu
-        registerElement(new ButtonComponent(1, this.width - 115, this.height - (inversedHeight += 25), 85, 20, "Choose Menu", btn -> {
-            new DesignSelectorMenu().display();
-        }).setMessageLines(Arrays.asList("Returns to the menu where", "you select the style for", "the mods menus")).setDrawingModern(buttonModern));
+        registerElement(new ButtonComponent(1, this.width - 115, this.height - (inversedHeight += 25), 85, 20, "Choose Menu", btn -> new DesignSelectorMenu().display()).setMessageLines(Arrays.asList("Returns to the menu where", "you select the style for", "the mods menus")).setDrawingModern(buttonModern));
         
         // Displays the theme editor menu.
-        registerElement(new ButtonComponent(2, this.width - 115, this.height - (inversedHeight += 25), 85, 20, "Theme Editor", btn -> {
-            new ModernConfigGui(this).display();
-        }).setMessageLines(Arrays.asList("Lets you change the style", "of buttons, textboxs and", "toggle UI blur.")).setDrawingModern(buttonModern));
+        registerElement(new ButtonComponent(2, this.width - 115, this.height - (inversedHeight += 25), 85, 20, "Theme Editor", btn -> new ModernConfigGui(this).display()).setMessageLines(Arrays.asList("Lets you change the style", "of buttons, textboxs and", "toggle UI blur.")).setDrawingModern(buttonModern));
         
         // Adds the scrollbar which modifies the y translation on the page.
-        registerElement(this.scrollComponent = new ScrollComponent(this.width - 20, 5, 12, this.height - 10, component -> {
-            this.yTranslation = -(this.finalYPos - this.height) * this.scrollComponent.getCurrentScroll();
-        }));
+        registerElement(this.scrollComponent = new ScrollComponent(this.width - 20, 5, 12, this.height - 10, component -> this.yTranslation = -(this.finalYPos - this.height) * this.scrollComponent.getCurrentScroll()));
     
         ApagogeHandler updater = ToggleChatMod.getInstance().getApagogeHandler();
         
@@ -221,9 +208,7 @@ public class NewMainUI extends ModernGui {
         }
     
         // Displays the custom toggle menu
-        registerElement(new ButtonComponent(4, this.width - 115, this.height - (inversedHeight + 25), 85, 20, "Custom Toggles", btn -> {
-            new NewCustomUI(this).display();
-        }).setMessageLines(Arrays.asList(ChatColor.AQUA + ChatColor.BOLD.toString() + "BETA", "Configure your own toggles")).setDrawingModern(buttonModern));
+        registerElement(new ButtonComponent(4, this.width - 115, this.height - (inversedHeight + 25), 85, 20, "Custom Toggles", btn -> new NewCustomUI(this).display()).setMessageLines(Arrays.asList(ChatColor.AQUA + ChatColor.BOLD.toString() + "BETA", "Configure your own toggles")).setDrawingModern(buttonModern));
     }
     
     @Override
@@ -309,19 +294,6 @@ public class NewMainUI extends ModernGui {
         //      It would be a nice QOL feature to have though, even for those unaware of its presence.
     
         // Save all the toggles
-        ToggleChatMod.getInstance().getConfigLoader().saveToggles();
-        try {
-            Minecraft.getMinecraft().ingameGUI.getChatGUI().refreshChat();
-        } catch (Exception e) {
-            e.printStackTrace();
-            ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getDrawnChatLines().clear();
-            Minecraft.getMinecraft().ingameGUI.getChatGUI().resetScroll();
-
-            for (int i = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines().size() - 1; i >= 0; --i)
-            {
-                ChatLine chatline = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getDrawnChatLines().get(i);
-                ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).invokeSetChatLine(chatline.getChatComponent(), chatline.getChatLineID(), chatline.getUpdatedCounter(), true);
-            }
-        }
+        ToggleChatMod.getInstance().getConfigLoader().saveToggles(true);
     }
 }

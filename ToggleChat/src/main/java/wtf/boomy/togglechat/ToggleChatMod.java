@@ -52,6 +52,8 @@ public class ToggleChatMod {
     private ConfigLoader configLoader;
     private BlurModHandler blurModHandler;
 
+    private final ChatMixinHandler chatHandler;
+
     @Mod.Instance
     private static ToggleChatMod instance;
     
@@ -66,6 +68,7 @@ public class ToggleChatMod {
         }
         
         this.apagogeHandler = hackHandler(new ApagogeHandler(runFile, "ToggleChat", ToggleChatMod.VERSION), runFile);
+        chatHandler = new ChatMixinHandler(this);
     }
     
     @Mod.EventHandler
@@ -90,7 +93,7 @@ public class ToggleChatMod {
         // and may be ignored in some implementations of Apagoge.
         this.apagogeHandler.addValidatorClasses(
                 ToggleChatMod.class,
-                GuiNewChatToggleHook.class,
+                ChatMixinHandler.class,
                 ConfigLoader.class,
                 ToggleCommand.class,
                 BlurModHandler.class
@@ -174,6 +177,16 @@ public class ToggleChatMod {
      */
     public ToggleHandler getToggleHandler() {
         return this.toggleHandler;
+    }
+
+    /**
+     * Returns the instance of the chat mixin handler which handles the toggling
+     * of chat messages in the mixin class.
+     *
+     * @return the ChatMixinHandler for the mod.
+     */
+    public ChatMixinHandler getChatHandler() {
+        return this.chatHandler;
     }
     
     /**

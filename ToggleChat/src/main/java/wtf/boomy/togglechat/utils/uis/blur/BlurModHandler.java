@@ -29,11 +29,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import wtf.boomy.mods.modernui.uis.ModernGui;
 import wtf.boomy.togglechat.ToggleChatMod;
-import wtf.boomy.togglechat.mixin.EntityRendererAccessor;
-import wtf.boomy.togglechat.mixin.ShaderGroupAccessor;
 
 import java.util.List;
 
@@ -118,7 +115,7 @@ public class BlurModHandler {
         // Why is this being computed every tick? Surely there is a better way?
         // This needs to be optimized.
         try {
-            final List<Shader> listShaders = ((ShaderGroupAccessor) this.mc.entityRenderer.getShaderGroup()).getListShaders();
+            final List<Shader> listShaders = this.mc.entityRenderer.getShaderGroup().listShaders;
 
             // Should not happen. Something bad happened.
             if (listShaders == null) {
@@ -160,7 +157,7 @@ public class BlurModHandler {
         // If a shader is not already active and the UI is
         // a one of ours, we should load our own blur!
         if (!er.isShaderActive() && gui instanceof ModernGui) {
-            ((EntityRendererAccessor) this.mc.entityRenderer).invokeLoadShader(this.blurShader);
+            this.mc.entityRenderer.loadShader(this.blurShader);
         
             this.start = System.currentTimeMillis();
             

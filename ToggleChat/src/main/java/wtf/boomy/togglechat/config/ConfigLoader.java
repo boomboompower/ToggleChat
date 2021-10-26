@@ -17,6 +17,8 @@
 
 package wtf.boomy.togglechat.config;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ChatLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -108,7 +110,7 @@ public class ConfigLoader {
                 this.toggleJson = new BetterJsonObject(builder.toString());
             } catch (Exception ex) {
                 this.logger.error("Could not read toggles properly, saving.", ex);
-                saveToggles();
+                saveToggles(false);
             }
 
             for (ToggleBase base : this.mod.getToggleHandler().getToggles().values()) {
@@ -123,11 +125,11 @@ public class ConfigLoader {
             }
 
         } else {
-            saveToggles();
+            saveToggles(false);
         }
     }
 
-    public void saveToggles() {
+    public void saveToggles(boolean refreshChat) {
         try {
             if (this.locations.isEmpty()) {
                 return;
@@ -151,6 +153,7 @@ public class ConfigLoader {
             }
 
             this.toggleJson.writeToFile(this.toggleFile);
+            if (refreshChat) refreshChat();
         } catch (Exception ex) {
             this.logger.error("Could not save toggles.", ex);
         }
@@ -265,6 +268,27 @@ public class ConfigLoader {
                     this.locations.add(o);
                     break;
                 }
+            }
+        }
+    }
+
+    /**
+     * Refreshes the chat.
+     * If the refreshing fails, it will print the stacktrace and
+     * attempt to refresh the chat manually.
+     */
+    public void refreshChat() {
+        try {
+            Minecraft.getMinecraft().ingameGUI.getChatGUI().refreshChat();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Minecraft.getMinecraft().ingameGUI.getChatGUI().drawnChatLines.clear();
+            Minecraft.getMinecraft().ingameGUI.getChatGUI().resetScroll();
+
+            for (int i = Minecraft.getMinecraft().ingameGUI.getChatGUI().chatLines.size() - 1; i >= 0; --i)
+            {
+                ChatLine chatline = Minecraft.getMinecraft().ingameGUI.getChatGUI().drawnChatLines.get(i);
+                Minecraft.getMinecraft().ingameGUI.getChatGUI().setChatLine(chatline.getChatComponent(), chatline.getChatLineID(), chatline.getUpdatedCounter(), true);
             }
         }
     }

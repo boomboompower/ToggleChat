@@ -17,12 +17,10 @@
 
 package wtf.boomy.togglechat.gui.list;
 
-import net.minecraft.client.gui.ChatLine;
+import net.minecraft.client.Minecraft;
 import wtf.boomy.mods.modernui.uis.ModernGui;
 import wtf.boomy.mods.modernui.uis.components.ButtonComponent;
-import wtf.boomy.togglechat.mixin.GuiNewChatAccessor;
 import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
-import net.minecraft.client.Minecraft;
 
 public class ClearListUI extends ToggleChatModernUI {
 
@@ -71,18 +69,5 @@ public class ClearListUI extends ToggleChatModernUI {
     @Override
     public void onGuiClose() {
         this.mod.getConfigLoader().saveModernUtils();
-        try {
-            Minecraft.getMinecraft().ingameGUI.getChatGUI().refreshChat();
-        } catch (Exception e) {
-            e.printStackTrace();
-            ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getDrawnChatLines().clear();
-            Minecraft.getMinecraft().ingameGUI.getChatGUI().resetScroll();
-
-            for (int i = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines().size() - 1; i >= 0; --i)
-            {
-                ChatLine chatline = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getDrawnChatLines().get(i);
-                ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).invokeSetChatLine(chatline.getChatComponent(), chatline.getChatLineID(), chatline.getUpdatedCounter(), true);
-            }
-        }
     }
 }

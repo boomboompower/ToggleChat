@@ -326,6 +326,7 @@ public final class ToggleInterpreter {
             // Save the custom toggle to the location
             saveCustomToggle(custom);
         }
+        mod.getConfigLoader().refreshChat();
     }
     
     /**

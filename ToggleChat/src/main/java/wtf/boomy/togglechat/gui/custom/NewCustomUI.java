@@ -17,8 +17,6 @@
 
 package wtf.boomy.togglechat.gui.custom;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ChatLine;
 import wtf.boomy.mods.modernui.uis.ChatColor;
 import wtf.boomy.mods.modernui.uis.ModernGui;
 import wtf.boomy.mods.modernui.uis.components.ButtonComponent;
@@ -26,22 +24,13 @@ import wtf.boomy.mods.modernui.uis.components.LabelComponent;
 import wtf.boomy.mods.modernui.uis.components.ScrollComponent;
 import wtf.boomy.mods.modernui.uis.components.TextBoxComponent;
 import wtf.boomy.togglechat.ToggleChatMod;
-import wtf.boomy.togglechat.mixin.GuiNewChatAccessor;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 import wtf.boomy.togglechat.toggles.custom.ConditionType;
 import wtf.boomy.togglechat.toggles.custom.CustomToggle;
 import wtf.boomy.togglechat.toggles.custom.ToggleCondition;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionCharacterAt;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionContains;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionEndsWith;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionEquals;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionIsLetter;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionIsNumber;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionRegex;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionStartsWith;
+import wtf.boomy.togglechat.toggles.custom.conditions.*;
 
-import java.awt.Color;
-import java.util.Arrays;
+import java.awt.*;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -417,19 +406,6 @@ public class NewCustomUI extends ModernGui {
         
         // Save all the toggles
         ToggleChatMod.getInstance().getConfigLoader().getToggleInterpreter().saveCustomToggles();
-        try {
-            Minecraft.getMinecraft().ingameGUI.getChatGUI().refreshChat();
-        } catch (Exception e) {
-            e.printStackTrace();
-            ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getDrawnChatLines().clear();
-            Minecraft.getMinecraft().ingameGUI.getChatGUI().resetScroll();
-
-            for (int i = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines().size() - 1; i >= 0; --i)
-            {
-                ChatLine chatline = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getDrawnChatLines().get(i);
-                ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).invokeSetChatLine(chatline.getChatComponent(), chatline.getChatLineID(), chatline.getUpdatedCounter(), true);
-            }
-        }
     }
     
     /**

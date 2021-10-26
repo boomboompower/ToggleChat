@@ -96,6 +96,7 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
     }
+    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 jar {
@@ -104,6 +105,7 @@ jar {
     manifest.attributes(
             'Main-Class' : 'wtf.boomy.togglechat.installer.InstallerCore',
             "FMLCorePlugin" : "wtf.boomy.togglechat.core.MixinLoadingPlugin",
+            'FMLAT': 'togglechatmod_at.cfg',
             "FMLCorePluginContainsFMLMod" : true,
             "ForceLoadAsMod" : true,
             "MixinConfigs" : "mixins.togglechat.json",
