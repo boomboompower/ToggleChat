@@ -4,10 +4,7 @@
   "package": "wtf.boomy.togglechat.mixin",
   "refmap": "mixins.togglechat.refmap.json",
   "mixins": [
-    "GuiNewChatMixin",
-    "GuiNewChatAccessor",
-    "EntityRendererAccessor",
-    "ShaderGroupAccessor"
+    "GuiNewChatMixin"
   ],
   "verbose": true
 }
