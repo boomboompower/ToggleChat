@@ -1,6 +1,13 @@
 # Hypixel ToggleChat Mod
-#### Version 3.0
 
+## Notice on Archival
+As of the 12th of March, this mod will no longer be updated or maintained - Anyone is free to get in touch and fork this if they wish :)
+
+A Minecraft mod which allows players to change their cape and skin directly from an in-game menu. Skins can be retrieved from files, urls and directly from player names and UUIDs.
+
+-----------
+
+#### Version 3.0
 ## Features
 * Twenty-six different chat toggles for ultimate chat supremacy
 * An inbuilt tutorial and developer api
