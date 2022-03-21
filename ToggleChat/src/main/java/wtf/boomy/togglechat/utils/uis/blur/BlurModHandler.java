@@ -29,7 +29,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import wtf.boomy.mods.modernui.uis.ModernGui;
 import wtf.boomy.togglechat.ToggleChatMod;
 

@@ -26,7 +26,7 @@ import wtf.boomy.togglechat.gui.redesign.NewMainUI;
 import wtf.boomy.togglechat.gui.selector.elements.LegacyMenuBoxedElement;
 import wtf.boomy.togglechat.gui.selector.elements.NewMenuBoxedElement;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * A menu to display the different designs of the mod, to condense the logic in this class, rendering is done

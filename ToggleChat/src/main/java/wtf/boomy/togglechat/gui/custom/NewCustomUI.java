@@ -28,17 +28,9 @@ import wtf.boomy.togglechat.toggles.ToggleBase;
 import wtf.boomy.togglechat.toggles.custom.ConditionType;
 import wtf.boomy.togglechat.toggles.custom.CustomToggle;
 import wtf.boomy.togglechat.toggles.custom.ToggleCondition;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionCharacterAt;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionContains;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionEndsWith;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionEquals;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionIsLetter;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionIsNumber;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionRegex;
-import wtf.boomy.togglechat.toggles.custom.conditions.ConditionStartsWith;
+import wtf.boomy.togglechat.toggles.custom.conditions.*;
 
-import java.awt.Color;
-import java.util.Arrays;
+import java.awt.*;
 import java.util.Collection;
 import java.util.Collections;
 

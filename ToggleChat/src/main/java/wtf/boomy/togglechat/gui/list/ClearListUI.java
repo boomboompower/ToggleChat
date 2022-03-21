@@ -17,10 +17,10 @@
 
 package wtf.boomy.togglechat.gui.list;
 
+import net.minecraft.client.Minecraft;
 import wtf.boomy.mods.modernui.uis.ModernGui;
 import wtf.boomy.mods.modernui.uis.components.ButtonComponent;
 import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
-import net.minecraft.client.Minecraft;
 
 public class ClearListUI extends ToggleChatModernUI {
 

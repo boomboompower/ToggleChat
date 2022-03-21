@@ -29,7 +29,7 @@ import wtf.boomy.togglechat.toggles.dummy.ToggleDummyMessage;
 import wtf.boomy.togglechat.utils.uis.ToggleChatModernUI;
 import wtf.boomy.togglechat.utils.uis.components.tc.ToggleChatButtonComponent;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -253,7 +253,7 @@ public class MainGui extends ToggleChatModernUI {
         // Save the toggles if something has been changed.
         // this will also run if someone clicks a toggle to disable it, then clicks it again.
         if (this.changed) {
-            this.mod.getConfigLoader().saveToggles();
+            this.mod.getConfigLoader().saveToggles(true);
         }
 
         // Only run if the favourite list has been modified.

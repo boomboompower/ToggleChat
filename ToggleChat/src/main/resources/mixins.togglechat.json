@@ -1,0 +1,10 @@
+{
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.7",
+  "package": "wtf.boomy.togglechat.mixin",
+  "refmap": "mixins.togglechat.refmap.json",
+  "mixins": [
+    "GuiNewChatMixin"
+  ],
+  "verbose": true
+}

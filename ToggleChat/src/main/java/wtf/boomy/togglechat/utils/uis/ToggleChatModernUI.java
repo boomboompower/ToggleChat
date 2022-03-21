@@ -2,7 +2,6 @@ package wtf.boomy.togglechat.utils.uis;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-
 import wtf.boomy.mods.modernui.uis.ChatColor;
 import wtf.boomy.mods.modernui.uis.ModernGui;
 import wtf.boomy.togglechat.ToggleChatMod;
@@ -10,7 +9,7 @@ import wtf.boomy.togglechat.config.ConfigLoader;
 import wtf.boomy.togglechat.toggles.ToggleBase;
 import wtf.boomy.togglechat.utils.uis.components.tc.ToggleChatButtonComponent;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
